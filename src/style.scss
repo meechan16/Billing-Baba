@@ -1,9 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
 
 :root {
   --black-1: #212934;
+}
+* {
+  font-family: "Montserrat", sans-serif;
 }
 
 #sidebar {
@@ -23,16 +27,37 @@
     width: 100%;
     border-radius: 10px;
     background-color: #212934;
+    border: 1px solid #212934;
     margin: 5px;
-    padding: 10px;
+    padding: 5px 10px;
     h1 {
-      font-size: 1.1rem;
+      font-size: 1rem;
+      transition: 100ms ease;
     }
     h2 {
       font-size: 0.8rem;
+      transition: 100ms ease;
     }
     .arrow {
-      font-size: 1.3rem;
+      width: 1rem;
+      fill: white;
+      transition: 100ms ease;
+    }
+    transition: 200ms ease;
+    &:hover {
+      border: 1px solid #212934;
+      background-color: transparent;
+      color: black;
+      h1,
+      h2 {
+        text-decoration: underline;
+        transition: 100ms ease;
+      }
+      svg {
+        fill: black;
+        transition: 100ms ease;
+      }
+      transition: 200ms ease;
     }
   }
   .body {
@@ -208,8 +233,8 @@
       padding-top: 10px;
       height: fit-content;
       & > .tile {
-        padding: 20px;
-        margin: 10px;
+        padding: 10px 20px;
+        margin: 15px;
         border-radius: 10px;
         box-shadow: 5px 0px 10px rgba(109, 109, 109, 0.504);
         background: linear-gradient(
@@ -229,6 +254,7 @@
             justify-content: center;
             align-items: center;
             svg {
+              aspect-ratio: 1/1;
               width: 20px;
               margin-right: 10px;
             }
@@ -267,7 +293,7 @@
           .tile {
             display: flex;
             justify-content: space-between;
-            width: 80%;
+            width: 90%;
           }
         }
         position: relative;
@@ -276,7 +302,7 @@
           bottom: 10px;
           right: 10px;
           svg {
-            width: 30px;
+            width: 15px;
             height: auto;
           }
         }
@@ -286,12 +312,13 @@
       width: 50%;
       padding: 10px 10px;
       margin: 0 10px;
-      border-left: 3px solid rgb(208, 208, 208);
+      border-left: 3px solid #1c1c1c1a;
       .list {
-        border: 1px solid gray;
+        border: 1px solid #eaeaea;
         border-radius: 10px;
         padding: 10px;
         margin: 10px;
+        background: #f9f8f280;
         .title {
           display: flex;
           justify-content: space-between;
@@ -300,7 +327,7 @@
             display: flex;
             align-items: center;
             font-weight: 600;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             svg {
               width: 12px;
               margin-left: 10px;
@@ -312,5 +339,81 @@
         }
       }
     }
+  }
+}
+
+#parties {
+  display: flex;
+  .left {
+    background-color: #f9f8f2;
+    flex: 1;
+    border-radius: 10px;
+    margin: 0 10px;
+    .top {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      button {
+        background: orange;
+        border: none;
+        padding: 5px 15px;
+        color: white;
+        border-radius: 10px;
+        transition: 100ms eas;
+        &:hover {
+          background-color: rgb(255, 180, 40);
+          transition: 100ms eas;
+        }
+      }
+      div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        svg {
+          height: 20px;
+        }
+      }
+    }
+    .content {
+      margin-top: 20px;
+      .head {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        h2 {
+          text-decoration: underline;
+          font-weight: 600;
+        }
+      }
+      .tile {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        &.selected {
+          background-color: #d4f7ea;
+        }
+        h1 {
+        }
+        div {
+          display: flex;
+          gap: 10px;
+          p {
+            color: red;
+            font-weight: 600;
+          }
+          svg {
+            height: 20px;
+          }
+        }
+        transition: 100ms ease;
+        &:hover {
+          background: rgba(164, 164, 164, 0.218);
+          transition: 100ms ease;
+        }
+      }
+    }
+  }
+  .right {
+    flex: 3;
   }
 }

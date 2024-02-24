@@ -4,6 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import "./style.scss";
 import { useEffect, useState } from "react";
+import Dashboard from "./pages/dashboard";
+import Parties from "./pages/parties";
+import Items from "./pages/items";
 
 function App() {
   let [mobile, setMobile] = useState(false);
@@ -19,8 +22,34 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" exact element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            exact
+            element={
+              <Home>
+                <Dashboard />
+              </Home>
+            }
+          />
+          <Route
+            path="/parties"
+            exact
+            element={
+              <Home>
+                <Parties />
+              </Home>
+            }
+          />
+          <Route
+            path="/items"
+            exact
+            element={
+              <Home>
+                <Items />
+              </Home>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>

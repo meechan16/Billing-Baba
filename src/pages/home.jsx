@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../components/sidebar";
 import Dashboard from "./dashboard";
 
-export default function Home() {
+export default function Home({ children }) {
   return (
     <div id="Home">
       <Sidebar />
@@ -19,7 +19,8 @@ export default function Home() {
             Add More <span>{"+"}</span>
           </button>
         </div>
-        <Dashboard />
+        {children}
+        {/* <Dashboard /> */}
       </div>
     </div>
   );
