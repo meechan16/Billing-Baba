@@ -2,10 +2,10 @@ import React from "react";
 import Sidebar from "../components/sidebar";
 import Dashboard from "./dashboard";
 
-export default function Home({ children }) {
+export default function Home({ children, part }) {
   return (
     <div id="Home">
-      <Sidebar />
+      <Sidebar part={part} />
       <div className="body">
         <div id="nav">
           <input

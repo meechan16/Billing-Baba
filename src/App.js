@@ -27,7 +27,7 @@ function App() {
             path="/"
             exact
             element={
-              <Home>
+              <Home part="dashboard">
                 <Dashboard />
               </Home>
             }
@@ -36,7 +36,7 @@ function App() {
             path="/parties"
             exact
             element={
-              <Home>
+              <Home part="parties">
                 <Parties />
               </Home>
             }
@@ -45,7 +45,7 @@ function App() {
             path="/items"
             exact
             element={
-              <Home>
+              <Home part="items">
                 <Items />
               </Home>
             }
