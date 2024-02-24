@@ -8,7 +8,11 @@ export default function Home({ children }) {
       <Sidebar />
       <div className="body">
         <div id="nav">
-          <input type="text" className="searchbar" />
+          <input
+            type="text"
+            className="searchbar"
+            placeholder="Search here..."
+          />
           <button className="addSale">
             Add Sale<span>{"+"}</span>
           </button>

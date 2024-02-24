@@ -130,7 +130,15 @@
         border: 1px solid white;
         border-radius: 5px;
         padding: 5px 10px;
-        margin: 5px 0;
+        margin: 10px 0;
+        transition: 100ms ease;
+        font-weight: 500;
+        &:hover {
+          background-color: white;
+          color: var(--black-1);
+          font-weight: 700;
+          transition: 100ms ease;
+        }
       }
     }
   }
@@ -388,6 +396,7 @@
       .tile {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding: 10px;
         &.selected {
           background-color: #d4f7ea;
@@ -396,13 +405,14 @@
         }
         div {
           display: flex;
+          align-items: center;
           gap: 10px;
           p {
             color: red;
             font-weight: 600;
           }
           svg {
-            height: 20px;
+            height: 15px;
           }
         }
         transition: 100ms ease;
