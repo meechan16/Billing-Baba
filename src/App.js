@@ -1,5 +1,5 @@
 import Home from "./pages/home";
-import Login from "./pages/login";
+import Login from "./pages/kogin";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import "./style.scss";
@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Dashboard from "./pages/dashboard";
 import Parties from "./pages/parties";
 import Items from "./pages/items";
+import Landing from "./pages/landing";
 
 function App() {
   let [mobile, setMobile] = useState(false);
@@ -22,6 +23,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+          <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/"
