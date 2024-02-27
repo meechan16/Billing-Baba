@@ -8,6 +8,7 @@ import Dashboard from "./pages/dashboard";
 import Parties from "./pages/parties";
 import Items from "./pages/items";
 import Landing from "./pages/landing";
+import Profile from "./pages/profilePage";
 
 function App() {
   let [mobile, setMobile] = useState(false);
@@ -25,6 +26,15 @@ function App() {
         <Routes>
           <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
+          <Route
+            path="/profile"
+            exact
+            element={
+              <Home part="profile">
+                <Profile />
+              </Home>
+            }
+          />
           <Route
             path="/"
             exact

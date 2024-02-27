@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../components/sidebar";
 import Dashboard from "./dashboard";
+import { getUidFromLocalStorage } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function Home({ children, part }) {
+  const Navigate = useNavigate();
+  useEffect(() => {
+    let uid = getUidFromLocalStorage();
+    // alert(uid);
+    if (!uid) {
+      Navigate("/landing");
+    }
+  }, []);
+
   return (
     <div id="Home">
       <Sidebar part={part} />

@@ -1,19 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  logInWithEmailAndPassword,
+  registerWithEmailAndPassword,
+  saveUidToLocalStorage,
+  signInWithGoogle,
+} from "../firebase";
 
 export default function LogIn() {
   const [Switch, setSwitch] = useState(true);
+
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
   const signup = () => {
+    let res = registerWithEmailAndPassword(email, password, name);
+    console.log(res);
+    alert(res);
+    saveUidToLocalStorage(res);
     setSwitch(true);
+    history("/");
   };
 
   const history = useNavigate();
   const login = () => {
+    let res = logInWithEmailAndPassword(email, password);
+    console.log(res);
+    alert(res);
+    saveUidToLocalStorage(res.data);
     history("/");
     setSwitch(false);
-    // if (false) {
-    // } else {
-    // }
   };
   return (
     <div id="login">
@@ -21,31 +38,87 @@ export default function LogIn() {
         <div className="left">
           <h1>Welcome back</h1>
           <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatu
+            Sign-In to your account to access full range of features and
+            capabilities of our software
           </p>
           <img src="./assets/login/login_img.png" alt="" />
         </div>
 
-        <div className="form right" action="">
+        <div className="right" action="">
           <div className="top"></div>
           {Switch ? (
             <div className="form login" action="">
               <h1>Log-In Form</h1>
-              <input type="text" name="username" placeholder="Username" />
-              <input type="password" name="passwd" placeholder="Password" />
+              <input
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                name="email"
+                placeholder="Enter your email"
+              />
+              <input
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                name="password"
+                placeholder="Enter your password"
+              />
               <button onClick={(e) => login()}>Log In</button>
-              <br />
+              <button
+                onClick={async (e) => {
+                  let res = await signInWithGoogle();
+                  saveUidToLocalStorage(res.data.uid);
+                  // alert(res.data.uid);
+                  history("/");
+                }}
+                className="google"
+              >
+                <img src="./assets/google_icon.png" alt="" />
+                Log In with Google
+              </button>
+              <div className="line"></div>
+              <p>If you dont have an account, please Sign Up</p>
+              <button onClick={() => setSwitch(false)}>Sign Up</button>
             </div>
           ) : (
-            <div className="form login" action="">
+            <div className="form signup" action="">
               <h1>Sign-Up Form</h1>
-              <input type="text" name="username" placeholder="Username" />
-              <input type="text" name="email" placeholder="email" />
-              <input type="text" name="name" placeholder="Full name" />
-              <input type="password" name="password" placeholder="Password" />
+              <input
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                name="email"
+                placeholder="email"
+              />
+              <input
+                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                name="name"
+                placeholder="Full name"
+              />
+              <input
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                name="password"
+                placeholder="Password"
+              />
               <button onClick={(e) => signup()}>Sign Up</button>
-              <br />
+              <button
+                onClick={async (e) => {
+                  let res = await signInWithGoogle();
+                  saveUidToLocalStorage(res.data.uid);
+                  history("/");
+                }}
+                className="google"
+              >
+                <img src="./assets/google_icon.png" alt="" />
+                Log In with Google
+              </button>
+              <div className="line"></div>
+              <p>If you aready have an account, please login</p>
+              <button onClick={() => setSwitch(true)}>Log-In</button>
             </div>
           )}
         </div>
