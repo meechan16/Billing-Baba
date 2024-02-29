@@ -1452,12 +1452,27 @@
         &.save {
           background-color: #f9232329;
           color: #f92323;
+          transition: 200ms ease;
+          &:hover {
+            transition: 200ms ease;
+            background-color: #f92323;
+            color: white;
+          }
         }
         &.share {
           border: 2px solid #346aff;
           color: #346aff;
           svg {
             fill: #346aff;
+          }
+          transition: 200ms ease;
+          &:hover {
+            transition: 200ms ease;
+            background-color: #346aff;
+            svg {
+              fill: white;
+            }
+            color: white;
           }
         }
       }
