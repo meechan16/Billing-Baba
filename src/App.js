@@ -9,6 +9,7 @@ import Parties from "./pages/parties";
 import Items from "./pages/items";
 import Landing from "./pages/landing";
 import Profile from "./pages/profilePage";
+import AddItems from "./pages/addItems";
 
 function App() {
   let [mobile, setMobile] = useState(false);
@@ -60,6 +61,16 @@ function App() {
               <Home part="items">
                 <Items />
               </Home>
+            }
+          />
+          <Route
+            path="/additems"
+            exact
+            element={
+              // <Home part="items">
+              //   <AddItems />
+              // </Home>
+              <AddItems />
             }
           />
         </Routes>

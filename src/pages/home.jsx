@@ -24,11 +24,11 @@ export default function Home({ children, part }) {
             className="searchbar"
             placeholder="Search here..."
           />
-          <button className="addSale">
-            Add Sale<span>{"+"}</span>
+          <button className="addSale" onClick={() => Navigate("/additems")}>
+            Add Sale <span>{"+"}</span>
           </button>
           <button className="purchase">
-            Add Purchase<span>{"+"}</span>
+            Add Purchase <span>{"+"}</span>
           </button>
           <button className="addMore">
             Add More <span>{"+"}</span>

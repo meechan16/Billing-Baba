@@ -156,8 +156,8 @@
   input {
     width: 100%;
     margin: 10px;
-    padding: 7px 10px;
-    border-radius: 5px;
+    padding: 7px 20px;
+    border-radius: 50px;
     border: 1px solid grey;
   }
 
@@ -193,7 +193,7 @@
       }
     }
     &.addMore {
-      border-radius: 5px;
+      border-radius: 10px;
       background-color: transparent;
       border: 3px solid #8ca8f6;
       color: #346aff;
@@ -231,6 +231,7 @@
     font-size: 1.3rem;
     color: black;
     box-shadow: 0 0 10px rgb(176, 176, 176);
+    border-radius: 10px;
   }
 }
 #login {
@@ -687,6 +688,8 @@
     width: 100%;
     justify-content: space-around;
     padding: 0 20px;
+    background-color: #f9f8f2;
+    border-radius: 10px;
     button {
       padding: 5px 10px;
       font-weight: 700;
@@ -696,8 +699,7 @@
         border-bottom: 2px solid red;
       }
       &:hover {
-        // border-bottom: 2px solid rgba(182, 0, 0, 0.784);
-        text-decoration: underline;
+        border-bottom: 1px solid rgb(255, 174, 158);
         transition: 200ms ease;
       }
     }
@@ -1005,6 +1007,8 @@
     justify-content: space-around;
     padding: 0 20px;
     margin-bottom: 20px;
+    background-color: #f9f8f2;
+    border-radius: 10px;
     button {
       padding: 5px 10px;
       font-weight: 700;
@@ -1014,8 +1018,6 @@
         border-bottom: 2px solid red;
       }
       &:hover {
-        // border-bottom: 2px solid rgba(182, 0, 0, 0.784);
-        // text-decoration: underline;
         border-bottom: 1px solid rgb(255, 174, 158);
         transition: 200ms ease;
       }
@@ -1042,7 +1044,7 @@
           transition: 100ms eas;
           &:hover {
             background-color: rgb(255, 180, 40);
-            transition: 100ms eas;
+            transition: 100ms ease;
           }
         }
         div {
@@ -1136,6 +1138,7 @@
               background-color: transparent;
               color: rgb(32, 151, 255);
               transition: 100ms ease;
+              font-weight: 600;
             }
           }
           p {
@@ -1164,6 +1167,7 @@
           padding: 20px;
           h1 {
             font-size: 1.2vw;
+            font-weight: 600;
           }
           .search {
             border: 1px solid grey;
@@ -1187,12 +1191,273 @@
           justify-content: space-between;
           align-items: center;
           padding: 10px 20px;
-          border-bottom: 1px solid gray;
+          // border-bottom: 1px solid gray;
+          margin: 10px;
+          // border-radius: 50px;
+          background-color: #d0e4d9;
+          &.top {
+            background-color: #bedfd3;
+            border-radius: 0px;
+          }
+          &:nth-child(odd) {
+            background-color: #def0e9;
+          }
           p {
             font-weight: 600;
+            flex: 1;
+            text-align: center;
             &.grey {
               font-weight: 400;
             }
+          }
+        }
+      }
+    }
+  }
+  .service {
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: zoomIn 150ms ease-in;
+
+    button {
+      padding: 5px 20px;
+      background-color: orange;
+      border-radius: 10px;
+      color: white;
+      margin: 20px;
+      font-weight: 600;
+    }
+    p {
+      font-weight: 500;
+    }
+  }
+  @keyframes zoomIn {
+    0% {
+      scale: 0.8;
+      opacity: 0;
+    }
+    90% {
+      opacity: 1;
+      scale: 1.05;
+    }
+    100% {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+}
+
+#addItem {
+  min-height: 100vh;
+  width: 100%;
+  svg {
+    height: 1rem;
+  }
+  & > .top {
+    svg {
+      height: 50px;
+      border-radius: 50px;
+      transition: 100ms ease;
+      padding: 10px;
+      &:hover {
+        background-color: rgba(128, 128, 128, 0.381);
+        transition: 100ms ease;
+      }
+    }
+    h1 {
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    p {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f8f2;
+    div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toggle {
+      width: 50px;
+      height: 25px;
+      background-color: #4eaaff;
+      border-radius: 50px;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      transition: 100ms ease;
+      &.opp {
+        justify-content: end;
+        transition: 100ms ease;
+      }
+      .button {
+        width: 20px;
+        margin: 0px 4px;
+        height: 20px;
+        background-color: #1653f9;
+        border-radius: 50px;
+      }
+    }
+  }
+  .body {
+    padding: 20px;
+    .ai1 {
+      display: flex;
+      justify-content: space-between;
+      .l {
+        background-color: #21293414;
+        display: flex;
+        align-items: center;
+        border-radius: 50px;
+        height: fit-content;
+        transition: 200ms ease;
+        &:hover {
+          background-color: #a9a9a964;
+          transition: 200ms ease;
+        }
+        svg {
+          margin: 15px;
+          font-size: 1.3rem;
+        }
+        input {
+          background: transparent;
+          border: none;
+          margin: 0;
+          width: 250px;
+          font-size: 1.1rem;
+        }
+      }
+      .r {
+        width: 300px;
+        div {
+          display: flex;
+          justify-content: space-between;
+          margin: 5px 0;
+        }
+        span {
+          font-weight: 500;
+        }
+        input {
+          // border-bottom: 1px solid black;
+          font-weight: 700;
+          width: 150px;
+        }
+      }
+    }
+    .ai2 {
+      .cl {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        // border-bottom: 1px solid gray;
+        margin: 10px 0;
+        border-radius: 10px;
+        background-color: #d0e4d9;
+        &.top {
+          background-color: #bedfd3;
+          border-radius: 10px;
+        }
+        &:nth-child(odd) {
+          background-color: #def0e9;
+        }
+        input {
+          // width: 100px;
+          flex: 1;
+          background-color: transparent;
+          border-bottom: 1px solid black;
+        }
+        p {
+          font-weight: 600;
+          flex: 1;
+          text-align: center;
+          &.grey {
+            font-weight: 400;
+          }
+        }
+      }
+    }
+    .ai3 {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        width: fit-content;
+        span {
+          font-weight: 600;
+        }
+        & > button {
+          font-weight: 600;
+          margin: 0;
+          border-radius: 50px;
+          padding: 2px 10px;
+          background-color: rgb(231, 231, 231);
+        }
+        input {
+          border: 1px solid rgb(184, 184, 184);
+          border-radius: 5px;
+        }
+      }
+    }
+    .ai4 {
+      display: flex;
+      justify-content: start;
+      gap: 20px;
+      margin: 20px 0;
+      button {
+        padding: 10px 40px;
+        border: 1px solid black;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        transition: 200ms ease;
+        &:hover {
+          background-color: rgb(59, 59, 59);
+          border-color: rgb(59, 59, 59);
+          color: white;
+          svg {
+            fill: white;
+          }
+          transition: 200ms ease;
+        }
+      }
+    }
+    .ai5 {
+      display: flex;
+      justify-content: end;
+      gap: 20px;
+      margin: 20px 0;
+      button {
+        padding: 5px 30px;
+        // border: 1px solid black;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        &.save {
+          background-color: #f9232329;
+          color: #f92323;
+        }
+        &.share {
+          border: 2px solid #346aff;
+          color: #346aff;
+          svg {
+            fill: #346aff;
           }
         }
       }
