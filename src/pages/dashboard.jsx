@@ -1,9 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Undone from "../components/undone";
+import TodoList from "../components/todoList";
 // import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   var [page, setPage] = useState("dashboard"); //overview, history, search, store
+  var [data, setdata] = useState(); //overview, history, search, store
+
+  const [taskStatus, setTaskStatus] = useState({});
+  useEffect(() => {
+    if (data?.todo_list) {
+      setTaskStatus(data?.todo_list);
+    }
+  }, [data]);
+  useEffect(() => {
+    if (data && taskStatus != {}) {
+      // setdata({ ...data, [data.todo_list]: taskStatus });
+      let url = "http://127.0.0.1:9000/update_todo";
+      // console.log(data);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "nulll", // Modify this if necessary
+        },
+        body: JSON.stringify({ ...data, todo_list: taskStatus }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response:", data);
+          // alert("done");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }, [taskStatus]);
+
+  useEffect(() => {
+    let fetchData = () => {
+      fetch("http://127.0.0.1:9000/get_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "nulll", // Modify this if necessary
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response:", data);
+          setdata(data.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+    fetchData();
+  }, []);
   return (
     <div id="Dashboard">
       <div className="topbar">
@@ -56,7 +109,7 @@ export default function Dashboard() {
                 </select>
               </div>
               <div className="mid">
-                <h1>₹ 3,738</h1>
+                <h1>₹ {data?.total_sales}</h1>
                 <h2>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                     <path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z" />
@@ -95,7 +148,7 @@ export default function Dashboard() {
                 </select>
               </div>
               <div className="mid">
-                <h1>₹ 20,738</h1>
+                <h1>₹ {data?.total_profit}</h1>
                 <h2>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                     <path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z" />
@@ -391,9 +444,7 @@ export default function Dashboard() {
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
               </div>
-              <div className="todo">
-                <div className="li"></div>
-              </div>
+              <TodoList taskStatus={taskStatus} setTaskStatus={setTaskStatus} />
             </div>
             <div className="list">
               <div className="title">

@@ -9,7 +9,10 @@ import Parties from "./pages/parties";
 import Items from "./pages/items";
 import Landing from "./pages/landing";
 import Profile from "./pages/profilePage";
-import AddItems from "./pages/addItems";
+import AddSales from "./pages/addsales";
+import AddPurchase from "./pages/addPurchase";
+import AddItem from "./pages/addItem";
+import AddParties from "./pages/addParties";
 
 function App() {
   let [mobile, setMobile] = useState(false);
@@ -55,6 +58,15 @@ function App() {
             }
           />
           <Route
+            path="/AddParties"
+            exact
+            element={
+              <Home part="parties">
+                <AddParties />
+              </Home>
+            }
+          />
+          <Route
             path="/items"
             exact
             element={
@@ -64,13 +76,32 @@ function App() {
             }
           />
           <Route
-            path="/additems"
+            path="/add-items"
+            exact
+            element={
+              <Home part="items">
+                <AddItem />
+              </Home>
+            }
+          />
+          <Route
+            path="/addsales"
             exact
             element={
               // <Home part="items">
               //   <AddItems />
               // </Home>
-              <AddItems />
+              <AddSales />
+            }
+          />
+          <Route
+            path="/addPurchase"
+            exact
+            element={
+              // <Home part="items">
+              //   <AddItems />
+              // </Home>
+              <AddPurchase />
             }
           />
         </Routes>
