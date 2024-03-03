@@ -1,7 +1,94 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ReactComponent as Invoice } from "../assets/landing/invoicing.svg";
+import { ReactComponent as Expense } from "../assets/landing/expense.svg";
+import { ReactComponent as Estimates } from "../assets/landing/estimates.svg";
+import { ReactComponent as Credits } from "../assets/landing/credit.svg";
+import { ReactComponent as Purchase } from "../assets/landing/purchase_order.svg";
+import { ReactComponent as Sales } from "../assets/landing/sales.svg";
+import { ReactComponent as Time } from "../assets/landing/time.svg";
 
 export default function Landing() {
+  const Navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState(0);
+
+  const feature_nav_items = [
+    {
+      name: "Manage Inventory",
+      color: "",
+      index: 0,
+    },
+    {
+      name: "Online Store",
+      color: "",
+      index: 1,
+    },
+    {
+      name: "Report and analytics",
+      color: "",
+      index: 2,
+    },
+    {
+      name: "Invoicing",
+      color: "",
+      index: 3,
+    },
+    {
+      name: "Estimates",
+      color: "",
+      index: 4,
+    },
+    {
+      name: "Purchase Order",
+      color: "",
+      index: 5,
+    },
+    {
+      name: "Credit Notes",
+      color: "",
+      index: 6,
+    },
+    {
+      name: "Sales Recipts",
+      color: "",
+      index: 7,
+    },
+    {
+      name: "Expenses",
+      color: "",
+      index: 8,
+    },
+    {
+      name: "Time-Tracking",
+      color: "",
+      index: 9,
+    },
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll(".feature_tiles");
+      const scrollPosition = window.scrollY;
+
+      // console.log(sections);
+      sections.forEach((section, index) => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        if (scrollPosition >= top && scrollPosition < top + height * 0.3) {
+          setActiveSection(index);
+          // alert(index);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  useEffect(() => {
+    console.log(activeSection);
+  }, [activeSection]);
   return (
     <div id="Landing">
       <nav>
@@ -273,7 +360,7 @@ export default function Landing() {
               compliant invoices & share with customers easily.
             </p>
           </div>
-          <div ti>
+          <div>
             <div className="icon" style={{ "background-color": "#29B9E7" }}>
               <svg
                 width="49"
@@ -387,8 +474,20 @@ export default function Landing() {
         </div>
       </section>
       <section className="three">
-        <div className="tiles">
-          <img src="./assets/landing/landing_Tile_1.png" alt="" />
+        <div className="feature_nav" style={{ background: "#fff" }}>
+          <h1>Power Packed Features</h1>
+          <div className="btns">
+            {feature_nav_items.map(({ name, color, index }) => (
+              <button
+                key={index}
+                className={index == activeSection ? "active" : ""}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="feature_tiles">
           <div>
             <h1>
               <div className="circle"></div> Manage inventory
@@ -399,10 +498,14 @@ export default function Landing() {
               reports on current inventory and update inventory quantities in
               bulk, which is helpful when adding new inventory.
             </p>
-            <button>Manage inventory for free</button>
+            <button onClick={() => Navigate("/login")}>
+              Manage inventory for free
+            </button>
           </div>
+          <img src="./assets/landing/landing_Tile_1.png" alt="" />
         </div>
-        <div className="tiles">
+        <div className="feature_tiles">
+          <img src="./assets/landing/landing_Tile_2.png" alt="" />
           <div>
             <h1>
               <div className="circle"></div> Get your store Online
@@ -413,12 +516,12 @@ export default function Landing() {
               offers. Directly share your store link with customers to receive
               online orders and payments!
             </p>
-            <button>Create Online store</button>
+            <button onClick={() => Navigate("/login")}>
+              Create Online store
+            </button>
           </div>
-          <img src="./assets/landing/landing_Tile_2.png" alt="" />
         </div>
-        <div className="tiles">
-          <img src="./assets/landing/landing_Tile_3.png" alt="" />
+        <div className="feature_tiles">
           <div>
             <h1>
               <div className="circle"></div> Powerful business analytics and
@@ -429,7 +532,158 @@ export default function Landing() {
               ever need to answer any question about the product/categorywise
               sales or to understand your users and payments.
             </p>
-            <button>Get Sales Report</button>
+            <button onClick={() => Navigate("/login")}>Get Sales Report</button>
+          </div>
+          <img src="./assets/landing/landing_Tile_3.png" alt="" />
+        </div>
+        <div className="feature_tiles">
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Invoice />
+          <div>
+            <h1>
+              <div className="circle"></div>
+              Invoicing
+            </h1>
+            <h2>View sales data from any device.</h2>
+            <p>
+              It's time to send e-invoices to your clients and customers, which
+              is best known for minimizing invoicing errors and fraud. Our
+              invoice and estimate software helps users generate proforma,
+              business, interim, and personalized invoices using ready-made
+              invoicing templates. First, customize the templates with new
+              invoicing themes, backgrounds, and number series. Then, start
+              invoicing your customers or clients from anywhere, anytime.
+            </p>
+            <button onClick={() => Navigate("/login")}>Get Sales Report</button>
+          </div>
+        </div>
+        <div className="feature_tiles">
+          <div>
+            <h1>
+              <div className="circle"></div>
+              Estimates
+            </h1>
+            <h2>Project Estimation Software</h2>
+            <p>
+              As a business owner, is sending timely yet accurate project and
+              product estimates a major headache or concern? Our invoice and
+              estimate software helps design quick business estimates that can
+              be easily converted to invoices when required. Get readymade
+              templates, design your estimate number series, and add an
+              attachment while sending winning estimates to your clients.
+            </p>
+            <button onClick={() => Navigate("/login")}>
+              DESIGN ACURATE ESTIMATES
+            </button>
+          </div>
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Estimates />
+        </div>
+        <div className="feature_tiles">
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Purchase />
+          <div>
+            <h1>
+              <div className="circle"></div>
+              Purchase Orders
+            </h1>
+            <h2>Generate Accurate POs with a Single Click!</h2>
+            <p>
+              It's time to send e-invoices to your clients and customers, which
+              is best known for minimizing invoicing errors and fraud. Our
+              invoice and estimate software helps users generate proforma,
+              business, interim, and personalized invoices using ready-made
+              invoicing templates. First, customize the templates with new
+              invoicing themes, backgrounds, and number series. Then, start
+              invoicing your customers or clients from anywhere, anytime.
+            </p>
+            <button onClick={() => Navigate("/login")}>
+              ISSUE PURCHASING ORDER
+            </button>
+          </div>
+        </div>
+        <div className="feature_tiles">
+          <div>
+            <h1>
+              <div className="circle"></div>
+              Credit Notes
+            </h1>
+            <h2>Settle Invoices Using Credit Notes</h2>
+            <p>
+              Issuing credit notes has been one of the routines of businesses
+              managing multiple products or services. Our invoice and estimate
+              software helps businesses like yours to generate credit notes for
+              your customers and clients who would like to redeem them against
+              invoices when required. In addition, we offer a readymade credit
+              template that needs to be duly filled for generating credit notes
+              on the go!
+            </p>
+            <button onClick={() => Navigate("/login")}>
+              START ISSUING CREDIT NOTES
+            </button>
+          </div>
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Credits />
+        </div>
+        <div className="feature_tiles">
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Sales />
+          <div>
+            <h1>
+              <div className="circle"></div>Sales Receipts
+            </h1>
+            <h2>Generate Unlimited Receipts</h2>
+            <p>
+              Receipts are proof of the sale. We help you send unlimited
+              receipts to your customers or clients, demanding them against
+              invoices or payments. So, why wait for issuing sales receipts when
+              you can generate unlimited receipts using our receipt maker app?
+              Get readymade sales receipt templates to issue receipts in the
+              blink of an eye.
+            </p>
+            <button onClick={() => Navigate("/login")}>
+              SEND DALES RECIPTS
+            </button>
+          </div>
+        </div>
+        <div className="feature_tiles">
+          <div>
+            <h1>
+              <div className="circle"></div> Expenses
+            </h1>
+            <h2>Track Business Expenses</h2>
+            <p>
+              Managing expenses is a difficult task. Not anymore! Our expense
+              management software helps track your business expenses, which is
+              easy to record and view using a single click. So, record all your
+              business expenses by choosing the appropriate company for which
+              you are recording the expenses. Also, download the annual expense
+              report required for each month, quarter, or year.
+            </p>
+            <button onClick={() => Navigate("/login")}>RECORD EXPENSE</button>
+          </div>
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Expense />
+        </div>
+        <div className="feature_tiles">
+          {/* <img src="./assets/landing/landing_Tile_3.png" alt="" /> */}
+          <Time />
+          <div>
+            <h1>
+              <div className="circle"></div>TIME-TRACKING
+            </h1>
+            <h2>Track Project Hours</h2>
+            <p>
+              Time-tracking is an essential feature of project management. Our
+              time-tracking software helps track work or project hours with the
+              built-in clock-in-out feature. Also, users can check the manual
+              time hours tracker for tracking tasks or project hours with the
+              start and stopwatch icons. Get accurate project time logs and
+              convert them into timesheets with a single click!
+            </p>
+            <button onClick={() => Navigate("/login")}>
+              TRACK PROJECT HOURS
+            </button>
           </div>
         </div>
       </section>

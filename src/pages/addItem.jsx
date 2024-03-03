@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 
-export default function AddItem() {
+export default function AddItem({ t = true }) {
   const Navigate = useNavigate();
-  var [toggle, setToggle] = useState(true);
+  var [toggle, setToggle] = useState(t);
   var [page, setPage] = useState("pricing");
   var [itemName, setitemName] = useState();
   var [itemHSN, setitemHSN] = useState();
@@ -86,8 +86,10 @@ export default function AddItem() {
         </div>
         <div className="c1">
           <div className="p1">
-            <CustomInput placeholder={"Item Name *"} />
-            <CustomInput placeholder={"Item HSN"} />
+            <CustomInput
+              placeholder={toggle ? "Item Name *" : "Service Name *"}
+            />
+            <CustomInput placeholder={toggle ? "Item HSN" : "Service HSN"} />
             {/* <button>Select Unit</button> */}
           </div>
           <div className="p1">
@@ -98,7 +100,7 @@ export default function AddItem() {
               <option value="">+ add category</option>
             </select>
             {/* <input type="text" className="box" /> */}
-            <CustomInput placeholder={"Item Code"} />
+            <CustomInput placeholder={toggle ? "Item Code" : "Service Code"} />
           </div>
         </div>
         <div className="c2">
@@ -109,12 +111,14 @@ export default function AddItem() {
             >
               Pricing
             </button>
-            <button
-              className={page == "stock" && "active"}
-              onClick={() => setPage("stock")}
-            >
-              Stock
-            </button>
+            {toggle && (
+              <button
+                className={page == "stock" && "active"}
+                onClick={() => setPage("stock")}
+              >
+                Stock
+              </button>
+            )}
           </div>
           {page == "pricing" ? (
             <div className="div">
@@ -123,7 +127,7 @@ export default function AddItem() {
                 <CustomInput placeholder={"Descount"} />
               </div>
               <div className="b">
-                <CustomInput placeholder={"Purchase Price"} />
+                {toggle && <CustomInput placeholder={"Purchase Price"} />}
                 <CustomInput placeholder={"Taxes"} />
               </div>
             </div>

@@ -426,7 +426,7 @@
     position: fixed;
     width: 100%;
     z-index: 10;
-    background-color: rgba(255, 255, 255, 0.382);
+    background-color: rgb(255, 255, 255);
     .icon svg {
       // height: 50px;
     }
@@ -435,9 +435,10 @@
       gap: 30px;
       align-items: center;
       a {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         text-decoration: none;
         color: #4f5361;
+        font-weight: 500;
       }
     }
     .controls {
@@ -445,8 +446,9 @@
       gap: 10px;
       align-items: center;
       a {
-        font-size: 1.2rem;
-        padding: 10px 20px;
+        font-size: 1rem;
+        padding: 5px 20px;
+        font-weight: 600;
         border-radius: 5px;
         border: none;
         background-color: transparent;
@@ -611,15 +613,69 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    .tiles {
+    .feature_nav {
+      // background-color: rgba(255, 255, 255, 0.736);
+      position: sticky;
+      top: 70px;
+      width: 100%;
+      left: 0;
+      padding: 20px 0;
+      padding-top: 0;
+      h1 {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 600;
+        padding: 10px 0;
+      }
+      .btns {
+        width: 100%;
+        gap: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+          padding: 5px 10px;
+          font-size: 0.8rem;
+          border: 1px solid rgb(219, 219, 219);
+          border-radius: 5px;
+          &.active {
+            background-color: #d8d8d875;
+          }
+        }
+      }
+    }
+    .feature_tiles {
       width: 90vw;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin: 40px 0;
+      & > img,
+      & > svg {
+        max-height: 50vh;
+      }
       div {
         width: 50vw;
+        h1 {
+          font-size: 2.2rem;
+          // margin-left: 10px;
+          // border-bottom: 2px solid rgb(217, 217, 217);
+          // padding: 10px 0;
+          font-weight: 600;
+          margin: 10px 0;
+        }
+        h2 {
+          font-size: 1.4rem;
+          // margin-left: 10px;
+          // border-bottom: 2px solid rgb(217, 217, 217);
+          // padding: 10px 0;
+          font-weight: 500;
+          margin: 10px 0;
+          margin-bottom: 20px;
+        }
         p {
-          font-size: 0.9rem;
+          font-size: 1.1rem;
           color: #696984;
         }
         button {
@@ -628,13 +684,15 @@
           border: none;
           background-color: transparent;
           color: var(#0f1b4c);
-          background-color: #0090d3;
+          background-color: #2f92c0;
+          border: 2px solid #0090d3;
           color: white;
           font-size: 1.2rem;
           margin: 20px 0px;
+          font-weight: 600;
           transition: 100ms ease-in-out;
           &:hover {
-            color: black;
+            color: #0090d3;
             background: transparent;
             border: 2px solid #0090d3;
             transition: 100ms ease-in-out;
@@ -687,6 +745,12 @@
   .five {
     min-height: 80vh;
     padding: 10vh;
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      padding: 10px 0;
+      margin: 10px 0;
+    }
     .sec {
       display: flex;
       justify-content: space-between;
@@ -1137,7 +1201,7 @@
         display: flex;
         justify-content: space-between;
         padding: 10px;
-        button {
+        & > button {
           background: orange;
           border: none;
           padding: 5px 15px;
@@ -1147,6 +1211,74 @@
           &:hover {
             background-color: rgb(255, 180, 40);
             transition: 100ms ease;
+          }
+        }
+        #ItemCategory {
+          position: absolute;
+          z-index: 2;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100vw;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: rgba(0, 0, 0, 0.658);
+          animation: fadeIn 100ms ease;
+          .center {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 10px;
+            gap: 0;
+            min-width: 30vw;
+            .t {
+              padding: 20px;
+              width: 100%;
+              border-bottom: 1px solid gray;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              h1 {
+                font-size: 1.4rem;
+                font-weight: 600;
+              }
+            }
+            .m {
+              padding: 20px;
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: start;
+              input {
+                border: 1px solid gray;
+                width: 100%;
+                padding: 10px 20px;
+
+                font-size: 1.1rem;
+                &:focus {
+                  outline: none;
+                }
+              }
+              button {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                background: red;
+                color: white;
+                font-weight: 600;
+                margin-top: 30px;
+                border-radius: 50px;
+              }
+            }
+          }
+        }
+        @keyframes fadeIn {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
           }
         }
         div {
@@ -1490,44 +1622,86 @@
       }
     }
   }
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
 
-  .input-container {
-    position: relative;
-    margin: 10px 0;
-    // margin-bottom: 20px;
-    input {
-      width: 200px;
-      padding: 10px;
-      border: none;
-      border-bottom: 1px solid #ccc;
-      font-size: 16px;
-      transition: border-color 0.3s;
-      &:focus {
-        border-radius: 5px;
-        outline: none;
-        border: 2px solid rgb(0, 58, 206);
+  .dropdown-button {
+    padding: 0 2px;
+    // background-color: #f1f1f1;
+    // border: none;
+    cursor: pointer;
+    z-index: 0;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    display: block;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    animation: fadeIn 200ms eas;
+    li {
+      padding: 8px 16px;
+      text-wrap: nowrap;
+      cursor: pointer;
+      &:hover {
+        background-color: #f1f1f1;
       }
     }
-
-    label {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #999;
-      background: white;
-      padding: 0 5px;
-      font-size: 16px;
-      pointer-events: none;
-      transition: top 0.3s, font-size 0.3s, color 0.3s;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
     }
-
-    .input-focused label,
-    input:focus + label {
-      top: 0;
-      font-size: 12px;
-      color: rgb(0, 58, 206);
+    100% {
+      opacity: 1;
     }
+  }
+}
+
+.input-container {
+  position: relative;
+  margin: 10px 0;
+  // margin-bottom: 20px;
+  input {
+    width: 200px;
+    padding: 10px;
+    border: none !important;
+    border-bottom: 1px solid #ccc !important;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    &:focus {
+      border-radius: 5px;
+      outline: none;
+      border: 2px solid rgb(0, 58, 206) !important;
+    }
+  }
+
+  label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    background: white;
+    padding: 0 5px;
+    font-size: 16px;
+    pointer-events: none;
+    transition: top 0.3s, font-size 0.3s, color 0.3s;
+  }
+
+  .input-focused label,
+  input:focus + label {
+    top: 0;
+    font-size: 12px;
+    color: rgb(0, 58, 206);
   }
 }
 
