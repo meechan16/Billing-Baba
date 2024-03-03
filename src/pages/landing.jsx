@@ -11,59 +11,61 @@ import { ReactComponent as Time } from "../assets/landing/time.svg";
 export default function Landing() {
   const Navigate = useNavigate();
   const [activeSection, setActiveSection] = useState(0);
-
   const feature_nav_items = [
     {
       name: "Manage Inventory",
-      color: "",
+      color: "rgb(228, 247, 247)",
       index: 0,
     },
     {
       name: "Online Store",
-      color: "",
+      color: "rgb(241, 242, 255)",
       index: 1,
     },
     {
       name: "Report and analytics",
-      color: "",
+      color: "rgb(243, 255, 234)",
       index: 2,
     },
     {
       name: "Invoicing",
-      color: "",
+      color: "rgb(255, 249, 234)",
       index: 3,
     },
     {
       name: "Estimates",
-      color: "",
+      color: "rgb(228, 247, 247)",
       index: 4,
     },
     {
       name: "Purchase Order",
-      color: "",
+      color: "rgb(241, 242, 255)",
       index: 5,
     },
     {
       name: "Credit Notes",
-      color: "",
+      color: "rgb(243, 255, 234)",
       index: 6,
     },
     {
       name: "Sales Recipts",
-      color: "",
+      color: "rgb(252, 242, 255)",
       index: 7,
     },
     {
       name: "Expenses",
-      color: "",
+      color: "rgb(255, 249, 234)",
       index: 8,
     },
     {
       name: "Time-Tracking",
-      color: "",
+      color: "rgb(228, 247, 247)",
       index: 9,
     },
   ];
+  const [activeColor, setActiveColor] = useState(
+    feature_nav_items[activeSection].color
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,8 +89,9 @@ export default function Landing() {
     };
   }, []);
   useEffect(() => {
-    console.log(activeSection);
+    setActiveColor(feature_nav_items[activeSection].color);
   }, [activeSection]);
+
   return (
     <div id="Landing">
       <nav>
@@ -473,8 +476,18 @@ export default function Landing() {
           </div>
         </div>
       </section>
-      <section className="three">
-        <div className="feature_nav" style={{ background: "#fff" }}>
+      <section
+        className="three"
+        style={{
+          backgroundColor: activeColor,
+        }}
+      >
+        <div
+          className="feature_nav"
+          style={{
+            backgroundColor: activeColor,
+          }}
+        >
           <h1>Power Packed Features</h1>
           <div className="btns">
             {feature_nav_items.map(({ name, color, index }) => (
