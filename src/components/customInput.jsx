@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-function CustomInput({ inputValue, setInputValue, placeholder }) {
+function CustomInput({
+  inputValue,
+  setInputValue,
+  placeholder,
+  disab = false,
+}) {
   const [isFocused, setIsFocused] = useState(false);
   // const [inputValue, setInputValue] = useState("");
 
@@ -27,6 +32,7 @@ function CustomInput({ inputValue, setInputValue, placeholder }) {
         type="text"
         value={inputValue}
         onChange={handleChange}
+        disabled={disab}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Undone from "../components/undone";
 import TodoList from "../components/todoList";
+import { dev_url } from "../url";
 // import { Link } from "react-router-dom";
 
 export default function Dashboard() {
@@ -16,7 +17,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (data && taskStatus != {}) {
       // setdata({ ...data, [data.todo_list]: taskStatus });
-      let url = "http://127.0.0.1:9000/update_todo";
+      let url = dev_url + "update_todo";
       // console.log(data);
       fetch(url, {
         method: "POST",
@@ -39,7 +40,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let fetchData = () => {
-      fetch("http://127.0.0.1:9000/get_user", {
+      fetch(dev_url + "/get_user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

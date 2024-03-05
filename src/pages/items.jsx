@@ -3,9 +3,11 @@ import Undone from "../components/undone";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
+import StockAdjust from "../components/stock_Adjustment";
 
 export default function Items() {
   var [page, setPage] = useState("product");
+  var [StockPage, setStockPage] = useState(false);
   const Navigate = useNavigate();
   var [Category, setCategory] = useState(false);
   var [Units, setUnits] = useState(false);
@@ -117,7 +119,10 @@ export default function Items() {
             <div className="title">
               <div className="tile">
                 <h1>Boat Headphonest</h1>
-                <button>+ Adujust Items</button>
+                <button onClick={() => setStockPage(!StockPage)}>
+                  + Adujust Items
+                </button>
+                {StockPage && <StockAdjust setClose={setStockPage} />}
               </div>
               <div className="tile">
                 <p>
@@ -151,30 +156,29 @@ export default function Items() {
               <div className="cl top">
                 <p>Type</p>
                 <p>Invoice/Ref</p>
+                <p>Name</p>
                 <p>Date</p>
-                <p>Total</p>
-                <p>Balance</p>
+                <p>Quantity</p>
+                <p>Price</p>
+                <p>Status</p>
               </div>
               <div className="cl">
-                <p>Row header 1</p>
-                <p className="grey">Item 1</p>
-                <p className="grey">Item 2</p>
-                <p className="grey">Item 3</p>
-                <p className="grey">Item 4</p>
+                <p>Tech</p>
+                <p className="grey">231</p>
+                <p className="grey">Boat</p>
+                <p className="grey">03/02/2024</p>
+                <p className="grey">10</p>
+                <p className="grey">3000</p>
+                <p className="grey">Unpaid</p>
               </div>
               <div className="cl">
-                <p>Row header 1</p>
-                <p className="grey">Item 1</p>
-                <p className="grey">Item 2</p>
-                <p className="grey">Item 3</p>
-                <p className="grey">Item 4</p>
-              </div>
-              <div className="cl">
-                <p>Row header 1</p>
-                <p className="grey">Item 1</p>
-                <p className="grey">Item 2</p>
-                <p className="grey">Item 3</p>
-                <p className="grey">Item 4</p>
+                <p>Tech</p>
+                <p className="grey">231</p>
+                <p className="grey">Boat</p>
+                <p className="grey">03/02/2024</p>
+                <p className="grey">10</p>
+                <p className="grey">3000</p>
+                <p className="grey">Unpaid</p>
               </div>
             </div>
           </div>
@@ -365,13 +369,13 @@ export default function Items() {
             </div>
             <div className="content">
               <div className="head">
-                <h2>Items</h2>
-                <h2>Qty</h2>
+                <h2>FULLNAME</h2>
+                <h2>SHORTNAME</h2>
               </div>
               <div className="tile selected">
-                <h1>Boat headphones</h1>
+                <h1>BAGS</h1>
                 <div className="">
-                  <p>10</p>
+                  <p>BAGS</p>
                   <Dropdown menuItems={["View/Edit", "Delete"]}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -383,9 +387,9 @@ export default function Items() {
                 </div>
               </div>
               <div className="tile">
-                <h1>Guccy Watch</h1>
+                <h1>Bottle</h1>
                 <div className="">
-                  <p>02</p>
+                  <p>Btl</p>
                   <Dropdown menuItems={["View/Edit", "Delete"]}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -397,9 +401,65 @@ export default function Items() {
                 </div>
               </div>
               <div className="tile">
-                <h1>T-shirt</h1>
+                <h1>BOX</h1>
                 <div className="">
-                  <p>18</p>
+                  <p>box</p>
+                  <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 128 512"
+                    >
+                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                    </svg>
+                  </Dropdown>
+                </div>
+              </div>
+              <div className="tile">
+                <h1>BUNDLE</h1>
+                <div className="">
+                  <p>bndl</p>
+                  <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 128 512"
+                    >
+                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                    </svg>
+                  </Dropdown>
+                </div>
+              </div>
+              <div className="tile">
+                <h1>CANS</h1>
+                <div className="">
+                  <p>Can</p>
+                  <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 128 512"
+                    >
+                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                    </svg>
+                  </Dropdown>
+                </div>
+              </div>
+              <div className="tile">
+                <h1>CATON</h1>
+                <div className="">
+                  <p>ctn</p>
+                  <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 128 512"
+                    >
+                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                    </svg>
+                  </Dropdown>
+                </div>
+              </div>
+              <div className="tile">
+                <h1>BOX</h1>
+                <div className="">
+                  <p>box</p>
                   <Dropdown menuItems={["View/Edit", "Delete"]}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -448,33 +508,11 @@ export default function Items() {
                 </div>
               </div>
               <div className="cl top">
-                <p>Type</p>
-                <p>Invoice/Ref</p>
-                <p>Date</p>
-                <p>Total</p>
-                <p>Balance</p>
+                <p>-</p>
+                <p>Conversion</p>
               </div>
-              <div className="cl">
-                <p>Row header 1</p>
-                <p className="grey">Item 1</p>
-                <p className="grey">Item 2</p>
-                <p className="grey">Item 3</p>
-                <p className="grey">Item 4</p>
-              </div>
-              <div className="cl">
-                <p>Row header 1</p>
-                <p className="grey">Item 1</p>
-                <p className="grey">Item 2</p>
-                <p className="grey">Item 3</p>
-                <p className="grey">Item 4</p>
-              </div>
-              <div className="cl">
-                <p>Row header 1</p>
-                <p className="grey">Item 1</p>
-                <p className="grey">Item 2</p>
-                <p className="grey">Item 3</p>
-                <p className="grey">Item 4</p>
-              </div>
+              <div className="cl"></div>
+              <div className="cl"></div>
             </div>
           </div>
         </div>

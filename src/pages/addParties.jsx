@@ -4,52 +4,41 @@ import { useNavigate } from "react-router-dom";
 
 export default function AddParties() {
   const Navigate = useNavigate();
-  var [toggle, setToggle] = useState(true);
+  // var [toggle, setToggle] = useState(true);
   var [page, setPage] = useState("GST");
-  var [itemName, setitemName] = useState();
-  var [itemHSN, setitemHSN] = useState();
-  var [itemCategory, setitemCategory] = useState();
-  var [itemCode, setitemCode] = useState();
-  var [sellPrice, setSellPrice] = useState();
-  var [descount, setDescount] = useState();
-  var [purchaseprice, setPurchasePrice] = useState();
-  var [tax, setTax] = useState();
-  var [openingQuantity, setOpeningQuantity] = useState();
-  var [atPrice, setAtPrice] = useState();
+  var [partyName, setPartyName] = useState();
+  var [GSTIN, setGSTIN] = useState();
+  var [phoneNo, setPhoneNo] = useState();
+  var [GstType, setGstType] = useState();
+  var [state, setState] = useState();
+  var [Email, setEmail] = useState();
+  var [Add, setAdd] = useState();
+  var [OpeningBalance, setOpeningBalance] = useState();
   var [asDate, setAsDate] = useState();
-  var [minToMaintain, setMinToMaintain] = useState();
-  var [location, setLocation] = useState();
+  var [AddF1, setAddF1] = useState();
+  var [AddF2, setAddF2] = useState();
+  var [AddF3, setAddF3] = useState();
   // var [toggle, set] = useState();
 
-  const addItemReq = async () => {
-    let data;
-    if (toggle) {
-      data = {
-        Name: itemName,
-        HSN: itemHSN,
-        Category: itemCategory,
-        Code: itemCode,
-        salesPrice: sellPrice,
-        discount: descount,
-        purchasePrice: purchaseprice,
-        Tax: tax,
-        openingQuantity,
-        atPrice: atPrice,
-        asDate: asDate,
-        minToMaintain,
-        location,
-      };
-    } else {
-      data = {
-        Name: itemName,
-        HSN: itemHSN,
-        Category: itemCategory,
-        Code: itemCode,
-        salesPrice: sellPrice,
-        discount: descount,
-        Tax: tax,
-      };
-    }
+  const addPartiesReq = async () => {
+    let data = {
+      partyName,
+      GSTIN,
+      phoneNo,
+      GstType,
+      state,
+      Email,
+      Add,
+      OpeningBalance,
+      asDate,
+      AddF1,
+      AddF2,
+      AddF3,
+      transactions: [],
+      ammount: 0,
+      balance: 0,
+    };
+    console.log(data);
   };
 
   return (
@@ -86,9 +75,21 @@ export default function AddParties() {
         </div>
         <div className="c1">
           <div className="p1">
-            <CustomInput placeholder={"Party Name *"} />
-            <CustomInput placeholder={"GSTIN"} />
-            <CustomInput placeholder={"Phone Number"} />
+            <CustomInput
+              inputValue={partyName}
+              setInputValue={setPartyName}
+              placeholder={"Party Name *"}
+            />
+            <CustomInput
+              inputValue={GSTIN}
+              setInputValue={setGSTIN}
+              placeholder={"GSTIN"}
+            />
+            <CustomInput
+              inputValue={phoneNo}
+              setInputValue={setPhoneNo}
+              placeholder={"Phone Number"}
+            />
             {/* <button>Select Unit</button> */}
           </div>
           {/* <div className="p1">
@@ -125,7 +126,7 @@ export default function AddParties() {
           {page == "GST" && (
             <div className="div">
               <div className="t">
-                <select name="" id="">
+                <select onChange={(e) => setGstType} name="" id="">
                   <option disabled selected value="">
                     {" "}
                     GST Type
@@ -143,9 +144,21 @@ export default function AddParties() {
                     Registered Business - Consumer
                   </option>
                 </select>
-                <CustomInput placeholder={"State"} />
-                <CustomInput placeholder={"Email Id"} />
-                <CustomInput placeholder={"Billing Address"} />
+                <CustomInput
+                  inputValue={state}
+                  setInputValue={setState}
+                  placeholder={"State"}
+                />
+                <CustomInput
+                  inputValue={Email}
+                  setInputValue={setEmail}
+                  placeholder={"Email Id"}
+                />
+                <CustomInput
+                  inputValue={Add}
+                  setInputValue={setAdd}
+                  placeholder={"Billing Address"}
+                />
               </div>
               {/* <div className="b">
                 <CustomInput placeholder={"Purchase Price"} />
@@ -155,10 +168,14 @@ export default function AddParties() {
           )}
           {page == "Credit" && (
             <div className="div s">
-              <CustomInput placeholder={"Opening balance"} />
+              <CustomInput
+                inputValue={OpeningBalance}
+                setInputValue={setPartyName}
+                placeholder={"Opening balance"}
+              />
               <input
                 type="date"
-                // onChange={(e) => setInvoice_date(e.target.value)}
+                onChange={(e) => setAsDate(e.target.value)}
                 id="birthday"
                 name="birthday"
               ></input>
@@ -166,15 +183,27 @@ export default function AddParties() {
           )}
           {page == "AddF" && (
             <div className="div s">
-              <CustomInput placeholder={"Additional Field 1"} />
-              <CustomInput placeholder={"Additional Field 2"} />
-              <CustomInput placeholder={"Additional Field 3"} />
+              <CustomInput
+                inputValue={AddF1}
+                setInputValue={setAddF1}
+                placeholder={"Additional Field 1"}
+              />
+              <CustomInput
+                inputValue={AddF2}
+                setInputValue={setAddF2}
+                placeholder={"Additional Field 2"}
+              />
+              <CustomInput
+                inputValue={AddF3}
+                setInputValue={setAddF3}
+                placeholder={"Additional Field 3"}
+              />
             </div>
           )}
         </div>
         <div className="c3">
-          <button>Save & New</button>
-          <button>Save</button>
+          <button onClick={() => addPartiesReq()}>Save & New</button>
+          <button onClick={() => addPartiesReq()}>Save</button>
         </div>
       </div>
     </div>

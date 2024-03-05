@@ -99,11 +99,36 @@ export default function Parties() {
             </div>
           </div>
           <div className="cl">
+            <p className="side">-</p>
             <p>Type</p>
-            <p>Invoice/Ref</p>
+            <p>Number</p>
             <p>Date</p>
             <p>Total</p>
             <p>Balance</p>
+            <p className="side">-</p>
+          </div>
+          <div className="cl">
+            <p className="side">-</p>
+            <p className="grey">Sale</p>
+            <p className="grey">1</p>
+            <p className="grey">03/02/24</p>
+            <p className="grey">1700</p>
+            <p className="grey">1700</p>
+            <p className="side">
+              <Dropdown
+                menuItems={[
+                  "View/Edit",
+                  "cancel",
+                  "Delete",
+                  "Duplicate",
+                  "Print",
+                ]}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
+                  <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                </svg>
+              </Dropdown>
+            </p>
           </div>
         </div>
       </div>

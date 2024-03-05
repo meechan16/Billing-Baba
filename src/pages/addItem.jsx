@@ -50,6 +50,7 @@ export default function AddItem({ t = true }) {
         Tax: tax,
       };
     }
+    console.log(data);
   };
 
   return (
@@ -87,20 +88,33 @@ export default function AddItem({ t = true }) {
         <div className="c1">
           <div className="p1">
             <CustomInput
+              inputValue={itemName}
+              setInputValue={setitemName}
               placeholder={toggle ? "Item Name *" : "Service Name *"}
             />
-            <CustomInput placeholder={toggle ? "Item HSN" : "Service HSN"} />
+            <CustomInput
+              inputValue={itemHSN}
+              setInputValue={setitemHSN}
+              placeholder={toggle ? "Item HSN" : "Service HSN"}
+            />
             {/* <button>Select Unit</button> */}
           </div>
           <div className="p1">
-            <select className="box">
+            <select
+              onChange={(e) => setitemCategory(e.target.value)}
+              className="box"
+            >
               <option selected disabled value="">
                 category
               </option>
               <option value="">+ add category</option>
             </select>
             {/* <input type="text" className="box" /> */}
-            <CustomInput placeholder={toggle ? "Item Code" : "Service Code"} />
+            <CustomInput
+              inputValue={itemCode}
+              setInputValue={setitemCode}
+              placeholder={toggle ? "Item Code" : "Service Code"}
+            />
           </div>
         </div>
         <div className="c2">
@@ -123,32 +137,66 @@ export default function AddItem({ t = true }) {
           {page == "pricing" ? (
             <div className="div">
               <div className="t">
-                <CustomInput placeholder={"Sale Price"} />
-                <CustomInput placeholder={"Descount"} />
+                <CustomInput
+                  inputValue={sellPrice}
+                  setInputValue={setSellPrice}
+                  placeholder={"Sale Price"}
+                />
+                <CustomInput
+                  inputValue={descount}
+                  setInputValue={setDescount}
+                  placeholder={"Descount"}
+                />
               </div>
               <div className="b">
-                {toggle && <CustomInput placeholder={"Purchase Price"} />}
-                <CustomInput placeholder={"Taxes"} />
+                {toggle && (
+                  <CustomInput
+                    inputValue={purchaseprice}
+                    setInputValue={setPurchasePrice}
+                    placeholder={"Purchase Price"}
+                  />
+                )}
+                <CustomInput
+                  inputValue={tax}
+                  setInputValue={setTax}
+                  placeholder={"Taxes"}
+                />
               </div>
             </div>
           ) : (
             <div className="div s">
-              <CustomInput placeholder={"Opening Quantity"} />
-              <CustomInput placeholder={"At Price"} />
+              <CustomInput
+                inputValue={openingQuantity}
+                setInputValue={setOpeningQuantity}
+                placeholder={"Opening Quantity"}
+              />
+              <CustomInput
+                inputValue={atPrice}
+                setInputValue={setAtPrice}
+                placeholder={"At Price"}
+              />
               <input
                 type="date"
-                // onChange={(e) => setInvoice_date(e.target.value)}
+                onChange={(e) => setAsDate(e.target.value)}
                 id="birthday"
                 name="birthday"
               ></input>
-              <CustomInput placeholder={"Min Stock to maintain"} />
-              <CustomInput placeholder={"Location"} />
+              <CustomInput
+                inputValue={minToMaintain}
+                setInputValue={setMinToMaintain}
+                placeholder={"Min Stock to maintain"}
+              />
+              <CustomInput
+                inputValue={location}
+                setInputValue={setLocation}
+                placeholder={"Location"}
+              />
             </div>
           )}
         </div>
         <div className="c3">
-          <button>Save & New</button>
-          <button>Save</button>
+          <button onClick={() => addItemReq()}>Save & New</button>
+          <button onClick={() => addItemReq()}>Save</button>
         </div>
       </div>
     </div>
