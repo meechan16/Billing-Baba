@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { dev_url } from "../url";
 
 export default function AddSales() {
   const Navigate = useNavigate();
@@ -101,7 +102,7 @@ export default function AddSales() {
       total_tax: totalTax,
       description: Description,
     };
-    let url = "http://127.0.0.1:9000/addsales";
+    let url = dev_url + "addsales";
     fetch(url, {
       method: "POST",
       headers: {
@@ -133,7 +134,7 @@ export default function AddSales() {
       description: Description,
     };
     try {
-      let url1 = "http://127.0.0.1:9000/addsalesAndGetPdf";
+      let url1 = dev_url + "addsalesAndGetPdf";
       const response = await fetch(url1, {
         method: "POST",
         headers: {
