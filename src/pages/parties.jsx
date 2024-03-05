@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
+import { dev_url } from "../url";
 
 export default function Parties() {
   const Navigate = useNavigate();
+  var [data, setdata] = useState(); //overview, history, search, store
+  useEffect(() => {
+    let fetchData = () => {
+      fetch(dev_url + "/get_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "nulll", // Modify this if necessary
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Data fetch:", data);
+          setdata(data.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+    fetchData();
+  }, []);
   return (
     <div id="parties">
       <div className="left">

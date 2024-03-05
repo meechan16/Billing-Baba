@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
+import { dev_url } from "../url";
 
 export default function AddItem({ t = true }) {
   const Navigate = useNavigate();
@@ -51,6 +52,24 @@ export default function AddItem({ t = true }) {
       };
     }
     console.log(data);
+    let url = dev_url + "additems";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "nulll", // Modify this if necessary
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("sales: ", data);
+        alert("done");
+        Navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -120,21 +139,21 @@ export default function AddItem({ t = true }) {
         <div className="c2">
           <div className="top t">
             <button
-              className={page == "pricing" && "active"}
+              className={page === "pricing" && "active"}
               onClick={() => setPage("pricing")}
             >
               Pricing
             </button>
             {toggle && (
               <button
-                className={page == "stock" && "active"}
+                className={page === "stock" && "active"}
                 onClick={() => setPage("stock")}
               >
                 Stock
               </button>
             )}
           </div>
-          {page == "pricing" ? (
+          {page === "pricing" ? (
             <div className="div">
               <div className="t">
                 <CustomInput

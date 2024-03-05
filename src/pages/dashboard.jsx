@@ -6,7 +6,28 @@ import { dev_url } from "../url";
 
 export default function Dashboard() {
   var [page, setPage] = useState("dashboard"); //overview, history, search, store
+
   var [data, setdata] = useState(); //overview, history, search, store
+  useEffect(() => {
+    let fetchData = () => {
+      fetch(dev_url + "/get_user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "nulll", // Modify this if necessary
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Data fetch:", data);
+          setdata(data.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+    fetchData();
+  }, []);
 
   const [taskStatus, setTaskStatus] = useState({});
   useEffect(() => {
@@ -14,8 +35,9 @@ export default function Dashboard() {
       setTaskStatus(data?.todo_list);
     }
   }, [data]);
+
   useEffect(() => {
-    if (data && taskStatus != {}) {
+    if (data && Object.keys(taskStatus).length >= 0) {
       // setdata({ ...data, [data.todo_list]: taskStatus });
       let url = dev_url + "update_todo";
       // console.log(data);
@@ -29,7 +51,7 @@ export default function Dashboard() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Response:", data);
+          console.log("todo pull:", data);
           // alert("done");
         })
         .catch((error) => {
@@ -38,26 +60,6 @@ export default function Dashboard() {
     }
   }, [taskStatus]);
 
-  useEffect(() => {
-    let fetchData = () => {
-      fetch(dev_url + "/get_user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "nulll", // Modify this if necessary
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Response:", data);
-          setdata(data.data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    };
-    fetchData();
-  }, []);
   return (
     <div id="Dashboard">
       <div className="topbar">
@@ -254,7 +256,7 @@ export default function Dashboard() {
                 </select>
               </div>
               <div className="mid">
-                <h1>₹ 00.00</h1>
+                <h1>₹ {data?.total_purchase}</h1>
                 <p>You have no purchases for today</p>
               </div>
               <div className="profile">

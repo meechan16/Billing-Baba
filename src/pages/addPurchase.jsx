@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { dev_url } from "../url";
 
 export default function AddPurchase() {
   const Navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function AddPurchase() {
     },
   ]);
 
-  const [indexCount, setIndexCount] = useState(2);
+  const [indexCount, setIndexCount] = useState();
   const addRow = () => {
     setRows([
       ...rows,
@@ -80,12 +81,14 @@ export default function AddPurchase() {
     });
   };
 
-  const [phone_no, setPhone_no] = useState(2); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(2); // Initial index count
-  const [invoice_date, setInvoice_date] = useState(2); // Initial index count
-  const [state_of_supply, setState_of_supply] = useState(2); // Initial index count
-  const [round_off, setRound_off] = useState(2); // Initial index count
-  // const [total, setTotal] = useState(2); // Initial index count
+  const [Name, setName] = useState();
+  const [phone_no, setPhone_no] = useState();
+  const [invoice_number, setInvoice_number] = useState();
+  const [invoice_date, setInvoice_date] = useState("");
+  const [state_of_supply, setState_of_supply] = useState();
+  const [round_off, setRound_off] = useState();
+  const [paymentType, setpaymentType] = useState();
+  const [Description, setDescription] = useState();
 
   let sendData = () => {
     const data = {
@@ -93,13 +96,15 @@ export default function AddPurchase() {
       invoice_number: invoice_number,
       invoice_date: invoice_date,
       state_of_supply: state_of_supply,
+      payment_type: paymentType,
       items: rows,
       round_off: round_off,
       total: totalAmount,
       total_tax: totalTax,
+      description: Description,
     };
-
-    fetch("http://127.0.0.1:9000/addItems", {
+    let url = dev_url + "addpurchase";
+    fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,31 +114,15 @@ export default function AddPurchase() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Response:", data);
+        console.log("purchase: ", data);
+        alert("done");
+        Navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
-  let fetchData = () => {
-    fetch("http://127.0.0.1:9000/addItems", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
-  useEffect(() => {}, []);
   return (
     <div id="addsales">
       <div className="top">
@@ -158,23 +147,39 @@ export default function AddPurchase() {
       </div>
       <div className="body">
         <div className="ai1">
-          <div className="l">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
-            </svg>
-            <input
-              type="text"
-              name="name"
-              placeholder="Search by Name/Phone"
-              id=""
-            />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-            </svg>
+          <div className="le">
+            <div className="l">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+              </svg>
+              <input
+                type="text"
+                name="name"
+                value={Name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Search by Name/Phone"
+                id=""
+              />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              </svg>
+            </div>
+            <div className="l">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+              </svg>
+              <input
+                type="text"
+                value={phone_no}
+                onChange={(e) => setPhone_no(e.target.value)}
+                name="phNo"
+                placeholder="Phone Number"
+                id=""
+              />
+            </div>
           </div>
-
           <div className="r">
-            <div className="">
+            {/* <div className="">
               <span>Phone No</span>
               <input
                 type="text"
@@ -184,7 +189,7 @@ export default function AddPurchase() {
                 placeholder="input..."
                 id=""
               />
-            </div>
+            </div> */}
             <div className="">
               <span>Invoice Number</span>
               <input
@@ -199,10 +204,10 @@ export default function AddPurchase() {
             <div className="">
               <span>Invoice Date</span>
               {/* <DatePicker
-                  selected={invoice_date}
-                  onChange={handleChange}
-                  dateFormat="dd/MM/yyyy"
-                /> */}
+                selected={invoice_date}
+                onChange={handleChange}
+                dateFormat="dd/MM/yyyy"
+              /> */}
               <input
                 type="date"
                 onChange={(e) => setInvoice_date(e.target.value)}
@@ -210,13 +215,13 @@ export default function AddPurchase() {
                 name="birthday"
               ></input>
               {/* <input
-                  type="text"
-                  value={invoice_date}
-                  onChange={(e) => setInvoice_date(e.target.value)}
-                  name="InvDate"
-                  placeholder="input..."
-                  id=""
-                /> */}
+                type="text"
+                value={invoice_date}
+                onChange={(e) => setInvoice_date(e.target.value)}
+                name="InvDate"
+                placeholder="input..."
+                id=""
+              /> */}
             </div>
             <div className="">
               <span>State of supply</span>
@@ -261,11 +266,11 @@ export default function AddPurchase() {
               </div>
               <div>
                 {/* <input
-                    value={row.col3}
-                    onChange={(e) =>
-                      handleInputChange(rowIndex, "unit", e.target.value)
-                    }
-                  /> */}
+                  value={row.col3}
+                  onChange={(e) =>
+                    handleInputChange(rowIndex, "unit", e.target.value)
+                  }
+                /> */}
                 <select
                   name=""
                   id=""
@@ -301,11 +306,11 @@ export default function AddPurchase() {
               </div>
               <div>
                 {/* <input
-                    value={row.col6}
-                    onChange={(e) =>
-                      handleInputChange(rowIndex, "tax", e.target.value)
-                    }
-                  /> */}
+                  value={row.col6}
+                  onChange={(e) =>
+                    handleInputChange(rowIndex, "tax", e.target.value)
+                  }
+                /> */}
                 <select
                   name=""
                   id=""
@@ -345,64 +350,61 @@ export default function AddPurchase() {
         </div>
         <div className="ai3">
           <div className="l">
-            <input type="checkbox" name="" id="" />
+            {/* <input type="checkbox" name="" id="" />
             <span>Round Off</span>
             <input
               className="in"
               value={round_off}
               onChange={(e) => setRound_off(e.target.value)}
               type="text"
+            /> */}
+
+            <input
+              type="text"
+              value={Description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Add Description..."
             />
-            <button onClick={addRow}>Add Row</button>
-            <button
+            <select onChange={(e) => setpaymentType(e.target.value)}>
+              {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+              </svg>{" "} */}
+              <option disabled selected value="">
+                PAYMENT TYPE
+              </option>
+              <option value="">CASH</option>
+              <option value="">CHECK</option>
+            </select>
+            <button onClick={addRow}>ADD ROW</button>
+            {/* <button
               onClick={() => {
                 sendData();
               }}
             >
               send Data
-            </button>
-            <button
+            </button> */}
+            {/* <button
               onClick={() => {
                 // console.log(rows);
                 fetchData();
               }}
             >
               fetch Data
-            </button>
+            </button> */}
           </div>
           <div className="r">
             <span>Total</span>
             <span>Rs.</span>
             <p>{totalAmount}</p>
-            {/* <input
-                type="text"
-                value={total}
-                onChange={(e) => setTotal(e.target.value)}
-              /> */}
           </div>
         </div>
-        <div className="ai4">
-          <button>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-              <path d="M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z" />
-            </svg>{" "}
-            ADD DESCRIPTION
-          </button>
-          {/* <button>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z" />
-              </svg>{" "}
-              ADD IMAGE
-            </button> */}
-          <button>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-            </svg>{" "}
-            PAYMENT TYPE
-          </button>
-        </div>
         <div className="ai5">
-          <button className="save">Save</button>
+          {/* <button className="save1" onClick={() => sendData_and_get_pdf()}>
+            Save & Generate Invoice
+          </button> */}
+          <button className="save" onClick={() => sendData()}>
+            Save
+          </button>
           <button className="share">
             Share{" "}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

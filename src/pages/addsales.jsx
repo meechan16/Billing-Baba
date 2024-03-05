@@ -81,6 +81,7 @@ export default function AddSales() {
     });
   };
 
+  const [Name, setName] = useState(); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
   const [invoice_number, setInvoice_number] = useState(); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
@@ -113,13 +114,15 @@ export default function AddSales() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Response:", data);
+        console.log("sales: ", data);
         alert("done");
+        Navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
+
   let sendData_and_get_pdf = async () => {
     const data = {
       phone_no: phone_no,
@@ -139,10 +142,10 @@ export default function AddSales() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "nulll", // Modify this if necessary
+          Authorization: "nulll",
         },
         body: JSON.stringify(data),
-      }); // Assuming your Flask server is running on the same domain
+      });
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
@@ -151,24 +154,6 @@ export default function AddSales() {
     }
   };
 
-  let fetchData = () => {
-    fetch("http://127.0.0.1:9000/addItems", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
-  // useEffect(() => {}, []);
   return (
     <div id="addsales">
       <div className="top">
@@ -193,23 +178,40 @@ export default function AddSales() {
       </div>
       <div className="body">
         <div className="ai1">
-          <div className="l">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
-            </svg>
-            <input
-              type="text"
-              name="name"
-              placeholder="Search by Name/Phone"
-              id=""
-            />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-            </svg>
+          <div className="le">
+            <div className="l">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+              </svg>
+              <input
+                type="text"
+                name="name"
+                value={Name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Search by Name/Phone"
+                id=""
+              />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              </svg>
+            </div>
+            <div className="l">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+              </svg>
+              <input
+                type="text"
+                value={phone_no}
+                onChange={(e) => setPhone_no(e.target.value)}
+                name="phNo"
+                placeholder="Phone Number"
+                id=""
+              />
+            </div>
           </div>
 
           <div className="r">
-            <div className="">
+            {/* <div className="">
               <span>Phone No</span>
               <input
                 type="text"
@@ -219,7 +221,7 @@ export default function AddSales() {
                 placeholder="input..."
                 id=""
               />
-            </div>
+            </div> */}
             <div className="">
               <span>Invoice Number</span>
               <input

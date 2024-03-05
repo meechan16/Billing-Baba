@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
+import { dev_url } from "../url";
 
 export default function AddParties() {
   const Navigate = useNavigate();
@@ -39,6 +40,24 @@ export default function AddParties() {
       balance: 0,
     };
     console.log(data);
+    let url = dev_url + "addparties";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "nulll", // Modify this if necessary
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("sales: ", data);
+        alert("done");
+        Navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
