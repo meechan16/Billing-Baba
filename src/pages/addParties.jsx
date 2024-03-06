@@ -7,18 +7,18 @@ export default function AddParties() {
   const Navigate = useNavigate();
   // var [toggle, setToggle] = useState(true);
   var [page, setPage] = useState("GST");
-  var [partyName, setPartyName] = useState();
-  var [GSTIN, setGSTIN] = useState();
-  var [phoneNo, setPhoneNo] = useState();
-  var [GstType, setGstType] = useState();
-  var [state, setState] = useState();
-  var [Email, setEmail] = useState();
-  var [Add, setAdd] = useState();
-  var [OpeningBalance, setOpeningBalance] = useState();
-  var [asDate, setAsDate] = useState();
-  var [AddF1, setAddF1] = useState();
-  var [AddF2, setAddF2] = useState();
-  var [AddF3, setAddF3] = useState();
+  var [partyName, setPartyName] = useState("");
+  var [GSTIN, setGSTIN] = useState("");
+  var [phoneNo, setPhoneNo] = useState("");
+  var [GstType, setGstType] = useState("");
+  var [state, setState] = useState("");
+  var [Email, setEmail] = useState("");
+  var [Add, setAdd] = useState("");
+  var [OpeningBalance, setOpeningBalance] = useState("");
+  var [asDate, setAsDate] = useState("");
+  var [AddF1, setAddF1] = useState("");
+  var [AddF2, setAddF2] = useState("");
+  var [AddF3, setAddF3] = useState("");
   // var [toggle, set] = useState();
 
   const addPartiesReq = async () => {
@@ -189,7 +189,7 @@ export default function AddParties() {
             <div className="div s">
               <CustomInput
                 inputValue={OpeningBalance}
-                setInputValue={setPartyName}
+                setInputValue={setOpeningBalance}
                 placeholder={"Opening balance"}
               />
               <input

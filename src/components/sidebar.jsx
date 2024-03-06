@@ -7,7 +7,7 @@ export default function Sidebar({ part }) {
   return (
     <div id="sidebar" className="flex">
       <div className="top" onClick={() => Navigate("/profile")}>
-        <img src="" alt="" />
+        <img src="./assets/home/user_img.png" alt="" />
         <div className="content">
           <h1>BKC Traders</h1>
           <h2>Aman Mishra</h2>

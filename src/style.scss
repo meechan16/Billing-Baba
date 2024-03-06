@@ -30,7 +30,11 @@
     background-color: #212934;
     border: 1px solid #212934;
     margin: 5px 0;
-    padding: 5px 10px;
+    padding: 5px 15px;
+    box-shadow: -5px 5px 5px #212934b7;
+    img {
+      height: 2.2rem;
+    }
     h1 {
       font-size: 1rem;
       transition: 100ms ease;
@@ -49,6 +53,7 @@
       border: 1px solid #212934;
       background-color: transparent;
       color: black;
+      box-shadow: -5px 5px 10px #212934b7;
       h1,
       h2 {
         // text-decoration: underline;
@@ -72,6 +77,7 @@
     justify-content: space-between;
     flex: 1;
     overflow-y: auto;
+    box-shadow: -5px 5px 10px #212934b7;
     .content {
       -ms-overflow-style: none; /* for Internet Explorer, Edge */
       scrollbar-width: none; /* for Firefox */
@@ -159,7 +165,18 @@
     margin: 10px;
     padding: 7px 20px;
     border-radius: 50px;
-    border: 1px solid grey;
+    border: 1px solid rgba(128, 128, 128, 0.584) (128, 128, 128, 0.584);
+    box-shadow: -2px 2px 8px #21293452;
+    transition: 200ms ease;
+    &:hover {
+      box-shadow: -2px 2px 6px #2129348b;
+      transition: 200ms ease;
+    }
+    &:focus {
+      outline: none;
+      transition: 200ms ease;
+      background-color: rgba(204, 204, 204, 0.478);
+    }
   }
 
   & > button {
@@ -169,6 +186,7 @@
     border-radius: 10px;
     font-size: 0.9rem;
     font-weight: 500;
+    box-shadow: -2px 2px 8px #222a353a;
     &.purchase {
       border-radius: 50px;
       background-color: #6e96ff7a;
@@ -176,6 +194,7 @@
       color: #346aff;
       transition: 200ms ease;
       &:hover {
+        box-shadow: -2px 2px 8px #212934c0;
         background: #346aff;
         color: white;
         transition: 200ms ease;
@@ -188,6 +207,7 @@
       color: #ff0d0d;
       transition: 200ms ease;
       &:hover {
+        box-shadow: -2px 2px 8px #212934c0;
         background: #ff0d0d;
         color: white;
         transition: 200ms ease;
@@ -200,6 +220,8 @@
       color: #346aff;
       transition: 200ms ease;
       &:hover {
+        box-shadow: -2px 2px 8px #212934c0;
+        border: 3px solid #002a9d;
         background: #002a9d;
         // border: transparent;
         color: white;
@@ -940,6 +962,7 @@
         }
         transition: 200ms ease-in-out;
         &:hover {
+          box-shadow: -5px 5px 10px rgba(136, 136, 136, 0.43);
           scale: 1.05;
           transition: 200ms ease-in-out;
         }
