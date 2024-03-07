@@ -1,18 +1,82 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Undone from "../components/undone";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
 import StockAdjust from "../components/stock_Adjustment";
+import { dev_url } from "../url";
 
 export default function Items() {
   var [page, setPage] = useState("product");
   var [StockPage, setStockPage] = useState(false);
   const Navigate = useNavigate();
-  var [Category, setCategory] = useState(false);
-  var [Units, setUnits] = useState(false);
-  var [addToggle, setAddToggle] = useState(false);
-  var [itemsToggle, setItemsToggle] = useState(false);
+  var [Category, setCategory] = useState();
+  var [Units, setUnits] = useState();
+  // var [addToggle, setAddToggle] = useState(false);
+  // var [itemsToggle, setItemsToggle] = useState(false);
+
+  const [data, setData] = useState([]);
+  const [selecteditems, setSelectedItems] = useState(null);
+  const [selectedunits, setSelectedUnits] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetch(dev_url + "/get_user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "nulll", // Modify this if necessary
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data fetch:", data);
+        setData(data.data || []); // Ensure data is always an array
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  var [unitName, setUnitName] = useState(false);
+  var [unitShorthand, setUnitShorthand] = useState(false);
+
+  var [addCategory, setAddCategory] = useState(false);
+
+  const addthings = async () => {
+    let data;
+    let url;
+    if (page === "category") {
+      data = { Category: addCategory };
+      url = dev_url + "addCategory";
+    } else if (page === "unit") {
+      data = { name: unitName, shortHand: unitShorthand };
+      url = dev_url + "addUnits";
+    }
+    console.log(data);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "nulll", // Modify this if necessary
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("category/units: ", data);
+        alert("done");
+        Navigate("/items");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <div id="items">
       <div className="topbar">
@@ -63,7 +127,6 @@ export default function Items() {
                     <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                   </svg>
                 </Dropdown>
-                <button></button>
               </div>
             </div>
             <div className="content">
@@ -71,116 +134,127 @@ export default function Items() {
                 <h2>Items</h2>
                 <h2>Qty</h2>
               </div>
-              <div className="tile selected">
-                <h1>Boat headphones</h1>
-                <div className="">
-                  <p>10</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
+              {data?.items?.map((item, index) => (
+                <div
+                  className={`tile ${selecteditems === item ? "selected" : ""}`}
+                  key={index}
+                  onClick={() => setSelectedItems(item)}
+                >
+                  <h1>{item.Name}</h1>
+                  <div className="">
+                    <p>₹ {item.ammount || "-"}</p>
+                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 128 512"
+                      >
+                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                      </svg>
+                    </Dropdown>
+                  </div>
                 </div>
-              </div>
-              <div className="tile">
-                <h1>Guccy Watch</h1>
-                <div className="">
-                  <p>02</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>T-shirt</h1>
-                <div className="">
-                  <p>18</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
           <div className="right">
             <div className="title">
               <div className="tile">
-                <h1>Boat Headphonest</h1>
+                <h1>
+                  {selecteditems ? selecteditems.Name : "No Item Selected"}
+                </h1>
                 <button onClick={() => setStockPage(!StockPage)}>
                   + Adujust Items
                 </button>
                 {StockPage && <StockAdjust setClose={setStockPage} />}
               </div>
-              <div className="tile">
-                <p>
-                  SALE PRICE <span> ₹ 100.00</span>(excl)
-                </p>
-                <p>
-                  Stock Qty: <span className="red"> 10</span>
-                </p>
-              </div>
-              <div className="tile">
-                <p>
-                  PURCHASE PRICE <span> ₹ 00.00</span>(excl)
-                </p>
-                <p>
-                  Stock Qty: <span className="red"> 10</span>
-                </p>
-              </div>
-              <div className="tile"></div>
-              <div className="tile"></div>
-            </div>
-            <div className="content">
-              <div className="t">
-                <h1>TRANSACTIONS</h1>
-                <div className="search">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                  </svg>
-                  <input type="" />
+
+              {selecteditems && (
+                <div className="tile">
+                  <p>
+                    SALE PRICE{" "}
+                    <span>
+                      {" "}
+                      ₹ {selecteditems ? selecteditems.salesPrice : "Null"}
+                    </span>
+                    (excl)
+                  </p>
+                  <p>
+                    Stock Qty:{" "}
+                    <span className="red">
+                      {" "}
+                      {selecteditems ? selecteditems.stock : "-"}
+                    </span>
+                  </p>
                 </div>
-              </div>
-              <div className="cl top">
-                <p>Type</p>
-                <p>Invoice/Ref</p>
-                <p>Name</p>
-                <p>Date</p>
-                <p>Quantity</p>
-                <p>Price</p>
-                <p>Status</p>
-              </div>
-              <div className="cl">
-                <p>Tech</p>
-                <p className="grey">231</p>
-                <p className="grey">Boat</p>
-                <p className="grey">03/02/2024</p>
-                <p className="grey">10</p>
-                <p className="grey">3000</p>
-                <p className="grey">Unpaid</p>
-              </div>
-              <div className="cl">
-                <p>Tech</p>
-                <p className="grey">231</p>
-                <p className="grey">Boat</p>
-                <p className="grey">03/02/2024</p>
-                <p className="grey">10</p>
-                <p className="grey">3000</p>
-                <p className="grey">Unpaid</p>
-              </div>
+              )}
+              {selecteditems && (
+                <div className="tile">
+                  <p>
+                    PURCHASE PRICE{" "}
+                    <span>
+                      {" "}
+                      ₹ {selecteditems ? selecteditems.purchasePrice : "-"}
+                    </span>
+                    (excl)
+                  </p>
+                  <p>
+                    Stock Qty:{" "}
+                    <span className="red">
+                      {" "}
+                      {selecteditems ? selecteditems.purchaseStock : "-"}
+                    </span>
+                  </p>
+                </div>
+              )}
+              <div className="tile"></div>
+              <div className="tile"></div>
             </div>
+            {selecteditems && (
+              <div className="content">
+                <div className="t">
+                  <h1>TRANSACTIONS</h1>
+                  <div className="search">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
+                    <input type="" />
+                  </div>
+                </div>
+                <div className="cl top">
+                  <p>Type</p>
+                  <p>Invoice/Ref</p>
+                  <p>Name</p>
+                  <p>Date</p>
+                  <p>Quantity</p>
+                  <p>Price</p>
+                  <p>Status</p>
+                </div>
+
+                {selecteditems.transactions?.map((transaction, index) => (
+                  <div className="cl">
+                    <p>Tech</p>
+                    <p className="grey">231</p>
+                    <p className="grey">Boat</p>
+                    <p className="grey">03/02/2024</p>
+                    <p className="grey">10</p>
+                    <p className="grey">3000</p>
+                    <p className="grey">Unpaid</p>
+                  </div>
+                ))}
+                {/* <div className="cl">
+                <p>Tech</p>
+                <p className="grey">231</p>
+                <p className="grey">Boat</p>
+                <p className="grey">03/02/2024</p>
+                <p className="grey">10</p>
+                <p className="grey">3000</p>
+                <p className="grey">Unpaid</p>
+              </div> */}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -224,8 +298,13 @@ export default function Items() {
                     </div>
                     <div className="m">
                       <span>Enter Category Name</span>
-                      <input type="text" placeholder="eg. Grocery" />
-                      <button>Create</button>
+                      <input
+                        type="text"
+                        value={addCategory}
+                        onChange={(e) => setAddCategory(e.target.value)}
+                        placeholder="eg. Grocery"
+                      />
+                      <button onClick={() => addthings()}>Create</button>
                     </div>
                   </div>
                 </div>
@@ -236,7 +315,29 @@ export default function Items() {
                 <h2>Full name</h2>
                 <h2>In Short</h2>
               </div>
-              <div className="tile selected">
+              {data?.category?.map((item, index) => (
+                <div
+                  className={`tile ${
+                    selectedCategory === item ? "selected" : ""
+                  }`}
+                  key={index}
+                  onClick={() => setSelectedCategory(item)}
+                >
+                  <h1>{item.name}</h1>
+                  <div className="">
+                    <p>₹ {item.name || "-"}</p>
+                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 128 512"
+                      >
+                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                      </svg>
+                    </Dropdown>
+                  </div>
+                </div>
+              ))}
+              {/* <div className="tile selected">
                 <h1>electronics</h1>
                 <div className="">
                   <p>tech</p>
@@ -277,13 +378,13 @@ export default function Items() {
                     </svg>
                   </Dropdown>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="right">
             <div className="title">
               <div className="tile">
-                <h1>BAGS</h1>
+                <h1>{selectedCategory?.name || "no name selected"}</h1>
                 <button>Move to this category</button>
               </div>
               {/* <div className="tile">
@@ -305,32 +406,39 @@ export default function Items() {
               <div className="tile"></div>
               <div className="tile"></div>
             </div>
-            <div className="content">
-              <div className="t">
-                <h1>UNITS</h1>
-                <div className="search">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                  </svg>
-                  <input type="" />
+            {selectedCategory && (
+              <div className="content">
+                <div className="t">
+                  <h1>Transactions</h1>
+                  <div className="search">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
+                    <input type="" />
+                  </div>
                 </div>
+                <div className="cl top">
+                  <p>Name</p>
+                  <p>Quantity</p>
+                  <p>Stock Value</p>
+                </div>
+                {selectedCategory.transactions?.map((transaction, index) => (
+                  <div className="cl">
+                    <p className="grey">Boat Headphones</p>
+                    <p className="grey">10</p>
+                    <p className="grey">0.0</p>
+                  </div>
+                ))}
+                {/* <div className="cl">
+                  <p className="grey">Gucci Watch</p>
+                  <p className="grey">2</p>
+                  <p className="grey">0.0</p>
+                </div> */}
               </div>
-              <div className="cl top">
-                <p>Name</p>
-                <p>Quantity</p>
-                <p>Stock Value</p>
-              </div>
-              <div className="cl">
-                <p className="grey">Boat Headphones</p>
-                <p className="grey">10</p>
-                <p className="grey">0.0</p>
-              </div>
-              <div className="cl">
-                <p className="grey">Gucci Watch</p>
-                <p className="grey">2</p>
-                <p className="grey">0.0</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -359,9 +467,17 @@ export default function Items() {
                       </button>
                     </div>
                     <div className="m">
-                      <CustomInput placeholder={"Unit Name"} />
-                      <CustomInput placeholder={"Short Name"} />
-                      <button>Save</button>
+                      <CustomInput
+                        inputValue={unitName}
+                        setInputValue={setUnitName}
+                        placeholder={"Unit Name"}
+                      />
+                      <CustomInput
+                        inputValue={unitShorthand}
+                        setInputValue={setUnitShorthand}
+                        placeholder={"Short Name"}
+                      />
+                      <button onClick={() => addthings()}>Save</button>
                     </div>
                   </div>
                 </div>
@@ -372,7 +488,27 @@ export default function Items() {
                 <h2>FULLNAME</h2>
                 <h2>SHORTNAME</h2>
               </div>
-              <div className="tile selected">
+              {data?.units?.map((item, index) => (
+                <div
+                  className={`tile ${selectedunits === item ? "selected" : ""}`}
+                  key={index}
+                  onClick={() => setSelectedUnits(item)}
+                >
+                  <h1>{item.name}</h1>
+                  <div className="">
+                    <p>₹ {item.shortHand || "-"}</p>
+                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 128 512"
+                      >
+                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                      </svg>
+                    </Dropdown>
+                  </div>
+                </div>
+              ))}
+              {/* <div className="tile selected">
                 <h1>BAGS</h1>
                 <div className="">
                   <p>BAGS</p>
@@ -469,16 +605,16 @@ export default function Items() {
                     </svg>
                   </Dropdown>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="right">
             <div className="title">
               <div className="tile">
-                <h1>Boat Headphonest</h1>
+                <h1>{selectedunits?.name || "no unit selected"}</h1>
                 <button>Add Conversions</button>
               </div>
-              <div className="tile">
+              {/* <div className="tile">
                 <p>
                   SALE PRICE <span> ₹ 100.00</span>(excl)
                 </p>
@@ -493,9 +629,9 @@ export default function Items() {
                 <p>
                   Stock Qty: <span className="red"> 10</span>
                 </p>
-              </div>
-              <div className="tile"></div>
-              <div className="tile"></div>
+              </div> */}
+              {/* <div className="tile"></div>
+              <div className="tile"></div> */}
             </div>
             <div className="content">
               <div className="t">

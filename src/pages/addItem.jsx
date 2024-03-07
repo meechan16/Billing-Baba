@@ -65,7 +65,7 @@ export default function AddItem({ t = true }) {
       .then((data) => {
         console.log("sales: ", data);
         alert("done");
-        Navigate("/");
+        Navigate("/items");
       })
       .catch((error) => {
         console.error("Error:", error);

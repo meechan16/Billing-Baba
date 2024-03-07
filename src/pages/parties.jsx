@@ -5,8 +5,8 @@ import { dev_url } from "../url";
 
 export default function Parties() {
   const Navigate = useNavigate();
-  const [data, setData] = useState([]);
   const [selectedParty, setSelectedParty] = useState(null);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -46,6 +46,10 @@ export default function Parties() {
           </div>
         </div>
         <div className="content">
+          <div className="head">
+            <h2>Name</h2>
+            <h2>Amount</h2>
+          </div>
           {data.map((party, index) => (
             <div
               className={`tile ${selectedParty === party ? "selected" : ""}`}
@@ -91,7 +95,7 @@ export default function Parties() {
               <p>Balance</p>
               <p className="side">-</p>
             </div>
-            {selectedParty.transactions.map((transaction, index) => (
+            {selectedParty.transactions?.map((transaction, index) => (
               <div className="cl" key={index}>
                 <p className="side">-</p>
                 <p className="grey">Sale</p>
