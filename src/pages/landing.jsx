@@ -138,10 +138,10 @@ export default function Landing() {
 
       <section className="landing">
         <div className="left">
+          <h1>Welcome to</h1>
           <h1>
-            Welcome to <span>BILLING BABA</span>
+            <span>BILLING BABA</span>
           </h1>
-
           <p>
             Create Invoices, Purchases & Quotations in less than 10 seconds.
             Share on WhatsApp with payment links and get paid{" "}
@@ -493,7 +493,7 @@ export default function Landing() {
             {feature_nav_items.map(({ name, color, index }) => (
               <button
                 key={index}
-                className={index == activeSection ? "active" : ""}
+                className={index === activeSection ? "active" : ""}
               >
                 {name}
               </button>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../url";
+import { dev_url } from "../../url";
 
-export default function AddSales() {
+export default function AddPurchase() {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -81,15 +81,15 @@ export default function AddSales() {
     });
   };
 
-  const [Name, setName] = useState(); // Initial index count
-  const [phone_no, setPhone_no] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(); // Initial index count
-  const [invoice_date, setInvoice_date] = useState(""); // Initial index count
-  const [state_of_supply, setState_of_supply] = useState(); // Initial index count
-  const [round_off, setRound_off] = useState(); // Initial index count
-  const [paymentType, setpaymentType] = useState(); // Initial index count
-  const [Description, setDescription] = useState(); // Initial index count
-  const [paymentStatus, setPaymentStatus] = useState("");
+  const [Name, setName] = useState();
+  const [phone_no, setPhone_no] = useState();
+  const [invoice_number, setInvoice_number] = useState();
+  const [invoice_date, setInvoice_date] = useState("");
+  const [state_of_supply, setState_of_supply] = useState();
+  const [round_off, setRound_off] = useState();
+  const [paymentType, setpaymentType] = useState();
+  const [Description, setDescription] = useState();
+
   let sendData = () => {
     const data = {
       phone_no: phone_no,
@@ -103,7 +103,7 @@ export default function AddSales() {
       total_tax: totalTax,
       description: Description,
     };
-    let url = dev_url + "addsales";
+    let url = dev_url + "addpurchase";
     fetch(url, {
       method: "POST",
       headers: {
@@ -114,44 +114,13 @@ export default function AddSales() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("sales: ", data);
+        console.log("purchase: ", data);
         alert("done");
         Navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-  };
-
-  let sendData_and_get_pdf = async () => {
-    const data = {
-      phone_no: phone_no,
-      invoice_number: invoice_number,
-      invoice_date: invoice_date,
-      state_of_supply: state_of_supply,
-      payment_type: paymentType,
-      items: rows,
-      round_off: round_off,
-      total: totalAmount,
-      total_tax: totalTax,
-      description: Description,
-    };
-    try {
-      let url1 = dev_url + "addsalesAndGetPdf";
-      const response = await fetch(url1, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "nulll",
-        },
-        body: JSON.stringify(data),
-      });
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
   };
 
   return (
@@ -163,7 +132,7 @@ export default function AddSales() {
               <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
             </svg>
           </button>
-          <h1>Sale</h1>
+          <h1>Purchase</h1>
         </div>
         <div className="">
           <p>Credit</p>
@@ -209,7 +178,6 @@ export default function AddSales() {
               />
             </div>
           </div>
-
           <div className="r">
             {/* <div className="">
               <span>Phone No</span>
@@ -430,30 +398,10 @@ export default function AddSales() {
             <p>{totalAmount}</p>
           </div>
         </div>
-        <div className="ai4">{/* <p>{paymentStatus}</p> */}</div>
         <div className="ai5">
-          <label>
-            Paid
-            <input
-              type="radio"
-              value="paid"
-              checked={paymentStatus === "paid"}
-              onChange={(e) => setPaymentStatus(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Pending
-            <input
-              type="radio"
-              value="pending"
-              checked={paymentStatus === "pending"}
-              onChange={(e) => setPaymentStatus(e.target.value)}
-            />
-          </label>
-          <button className="save1" onClick={() => sendData_and_get_pdf()}>
+          {/* <button className="save1" onClick={() => sendData_and_get_pdf()}>
             Save & Generate Invoice
-          </button>
+          </button> */}
           <button className="save" onClick={() => sendData()}>
             Save
           </button>
