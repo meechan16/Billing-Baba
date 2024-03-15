@@ -25,6 +25,21 @@ export default function Profile({ data, setData }) {
 
   return (
     <div id="profile">
+      <h1>
+        Name: <span>{data.name}</span>
+      </h1>
+      <h1>
+        Business Name: <span>{data.BusinessName}</span>
+      </h1>
+      <h1>
+        Email: <span>{data.email}</span>
+      </h1>
+      <h1>
+        GSTIN: <span>{data.GSTIN}</span>
+      </h1>
+      <h1>
+        Mobile: <span>{data.mobile}</span>
+      </h1>
       <button
         onClick={() => {
           logout();

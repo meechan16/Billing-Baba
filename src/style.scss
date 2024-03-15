@@ -46,6 +46,10 @@ input[type="number"] {
     }
     h1 {
       font-size: 1rem;
+      margin: 0 2px;
+      text-wrap: nowrap;
+      overflow: hidden;
+      width: 8vw;
       transition: 100ms ease;
     }
     h2 {
@@ -345,13 +349,22 @@ input[type="number"] {
   height: 80vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   align-items: center;
   justify-content: center;
+  h1 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    span {
+      font-weight: 700;
+    }
+  }
   button {
-    padding: 10px 20px;
+    padding: 10px 30px;
     font-size: 1.3rem;
     color: black;
-    box-shadow: 0 0 10px rgb(176, 176, 176);
+    background: rgb(176, 176, 176);
     border-radius: 10px;
   }
 }
@@ -361,7 +374,7 @@ input[type="number"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f2eed5b3;
+  background-color: #e6e6e6;
   .content {
     display: flex;
     justify-content: space-evenly;
@@ -407,8 +420,8 @@ input[type="number"] {
       align-items: center;
       padding: 20px;
       gap: 5px;
-      box-shadow: 5px 5px 10px rgb(172, 172, 172);
-      border-radius: 10px;
+      // box-shadow: 5px 5px 10px rgb(172, 172, 172);
+      // border-radius: 10px;
       .line {
         border-bottom: 1px solid rgb(130, 130, 130);
         width: 100%;
@@ -425,9 +438,9 @@ input[type="number"] {
         align-items: center;
         h1 {
           color: #0090d3;
-          margin: 5px 0;
-          font-size: 1.5rem;
-          font-weight: 600;
+          margin: 20px 0 !important;
+          font-size: 2.1rem;
+          font-weight: 800;
           margin: 10px 0;
         }
         input {
@@ -453,6 +466,7 @@ input[type="number"] {
           background-color: transparent;
           color: var(#0f1b4c);
           background-color: #0090d3;
+          font-weight: 600;
           color: white;
           font-size: 1.2rem;
           transition: 100ms ease-in-out;
@@ -2821,5 +2835,33 @@ input[type="number"] {
         width: 100%;
       }
     }
+  }
+}
+
+#loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  h1 {
+    font-size: 1.8rem;
+    margin: 10px 0;
+  }
+  button {
+    width: 200px;
+    background: rgb(241, 241, 241);
+    padding: 10px 30px;
+
+    font-size: 1.2rem;
   }
 }

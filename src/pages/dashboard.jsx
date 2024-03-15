@@ -2,9 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import Undone from "../components/undone";
 import TodoList from "../components/todoList";
 import { dev_url } from "../url";
+import LogIn from "./kogin";
+import AddInfo from "./addInfo";
+import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
 export default function Dashboard({ data, setData }) {
+  const Navigate = useNavigate();
+
   var [page, setPage] = useState("dashboard");
 
   const [taskStatus, setTaskStatus] = useState({});
@@ -44,7 +49,9 @@ export default function Dashboard({ data, setData }) {
         });
     }
   }, [taskStatus]);
-
+  if (!data.name) {
+    Navigate("/add-info");
+  }
   return (
     <div id="Dashboard">
       <div className="topbar">

@@ -37,8 +37,12 @@ import Utils from "./pages/utils";
 import Backup from "./pages/backup";
 import Syncnshare from "./pages/syncnshare";
 import Rep from "./pages/report";
+import AddExpense from "./pages/AddExpense";
+import Loader from "./pages/Loader";
+import AddInfo from "./pages/addInfo";
 
 function App() {
+  // const Navigate = useNavigate();
   let [mobile, setMobile] = useState(false);
   useEffect(() => {
     if (isMobile) {
@@ -49,28 +53,40 @@ function App() {
   }, []);
 
   const [data, setData] = useState([]);
+  const [loading, setloading] = useState(true);
+  const [Error, setError] = useState(true);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const uid = "nulll";
+  // const uid = localStorage.getItem("uid");
 
   const fetchData = () => {
     fetch(dev_url + "/get_user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Data fetch:", data.data.purchase);
         setData(data.data || []); // Ensure data is always an array
+        setloading(false);
       })
       .catch((error) => {
+        setloading(false);
+        setError(true);
         console.error("Error:", error);
       });
   };
+
+  if (loading || !data) {
+    return <Loader />;
+  }
 
   return (
     <div className="App">
@@ -85,6 +101,15 @@ function App() {
               <Home part="profile" data={data} setData={setData}>
                 <Profile data={data} setData={setData} />
               </Home>
+            }
+          />
+          <Route
+            path="/add-info"
+            exact
+            element={
+              <AddInfo uid={uid} data={data} setData={setData} />
+              // <Home part="dashboard" data={data} setData={setData}>
+              // </Home>
             }
           />
           <Route
@@ -341,6 +366,15 @@ function App() {
               <Home part="expense" data={data} setData={setData}>
                 <Expense data={data} setData={setData} />
               </Home>
+            }
+          />
+          <Route
+            path="/add-expense"
+            exact
+            element={
+              <AddExpense data={data} setData={setData} />
+              // <Home part="expense" data={data} setData={setData}>
+              // </Home>
             }
           />
           <Route

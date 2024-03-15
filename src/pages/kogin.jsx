@@ -8,11 +8,14 @@ import {
 } from "../firebase";
 import CustomInput from "../components/customInput";
 
-export default function LogIn() {
-  const [Switch, setSwitch] = useState(true);
+export default function LogIn({ sw = false }) {
+  const [Switch, setSwitch] = useState(sw ? "add-info" : "login");
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [BusinessName, setBusinessName] = useState("");
+  const [GSTIN, setGSTIN] = useState("");
+  const [Mobile, setMobil] = useState("");
   const [password, setPassword] = useState("");
 
   const signup = () => {
@@ -79,7 +82,7 @@ export default function LogIn() {
               </button>
               <div className="line"></div>
               <p>If you dont have an account, please Sign Up</p>
-              <button onClick={() => setSwitch(false)}>Sign Up</button>
+              <button onClick={() => setSwitch("signup")}>Sign Up</button>
             </div>
           )}
           {Switch === "signup" && (
@@ -90,7 +93,7 @@ export default function LogIn() {
                 onChange={(e) => setName(e.target.value)}
                 value={name}
                 name="email"
-                placeholder="email"
+                placeholder="Email"
               />
               <input
                 type="text"
@@ -120,24 +123,7 @@ export default function LogIn() {
               </button>
               <div className="line"></div>
               <p>If you aready have an account, please login</p>
-              <button onClick={() => setSwitch(true)}>Log-In</button>
-            </div>
-          )}
-          {Switch === "addInfo" && (
-            <div className="info">
-              <div className="t">
-                <h1>Edit Frim</h1>
-                <button>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-                  </svg>
-                </button>
-              </div>
-              <CustomInput placeholder={"Business Name"} />
-              <CustomInput placeholder={"GSTIN"} />
-              <CustomInput placeholder={"Phone No"} />
-              <CustomInput placeholder={"Email ID"} />
-              <button>Save</button>
+              <button onClick={() => setSwitch("login")}>Log-In</button>
             </div>
           )}
         </div>

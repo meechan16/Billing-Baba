@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Sidebar({ part, subpart }) {
+export default function Sidebar({ part, subpart, data = null }) {
   const Navigate = useNavigate();
   // alert(part);
 
@@ -17,8 +17,10 @@ export default function Sidebar({ part, subpart }) {
       <div className="top" onClick={() => Navigate("/profile")}>
         <img src="./assets/home/user_img.png" alt="" />
         <div className="content">
-          <h1>BKC Traders</h1>
-          <h2>Aman Mishra</h2>
+          {data ? <h1>{data.BusinessName}</h1> : <h1>BKC Traders</h1>}
+          {data ? <h1>{data.name}</h1> : <h1>Aman Mishra</h1>}
+          {/* <h1>BKC Traders</h1>
+          <h2>Aman Mishra</h2> */}
         </div>
         <svg
           className="arrow"

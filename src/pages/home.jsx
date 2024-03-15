@@ -17,7 +17,7 @@ export default function Home({ children, part, subpart, data, setData }) {
 
   return (
     <div id="Home">
-      <Sidebar part={part} subpart={subpart} />
+      <Sidebar data={data} part={part} subpart={subpart} />
       <div className="body">
         <div id="nav">
           <input
