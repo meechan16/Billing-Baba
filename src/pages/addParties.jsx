@@ -3,7 +3,7 @@ import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
 
-export default function AddParties() {
+export default function AddParties({ data, setData }) {
   const Navigate = useNavigate();
   // var [toggle, setToggle] = useState(true);
   var [page, setPage] = useState("GST");
@@ -23,22 +23,23 @@ export default function AddParties() {
 
   const addPartiesReq = async () => {
     let data = {
-      partyName,
-      GSTIN,
-      phoneNo,
-      GstType,
-      state,
-      Email,
-      Add,
-      OpeningBalance,
-      asDate,
-      AddF1,
-      AddF2,
-      AddF3,
+      partyName: partyName ? partyName : "",
+      GSTIN: GSTIN ? GSTIN : "",
+      phoneNo: phoneNo ? phoneNo : "",
+      GstType: GstType ? GstType : "",
+      state: state ? state : "",
+      Email: Email ? Email : "",
+      Add: Add ? Add : "",
+      OpeningBalance: OpeningBalance ? OpeningBalance : "",
+      asDate: asDate ? asDate : "",
+      AddF1: AddF1 ? AddF1 : "",
+      AddF2: AddF2 ? AddF2 : "",
+      AddF3: AddF3 ? AddF3 : "",
       transactions: [],
       ammount: 0,
       balance: 0,
     };
+
     console.log(data);
     let url = dev_url + "addparties";
     fetch(url, {

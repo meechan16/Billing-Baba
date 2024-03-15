@@ -6,7 +6,7 @@ import Dropdown from "../components/dropdown";
 import StockAdjust from "../components/stock_Adjustment";
 import { dev_url } from "../url";
 
-export default function Items() {
+export default function Items({ data, setData }) {
   var [page, setPage] = useState("product");
   var [StockPage, setStockPage] = useState(false);
   const Navigate = useNavigate();
@@ -15,32 +15,32 @@ export default function Items() {
   // var [addToggle, setAddToggle] = useState(false);
   // var [itemsToggle, setItemsToggle] = useState(false);
 
-  const [data, setData] = useState([]);
   const [selecteditems, setSelectedItems] = useState(null);
   const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const [data, setData] = useState([]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = () => {
-    fetch(dev_url + "/get_user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Data fetch:", data);
-        setData(data.data || []); // Ensure data is always an array
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+  // const fetchData = () => {
+  //   fetch(dev_url + "/get_user", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "nulll", // Modify this if necessary
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("Data fetch:", data);
+  //       setData(data.data || []); // Ensure data is always an array
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
   var [unitName, setUnitName] = useState(false);
   var [unitShorthand, setUnitShorthand] = useState(false);

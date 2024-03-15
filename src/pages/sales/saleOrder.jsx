@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function SaleOrder() {
+export default function SaleOrder({ data, setData }) {
   var [page, setPage] = useState("saleOrder");
   const Navigate = useNavigate();
   return (
@@ -26,7 +26,7 @@ export default function SaleOrder() {
           <p>
             Make & share sale orders & convert them to sale invoice instantly.
           </p>
-          <button onClick={() => Navigate("/add-items")}>
+          <button onClick={() => Navigate("/add-sales-order")}>
             Add Your First Sale Order
           </button>
         </div>

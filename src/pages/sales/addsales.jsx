@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../../url";
+import CustomInput from "../../components/customInput";
 
-export default function AddSales() {
+export default function AddSales({ data, setData }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -87,21 +88,31 @@ export default function AddSales() {
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
   const [state_of_supply, setState_of_supply] = useState(); // Initial index count
   const [round_off, setRound_off] = useState(); // Initial index count
-  const [paymentType, setpaymentType] = useState(); // Initial index count
+  const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
-  const [paymentStatus, setPaymentStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("pending");
+  const [paid, setPaid] = useState(0);
+  const [pending, setPending] = useState(0);
+  useEffect(() => {
+    setPending(totalAmount - paid);
+  }, [totalAmount, paid]);
   let sendData = () => {
     const data = {
-      phone_no: phone_no,
-      invoice_number: invoice_number,
-      invoice_date: invoice_date,
-      state_of_supply: state_of_supply,
-      payment_type: paymentType,
-      items: rows,
-      round_off: round_off,
-      total: totalAmount,
-      total_tax: totalTax,
-      description: Description,
+      name: Name ? Name : "",
+      phone_no: phone_no ? phone_no : "",
+      invoice_number: invoice_number ? invoice_number : "",
+      invoice_date: invoice_date ? invoice_date : "",
+      state_of_supply: state_of_supply ? state_of_supply : "",
+      payment_type: paymentType ? paymentType : "",
+      tramsactionType: "Sale",
+      items: rows ? rows : "",
+      round_off: round_off ? round_off : "",
+      total: totalAmount ? totalAmount : "",
+      total_tax: totalTax ? totalTax : "",
+      description: Description ? Description : "",
+      payment_status: paymentStatus ? paymentStatus : "",
+      pending: pending ? pending : "",
+      paid: paid ? paid : "",
     };
     let url = dev_url + "addsales";
     fetch(url, {
@@ -125,16 +136,20 @@ export default function AddSales() {
 
   let sendData_and_get_pdf = async () => {
     const data = {
-      phone_no: phone_no,
-      invoice_number: invoice_number,
-      invoice_date: invoice_date,
-      state_of_supply: state_of_supply,
-      payment_type: paymentType,
-      items: rows,
-      round_off: round_off,
-      total: totalAmount,
-      total_tax: totalTax,
-      description: Description,
+      name: Name ? Name : "",
+      phone_no: phone_no ? phone_no : "",
+      invoice_number: invoice_number ? invoice_number : "",
+      invoice_date: invoice_date ? invoice_date : "",
+      state_of_supply: state_of_supply ? state_of_supply : "",
+      payment_type: paymentType ? paymentType : "",
+      items: rows ? rows : "",
+      round_off: round_off ? round_off : "",
+      total: totalAmount ? totalAmount : "",
+      total_tax: totalTax ? totalTax : "",
+      description: Description ? Description : "",
+      payment_status: paymentStatus ? paymentStatus : "",
+      pending: pending ? pending : "",
+      paid: paid ? paid : "",
     };
     try {
       let url1 = dev_url + "addsalesAndGetPdf";
@@ -154,6 +169,9 @@ export default function AddSales() {
     }
   };
 
+  useEffect(() => {
+    console.log(paymentType);
+  }, [paymentType]);
   return (
     <div id="addsales">
       <div className="top">
@@ -169,7 +187,10 @@ export default function AddSales() {
           <p>Credit</p>
           <div
             className={toggle ? "toggle" : "toggle opp"}
-            onClick={() => setToggle(!toggle)}
+            onClick={() => {
+              setpaymentType(toggle ? "Cash" : "Credit");
+              setToggle(!toggle);
+            }}
           >
             <div className="button"></div>
           </div>
@@ -200,7 +221,7 @@ export default function AddSales() {
                 <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
               </svg>
               <input
-                type="text"
+                type="number"
                 value={phone_no}
                 onChange={(e) => setPhone_no(e.target.value)}
                 name="phNo"
@@ -225,7 +246,7 @@ export default function AddSales() {
             <div className="">
               <span>Invoice Number</span>
               <input
-                type="text"
+                type="number"
                 value={invoice_number}
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
@@ -290,6 +311,7 @@ export default function AddSales() {
               </div>
               <div>
                 <input
+                  type="number"
                   value={row.col2}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "qty", e.target.value)
@@ -318,6 +340,7 @@ export default function AddSales() {
               </div>
               <div>
                 <input
+                  type="number"
                   value={row.col4}
                   onChange={(e) =>
                     handleInputChange(
@@ -330,6 +353,7 @@ export default function AddSales() {
               </div>
               <div>
                 <input
+                  type="number"
                   value={row.col5}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "discount", e.target.value)
@@ -371,6 +395,7 @@ export default function AddSales() {
               </div>
               <div>
                 <input
+                  type="number"
                   value={row.amount}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "amount", e.target.value)
@@ -397,16 +422,14 @@ export default function AddSales() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add Description..."
             />
-            <select onChange={(e) => setpaymentType(e.target.value)}>
-              {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-              </svg>{" "} */}
+            {/* <select onChange={(e) => setpaymentType(e.target.value)}>
+
               <option disabled selected value="">
                 PAYMENT TYPE
               </option>
               <option value="">CASH</option>
               <option value="">CHECK</option>
-            </select>
+            </select> */}
             <button onClick={addRow}>ADD ROW</button>
             {/* <button
               onClick={() => {
@@ -424,10 +447,22 @@ export default function AddSales() {
               fetch Data
             </button> */}
           </div>
-          <div className="r">
-            <span>Total</span>
-            <span>Rs.</span>
-            <p>{totalAmount}</p>
+          <div className="">
+            {paymentStatus === "pending" && (
+              <div className="a">
+                <span>Amount paid: </span>
+                <input
+                  type="number"
+                  value={paid}
+                  onChange={(e) => setPaid(e.target.value)}
+                />
+              </div>
+            )}
+            <div className="r">
+              <span>Total</span>
+              <span>Rs.</span>
+              <p>{totalAmount}</p>
+            </div>
           </div>
         </div>
         <div className="ai4">{/* <p>{paymentStatus}</p> */}</div>

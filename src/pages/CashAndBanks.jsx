@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function PurchaseOrder({ data, setData }) {
+export default function CashAndBanks() {
   var [page, setPage] = useState("saleOrder");
   const Navigate = useNavigate();
   return (
@@ -11,19 +11,19 @@ export default function PurchaseOrder({ data, setData }) {
           className={page === "saleOrder" ? "selected" : ""}
           onClick={() => setPage("saleOrder")}
         >
-          Purchase Order
+          Banks
         </button>
       </div>
       {page === "saleOrder" && (
         <div className="service">
-          <img src="./assets/bill.jpg" alt="" />
+          <img src="./assets/banksCover.jpg" alt="" />
+          <h1>Banking with Billing Baba</h1>
           <p>
-            Make & share purchase orders with your parties & convert them to
-            purchase bill instantly.
+            Detailed Invoices | Connected Online Banks | Recieve and send
+            Payments
           </p>
-          <button onClick={() => Navigate("/add-purchase-order")}>
-            Add Your First Purchase Order
-          </button>
+          {/* <button onClick={() => Navigate("/add-purchase-order")}> */}
+          <button>Comming Soon</button>
         </div>
       )}
     </div>

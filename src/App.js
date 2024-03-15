@@ -23,6 +23,20 @@ import PurchaseOrder from "./pages/purchase/PurchaseOrder";
 import PaymentOut from "./pages/purchase/PaymentOut";
 import PurchaseBill from "./pages/purchase/PurchaseBill";
 import PurchaseReturn from "./pages/purchase/PurchaseReturn";
+import { dev_url } from "./url";
+import QuickBilling from "./pages/QuickBilling";
+import AddEstimations from "./pages/sales/addEstimations";
+import AddPaymentsin from "./pages/sales/addPaymentsin";
+import AddSalesOrder from "./pages/sales/AddSalesOrder";
+import AddPurchaseOrder from "./pages/purchase/AddPurchaseOrder";
+import Expense from "./pages/Expense";
+import CashAndBanks from "./pages/CashAndBanks";
+import Checkplan from "./pages/checkplan";
+import Settings from "./pages/settings";
+import Utils from "./pages/utils";
+import Backup from "./pages/backup";
+import Syncnshare from "./pages/syncnshare";
+import Rep from "./pages/report";
 
 function App() {
   let [mobile, setMobile] = useState(false);
@@ -34,6 +48,30 @@ function App() {
     }
   }, []);
 
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetch(dev_url + "/get_user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "nulll", // Modify this if necessary
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data fetch:", data.data.purchase);
+        setData(data.data || []); // Ensure data is always an array
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -44,8 +82,8 @@ function App() {
             path="/profile"
             exact
             element={
-              <Home part="profile">
-                <Profile />
+              <Home part="profile" data={data} setData={setData}>
+                <Profile data={data} setData={setData} />
               </Home>
             }
           />
@@ -53,8 +91,8 @@ function App() {
             path="/"
             exact
             element={
-              <Home part="dashboard">
-                <Dashboard />
+              <Home part="dashboard" data={data} setData={setData}>
+                <Dashboard data={data} setData={setData} />
               </Home>
             }
           />
@@ -62,8 +100,8 @@ function App() {
             path="/parties"
             exact
             element={
-              <Home part="parties">
-                <Parties />
+              <Home part="parties" data={data} setData={setData}>
+                <Parties data={data} setData={setData} />
               </Home>
             }
           />
@@ -71,8 +109,8 @@ function App() {
             path="/AddParties"
             exact
             element={
-              <Home part="parties">
-                <AddParties />
+              <Home part="parties" data={data} setData={setData}>
+                <AddParties data={data} setData={setData} />
               </Home>
             }
           />
@@ -80,8 +118,8 @@ function App() {
             path="/items"
             exact
             element={
-              <Home part="items">
-                <Items />
+              <Home part="items" data={data} setData={setData}>
+                <Items data={data} setData={setData} />
               </Home>
             }
           />
@@ -89,8 +127,8 @@ function App() {
             path="/add-items"
             exact
             element={
-              <Home part="items">
-                <AddItem />
+              <Home part="items" data={data} setData={setData}>
+                <AddItem data={data} setData={setData} />
               </Home>
             }
           />
@@ -101,7 +139,7 @@ function App() {
               // <Home part="items">
               //   <AddItems />
               // </Home>
-              <AddSales />
+              <AddSales data={data} setData={setData} />
             }
           />
           <Route
@@ -111,15 +149,20 @@ function App() {
               // <Home part="items">
               //   <AddItems />
               // </Home>
-              <AddPurchase />
+              <AddPurchase data={data} setData={setData} />
             }
           />
           <Route
             path="/sale-invoice"
             exact
             element={
-              <Home part="sale">
-                <SaleInvoice />
+              <Home
+                part="sale"
+                subpart="sale-invoice"
+                data={data}
+                setData={setData}
+              >
+                <SaleInvoice data={data} setData={setData} />
               </Home>
             }
           />
@@ -127,17 +170,46 @@ function App() {
             path="/estimation"
             exact
             element={
-              <Home part="sale">
-                <EstimatedQuortation />
+              <Home
+                part="sale"
+                subpart="estimation"
+                data={data}
+                setData={setData}
+              >
+                <EstimatedQuortation data={data} setData={setData} />
               </Home>
             }
+          />
+          <Route
+            path="/add-estimation"
+            exact
+            element={<AddEstimations data={data} setData={setData} />}
           />
           <Route
             path="/payment-in"
             exact
             element={
-              <Home part="sale">
-                <PaymentIn />
+              <Home
+                part="sale"
+                subpart="payment-in"
+                data={data}
+                setData={setData}
+              >
+                <PaymentIn data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/add-payment-in"
+            exact
+            element={
+              <Home
+                part="sale"
+                subpart="add-payment-in"
+                data={data}
+                setData={setData}
+              >
+                <AddPaymentsin data={data} setData={setData} />
               </Home>
             }
           />
@@ -145,17 +217,36 @@ function App() {
             path="/sales-order"
             exact
             element={
-              <Home part="sale">
-                <SaleOrder />
+              <Home
+                part="sale"
+                subpart="sales-order"
+                data={data}
+                setData={setData}
+              >
+                <SaleOrder data={data} setData={setData} />
               </Home>
+            }
+          />
+          <Route
+            path="/add-sales-order"
+            exact
+            element={
+              // <Home part="sale" data={data} setData={setData}>
+              <AddSalesOrder data={data} setData={setData} />
+              // </Home>
             }
           />
           <Route
             path="/delievery-chalan"
             exact
             element={
-              <Home part="sale">
-                <DelieveryChalan />
+              <Home
+                part="sale"
+                subpart="delievery-chalan"
+                data={data}
+                setData={setData}
+              >
+                <DelieveryChalan data={data} setData={setData} />
               </Home>
             }
           />
@@ -163,8 +254,13 @@ function App() {
             path="/sales-return"
             exact
             element={
-              <Home part="sale">
-                <SaleReturn />
+              <Home
+                part="sale"
+                subpart="sales-return"
+                data={data}
+                setData={setData}
+              >
+                <SaleReturn data={data} setData={setData} />
               </Home>
             }
           />
@@ -172,17 +268,36 @@ function App() {
             path="/purchase-order"
             exact
             element={
-              <Home part="purchase">
-                <PurchaseOrder />
+              <Home
+                part="purchase"
+                subpart="purchase-order"
+                data={data}
+                setData={setData}
+              >
+                <PurchaseOrder data={data} setData={setData} />
               </Home>
+            }
+          />
+          <Route
+            path="/add-purchase-order"
+            exact
+            element={
+              // <Home part="purchase" data={data} setData={setData}>
+              <AddPurchaseOrder data={data} setData={setData} />
+              // </Home>l
             }
           />
           <Route
             path="/payment-out"
             exact
             element={
-              <Home part="purchase">
-                <PaymentOut />
+              <Home
+                part="purchase"
+                subpart="payment-out"
+                data={data}
+                setData={setData}
+              >
+                <PaymentOut data={data} setData={setData} />
               </Home>
             }
           />
@@ -190,8 +305,13 @@ function App() {
             path="/purchase-bill"
             exact
             element={
-              <Home part="purchase">
-                <PurchaseBill />
+              <Home
+                part="purchase"
+                subpart="purchase-bill"
+                data={data}
+                setData={setData}
+              >
+                <PurchaseBill data={data} setData={setData} />
               </Home>
             }
           />
@@ -199,8 +319,100 @@ function App() {
             path="/purchase-return"
             exact
             element={
-              <Home part="purchase">
-                <PurchaseReturn />
+              <Home
+                part="purchase"
+                subpart="purchase-return"
+                data={data}
+                setData={setData}
+              >
+                <PurchaseReturn data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/quick-billing"
+            exact
+            element={<QuickBilling data={data} setData={setData} />}
+          />
+          <Route
+            path="/expenses"
+            exact
+            element={
+              <Home part="expense" data={data} setData={setData}>
+                <Expense data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/cash-and-bank"
+            exact
+            element={
+              <Home part="cash-and-bank" data={data} setData={setData}>
+                <CashAndBanks data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/e-way-bill"
+            exact
+            element={
+              <Home part="e-way-bill" data={data} setData={setData}>
+                <CashAndBanks data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/report"
+            exact
+            element={
+              <Home part="report" data={data} setData={setData}>
+                <Rep data={data} setData={setData} />
+              </Home>
+            }
+          />
+
+          <Route
+            path="/sync-n-share"
+            exact
+            element={
+              <Home part="sync-n-share" data={data} setData={setData}>
+                <Syncnshare data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/backup-n-restore"
+            exact
+            element={
+              <Home part="backup-n-restore" data={data} setData={setData}>
+                <Backup data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/utils"
+            exact
+            element={
+              <Home part="utils" data={data} setData={setData}>
+                <Utils data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/settings"
+            exact
+            element={
+              <Home part="settings" data={data} setData={setData}>
+                <Settings data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/check-plan"
+            exact
+            element={
+              <Home part="expense" data={data} setData={setData}>
+                <Checkplan data={data} setData={setData} />
               </Home>
             }
           />

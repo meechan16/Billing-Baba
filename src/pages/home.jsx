@@ -4,7 +4,7 @@ import Dashboard from "./dashboard";
 import { getUidFromLocalStorage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
-export default function Home({ children, part }) {
+export default function Home({ children, part, subpart, data, setData }) {
   const [toggle, setToggle] = useState(false);
   const Navigate = useNavigate();
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function Home({ children, part }) {
 
   return (
     <div id="Home">
-      <Sidebar part={part} />
+      <Sidebar part={part} subpart={subpart} />
       <div className="body">
         <div id="nav">
           <input

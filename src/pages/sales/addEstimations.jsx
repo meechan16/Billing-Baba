@@ -1,164 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../url";
+import { dev_url } from "../../url";
 
-export default function QuickBilling({ data, setData, t = true }) {
-  const Navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  // const [selectedItem, setSelectedItem] = useState(null);
-  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [billingItems, setBillingItems] = useState([]);
-
-  const [CurrentItems, setCurrentItems] = useState();
-
-  // Sample data
-  const items = [
-    { name: "tshirt", itemCode: "001", unit: "pcs", total: 10 },
-    { name: "pants", itemCode: "002", unit: "pcs", total: 20 },
-    { name: "banana", itemCode: "003", unit: "pcs", total: 30 },
-  ];
-
-  useEffect(() => {}, [items]);
-  const customers = [
-    { name: "Customer 1" },
-    { name: "Customer 2" },
-    { name: "Customer 3" },
-  ];
-
-  const handleItemSelect = (item) => {
-    // setSelectedItem(item);
-    setBillingItems([...billingItems, item]);
-    setTotalAmount(totalAmount + item.total);
-  };
-
-  const handleCustomerSelect = (customer) => {
-    setSelectedCustomer(customer);
-  };
-
-  return (
-    <div id="QuickBilling">
-      {/* Left side */}
-      <div className="l">
-        <div className="top">
-          <input
-            type="text"
-            placeholder="Search item..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <ul>
-              {items
-                .filter((item) =>
-                  item.name.toLowerCase().includes(searchTerm.toLowerCase())
-                )
-                .map((item) => (
-                  <li
-                    key={item.itemCode}
-                    onClick={() => {
-                      handleItemSelect(item);
-                      setSearchTerm("");
-                    }}
-                  >
-                    {item.name}
-                  </li>
-                ))}
-            </ul>
-          )}
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>ITEM CODE</th>
-                <th className="name">NAME</th>
-                <th>QTY</th>
-                <th>Unit</th>
-                <th>PRICE / UNIT</th>
-                <th>DESCOUNT</th>
-                <th>TAX</th>
-                <th>TOTAL</th>
-              </tr>
-            </thead>
-            <tbody>
-              {billingItems.map((item, index) => (
-                <tr
-                  key={index}
-                  className={CurrentItems === index ? "selected" : ""}
-                >
-                  <td>{index}</td>
-                  <td>{item.itemCode}</td>
-                  <td className="name">{item.name}</td>
-                  <td>{item.quantity}</td>
-                  <td>{item.unit}</td>
-                  <td>{item.price_per_unit}</td>
-                  <td>{item.discount}</td>
-                  <td>{item.tax}</td>
-                  <td>{item.total}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="b">
-          <button>Change Quantity</button>
-          <button>Item Descount</button>
-          <button>Remove Item</button>
-          <button className="unavailable">Bill Item</button>
-          <button className="unavailable">Additionl changes</button>
-          <button className="unavailable">Bill discount</button>
-          <button className="unavailable">Loyal points</button>
-          <button className="unavailable">Remarks</button>
-        </div>
-      </div>
-      {/* // Right side */}
-      <div className="r">
-        <div className="t1">
-          <h1>Customer details</h1>
-          <input
-            type="text"
-            placeholder="Search customer..."
-            value={
-              selectedCustomer ? selectedCustomer.name : customerSearchTerm
-            }
-            disabled={selectedCustomer ? true : false}
-            onChange={(e) => setCustomerSearchTerm(e.target.value)}
-          />
-          {customerSearchTerm && (
-            <ul>
-              {customers
-                .filter((customer) =>
-                  customer.name
-                    .toLowerCase()
-                    .includes(customerSearchTerm.toLowerCase())
-                )
-                .map((customer) => (
-                  <li
-                    key={customer.name}
-                    onClick={() => {
-                      setSelectedCustomer(customer);
-                      setCustomerSearchTerm("");
-                    }}
-                  >
-                    {customer.name}
-                  </li>
-                ))}
-            </ul>
-          )}
-        </div>
-        <div className="t2">
-          <h1>Total Amount: {totalAmount}</h1>
-        </div>
-        <div className="t3">
-          <button onClick={() => Navigate("/")}>Save Bill</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function QuickBil({ data, setData, t = true }) {
+export default function AddEstimations({ data, setData }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -246,12 +90,9 @@ function QuickBil({ data, setData, t = true }) {
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
   const [paymentStatus, setPaymentStatus] = useState("pending");
-  const [paid, setPaid] = useState(0);
-  const [pending, setPending] = useState(0);
-  useEffect(() => {
-    setPending(totalAmount - paid);
-  }, [totalAmount, paid]);
   let sendData = () => {
+    alert("not impleented");
+    return null;
     const data = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
@@ -266,8 +107,6 @@ function QuickBil({ data, setData, t = true }) {
       total_tax: totalTax ? totalTax : "",
       description: Description ? Description : "",
       payment_status: paymentStatus ? paymentStatus : "",
-      pending: pending ? pending : "",
-      paid: paid ? paid : "",
     };
     let url = dev_url + "addsales";
     fetch(url, {
@@ -287,41 +126,6 @@ function QuickBil({ data, setData, t = true }) {
       .catch((error) => {
         console.error("Error:", error);
       });
-  };
-
-  let sendData_and_get_pdf = async () => {
-    const data = {
-      name: Name ? Name : "",
-      phone_no: phone_no ? phone_no : "",
-      invoice_number: invoice_number ? invoice_number : "",
-      invoice_date: invoice_date ? invoice_date : "",
-      state_of_supply: state_of_supply ? state_of_supply : "",
-      payment_type: paymentType ? paymentType : "",
-      items: rows ? rows : "",
-      round_off: round_off ? round_off : "",
-      total: totalAmount ? totalAmount : "",
-      total_tax: totalTax ? totalTax : "",
-      description: Description ? Description : "",
-      payment_status: paymentStatus ? paymentStatus : "",
-      pending: pending ? pending : "",
-      paid: paid ? paid : "",
-    };
-    try {
-      let url1 = dev_url + "addsalesAndGetPdf";
-      const response = await fetch(url1, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "nulll",
-        },
-        body: JSON.stringify(data),
-      });
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
   };
 
   useEffect(() => {
@@ -376,7 +180,7 @@ function QuickBil({ data, setData, t = true }) {
                 <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
               </svg>
               <input
-                type="number"
+                type="text"
                 value={phone_no}
                 onChange={(e) => setPhone_no(e.target.value)}
                 name="phNo"
@@ -388,20 +192,20 @@ function QuickBil({ data, setData, t = true }) {
 
           <div className="r">
             {/* <div className="">
-              <span>Phone No</span>
-              <input
-                type="text"
-                value={phone_no}
-                onChange={(e) => setPhone_no(e.target.value)}
-                name="phNo"
-                placeholder="input..."
-                id=""
-              />
-            </div> */}
+                  <span>Phone No</span>
+                  <input
+                    type="text"
+                    value={phone_no}
+                    onChange={(e) => setPhone_no(e.target.value)}
+                    name="phNo"
+                    placeholder="input..."
+                    id=""
+                  />
+                </div> */}
             <div className="">
               <span>Invoice Number</span>
               <input
-                type="number"
+                type="text"
                 value={invoice_number}
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
@@ -412,10 +216,10 @@ function QuickBil({ data, setData, t = true }) {
             <div className="">
               <span>Invoice Date</span>
               {/* <DatePicker
-                selected={invoice_date}
-                onChange={handleChange}
-                dateFormat="dd/MM/yyyy"
-              /> */}
+                    selected={invoice_date}
+                    onChange={handleChange}
+                    dateFormat="dd/MM/yyyy"
+                  /> */}
               <input
                 type="date"
                 onChange={(e) => setInvoice_date(e.target.value)}
@@ -423,13 +227,13 @@ function QuickBil({ data, setData, t = true }) {
                 name="birthday"
               ></input>
               {/* <input
-                type="text"
-                value={invoice_date}
-                onChange={(e) => setInvoice_date(e.target.value)}
-                name="InvDate"
-                placeholder="input..."
-                id=""
-              /> */}
+                    type="text"
+                    value={invoice_date}
+                    onChange={(e) => setInvoice_date(e.target.value)}
+                    name="InvDate"
+                    placeholder="input..."
+                    id=""
+                  /> */}
             </div>
             <div className="">
               <span>State of supply</span>
@@ -466,7 +270,6 @@ function QuickBil({ data, setData, t = true }) {
               </div>
               <div>
                 <input
-                  type="number"
                   value={row.col2}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "qty", e.target.value)
@@ -475,11 +278,11 @@ function QuickBil({ data, setData, t = true }) {
               </div>
               <div>
                 {/* <input
-                  value={row.col3}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "unit", e.target.value)
-                  }
-                /> */}
+                      value={row.col3}
+                      onChange={(e) =>
+                        handleInputChange(rowIndex, "unit", e.target.value)
+                      }
+                    /> */}
                 <select
                   name=""
                   id=""
@@ -495,7 +298,6 @@ function QuickBil({ data, setData, t = true }) {
               </div>
               <div>
                 <input
-                  type="number"
                   value={row.col4}
                   onChange={(e) =>
                     handleInputChange(
@@ -508,7 +310,6 @@ function QuickBil({ data, setData, t = true }) {
               </div>
               <div>
                 <input
-                  type="number"
                   value={row.col5}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "discount", e.target.value)
@@ -517,18 +318,11 @@ function QuickBil({ data, setData, t = true }) {
               </div>
               <div>
                 {/* <input
-                  value={row.col6}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "tax", e.target.value)
-                  }
-                /> 
-                
-give me react component page that is used as a quick billing portal, page is devided into 2 sides, 
-
-on left on top there's input box, as we type input it search name attribute from array of objects of item, and show it in dropdown, once we select one object, objet's "name" and "itemcode" "unit" and "price" is apended into table below,
-
-on the right on top theres an iinput bar that is search for customer's name, it search from array of customer's object for name and show suggestion in dropdown, and we select a object from dropdown, under input we have "total ammount" h1 for addition of all objects, and "save bill" button
-                */}
+                      value={row.col6}
+                      onChange={(e) =>
+                        handleInputChange(rowIndex, "tax", e.target.value)
+                      }
+                    /> */}
                 <select
                   name=""
                   id=""
@@ -557,7 +351,6 @@ on the right on top theres an iinput bar that is search for customer's name, it 
               </div>
               <div>
                 <input
-                  type="number"
                   value={row.amount}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "amount", e.target.value)
@@ -570,13 +363,13 @@ on the right on top theres an iinput bar that is search for customer's name, it 
         <div className="ai3">
           <div className="l">
             {/* <input type="checkbox" name="" id="" />
-            <span>Round Off</span>
-            <input
-              className="in"
-              value={round_off}
-              onChange={(e) => setRound_off(e.target.value)}
-              type="text"
-            /> */}
+                <span>Round Off</span>
+                <input
+                  className="in"
+                  value={round_off}
+                  onChange={(e) => setRound_off(e.target.value)}
+                  type="text"
+                /> */}
 
             <input
               type="text"
@@ -585,46 +378,34 @@ on the right on top theres an iinput bar that is search for customer's name, it 
               placeholder="Add Description..."
             />
             {/* <select onChange={(e) => setpaymentType(e.target.value)}>
-
-              <option disabled selected value="">
-                PAYMENT TYPE
-              </option>
-              <option value="">CASH</option>
-              <option value="">CHECK</option>
-            </select> */}
+    
+                  <option disabled selected value="">
+                    PAYMENT TYPE
+                  </option>
+                  <option value="">CASH</option>
+                  <option value="">CHECK</option>
+                </select> */}
             <button onClick={addRow}>ADD ROW</button>
             {/* <button
-              onClick={() => {
-                sendData();
-              }}
-            >
-              send Data
-            </button> */}
+                  onClick={() => {
+                    sendData();
+                  }}
+                >
+                  send Data
+                </button> */}
             {/* <button
-              onClick={() => {
-                // console.log(rows);
-                fetchData();
-              }}
-            >
-              fetch Data
-            </button> */}
+                  onClick={() => {
+                    // console.log(rows);
+                    fetchData();
+                  }}
+                >
+                  fetch Data
+                </button> */}
           </div>
-          <div className="">
-            {paymentStatus === "pending" && (
-              <div className="a">
-                <span>Amount paid: </span>
-                <input
-                  type="number"
-                  value={paid}
-                  onChange={(e) => setPaid(e.target.value)}
-                />
-              </div>
-            )}
-            <div className="r">
-              <span>Total</span>
-              <span>Rs.</span>
-              <p>{totalAmount}</p>
-            </div>
+          <div className="r">
+            <span>Total</span>
+            <span>Rs.</span>
+            <p>{totalAmount}</p>
           </div>
         </div>
         <div className="ai4">{/* <p>{paymentStatus}</p> */}</div>
@@ -648,9 +429,6 @@ on the right on top theres an iinput bar that is search for customer's name, it 
               onChange={(e) => setPaymentStatus(e.target.value)}
             />
           </label>
-          <button className="save1" onClick={() => sendData_and_get_pdf()}>
-            Save & Generate Invoice
-          </button>
           <button className="save" onClick={() => sendData()}>
             Save
           </button>

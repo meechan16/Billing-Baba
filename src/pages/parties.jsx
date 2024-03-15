@@ -3,32 +3,32 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
 import { dev_url } from "../url";
 
-export default function Parties() {
+export default function Parties({ data, setData }) {
   const Navigate = useNavigate();
   const [selectedParty, setSelectedParty] = useState(null);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = () => {
-    fetch(dev_url + "/get_user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Data fetch:", data);
-        setData(data.data.parties || []); // Ensure data is always an array
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+  // const fetchData = () => {
+  //   fetch(dev_url + "/get_user", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "nulll", // Modify this if necessary
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("Data fetch:", data);
+  //       setData(data.data.parties || []); // Ensure data is always an array
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
   const handlePartySelect = (party) => {
     setSelectedParty(party);
@@ -50,7 +50,7 @@ export default function Parties() {
             <h2>Name</h2>
             <h2>Amount</h2>
           </div>
-          {data.map((party, index) => (
+          {data?.parties?.map((party, index) => (
             <div
               className={`tile ${selectedParty === party ? "selected" : ""}`}
               key={index}

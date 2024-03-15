@@ -1,39 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Undone from "../components/undone";
 import TodoList from "../components/todoList";
 import { dev_url } from "../url";
 // import { Link } from "react-router-dom";
 
-export default function Dashboard() {
-  var [page, setPage] = useState("dashboard"); //overview, history, search, store
-
-  var [data, setdata] = useState(); //overview, history, search, store
-  useEffect(() => {
-    let fetchData = () => {
-      fetch(dev_url + "/get_user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "nulll", // Modify this if necessary
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Data fetch:", data);
-          setdata(data.data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    };
-    fetchData();
-  }, []);
+export default function Dashboard({ data, setData }) {
+  var [page, setPage] = useState("dashboard");
 
   const [taskStatus, setTaskStatus] = useState({});
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (data?.todo_list) {
+  //     setTaskStatus(data?.todo_list);
+  //   }
+  // }, [data]);
+  useMemo(() => {
     if (data?.todo_list) {
       setTaskStatus(data?.todo_list);
     }
+    // console.log('Computing sum...');
+    // return a + b;
   }, [data]);
 
   useEffect(() => {
@@ -47,7 +32,7 @@ export default function Dashboard() {
           "Content-Type": "application/json",
           Authorization: "nulll", // Modify this if necessary
         },
-        body: JSON.stringify({ ...data, todo_list: taskStatus }),
+        body: JSON.stringify({ todo_lists: taskStatus }),
       })
         .then((response) => response.json())
         .then((data) => {

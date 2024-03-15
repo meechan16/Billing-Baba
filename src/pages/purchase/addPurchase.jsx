@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../../url";
 
-export default function AddPurchase() {
+export default function AddPurchase({ data, setData }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -92,16 +92,16 @@ export default function AddPurchase() {
 
   let sendData = () => {
     const data = {
-      phone_no: phone_no,
-      invoice_number: invoice_number,
-      invoice_date: invoice_date,
-      state_of_supply: state_of_supply,
-      payment_type: paymentType,
-      items: rows,
-      round_off: round_off,
-      total: totalAmount,
-      total_tax: totalTax,
-      description: Description,
+      phone_no: phone_no ? phone_no : "",
+      invoice_number: invoice_number ? invoice_number : "",
+      invoice_date: invoice_date ? invoice_date : "",
+      state_of_supply: state_of_supply ? state_of_supply : "",
+      payment_type: paymentType ? paymentType : "",
+      items: rows ? rows : "",
+      round_off: round_off ? round_off : "",
+      total: totalAmount ? totalAmount : "",
+      total_tax: totalTax ? totalTax : "",
+      description: Description ? Description : "",
     };
     let url = dev_url + "addpurchase";
     fetch(url, {

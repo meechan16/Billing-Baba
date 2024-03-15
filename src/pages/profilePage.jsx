@@ -3,7 +3,7 @@ import { logout, saveUidToLocalStorage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
 
-export default function Profile() {
+export default function Profile({ data, setData }) {
   const Navigate = useNavigate();
   let fetchData = () => {
     fetch(dev_url + "/reset_acc", {
@@ -22,6 +22,7 @@ export default function Profile() {
         console.error("Error:", error);
       });
   };
+
   return (
     <div id="profile">
       <button
