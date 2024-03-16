@@ -63,7 +63,7 @@ export default function Home({ children, part, subpart, data, setData }) {
               onFocus={() => setInputFocus(true)}
               onBlur={() => setInputFocus(false)}
             />
-            {searchTerm && inputFocus && (
+            {searchTerm && (
               <ul>
                 {pages
                   .filter((item) =>

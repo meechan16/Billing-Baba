@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
@@ -24,6 +24,15 @@ export default function AddItem({ data, setData, t = true }) {
 
   var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
+
+  useEffect(() => {
+    if (sellPrice < discount) {
+      alert("discount can't be more than sales price");
+    } else if (purchaseprice <= sellPrice - discount) {
+      alert("purchase price less more than sale price, please fix");
+    }
+  }, [purchaseprice, sellPrice]);
+
   let uid = data.uid;
   const addItemReq = async () => {
     setLoading(true);
@@ -43,6 +52,7 @@ export default function AddItem({ data, setData, t = true }) {
         asDate: asDate ? asDate : "",
         minToMaintain: minToMaintain ? minToMaintain : "",
         location: location ? location : "",
+        profit: sellPrice - discount - purchaseprice,
       };
     } else {
       data = {
@@ -53,6 +63,7 @@ export default function AddItem({ data, setData, t = true }) {
         salesPrice: sellPrice ? sellPrice : "",
         discount: discount ? discount : "",
         Tax: tax ? tax : "",
+        profit: sellPrice - discount,
       };
     }
     console.log(data);

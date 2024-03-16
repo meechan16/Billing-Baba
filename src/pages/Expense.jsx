@@ -25,10 +25,10 @@ export default function Expense({ data, setData }) {
     let url;
     if (page === "category") {
       data = { Category: addCategory };
-      url = dev_url + "addCategory";
+      url = dev_url + "addExpense";
     } else if (page === "unit") {
       data = { name: unitName, shortHand: unitShorthand };
-      url = dev_url + "addUnits";
+      url = dev_url + "addExpense";
     }
     console.log(data);
     fetch(url, {

@@ -82,7 +82,7 @@ export default function SaleInvoice({ data, setData }) {
                 </svg>
                 <input type="" />
               </div>
-              <button>+ Add Sale</button>
+              <button onClick={() => Navigate("/addsales")}>+ Add Sale</button>
             </div>
           </div>
           <div className="cl">

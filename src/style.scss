@@ -1944,7 +1944,8 @@ input[type="number"] {
     list-style-type: none;
     background-color: #fff;
     border: 1px solid #ccc;
-    animation: fadeIn 200ms eas;
+    animation: fadeIn 200ms ease;
+
     li {
       padding: 8px 16px;
       text-wrap: nowrap;
@@ -2068,6 +2069,21 @@ input[type="number"] {
       justify-content: space-between;
       // align-items: center;
       margin: 30px 0;
+      .search {
+        position: relative;
+        ul {
+          position: absolute;
+          background-color: rgb(250, 250, 250);
+          width: 100%;
+          li {
+            padding: 10px;
+            &.add {
+              color: #0090d3;
+              font-weight: 600;
+            }
+          }
+        }
+      }
       .le {
         display: flex;
         gap: 10px;
@@ -2386,6 +2402,52 @@ input[type="number"] {
             }
             color: white;
           }
+        }
+      }
+    }
+  }
+  .addExpenseCategoryDiv {
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(19, 19, 19, 0.468);
+    .content {
+      background-color: white;
+      padding: 10px;
+      border-radius: 10px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      .t {
+        display: flex;
+        justify-content: space-between;
+      }
+      h1 {
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-right: 30px;
+      }
+      & > button {
+        font-size: 1.2rem;
+        font-weight: 600;
+        background: #2990ff;
+        border-radius: 10px;
+        color: white;
+        padding: 5px 50px;
+      }
+      select {
+        padding: 10px;
+        option {
+          padding: 10px;
         }
       }
     }
@@ -2731,16 +2793,17 @@ input[type="number"] {
     height: fit-content;
     display: flex;
     align-items: center;
+    background: rgb(232, 232, 232);
     // gap: 5px;
     .addTb {
-      background-color: rgb(215, 215, 215);
-      padding: 5px;
+      background-color: rgb(255, 255, 255);
+      padding: 5px 10px;
       margin: 5px;
       height: fit-content;
-      border-radius: 50px;
+      border-radius: 5px;
       svg {
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         fill: black;
       }
     }
@@ -2758,9 +2821,10 @@ input[type="number"] {
       }
     }
     .tab {
-      background-color: rgb(255, 255, 255);
-      padding: 5px 10px;
-      margin: 5px;
+      background-color: transparent;
+      padding: 0px 10px;
+      margin: 6px;
+      // border-left: 1px solid black;
       border-right: 1px solid black;
       display: flex;
       flex-direction: row;
@@ -2770,20 +2834,25 @@ input[type="number"] {
         padding: 2px;
         border-radius: 50px;
         svg {
-          width: 20px;
-          height: 20px;
+          width: 15px;
+          height: 15px;
           fill: black;
         }
       }
       &.open {
-        border-radius: 10px;
-        background-color: rgb(12, 12, 12);
-        color: white;
+        // border-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        background-color: white;
+        color: rgb(20, 20, 20);
+        border: none;
+        padding-bottom: 6px;
+        margin-bottom: 0;
         button {
           padding: 2px;
           border-radius: 50px;
           svg {
-            fill: rgb(255, 255, 255);
+            fill: rgb(20, 20, 20);
           }
         }
       }
