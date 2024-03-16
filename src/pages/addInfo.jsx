@@ -47,12 +47,8 @@ export default function AddInfo({ data, setData, uid = null }) {
       });
   };
 
-  if (data.name) {
-    Navigate("/");
-  }
-  if (Loading) {
-    return <Loader />;
-  }
+  if (data.name) Navigate("/");
+  if (Loading) return <Loader />;
   return (
     <div id="info">
       <h1>Add Your Busines Details info</h1>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
+import Loader from "./Loader";
 
 export default function AddParties({ data, setData }) {
   const Navigate = useNavigate();
@@ -19,9 +20,11 @@ export default function AddParties({ data, setData }) {
   var [AddF1, setAddF1] = useState("");
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
+  var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addPartiesReq = async () => {
+    setLoading(true);
     let data = {
       partyName: partyName ? partyName : "",
       GSTIN: GSTIN ? GSTIN : "",
@@ -53,14 +56,17 @@ export default function AddParties({ data, setData }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("sales: ", data);
-        alert("done");
-        Navigate("/");
+        // alert("done");
+        setLoading(false);
+        window.location.href = "/parties";
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error:", error);
       });
   };
 
+  if (loading) return <Loader />;
   return (
     <div id="addItem">
       <div className="container">

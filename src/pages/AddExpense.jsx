@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
+import Loader from "./Loader";
 
 export default function AddExpense({ data, setData }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
+  var [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([
     {
       index: 1,
@@ -175,6 +177,8 @@ export default function AddExpense({ data, setData }) {
   useEffect(() => {
     console.log(paymentType);
   }, [paymentType]);
+
+  if (loading) return <Loader />;
   return (
     <div id="addsales">
       <div className="top">

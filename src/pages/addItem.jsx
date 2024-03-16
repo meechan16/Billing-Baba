@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
+import Loader from "./Loader";
 
 export default function AddItem({ data, setData, t = true }) {
   const Navigate = useNavigate();
@@ -20,9 +21,12 @@ export default function AddItem({ data, setData, t = true }) {
   var [asDate, setAsDate] = useState();
   var [minToMaintain, setMinToMaintain] = useState();
   var [location, setLocation] = useState();
+
+  var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addItemReq = async () => {
+    setLoading(true);
     let data;
     if (toggle) {
       data = {
@@ -64,13 +68,17 @@ export default function AddItem({ data, setData, t = true }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("sales: ", data);
-        alert("done");
-        Navigate("/items");
+        // alert("done");
+        setLoading(false);
+        window.location.href = "/items";
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error:", error);
       });
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div id="addItem">

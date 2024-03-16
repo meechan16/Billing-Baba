@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../../url";
+import Loader from "../Loader";
 
 export default function AddPurchase({ data, setData }) {
   const Navigate = useNavigate();
+  var [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
     {
@@ -92,6 +94,7 @@ export default function AddPurchase({ data, setData }) {
 
   let uid = data.uid;
   let sendData = () => {
+    setLoading(true);
     const data = {
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
@@ -116,13 +119,17 @@ export default function AddPurchase({ data, setData }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("purchase: ", data);
-        alert("done");
-        Navigate("/");
+        setLoading(false);
+        window.location.href = "/purchase-bill";
+        // Navigate("/");
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error:", error);
       });
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div id="addsales">
