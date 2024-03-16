@@ -5,12 +5,13 @@ import { dev_url } from "../url";
 
 export default function Profile({ data, setData }) {
   const Navigate = useNavigate();
+  let uid = data.uid;
   let fetchData = () => {
     fetch(dev_url + "/reset_acc", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
     })
       .then((response) => response.json())

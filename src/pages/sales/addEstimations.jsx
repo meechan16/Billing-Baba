@@ -90,6 +90,7 @@ export default function AddEstimations({ data, setData }) {
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
   const [paymentStatus, setPaymentStatus] = useState("pending");
+  let uid = data.uid;
   let sendData = () => {
     alert("not impleented");
     return null;
@@ -113,7 +114,7 @@ export default function AddEstimations({ data, setData }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

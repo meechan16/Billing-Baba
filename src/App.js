@@ -40,6 +40,7 @@ import Rep from "./pages/report";
 import AddExpense from "./pages/AddExpense";
 import Loader from "./pages/Loader";
 import AddInfo from "./pages/addInfo";
+import Tabs from "./pages/tabs";
 
 function App() {
   // const Navigate = useNavigate();
@@ -60,8 +61,8 @@ function App() {
     fetchData();
   }, []);
 
-  const uid = "nulll";
-  // const uid = localStorage.getItem("uid");
+  // const uid = "nulll";
+  const uid = localStorage.getItem("uid");
 
   const fetchData = () => {
     fetch(dev_url + "/get_user", {
@@ -357,7 +358,7 @@ function App() {
           <Route
             path="/quick-billing"
             exact
-            element={<QuickBilling data={data} setData={setData} />}
+            element={<Tabs data={data} setData={setData} />}
           />
           <Route
             path="/expenses"

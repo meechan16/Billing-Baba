@@ -13,19 +13,23 @@ export default function Dashboard({ data, setData }) {
   var [page, setPage] = useState("dashboard");
 
   const [taskStatus, setTaskStatus] = useState({});
-  // useEffect(() => {
+  useEffect(() => {
+    if (data?.todo_list) {
+      console.log(data?.todo_list);
+      setTaskStatus(data?.todo_list);
+    }
+    if (!data.name) {
+      Navigate("/add-info");
+    }
+  }, [data]);
+  // useMemo(() => {
   //   if (data?.todo_list) {
   //     setTaskStatus(data?.todo_list);
   //   }
+  //   // console.log('Computing sum...');
+  //   // return a + b;
   // }, [data]);
-  useMemo(() => {
-    if (data?.todo_list) {
-      setTaskStatus(data?.todo_list);
-    }
-    // console.log('Computing sum...');
-    // return a + b;
-  }, [data]);
-
+  let uid = data.uid;
   useEffect(() => {
     if (data && Object.keys(taskStatus).length >= 0) {
       // setdata({ ...data, [data.todo_list]: taskStatus });
@@ -35,7 +39,7 @@ export default function Dashboard({ data, setData }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "nulll", // Modify this if necessary
+          Authorization: uid, // Modify this if necessary
         },
         body: JSON.stringify({ todo_lists: taskStatus }),
       })
@@ -49,9 +53,6 @@ export default function Dashboard({ data, setData }) {
         });
     }
   }, [taskStatus]);
-  if (!data.name) {
-    Navigate("/add-info");
-  }
   return (
     <div id="Dashboard">
       <div className="topbar">
@@ -89,7 +90,10 @@ export default function Dashboard({ data, setData }) {
       {page === "dashboard" && (
         <div className="content">
           <div className="left">
-            <div className="tile sale">
+            <div
+              className="tile sale"
+              onClick={() => Navigate("/sale-invoice")}
+            >
               <div className="top">
                 <div className="title">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -157,7 +161,10 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
             </div>
-            <div className="tile collect">
+            <div
+              className="tile collect"
+              onClick={() => Navigate("/sale-invoice")}
+            >
               <div className="top">
                 <div className="title">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -188,7 +195,10 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
             </div>
-            <div className="tile pay">
+            <div
+              className="tile pay"
+              onClick={() => Navigate("/purchase-bill")}
+            >
               <div className="top">
                 <div className="title">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -219,7 +229,10 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
             </div>
-            <div className="tile purchase">
+            <div
+              className="tile purchase"
+              onClick={() => Navigate("/purchase-bill")}
+            >
               <div className="top">
                 <div className="title">
                   <svg
@@ -257,7 +270,7 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
             </div>
-            <div className="tile expense">
+            <div className="tile expense" onClick={() => Navigate("/expenses")}>
               <div className="top">
                 <div className="title">
                   <svg

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dev_url } from "../../url";
 
-export default function AddSalesOrder() {
+export default function AddSalesOrder({ data }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -90,6 +90,7 @@ export default function AddSalesOrder() {
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
   const [paymentStatus, setPaymentStatus] = useState("pending");
+  let uid = data.uid;
   let sendData = () => {
     const data = {
       name: Name ? Name : "",
@@ -111,7 +112,7 @@ export default function AddSalesOrder() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

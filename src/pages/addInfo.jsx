@@ -16,7 +16,7 @@ export default function AddInfo({ data, setData, uid = null }) {
   const [Loading, setLoading] = useState(false);
   const addItemReq = async () => {
     setLoading(true);
-    let data = {
+    let dataa = {
       uid: uid ? uid : "",
       Name: name ? name : "",
       BusinessName: BusinessName ? BusinessName : "",
@@ -24,15 +24,15 @@ export default function AddInfo({ data, setData, uid = null }) {
       GSTIN: GSTIN ? GSTIN : "",
       Mobile: Mobile ? Mobile : "",
     };
-    console.log(data);
+    console.log(dataa);
     let url = dev_url + "addinfo";
     fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataa),
     })
       .then((response) => response.json())
       .then((data) => {

@@ -20,7 +20,7 @@ export default function AddParties({ data, setData }) {
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
   // var [toggle, set] = useState();
-
+  let uid = data.uid;
   const addPartiesReq = async () => {
     let data = {
       partyName: partyName ? partyName : "",
@@ -46,7 +46,7 @@ export default function AddParties({ data, setData }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

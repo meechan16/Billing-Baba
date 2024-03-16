@@ -47,6 +47,7 @@ export default function Items({ data, setData }) {
 
   var [addCategory, setAddCategory] = useState(false);
 
+  let uid = data.uid;
   const addthings = async () => {
     let data;
     let url;
@@ -62,7 +63,7 @@ export default function Items({ data, setData }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

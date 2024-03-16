@@ -19,7 +19,7 @@ export default function Expense({ data, setData }) {
   var [unitShorthand, setUnitShorthand] = useState(false);
 
   var [addCategory, setAddCategory] = useState(false);
-
+  let uid = data.uid;
   const addthings = async () => {
     let data;
     let url;
@@ -35,7 +35,7 @@ export default function Expense({ data, setData }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

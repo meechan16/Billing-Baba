@@ -2692,147 +2692,217 @@ input[type="number"] {
   }
 }
 
-#QuickBilling {
-  display: flex;
+.tabs {
   height: 100vh;
-  .l {
-    // flex: 2;
-    padding: 5px;
-    .top {
-      input {
-        width: 100%;
-        border: 2px solid rgb(197, 197, 197);
-        outline: none;
-        padding: 10px;
-        font-size: 1.1rem;
-        border-radius: 5px;
-        &:hover {
-          background-color: whitesmoke;
-        }
-        &:focus {
-          border: 2px solid rgb(0, 136, 255);
-        }
-      }
-      position: relative;
-      ul {
-        position: absolute;
-        background-color: rgb(243, 243, 243);
-        padding: 10px;
-        box-shadow: 5px 5px 10px rgba(63, 63, 63, 0.498);
-        width: 99%;
-      }
-      table {
-        width: 100%;
-        margin-top: 10px;
-        border-left: 1px solid gray;
-        border-right: 1px solid gray;
-
-        tr {
-          display: flex;
-          th {
-            // border-bottom: 1px solid gray;
-            background: whitesmoke;
-          }
-          th,
-          td {
-            // flex: 1;
-            font-size: 0.7rem;
-            width: 7vw;
-            text-align: center;
-            border-left: 1px solid gray;
-            padding: 10px;
-            &.name {
-              flex: 2;
-              width: 15vw;
-            }
-          }
-        }
+  display: flex;
+  flex-direction: column;
+  .tabs-header {
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    // gap: 5px;
+    .addTb {
+      background-color: rgb(215, 215, 215);
+      padding: 5px;
+      margin: 5px;
+      height: fit-content;
+      border-radius: 50px;
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: black;
       }
     }
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100vh;
-    .b {
-      border: 1px solid rgb(202, 202, 202);
-      padding: 10px;
+    .quit {
+      background-color: rgb(255, 0, 0);
+      padding: 5px 30px;
+      margin-left: auto;
+      margin-right: 5px;
+      height: fit-content;
       border-radius: 10px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 10px;
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: rgb(255, 255, 255);
+      }
+    }
+    .tab {
+      background-color: rgb(255, 255, 255);
+      padding: 5px 10px;
+      margin: 5px;
+      border-right: 1px solid black;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
       button {
-        padding: 10px;
-        border: 2px solid rgb(104, 200, 255);
-        background-color: #ade5ff;
-        border-radius: 5px;
-        &.unavailable {
-          background-color: rgb(224, 224, 224);
-          border: none;
+        padding: 2px;
+        border-radius: 50px;
+        svg {
+          width: 20px;
+          height: 20px;
+          fill: black;
+        }
+      }
+      &.open {
+        border-radius: 10px;
+        background-color: rgb(12, 12, 12);
+        color: white;
+        button {
+          padding: 2px;
+          border-radius: 50px;
+          svg {
+            fill: rgb(255, 255, 255);
+          }
         }
       }
     }
   }
-  .r {
+  .tab-content {
     flex: 1;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    h1 {
-      font-size: 1.3rem;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-    & > div {
-      border: 1px solid rgb(202, 202, 202);
-      padding: 10px;
-      border-radius: 10px;
-      padding: 10px;
-    }
-    .t1 {
-      input {
-        width: 100%;
-        border: 2px solid rgb(197, 197, 197);
-        outline: none;
-        padding: 10px;
-        font-size: 1.1rem;
-        border-radius: 5px;
-        &:hover {
-          background-color: whitesmoke;
+    #QuickBilling {
+      display: flex;
+      height: 100%;
+      .l {
+        // flex: 2;
+        padding: 5px;
+        .top {
+          input {
+            width: 100%;
+            border: 2px solid rgb(197, 197, 197);
+            outline: none;
+            padding: 10px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            &:hover {
+              background-color: whitesmoke;
+            }
+            &:focus {
+              border: 2px solid rgb(0, 136, 255);
+            }
+          }
+          position: relative;
+          ul {
+            position: absolute;
+            background-color: rgb(243, 243, 243);
+            padding: 10px;
+            box-shadow: 5px 5px 10px rgba(63, 63, 63, 0.498);
+            width: 99%;
+          }
+          table {
+            width: 100%;
+            margin-top: 10px;
+            border-left: 1px solid gray;
+            border-right: 1px solid gray;
+
+            tr {
+              display: flex;
+              th {
+                // border-bottom: 1px solid gray;
+                background: whitesmoke;
+              }
+              th,
+              td {
+                // flex: 1;
+                font-size: 0.7rem;
+                width: 7vw;
+                text-align: center;
+                border-left: 1px solid gray;
+                padding: 10px;
+                &.name {
+                  flex: 2;
+                  width: 15vw;
+                }
+              }
+            }
+          }
         }
-        &:focus {
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: inherit;
+        .b {
+          border: 1px solid rgb(202, 202, 202);
+          padding: 10px;
+          border-radius: 10px;
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          gap: 10px;
+          button {
+            padding: 10px;
+            border: 2px solid rgb(104, 200, 255);
+            background-color: #ade5ff;
+            border-radius: 5px;
+            &.unavailable {
+              background-color: rgb(224, 224, 224);
+              border: none;
+            }
+          }
+        }
+      }
+      .r {
+        flex: 1;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        h1 {
+          font-size: 1.3rem;
+          font-weight: 500;
+          margin-bottom: 10px;
+        }
+        & > div {
+          border: 1px solid rgb(202, 202, 202);
+          padding: 10px;
+          border-radius: 10px;
+          padding: 10px;
+        }
+        .t1 {
+          input {
+            width: 100%;
+            border: 2px solid rgb(197, 197, 197);
+            outline: none;
+            padding: 10px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            &:hover {
+              background-color: whitesmoke;
+            }
+            &:focus {
+              border: none;
+              outline: none;
+              border: 2px solid rgb(0, 136, 255);
+            }
+          }
+          position: relative;
+          ul {
+            position: absolute;
+            background-color: rgb(243, 243, 243);
+            padding: 10px;
+            box-shadow: 5px 5px 10px rgba(63, 63, 63, 0.498);
+            width: 99%;
+          }
+        }
+        height: inherit;
+        .t2 {
+          flex: 1;
+        }
+        .t3 {
+          // flex: 1;
+          margin-top: auto;
+          margin-bottom: 0;
+          padding: 0px;
+          padding-bottom: 10px;
           border: none;
-          outline: none;
-          border: 2px solid rgb(0, 136, 255);
+          button {
+            padding: 10px;
+            border: 2px solid rgb(255, 104, 104);
+            background-color: #ffadad;
+            border-radius: 5px;
+            width: 100%;
+          }
         }
-      }
-      position: relative;
-      ul {
-        position: absolute;
-        background-color: rgb(243, 243, 243);
-        padding: 10px;
-        box-shadow: 5px 5px 10px rgba(63, 63, 63, 0.498);
-        width: 99%;
-      }
-    }
-    height: 100vh;
-    .t2 {
-      flex: 1;
-    }
-    .t3 {
-      // flex: 1;
-      margin-top: auto;
-      margin-bottom: 0;
-      padding: 0px;
-      padding-bottom: 10px;
-      border: none;
-      button {
-        padding: 10px;
-        border: 2px solid rgb(255, 104, 104);
-        background-color: #ffadad;
-        border-radius: 5px;
-        width: 100%;
       }
     }
   }

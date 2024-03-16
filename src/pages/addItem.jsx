@@ -21,7 +21,7 @@ export default function AddItem({ data, setData, t = true }) {
   var [minToMaintain, setMinToMaintain] = useState();
   var [location, setLocation] = useState();
   // var [toggle, set] = useState();
-
+  let uid = data.uid;
   const addItemReq = async () => {
     let data;
     if (toggle) {
@@ -57,7 +57,7 @@ export default function AddItem({ data, setData, t = true }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

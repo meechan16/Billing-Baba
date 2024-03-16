@@ -95,6 +95,7 @@ export default function AddExpense({ data, setData }) {
   useEffect(() => {
     setPending(totalAmount - paid);
   }, [totalAmount, paid]);
+  let uid = data.uid;
   let sendData = () => {
     return;
 
@@ -120,7 +121,7 @@ export default function AddExpense({ data, setData }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })
@@ -159,7 +160,7 @@ export default function AddExpense({ data, setData }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "nulll",
+          Authorization: uid,
         },
         body: JSON.stringify(data),
       });

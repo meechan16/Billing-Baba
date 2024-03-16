@@ -90,6 +90,7 @@ export default function AddPurchase({ data, setData }) {
   const [paymentType, setpaymentType] = useState();
   const [Description, setDescription] = useState();
 
+  let uid = data.uid;
   let sendData = () => {
     const data = {
       phone_no: phone_no ? phone_no : "",
@@ -108,7 +109,7 @@ export default function AddPurchase({ data, setData }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })

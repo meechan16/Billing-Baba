@@ -96,6 +96,8 @@ export default function AddSales({ data, setData }) {
   useEffect(() => {
     setPending(totalAmount - paid);
   }, [totalAmount, paid]);
+
+  let uid = data.uid;
   let sendData = () => {
     const data = {
       name: Name ? Name : "",
@@ -108,18 +110,18 @@ export default function AddSales({ data, setData }) {
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount : "",
-      total_tax: totalTax ? totalTax : "",
+      total_tax: totalTax,
       description: Description ? Description : "",
       payment_status: paymentStatus ? paymentStatus : "",
       pending: pending ? pending : "",
-      paid: paid ? paid : "",
+      paid: paid,
     };
     let url = dev_url + "addsales";
     fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "nulll", // Modify this if necessary
+        Authorization: uid, // Modify this if necessary
       },
       body: JSON.stringify(data),
     })
@@ -127,7 +129,7 @@ export default function AddSales({ data, setData }) {
       .then((data) => {
         console.log("sales: ", data);
         alert("done");
-        Navigate("/");
+        window.location.href = "/";
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -145,33 +147,33 @@ export default function AddSales({ data, setData }) {
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount : "",
-      total_tax: totalTax ? totalTax : "",
+      total_tax: totalTax,
       description: Description ? Description : "",
       payment_status: paymentStatus ? paymentStatus : "",
       pending: pending ? pending : "",
-      paid: paid ? paid : "",
+      paid: paid,
     };
+    console.log(data);
+
     try {
       let url1 = dev_url + "addsalesAndGetPdf";
       const response = await fetch(url1, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "nulll",
+          Authorization: uid,
         },
         body: JSON.stringify(data),
       });
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
+      window.location.href = "/";
     } catch (error) {
       console.error("Error generating PDF:", error);
     }
   };
 
-  useEffect(() => {
-    console.log(paymentType);
-  }, [paymentType]);
   return (
     <div id="addsales">
       <div className="top">
