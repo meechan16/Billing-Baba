@@ -3,7 +3,7 @@ import Login from "./pages/kogin";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import "./style.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Dashboard from "./pages/dashboard";
 import Parties from "./pages/parties";
 import Items from "./pages/items";
@@ -32,7 +32,6 @@ import AddPurchaseOrder from "./pages/purchase/AddPurchaseOrder";
 import Expense from "./pages/Expense";
 import CashAndBanks from "./pages/CashAndBanks";
 import Checkplan from "./pages/checkplan";
-import Settings from "./pages/settings";
 import Utils from "./pages/utils";
 import Backup from "./pages/backup";
 import Syncnshare from "./pages/syncnshare";
@@ -41,6 +40,8 @@ import AddExpense from "./pages/AddExpense";
 import Loader from "./pages/Loader";
 import AddInfo from "./pages/addInfo";
 import Tabs from "./pages/tabs";
+import OnlineStore from "./pages/OnlineStore";
+import Setting from "./pages/Setting";
 
 function App() {
   // const Navigate = useNavigate();
@@ -53,16 +54,50 @@ function App() {
     }
   }, []);
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(localStorage.getItem("data"));
+  const [change, setChange] = useState(false);
   const [loading, setloading] = useState(true);
+  const [loading2, setloading2] = useState(false);
   const [Error, setError] = useState(true);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  // const uid = "nulll";
   const uid = localStorage.getItem("uid");
+
+  const updateData = () => {
+    setloading2(true);
+    localStorage.setItem("data", data);
+    try {
+      let url = dev_url + "editData";
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: uid, // Modify this if necessary
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log("updated");
+          setloading2(false);
+          localStorage.setItem("edited", false);
+        })
+        .catch((error) => {
+          setloading2(false);
+          console.error("Error:", error);
+        });
+    } catch (e) {
+      setloading2(false);
+      localStorage.setItem("edited", true);
+      alert("unable to save to remote server");
+    }
+  };
+  useEffect(() => {
+    updateData();
+  }, [data, change]);
 
   const fetchData = () => {
     fetch(dev_url + "/get_user", {
@@ -74,7 +109,8 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data fetch:", data.data.purchase);
+        // console.log("fetched");
+        // console.log("Data fetch:", data);
         setData(data.data || []); // Ensure data is always an array
         setloading(false);
       })
@@ -100,7 +136,12 @@ function App() {
             exact
             element={
               <Home part="profile" data={data} setData={setData}>
-                <Profile data={data} setData={setData} />
+                <Profile
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -108,7 +149,13 @@ function App() {
             path="/add-info"
             exact
             element={
-              <AddInfo uid={uid} data={data} setData={setData} />
+              <AddInfo
+                uid={uid}
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
               // <Home part="dashboard" data={data} setData={setData}>
               // </Home>
             }
@@ -118,7 +165,12 @@ function App() {
             exact
             element={
               <Home part="dashboard" data={data} setData={setData}>
-                <Dashboard data={data} setData={setData} />
+                <Dashboard
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -127,7 +179,12 @@ function App() {
             exact
             element={
               <Home part="parties" data={data} setData={setData}>
-                <Parties data={data} setData={setData} />
+                <Parties
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -136,7 +193,12 @@ function App() {
             exact
             element={
               <Home part="parties" data={data} setData={setData}>
-                <AddParties data={data} setData={setData} />
+                <AddParties
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -145,7 +207,12 @@ function App() {
             exact
             element={
               <Home part="items" data={data} setData={setData}>
-                <Items data={data} setData={setData} />
+                <Items
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -154,7 +221,12 @@ function App() {
             exact
             element={
               <Home part="items" data={data} setData={setData}>
-                <AddItem data={data} setData={setData} />
+                <AddItem
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -165,7 +237,12 @@ function App() {
               // <Home part="items">
               //   <AddItems />
               // </Home>
-              <AddSales data={data} setData={setData} />
+              <AddSales
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
             }
           />
           <Route
@@ -175,7 +252,12 @@ function App() {
               // <Home part="items">
               //   <AddItems />
               // </Home>
-              <AddPurchase data={data} setData={setData} />
+              <AddPurchase
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
             }
           />
           <Route
@@ -188,7 +270,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <SaleInvoice data={data} setData={setData} />
+                <SaleInvoice
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -202,14 +289,26 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <EstimatedQuortation data={data} setData={setData} />
+                <EstimatedQuortation
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
           <Route
             path="/add-estimation"
             exact
-            element={<AddEstimations data={data} setData={setData} />}
+            element={
+              <AddEstimations
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
           />
           <Route
             path="/payment-in"
@@ -221,7 +320,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <PaymentIn data={data} setData={setData} />
+                <PaymentIn
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -235,7 +339,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <AddPaymentsin data={data} setData={setData} />
+                <AddPaymentsin
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -249,7 +358,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <SaleOrder data={data} setData={setData} />
+                <SaleOrder
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -258,7 +372,12 @@ function App() {
             exact
             element={
               // <Home part="sale" data={data} setData={setData}>
-              <AddSalesOrder data={data} setData={setData} />
+              <AddSalesOrder
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
               // </Home>
             }
           />
@@ -272,7 +391,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <DelieveryChalan data={data} setData={setData} />
+                <DelieveryChalan
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -286,7 +410,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <SaleReturn data={data} setData={setData} />
+                <SaleReturn
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -300,7 +429,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <PurchaseOrder data={data} setData={setData} />
+                <PurchaseOrder
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -309,7 +443,12 @@ function App() {
             exact
             element={
               // <Home part="purchase" data={data} setData={setData}>
-              <AddPurchaseOrder data={data} setData={setData} />
+              <AddPurchaseOrder
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
               // </Home>l
             }
           />
@@ -323,7 +462,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <PaymentOut data={data} setData={setData} />
+                <PaymentOut
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -337,7 +481,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <PurchaseBill data={data} setData={setData} />
+                <PurchaseBill
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -351,21 +500,38 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <PurchaseReturn data={data} setData={setData} />
+                <PurchaseReturn
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
           <Route
             path="/quick-billing"
             exact
-            element={<Tabs data={data} setData={setData} />}
+            element={
+              <Tabs
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
           />
           <Route
             path="/expenses"
             exact
             element={
               <Home part="expense" data={data} setData={setData}>
-                <Expense data={data} setData={setData} />
+                <Expense
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -373,7 +539,12 @@ function App() {
             path="/add-expense"
             exact
             element={
-              <AddExpense data={data} setData={setData} />
+              <AddExpense
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
               // <Home part="expense" data={data} setData={setData}>
               // </Home>
             }
@@ -383,16 +554,26 @@ function App() {
             exact
             element={
               <Home part="cash-and-bank" data={data} setData={setData}>
-                <CashAndBanks data={data} setData={setData} />
+                <CashAndBanks
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
           <Route
-            path="/e-way-bill"
+            path="/my-online-store"
             exact
             element={
               <Home part="e-way-bill" data={data} setData={setData}>
-                <CashAndBanks data={data} setData={setData} />
+                <OnlineStore
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -401,7 +582,12 @@ function App() {
             exact
             element={
               <Home part="report" data={data} setData={setData}>
-                <Rep data={data} setData={setData} />
+                <Rep
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -411,7 +597,12 @@ function App() {
             exact
             element={
               <Home part="sync-n-share" data={data} setData={setData}>
-                <Syncnshare data={data} setData={setData} />
+                <Syncnshare
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -420,7 +611,12 @@ function App() {
             exact
             element={
               <Home part="backup-n-restore" data={data} setData={setData}>
-                <Backup data={data} setData={setData} />
+                <Backup
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -429,7 +625,12 @@ function App() {
             exact
             element={
               <Home part="utils" data={data} setData={setData}>
-                <Utils data={data} setData={setData} />
+                <Utils
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -437,9 +638,14 @@ function App() {
             path="/settings"
             exact
             element={
-              <Home part="settings" data={data} setData={setData}>
-                <Settings data={data} setData={setData} />
-              </Home>
+              // <Home part="settings" data={data} setData={setData}>
+              <Setting
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+              // </Home>
             }
           />
           <Route
@@ -447,12 +653,117 @@ function App() {
             exact
             element={
               <Home part="expense" data={data} setData={setData}>
-                <Checkplan data={data} setData={setData} />
+                <Checkplan
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
         </Routes>
       </BrowserRouter>
+      {loading2 && (
+        <div className="loading">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+            <circle
+              fill="#FF156D"
+              stroke="#FF156D"
+              stroke-width="15"
+              r="15"
+              cx="35"
+              cy="100"
+            >
+              <animate
+                attributeName="cx"
+                calcMode="spline"
+                dur="2"
+                values="35;165;165;35;35"
+                keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1"
+                repeatCount="indefinite"
+                begin="0"
+              ></animate>
+            </circle>
+            <circle
+              fill="#FF156D"
+              stroke="#FF156D"
+              stroke-width="15"
+              opacity=".8"
+              r="15"
+              cx="35"
+              cy="100"
+            >
+              <animate
+                attributeName="cx"
+                calcMode="spline"
+                dur="2"
+                values="35;165;165;35;35"
+                keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1"
+                repeatCount="indefinite"
+                begin="0.05"
+              ></animate>
+            </circle>
+            <circle
+              fill="#FF156D"
+              stroke="#FF156D"
+              stroke-width="15"
+              opacity=".6"
+              r="15"
+              cx="35"
+              cy="100"
+            >
+              <animate
+                attributeName="cx"
+                calcMode="spline"
+                dur="2"
+                values="35;165;165;35;35"
+                keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1"
+                repeatCount="indefinite"
+                begin=".1"
+              ></animate>
+            </circle>
+            <circle
+              fill="#FF156D"
+              stroke="#FF156D"
+              stroke-width="15"
+              opacity=".4"
+              r="15"
+              cx="35"
+              cy="100"
+            >
+              <animate
+                attributeName="cx"
+                calcMode="spline"
+                dur="2"
+                values="35;165;165;35;35"
+                keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1"
+                repeatCount="indefinite"
+                begin=".15"
+              ></animate>
+            </circle>
+            <circle
+              fill="#FF156D"
+              stroke="#FF156D"
+              stroke-width="15"
+              opacity=".2"
+              r="15"
+              cx="35"
+              cy="100"
+            >
+              <animate
+                attributeName="cx"
+                calcMode="spline"
+                dur="2"
+                values="35;165;165;35;35"
+                keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1"
+                repeatCount="indefinite"
+                begin=".2"
+              ></animate>
+            </circle>
+          </svg>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { dev_url } from "../../url";
 import CustomInput from "../../components/customInput";
 
-export default function AddSales({ data, setData }) {
+export default function AddSales({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -80,6 +80,8 @@ export default function AddSales({ data, setData }) {
       newRows[index][column] = value;
       return newRows;
     });
+    console.log("rows");
+    console.log(rows[0]);
   };
 
   const [Name, setName] = useState(); // Initial index count
@@ -93,13 +95,16 @@ export default function AddSales({ data, setData }) {
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [paid, setPaid] = useState(0);
   const [pending, setPending] = useState(0);
+
+  const [Search, setSearch] = useState(); // Initial index count
+  const [searchFocus, setSearchFoucs] = useState(); // Initial index count
   useEffect(() => {
     setPending(totalAmount - paid);
   }, [totalAmount, paid]);
 
   let uid = data.uid;
   let sendData = () => {
-    const data = {
+    const newData = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
@@ -115,29 +120,31 @@ export default function AddSales({ data, setData }) {
       payment_status: paymentStatus ? paymentStatus : "",
       pending: pending ? pending : "",
       paid: paid,
+      type: "sale",
     };
-    let url = dev_url + "addsales";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sales: ", data);
-        alert("done");
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+
+    let newDa = data;
+    newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
+    newDa.sale_pending
+      ? (newDa.sale_pending += parseFloat(newData.pending))
+      : (newDa.sale_pending = parseFloat(newData.pending));
+    newDa.sale_paid
+      ? (newDa.sale_paid += parseFloat(newData.paid))
+      : (newDa.sale_paid = parseFloat(newData.paid));
+    newDa.paymentStatus === pending
+      ? (newDa.to_collect += parseFloat(newData.pending))
+      : (newDa.to_collect = parseFloat(newData.pending));
+    newDa.total_sales
+      ? (newDa.total_sales += parseFloat(newData.total))
+      : (newDa.total_sales = parseFloat(newData.total));
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/sale-invoice");
   };
 
   let sendData_and_get_pdf = async () => {
-    const data = {
+    const newData = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
@@ -153,26 +160,61 @@ export default function AddSales({ data, setData }) {
       pending: pending ? pending : "",
       paid: paid,
     };
-    console.log(data);
 
     try {
-      let url1 = dev_url + "addsalesAndGetPdf";
+      let url1 = dev_url + "get-sales-invoice-pdf";
       const response = await fetch(url1, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: uid,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(newData),
       });
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
       window.location.href = "/";
     } catch (error) {
+      alert("unable to generate PDF");
       console.error("Error generating PDF:", error);
     }
+
+    let newDa = data;
+    newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
+    newDa.sale_pending
+      ? (newDa.sale_pending += parseFloat(newData.pending))
+      : (newDa.sale_pending = parseFloat(newData.pending));
+    newDa.sale_paid
+      ? (newDa.sale_paid += parseFloat(newData.paid))
+      : (newDa.sale_paid = parseFloat(newData.paid));
+    newDa.paymentStatus === pending
+      ? (newDa.to_collect += parseFloat(newData.pending))
+      : (newDa.to_collect = parseFloat(newData.pending));
+    newDa.total_sales
+      ? (newDa.total_sales += parseFloat(newData.total))
+      : (newDa.total_sales = parseFloat(newData.total));
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/sale-invoice");
   };
+
+  let tax = [
+    { value: "0.5", name: "IGST@0.25%" },
+    { value: "0.5", name: "GST@0.25%" },
+    { value: "0", name: "IGST@0%" },
+    { value: "0", name: "GST@0%" },
+    { value: "3", name: "IGST@3%" },
+    { value: "3", name: "GST@3%" },
+    { value: "5", name: "IGST@5%" },
+    { value: "5", name: "GST@5%" },
+    { value: "12", name: "IGST@12%" },
+    { value: "18", name: "IGST@18%" },
+    { value: "18", name: "GST@18%" },
+    { value: "28", name: "IGST@28%" },
+    { value: "28", name: "GST @28%" },
+  ];
 
   return (
     <div id="addsales">
@@ -206,14 +248,43 @@ export default function AddSales({ data, setData }) {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
               </svg>
-              <input
-                type="text"
-                name="name"
-                value={Name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Search by Name/Phone"
-                id=""
-              />
+
+              <div className="search">
+                <input
+                  type="text"
+                  name="name"
+                  value={Name ? Name : Search?.party ? Search?.party : ""}
+                  onChange={(e) => setSearch({ party: e.target.value })}
+                  placeholder="Search by Name/Phone"
+                  id=""
+                />
+                {Search?.party && (
+                  <ul>
+                    {data.parties
+                      .filter((customer) =>
+                        customer.partyName
+                          .toLowerCase()
+                          .includes(Search.party.toLowerCase())
+                      )
+                      .map((customer) => (
+                        <li
+                          key={customer.phone_no}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            setName(customer.partyName);
+                            setPhone_no(customer.phoneNo);
+                            setSearch();
+                          }}
+                        >
+                          {customer.partyName}
+                        </li>
+                      ))}
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
+              </div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               </svg>
@@ -223,7 +294,7 @@ export default function AddSales({ data, setData }) {
                 <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
               </svg>
               <input
-                type="number"
+                type="text"
                 value={phone_no}
                 onChange={(e) => setPhone_no(e.target.value)}
                 name="phNo"
@@ -234,17 +305,6 @@ export default function AddSales({ data, setData }) {
           </div>
 
           <div className="r">
-            {/* <div className="">
-              <span>Phone No</span>
-              <input
-                type="text"
-                value={phone_no}
-                onChange={(e) => setPhone_no(e.target.value)}
-                name="phNo"
-                placeholder="input..."
-                id=""
-              />
-            </div> */}
             <div className="">
               <span>Invoice Number</span>
               <input
@@ -258,25 +318,12 @@ export default function AddSales({ data, setData }) {
             </div>
             <div className="">
               <span>Invoice Date</span>
-              {/* <DatePicker
-                selected={invoice_date}
-                onChange={handleChange}
-                dateFormat="dd/MM/yyyy"
-              /> */}
               <input
                 type="date"
                 onChange={(e) => setInvoice_date(e.target.value)}
                 id="birthday"
                 name="birthday"
               ></input>
-              {/* <input
-                type="text"
-                value={invoice_date}
-                onChange={(e) => setInvoice_date(e.target.value)}
-                name="InvDate"
-                placeholder="input..."
-                id=""
-              /> */}
             </div>
             <div className="">
               <span>State of supply</span>
@@ -303,13 +350,66 @@ export default function AddSales({ data, setData }) {
           </div>
           {rows.map((row, rowIndex) => (
             <div className="cl" key={rowIndex}>
-              <div>
+              <div className="search">
                 <input
-                  value={row.col1}
+                  // value={
+                  //   rows?[rowIndex]
+                  //     ? rows[rowIndex].item
+                  //     : (Search?.rowIndex?.item
+                  //     ? Search.rowIndex.item
+                  //     : "")
+                  // }
+                  value={
+                    rows[rowIndex].item
+                      ? rows[rowIndex].item
+                      : Search
+                      ? Search[rowIndex]?.item
+                      : ""
+                  }
                   onChange={(e) =>
-                    handleInputChange(rowIndex, "item", e.target.value)
+                    setSearch({ rowIndex: { item: e.target.value } })
                   }
                 />
+                {/* {console.log(rows[rowIndex].item)} */}
+                {Search?.rowIndex?.item && (
+                  <ul>
+                    {data.items
+                      .filter((item) =>
+                        item.Name.toLowerCase().includes(
+                          rows[rowIndex].item.toLowerCase()
+                        )
+                      )
+                      .map((item) => (
+                        <li
+                          key={item.code}
+                          onClick={() => {
+                            handleInputChange(rowIndex, "item", item.Name);
+                            handleInputChange(rowIndex, "tax", item.tax);
+                            handleInputChange(
+                              rowIndex,
+                              "discount",
+                              item.discount
+                            );
+                            handleInputChange(
+                              rowIndex,
+                              "price_per_unit",
+                              item.salesPrice
+                            );
+                            console.log(item.Name);
+                            console.log(rows?.rowIndex?.item);
+                            // setName(item.Name);
+                            // setPhone_no(item.phoneNo);
+                            setSearch({});
+                          }}
+                        >
+                          {item.Name}
+                        </li>
+                      ))}
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
               </div>
               <div>
                 <input
@@ -320,14 +420,46 @@ export default function AddSales({ data, setData }) {
                   }
                 />
               </div>
-              <div>
-                {/* <input
-                  value={row.col3}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "unit", e.target.value)
+              <div className="search">
+                <input
+                  value={
+                    rows[rowIndex].unit
+                      ? rows[rowIndex].unit
+                      : Search
+                      ? Search[rowIndex]?.unit
+                      : ""
                   }
-                /> */}
-                <select
+                  onChange={(e) =>
+                    setSearch({ rowIndex: { unit: e.target.value } })
+                  }
+                />
+                {Search?.rowIndex?.unit && (
+                  <ul>
+                    {data.units
+                      .filter((unit) =>
+                        unit.name
+                          .toLowerCase()
+                          .includes(rows[rowIndex].unit.toLowerCase())
+                      )
+                      .map((unit) => (
+                        <li
+                          key={unit.name}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            handleInputChange(rowIndex, "unit", unit.name);
+                            handleInputChange(rowIndex, "unit", unit.name);
+                            setSearch({});
+                          }}
+                        >
+                          {unit.name}
+                        </li>
+                      ))}
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Items +
+                    </li>
+                  </ul>
+                )}
+                {/* <select
                   name=""
                   id=""
                   onChange={(e) =>
@@ -338,7 +470,7 @@ export default function AddSales({ data, setData }) {
                   <option value="BAG">Bag</option>
                   <option value="Gram">Gram</option>
                   <option value="UNIT">UNIT</option>
-                </select>
+                </select> */}
               </div>
               <div>
                 <input
@@ -362,13 +494,13 @@ export default function AddSales({ data, setData }) {
                   }
                 />
               </div>
-              <div>
-                {/* <input
+              {/* <div>
+                <input
                   value={row.col6}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "tax", e.target.value)
                   }
-                /> */}
+                />
                 <select
                   name=""
                   id=""
@@ -394,6 +526,45 @@ export default function AddSales({ data, setData }) {
 
                   <option value="28">GST @28%</option>
                 </select>
+              </div> */}
+              <div className="search">
+                <input
+                  value={
+                    rows[rowIndex]?.tax
+                      ? rows[rowIndex].tax
+                      : Search
+                      ? Search[rowIndex]?.tax
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setSearch({ rowIndex: { tax: e.target.value } })
+                  }
+                />
+                {Search?.rowIndex?.tax && (
+                  <ul>
+                    {tax
+                      .filter((unit) =>
+                        unit.value
+                          .toLowerCase()
+                          .includes(rows[rowIndex].tax.toLowerCase())
+                      )
+                      .map((unit) => (
+                        <li
+                          key={unit.name}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            handleInputChange(rowIndex, "tax", unit.value);
+                            setSearch({});
+                          }}
+                        >
+                          {unit.name}
+                        </li>
+                      ))}
+                    {/* <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Ta +
+                    </li> */}
+                  </ul>
+                )}
               </div>
               <div>
                 <input

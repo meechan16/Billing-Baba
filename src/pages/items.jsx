@@ -5,8 +5,9 @@ import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
 import StockAdjust from "../components/stock_Adjustment";
 import { dev_url } from "../url";
+import Loader from "./Loader";
 
-export default function Items({ data, setData }) {
+export default function Items({ data, setData, change, setChange }) {
   var [page, setPage] = useState("product");
   var [StockPage, setStockPage] = useState(false);
   const Navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Items({ data, setData }) {
   const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  var [loading, setloading] = useState(false);
   // const [data, setData] = useState([]);
   // useEffect(() => {
   //   fetchData();
@@ -42,41 +44,36 @@ export default function Items({ data, setData }) {
   //     });
   // };
 
-  var [unitName, setUnitName] = useState(false);
-  var [unitShorthand, setUnitShorthand] = useState(false);
+  var [unitName, setUnitName] = useState("");
+  var [unitShorthand, setUnitShorthand] = useState("");
 
-  var [addCategory, setAddCategory] = useState(false);
+  var [addCategory, setAddCategory] = useState("");
 
-  let uid = data.uid;
   const addthings = async () => {
-    let data;
-    let url;
+    let newDa = data;
+
     if (page === "category") {
-      data = { Category: addCategory };
-      url = dev_url + "addCategory";
+      newDa.category
+        ? newDa.category.push({ name: addCategory })
+        : (newDa.category = [{ name: addCategory }]);
+      console.log(newDa);
+      setData(newDa);
+      setAddCategory("");
     } else if (page === "unit") {
-      data = { name: unitName, shortHand: unitShorthand };
-      url = dev_url + "addUnits";
+      newDa.units
+        ? newDa.units.push({ name: unitName, shortHand: unitShorthand })
+        : (newDa.units = [{ name: unitName, shortHand: unitShorthand }]);
+      console.log(newDa);
+      setData(newDa);
+      setUnits(false);
+      setUnitName("");
+      setUnitShorthand("");
     }
-    console.log(data);
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("category/units: ", data);
-        alert("done");
-        Navigate("/items");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    setChange(!change);
+    setCategory(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div id="items">
@@ -313,8 +310,8 @@ export default function Items({ data, setData }) {
             </div>
             <div className="content">
               <div className="head">
-                <h2>Full name</h2>
-                <h2>In Short</h2>
+                <h2>CATEGORY NAME</h2>
+                {/* <h2>In Short</h2> */}
               </div>
               {data?.category?.map((item, index) => (
                 <div
@@ -326,7 +323,7 @@ export default function Items({ data, setData }) {
                 >
                   <h1>{item.name}</h1>
                   <div className="">
-                    <p>₹ {item.name || "-"}</p>
+                    {/* <p>{item.name || "-"}</p> */}
                     <Dropdown menuItems={["View/Edit", "Delete"]}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -497,7 +494,7 @@ export default function Items({ data, setData }) {
                 >
                   <h1>{item.name}</h1>
                   <div className="">
-                    <p>₹ {item.shortHand || "-"}</p>
+                    <p>{item.shortHand || "-"}</p>
                     <Dropdown menuItems={["View/Edit", "Delete"]}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

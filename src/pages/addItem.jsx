@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
 import Loader from "./Loader";
 
-export default function AddItem({ data, setData, t = true }) {
+export default function AddItem({
+  data,
+  setData,
+  t = true,
+  change,
+  setChange,
+}) {
   const Navigate = useNavigate();
   var [toggle, setToggle] = useState(t);
   var [page, setPage] = useState("pricing");
@@ -28,17 +34,17 @@ export default function AddItem({ data, setData, t = true }) {
   useEffect(() => {
     if (sellPrice < discount) {
       alert("discount can't be more than sales price");
-    } else if (purchaseprice <= sellPrice - discount) {
-      alert("purchase price less more than sale price, please fix");
+    } else if (purchaseprice >= sellPrice - discount) {
+      alert("purchase price more than sale price, please fix");
     }
   }, [purchaseprice, sellPrice]);
 
   let uid = data.uid;
   const addItemReq = async () => {
     setLoading(true);
-    let data;
+    let newData;
     if (toggle) {
-      data = {
+      newData = {
         Name: itemName ? itemName : "",
         HSN: itemHSN ? itemHSN : "",
         Category: itemCategory ? itemCategory : "",
@@ -55,7 +61,7 @@ export default function AddItem({ data, setData, t = true }) {
         profit: sellPrice - discount - purchaseprice,
       };
     } else {
-      data = {
+      newData = {
         Name: itemName ? itemName : "",
         HSN: itemHSN ? itemHSN : "",
         Category: itemCategory ? itemCategory : "",
@@ -67,26 +73,12 @@ export default function AddItem({ data, setData, t = true }) {
       };
     }
     console.log(data);
-    let url = dev_url + "additems";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sales: ", data);
-        // alert("done");
-        setLoading(false);
-        window.location.href = "/items";
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error:", error);
-      });
+    let newDa = data;
+    newDa.items ? newDa.items.push(newData) : (newDa.items = [newData]);
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/items");
   };
 
   if (loading) return <Loader />;

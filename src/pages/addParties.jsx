@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { dev_url } from "../url";
 import Loader from "./Loader";
 
-export default function AddParties({ data, setData }) {
+export default function AddParties({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   // var [toggle, setToggle] = useState(true);
   var [page, setPage] = useState("GST");
@@ -24,8 +24,7 @@ export default function AddParties({ data, setData }) {
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addPartiesReq = async () => {
-    setLoading(true);
-    let data = {
+    let newData = {
       partyName: partyName ? partyName : "",
       GSTIN: GSTIN ? GSTIN : "",
       phoneNo: phoneNo ? phoneNo : "",
@@ -43,27 +42,12 @@ export default function AddParties({ data, setData }) {
       balance: 0,
     };
 
-    console.log(data);
-    let url = dev_url + "addparties";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sales: ", data);
-        // alert("done");
-        setLoading(false);
-        window.location.href = "/parties";
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error:", error);
-      });
+    let newDa = data;
+    newDa.parties ? newDa.parties.push(newData) : (newDa.parties = [newData]);
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/parties");
   };
 
   if (loading) return <Loader />;

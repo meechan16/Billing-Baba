@@ -4,10 +4,10 @@ import { dev_url } from "../url";
 import Loader from "./Loader";
 import CustomInput from "../components/customInput";
 
-export default function AddExpense({ data, setData }) {
+export default function AddExpense({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
-  var [loading, setLoading] = useState(false);
+  // var [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([
     {
       index: 1,
@@ -18,7 +18,7 @@ export default function AddExpense({ data, setData }) {
     },
   ]);
 
-  const [indexCount, setIndexCount] = useState();
+  const [indexCount, setIndexCount] = useState(0);
   const addRow = () => {
     setRows([
       ...rows,
@@ -66,53 +66,63 @@ export default function AddExpense({ data, setData }) {
     });
   };
 
+  const [searchTerm, setSearchTerm] = useState(""); // Initial index count
   const [Name, setName] = useState(); // Initial index count
   const [invoice_number, setInvoice_number] = useState(); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
-  const [paymentType, setpaymentType] = useState("credit"); // Initial index count
+  // const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
   const [addExpenseCategory, setAddExpenseCategory] = useState(false); // Initial index count
   const [inputFocus, setInputFocus] = useState(false); // Initial index count
 
-  let uid = data.uid;
-  let sendData = () => {
+  // let uid = data.uid;
+  let addExpense = () => {
     // return;
 
-    const data = {
-      name: Name ? Name : "",
+    const newData = {
+      Category: Name ? Name : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      payment_type: paymentType ? paymentType : "",
+      // payment_type: paymentType ? paymentType : "",
       tramsactionType: "Sale",
       items: rows ? rows : "",
       total: totalAmount ? totalAmount : "",
       description: Description ? Description : "",
     };
-    let url = dev_url + "addsales";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sales: ", data);
-        alert("done");
-        Navigate("/");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+
+    let newDa = data;
+    newDa.expense ? newDa.expense.push(newData) : (newDa.sales = [newData]);
+    newDa.total_expense
+      ? (newDa.total_expense += parseFloat(newData.total))
+      : (newDa.total_expense = parseFloat(newData.total));
+    console.log("newData");
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/expenses");
   };
+  const [categoryName, setCategoryName] = useState(""); // Initial index count
+  const [categoryType, setCategoryType] = useState(""); // Initial index count
 
-  useEffect(() => {
-    console.log(paymentType);
-  }, [paymentType]);
+  let addExpCategory = () => {
+    console.log("hit");
+    // return;
 
-  if (loading) return <Loader />;
+    const newData = {
+      name: categoryName ? categoryName : "",
+      type: categoryType ? categoryType : "",
+    };
+
+    let newDa = data;
+    newDa.expenseCategory
+      ? newDa.expenseCategory.push(newData)
+      : (newDa.expenseCategory = [newData]);
+    setData(newDa);
+    setChange(!change);
+    setCategoryName("");
+    setCategoryType("");
+    setAddExpenseCategory(!addExpenseCategory);
+  };
   return (
     <div id="addsales">
       {addExpenseCategory && (
@@ -122,12 +132,20 @@ export default function AddExpense({ data, setData }) {
               <h1>Add Expense Category</h1>
               <button onClick={() => setAddExpenseCategory(false)}>x</button>
             </div>
-            <CustomInput placeholder={"Expense Category"} />
-            <select name="" id="">
+            <CustomInput
+              inputValue={categoryName}
+              setInputValue={setCategoryName}
+              placeholder={"Expense Category"}
+            />
+            <select
+              onChange={(e) => setCategoryType(e.target.value)}
+              name=""
+              id=""
+            >
               <option value="">Dirrect Expense</option>
               <option value="">Indirrect Expense</option>
             </select>
-            <button>Save</button>
+            <button onClick={() => addExpCategory()}>Save</button>
           </div>
         </div>
       )}
@@ -145,7 +163,7 @@ export default function AddExpense({ data, setData }) {
           <div
             className={toggle ? "toggle" : "toggle opp"}
             onClick={() => {
-              setpaymentType(toggle ? "Cash" : "Credit");
+              // setpaymentType(toggle ? "GST" : "none");
               setToggle(!toggle);
             }}
           >
@@ -168,17 +186,32 @@ export default function AddExpense({ data, setData }) {
                   onBlur={() => setInputFocus(false)}
                   placeholder="Expense Catogroy"
                   id=""
-                  value={Name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={Name ? Name : searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
               </div>
-              {/* <h1>Add the "Add category" option in this input dropdown</h1> */}
             </div>
-            {Name && (
+            {searchTerm && (
               <ul>
+                {data.expenseCategory
+                  ?.filter((item) =>
+                    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((item) => (
+                    <li
+                      key={item.itemCode}
+                      onClick={() => {
+                        Navigate(item.to);
+                        setName(item.name);
+                        setSearchTerm("");
+                      }}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
                 <li
                   className="add"
                   onClick={() => {
@@ -187,19 +220,6 @@ export default function AddExpense({ data, setData }) {
                 >
                   Add Expense Category +
                 </li>
-                {data.ExpenseCategory?.filter((item) =>
-                  item.name.toLowerCase().includes(Name.toLowerCase())
-                ).map((item) => (
-                  <li
-                    key={item.itemCode}
-                    onClick={() => {
-                      Navigate(item.to);
-                      setName(item.name);
-                    }}
-                  >
-                    {item.name}
-                  </li>
-                ))}
               </ul>
             )}
           </div>
@@ -285,7 +305,7 @@ export default function AddExpense({ data, setData }) {
           </div>
         </div>
         <div className="ai5">
-          <button className="save" onClick={() => sendData()}>
+          <button className="save" onClick={() => addExpense()}>
             Save
           </button>
           <button

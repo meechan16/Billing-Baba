@@ -5,6 +5,8 @@ import { dev_url } from "../url";
 import LogIn from "./kogin";
 import AddInfo from "./addInfo";
 import { useNavigate } from "react-router-dom";
+import OnlineStore from "./OnlineStore";
+import CommingSoon from "./commingSoon";
 // import { Link } from "react-router-dom";
 
 export default function Dashboard({ data, setData }) {
@@ -491,8 +493,8 @@ export default function Dashboard({ data, setData }) {
       )}
       {page === "overview" && <Undone />}
       {page === "history" && <Undone />}
-      {page === "search" && <Undone />}
-      {page === "store" && <Undone />}
+      {page === "search" && <CommingSoon />}
+      {page === "store" && <OnlineStore pr={false} />}
     </div>
   );
 }

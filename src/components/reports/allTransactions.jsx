@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../../components/dropdown";
 
-export default function PurchaseBill({ data, setData }) {
+export default function AllTransactions({ data, setData }) {
+  const [tran, setTran] = useState([
+    ...data.sales,
+    ...data.purchase,
+    data.expense,
+  ]);
   return (
     <div id="saleInvoice">
       <div className="title">
@@ -9,7 +14,7 @@ export default function PurchaseBill({ data, setData }) {
           <div className="l">
             <select name="" id="">
               <option selected value="">
-                All Purchase Invoice
+                All Transactions
               </option>
               <option value="">This Month</option>
               <option value="">This Quater</option>
@@ -65,15 +70,15 @@ export default function PurchaseBill({ data, setData }) {
             <p>Balance Due</p>
             <p className="side">-</p>
           </div>
-          {data?.sales?.map((sale, index) => (
+          {tran?.map((sale, index) => (
             <div className="cl" key={index}>
               <p className="">{sale.invoice_date}</p>
               <p className="grey">{sale.invoice_number}</p>
               <p className="grey">{sale.name}</p>
               <p className="grey">{sale.type}</p>
-              <p className="grey">{sale.payType}</p>
+              <p className="grey">{sale.payment_type}</p>
               <p className="grey">{sale.total}</p>
-              <p className="grey">{sale.balance}</p>
+              <p className="grey">{sale.pending}</p>
               <p className="side">
                 <Dropdown
                   menuItems={[

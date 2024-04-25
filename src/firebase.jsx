@@ -133,6 +133,8 @@ const sendPasswordReset = async (email) => {
 };
 
 const logout = async () => {
+  localStorage.setItem("data", {});
+  localStorage.setItem("uid", {});
   await signOut(auth);
 };
 

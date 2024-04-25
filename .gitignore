@@ -10,7 +10,7 @@
 /backend
 
 url.jsx
-
+.env
 # production
 /build
 

@@ -81,18 +81,18 @@ export default function Expense({ data, setData }) {
             </div>
             <div className="content">
               <div className="head">
-                <h2>Items</h2>
-                <h2>Ammount</h2>
+                <h2>Invoice</h2>
+                <h2>Total</h2>
               </div>
-              {data?.items?.map((item, index) => (
+              {data?.expense?.map((item, index) => (
                 <div
                   className={`tile ${selecteditems === item ? "selected" : ""}`}
                   key={index}
                   onClick={() => setSelectedItems(item)}
                 >
-                  <h1>{item.Name}</h1>
+                  <h1>{item.invoice_number}</h1>
                   <div className="">
-                    <p>₹ {item.ammount || "-"}</p>
+                    <p>₹ {item.total || "-"}</p>
                     <Dropdown menuItems={["View/Edit", "Delete"]}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -225,9 +225,9 @@ export default function Expense({ data, setData }) {
             <div className="content">
               <div className="head">
                 <h2>Category</h2>
-                <h2>Ammount</h2>
+                {/* <h2>Ammount</h2> */}
               </div>
-              {data?.category?.map((item, index) => (
+              {data?.expenseCategory?.map((item, index) => (
                 <div
                   className={`tile ${
                     selectedCategory === item ? "selected" : ""
@@ -237,7 +237,7 @@ export default function Expense({ data, setData }) {
                 >
                   <h1>{item.name}</h1>
                   <div className="">
-                    <p>₹ {item.name || "-"}</p>
+                    {/* <p>₹ {item.name || "-"}</p> */}
                     <Dropdown menuItems={["View/Edit", "Delete"]}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -249,48 +249,6 @@ export default function Expense({ data, setData }) {
                   </div>
                 </div>
               ))}
-              {/* <div className="tile selected">
-                    <h1>electronics</h1>
-                    <div className="">
-                      <p>tech</p>
-                      <Dropdown menuItems={["View/Edit", "Delete"]}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 128 512"
-                        >
-                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                        </svg>
-                      </Dropdown>
-                    </div>
-                  </div>
-                  <div className="tile">
-                    <h1>bag</h1>
-                    <div className="">
-                      <p>bag</p>
-                      <Dropdown menuItems={["View/Edit", "Delete"]}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 128 512"
-                        >
-                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                        </svg>
-                      </Dropdown>
-                    </div>
-                  </div>
-                  <div className="tile">
-                    <h1>cloths</h1>
-                    <div className="">
-                      <p>cloths</p>
-                      <Dropdown menuItems={["View/Edit", "Delete"]}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 128 512"
-                        >
-                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                        </svg>
-                      </Dropdown>
-                    </div>
-                  </div> */}
             </div>
           </div>
           <div className="right">
@@ -298,22 +256,6 @@ export default function Expense({ data, setData }) {
               <div className="tile">
                 <h1>{selectedCategory?.name || "no category selected"}</h1>
               </div>
-              {/* <div className="tile">
-                    <p>
-                      SALE PRICE <span> ₹ 100.00</span>(excl)
-                    </p>
-                    <p>
-                      Stock Qty: <span className="red"> 10</span>
-                    </p>
-                  </div>
-                  <div className="tile">
-                    <p>
-                      PURCHASE PRICE <span> ₹ 00.00</span>(excl)
-                    </p>
-                    <p>
-                      Stock Qty: <span className="red"> 10</span>
-                    </p>
-                  </div> */}
               <div className="tile"></div>
               <div className="tile"></div>
             </div>
@@ -343,11 +285,6 @@ export default function Expense({ data, setData }) {
                     <p className="grey">0.0</p>
                   </div>
                 ))}
-                {/* <div className="cl">
-                      <p className="grey">Gucci Watch</p>
-                      <p className="grey">2</p>
-                      <p className="grey">0.0</p>
-                    </div> */}
               </div>
             )}
           </div>

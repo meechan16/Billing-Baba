@@ -1,10 +1,10 @@
 import React from "react";
-import Undone from "../components/undone";
+import CommingSoon from "./commingSoon";
 
 export default function Utils({ data, setData }) {
   return (
     <div>
-      <Undone />
+      <CommingSoon />
     </div>
   );
 }
