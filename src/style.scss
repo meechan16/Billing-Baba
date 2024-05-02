@@ -399,23 +399,42 @@ input[type="number"] {
   height: 80vh;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
   align-items: center;
   justify-content: center;
-  h1 {
-    font-size: 1.3rem;
-    font-weight: 500;
-    span {
-      font-weight: 700;
+  .profileD {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 30vw;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: -5px 5px 10px rgba(53, 53, 53, 0.536);
+    border-radius: 5px;
+    div {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
     }
-  }
-  button {
-    padding: 10px 30px;
-    font-size: 1.3rem;
-    color: black;
-    background: rgb(176, 176, 176);
-    border-radius: 10px;
+    h1 {
+      font-size: 1vw;
+      font-weight: 400;
+    }
+    span {
+      font-size: 1.2vw;
+      font-weight: 600;
+    }
+    button {
+      padding: 10px 30px;
+      font-size: 1.3rem;
+      color: rgb(255, 255, 255);
+      font-weight: 600;
+      width: 100%;
+      background: rgb(0, 57, 114);
+      border-radius: 10px;
+    }
   }
 }
 #login {
@@ -3251,11 +3270,13 @@ input[type="number"] {
     height: 100%;
     background-color: rgb(9, 17, 31);
     color: white;
-    width: 20vw;
+    width: 15vw;
+    position: fixed;
     li {
       display: flex;
       padding: 2vh 3vh;
       justify-content: space-between;
+      align-items: center;
       transition: 100ms ease;
       &:hover {
         transition: 100ms ease;
@@ -3284,7 +3305,7 @@ input[type="number"] {
     }
   }
   .closebtn {
-    position: absolute;
+    position: fixed;
     top: 3%;
     right: 6%;
     svg {
@@ -3298,6 +3319,90 @@ input[type="number"] {
     &:hover {
       transition: 100ms ease;
       background: rgba(187, 187, 187, 0.345);
+    }
+  }
+  .content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25vw, 1fr));
+    width: 85vw;
+    margin-left: 15vw;
+    .tile {
+      height: max-content;
+      padding: 30px;
+      h1 {
+        font-size: 1.5vw;
+        padding: 10px 0px;
+        margin: 10px 0px;
+        border-bottom: 1px solid gray;
+        font-weight: 700;
+        color: rgb(30, 30, 30);
+        input {
+          margin-right: 10px;
+        }
+        button {
+          margin: 0 10px;
+          padding: 0px 20px;
+          border-radius: 5px;
+          background: rgb(205, 205, 205);
+          &:hover {
+            background: rgb(159, 159, 159);
+          }
+        }
+      }
+      & > p {
+        color: gray;
+        font-weight: 600;
+        font-size: 0.8vw;
+      }
+      & > div {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+        align-items: center;
+
+        .range {
+          width: 100%;
+        }
+        span {
+          font-weight: 500;
+        }
+        input {
+          border: 2px solid rgb(204, 204, 204);
+          padding: 5px 10px;
+        }
+      }
+    }
+    .popup {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #1b1b1b52;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .popupC {
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        border: 2px solid rgb(188, 188, 188);
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        button {
+          width: 100%;
+          background: rgb(193, 193, 193);
+          padding: 10px 20px;
+          border-radius: 5px;
+          font-weight: 600;
+          &.add {
+            background: rgb(255, 150, 150);
+          }
+        }
+      }
     }
   }
 }
@@ -3341,5 +3446,16 @@ input[type="number"] {
         background-color: rgb(160, 222, 255);
       }
     }
+  }
+}
+
+#utils {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 100%;
+  h1 {
+    font-size: 1.4vw;
   }
 }

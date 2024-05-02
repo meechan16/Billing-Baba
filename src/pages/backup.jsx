@@ -15,7 +15,7 @@ export default function Backup({ data, setData }) {
         class="giphy-embed"
         allowFullScreen
       ></iframe>
-      <h2>🔑 Feature locked for Desktop/Mobile Application only</h2>
+      {/* <h2>🔑 Feature locked for Desktop/Mobile Application only</h2> */}
       <h2>
         <span>Website have Auto Backup enabled 🎊</span>
       </h2>

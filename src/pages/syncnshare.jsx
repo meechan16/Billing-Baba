@@ -14,7 +14,7 @@ export default function Syncnshare() {
         class="giphy-embed"
         allowFullScreen
       ></iframe>
-      <h2>🔒 This Feature is for Desktop/Mobile Application only,</h2>
+      {/* <h2>🔒 This Feature is for Desktop/Mobile Application only,</h2> */}
       <h2>
         <span>Website data is auto synced 🎉</span>
       </h2>
