@@ -44,6 +44,34 @@ export default function QuickBilling({ data, setData, t = true }) {
     setSelectedCustomer(customer);
   };
 
+  // Barcode Locha
+  let barcode = "";
+  let lastKeyTime = Date.now();
+
+  let [barcodes, setbarcodes] = useState([]);
+
+  document.addEventListener("keydown", (event) => {
+    const currentTime = Date.now();
+
+    // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
+    if (currentTime - lastKeyTime > 50) {
+      barcode = ""; // Reset barcode if too much time has passed
+    }
+    lastKeyTime = currentTime;
+
+    // Filter out non-character keys
+    if (event.key.length === 1) {
+      barcode += event.key;
+    }
+
+    if (event.key === "Enter") {
+      if (barcode) {
+        setbarcodes([...barcodes, barcode]);
+        barcode = ""; // Clear the barcode after processing
+      }
+    }
+  });
+
   return (
     <div id="QuickBilling">
       {/* Left side */}

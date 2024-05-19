@@ -7,15 +7,17 @@ export default function Backup({ data, setData }) {
   return (
     // <div>
     <div id="info">
-      <iframe
+      {/* <iframe
         src="https://giphy.com/embed/ND6xkVPaj8tHO"
         width="480"
         height="446"
         frameBorder="0"
         class="giphy-embed"
         allowFullScreen
-      ></iframe>
+      ></iframe> */}
       {/* <h2>🔑 Feature locked for Desktop/Mobile Application only</h2> */}
+
+      <img src="./assets/happyGrp.jpg" alt="" />
       <h2>
         <span>Website have Auto Backup enabled 🎊</span>
       </h2>

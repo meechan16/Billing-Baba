@@ -20,7 +20,9 @@ export default function Dashboard({ data, setData }) {
       console.log(data?.todo_list);
       setTaskStatus(data?.todo_list);
     }
-    if (!data.name) {
+    if (data.serverError) {
+      alert("server not responding");
+    } else if (!data.name) {
       Navigate("/add-info");
     }
   }, [data]);
@@ -174,7 +176,11 @@ export default function Dashboard({ data, setData }) {
                   </svg>
                   <div className="">
                     <h1>To Collect</h1>
-                    <h2>₹ 20,738</h2>
+                    <h2>
+                      {data?.sales?.reduce((acc, obj) => acc + obj.pending, 0)
+                        ? data.sales.reduce((acc, obj) => acc + obj.pending, 0)
+                        : "0"}
+                    </h2>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">

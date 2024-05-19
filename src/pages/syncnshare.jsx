@@ -6,15 +6,17 @@ export default function Syncnshare() {
   const Navigate = useNavigate();
   return (
     <div id="info">
-      <iframe
+      {/* <iframe
         src="https://giphy.com/embed/ToMjGpxInCZSzD3V82s"
         width="480"
         height="249"
         frameBorder="0"
         class="giphy-embed"
         allowFullScreen
-      ></iframe>
+      ></iframe> */}
       {/* <h2>🔒 This Feature is for Desktop/Mobile Application only,</h2> */}
+
+      <img src="./assets/happyGrp.jpg" alt="" />
       <h2>
         <span>Website data is auto synced 🎉</span>
       </h2>

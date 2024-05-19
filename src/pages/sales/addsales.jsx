@@ -435,6 +435,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                 />
                 {Search?.rowIndex?.unit && (
                   <ul>
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Items +
+                    </li>
                     {data.units
                       .filter((unit) =>
                         unit.name
@@ -447,15 +450,20 @@ export default function AddSales({ data, setData, change, setChange }) {
                           onClick={() => {
                             // i should probably add more than a name to improve future search filter
                             handleInputChange(rowIndex, "unit", unit.name);
-                            handleInputChange(rowIndex, "unit", unit.name);
                             setSearch({});
                           }}
                         >
                           {unit.name}
                         </li>
                       ))}
-                    <li className="add" onClick={() => Navigate("/addParties")}>
-                      Add Items +
+                    <li
+                      className="extra"
+                      onClick={() => {
+                        handleInputChange(rowIndex, "unit", "-");
+                        setSearch({});
+                      }}
+                    >
+                      --- none ---
                     </li>
                   </ul>
                 )}

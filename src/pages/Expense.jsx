@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomInput from "../components/customInput";
+// import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
-import StockAdjust from "../components/stock_Adjustment";
+// import StockAdjust from "../components/stock_Adjustment";
 import { dev_url } from "../url";
 export default function Expense({ data, setData }) {
   var [page, setPage] = useState("category");
-  var [StockPage, setStockPage] = useState(false);
+  // var [StockPage, setStockPage] = useState(false);
   const Navigate = useNavigate();
-  var [Category, setCategory] = useState();
-  var [Units, setUnits] = useState();
+  // var [Category, setCategory] = useState();
+  // var [Units, setUnits] = useState();
 
   const [selecteditems, setSelectedItems] = useState(null);
-  const [selectedunits, setSelectedUnits] = useState(null);
+  // const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   var [unitName, setUnitName] = useState(false);
@@ -274,17 +274,25 @@ export default function Expense({ data, setData }) {
                   </div>
                 </div>
                 <div className="cl top">
-                  <p>Name</p>
-                  <p>Quantity</p>
-                  <p>Stock Value</p>
+                  <p>invoice date</p>
+                  <p>invoice number</p>
+                  <p>Total</p>
+                  <p>transaction type</p>
                 </div>
-                {selectedCategory.transactions?.map((transaction, index) => (
-                  <div className="cl">
-                    <p className="grey">Boat Headphones</p>
-                    <p className="grey">10</p>
-                    <p className="grey">0.0</p>
-                  </div>
-                ))}
+                {data.expense
+                  .filter((ele) => ele.Category === selectedCategory.name)
+                  .map((transaction, index) => (
+                    <div className="cl">
+                      <p>{transaction.invoice_date}</p>
+                      <p>{transaction.invoice_number}</p>
+                      <p>{transaction.total}</p>
+                      <p>{transaction.tramsactionType}</p>
+                      {/* <p>{transaction.Category}</p>
+                      <p className="grey">Boat Headphones</p>
+                      <p className="grey">10</p>
+                      <p className="grey">0.0</p> */}
+                    </div>
+                  ))}
               </div>
             )}
           </div>

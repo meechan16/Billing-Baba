@@ -42,6 +42,8 @@ import AddInfo from "./pages/addInfo";
 import Tabs from "./pages/tabs";
 import OnlineStore from "./pages/OnlineStore";
 import Setting from "./pages/Setting";
+import ServerError from "./pages/serverError";
+import BarcodeMaker from "./pages/barcodeMaker";
 
 function App() {
   // const Navigate = useNavigate();
@@ -61,6 +63,8 @@ function App() {
   const [Error, setError] = useState(true);
 
   useEffect(() => {
+    console.log(data);
+    console.log("data before fetch");
     fetchData();
   }, []);
 
@@ -118,12 +122,14 @@ function App() {
         setloading(false);
         setError(true);
         console.error("Error:", error);
+        setData({ serverError: true });
       });
   };
 
   if (loading || !data) {
     return <Loader />;
   }
+  if (data.serverError) return <ServerError />;
 
   return (
     <div className="App">
@@ -213,6 +219,20 @@ function App() {
                   change={change}
                   setChange={setChange}
                 />
+              </Home>
+            }
+          />
+          <Route
+            path="/barcodeMaker"
+            exact
+            element={
+              <Home
+                part="utils"
+                subpart="generate-barcode"
+                data={data}
+                setData={setData}
+              >
+                <BarcodeMaker data={data} setData={setData} />
               </Home>
             }
           />
