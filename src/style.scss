@@ -2141,6 +2141,28 @@ input[type="number"] {
           display: flex;
           justify-content: space-between;
           margin: 5px 0;
+          // &.ne {
+          //   flex-direction: column;
+          // }
+          p {
+            text-align: center;
+            width: 50%;
+            height: fit-content;
+            font-weight: 600;
+          }
+          &.dropdown {
+            position: absolute;
+            background: white;
+            flex-direction: column;
+            right: 20px;
+            width: 10vw;
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: 30vh;
+            padding: 10px;
+            box-shadow: 0 0 10px rgb(170, 170, 170);
+            border-radius: 10px;
+          }
         }
         span {
           font-weight: 500;
@@ -2189,7 +2211,6 @@ input[type="number"] {
         }
         input {
           width: 100%;
-          flex: 1;
           background-color: transparent;
           border-radius: 0px;
           text-align: center;
@@ -2197,10 +2218,14 @@ input[type="number"] {
           padding: 5px;
           margin: 5px;
           border: 2px solid rgba(255, 255, 255, 0);
+          // flex: 1;
           &:focus {
             border: 2px solid rgb(255, 255, 255);
             outline: none;
           }
+        }
+        & > div {
+          flex: 1;
         }
         select {
           flex: 1;
@@ -2231,7 +2256,7 @@ input[type="number"] {
       div {
         display: flex;
         gap: 10px;
-        align-items: center;
+        align-items: baseline;
         width: fit-content;
         span {
           font-weight: 600;
@@ -2246,6 +2271,9 @@ input[type="number"] {
             font-weight: 700;
             font-size: 1.6rem;
             margin: 0 20px;
+            &.sub {
+              font-size: 1.4rem;
+            }
           }
           span {
             font-weight: 500;

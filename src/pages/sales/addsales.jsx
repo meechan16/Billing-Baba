@@ -14,7 +14,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       unit: "",
       price_per_unit: "",
       discount: "",
-      tax: "",
+      // tax: "",
       amount: "",
     },
   ]);
@@ -30,7 +30,7 @@ export default function AddSales({ data, setData, change, setChange }) {
         unit: "",
         price_per_unit: "",
         discount: "",
-        tax: "",
+        // tax: "",
         amount: "",
       },
     ]);
@@ -46,21 +46,22 @@ export default function AddSales({ data, setData, change, setChange }) {
       if (
         column === "qty" ||
         column === "price_per_unit" ||
-        column === "discount" ||
-        column === "tax"
+        column === "discount"
+        // column === "tax"
       ) {
         const qty = parseInt(newRows[index]["qty"]);
         const pricePerUnit = parseInt(newRows[index]["price_per_unit"]);
         const discount = parseInt(newRows[index]["discount"]);
-        const taxPercentage = parseInt(newRows[index]["tax"]);
+        // const taxPercentage = parseInt(newRows[index]["tax"]);
 
-        console.log(qty);
-        console.log(pricePerUnit);
-        console.log(discount);
-        const tax = (pricePerUnit - discount) * (taxPercentage / 100);
-        console.log(tax);
+        // console.log(qty);
+        // console.log(pricePerUnit);
+        // console.log(discount);
+        // const tax = (pricePerUnit - discount) * (taxPercentage / 100);
+        // console.log(tax);
         // Calculate amount
-        const amount = qty * (pricePerUnit - discount + tax);
+        // const amount = qty * (pricePerUnit - discount + tax);
+        const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
 
         // Update total amount
@@ -71,11 +72,11 @@ export default function AddSales({ data, setData, change, setChange }) {
         setTotalAmount(newTotalAmount);
 
         // Update total tax
-        const newTotalTax = newRows.reduce(
-          (total, row) => total + (row.amount ? tax : 0),
-          0
-        );
-        setTotalTax(newTotalTax);
+        // const newTotalTax = newRows.reduce(
+        //   (total, row) => total + (row.amount ? tax : 0),
+        //   0
+        // );
+        // setTotalTax(newTotalTax);
       }
       newRows[index][column] = value;
       return newRows;
@@ -84,11 +85,31 @@ export default function AddSales({ data, setData, change, setChange }) {
     console.log(rows[0]);
   };
 
+  // const addItemToRow = async (index, item) => {
+  //   setRows([
+  //     ...rows,
+  //     (rows[index] = {
+  //       index: index,
+  //       item: item.name,
+  //       unit: item.unit,
+  //       price_per_unit: item.price_per_unit,
+  //       discount: item.discount,
+  //       amount: "",
+  //     }),
+  //   ]);
+  // };
   const [Name, setName] = useState(); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(); // Initial index count
+  const [invoice_number, setInvoice_number] = useState(
+    data.sales
+      ? parseInt(data.sales[data.sales.length - 1].invoice_number) + 1
+      : 0
+  ); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
-  const [state_of_supply, setState_of_supply] = useState(); // Initial index count
+  const [state_of_supply, setState_of_supply] = useState({
+    state: "",
+    isDone: false,
+  }); // Initial index count
   const [round_off, setRound_off] = useState(); // Initial index count
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
@@ -109,12 +130,12 @@ export default function AddSales({ data, setData, change, setChange }) {
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      state_of_supply: state_of_supply ? state_of_supply : "",
+      state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
       tramsactionType: "Sale",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
-      total: totalAmount ? totalAmount : "",
+      total: totalAmount ? totalAmount + totalTax : "",
       total_tax: totalTax,
       description: Description ? Description : "",
       payment_status: paymentStatus ? paymentStatus : "",
@@ -149,11 +170,11 @@ export default function AddSales({ data, setData, change, setChange }) {
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      state_of_supply: state_of_supply ? state_of_supply : "",
+      state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
-      total: totalAmount ? totalAmount : "",
+      total: totalAmount ? totalAmount + totalTax : "",
       total_tax: totalTax,
       description: Description ? Description : "",
       payment_status: paymentStatus ? paymentStatus : "",
@@ -201,21 +222,32 @@ export default function AddSales({ data, setData, change, setChange }) {
   };
 
   let tax = [
-    { value: "0.5", name: "IGST@0.25%" },
-    { value: "0.5", name: "GST@0.25%" },
-    { value: "0", name: "IGST@0%" },
-    { value: "0", name: "GST@0%" },
-    { value: "3", name: "IGST@3%" },
-    { value: "3", name: "GST@3%" },
-    { value: "5", name: "IGST@5%" },
-    { value: "5", name: "GST@5%" },
-    { value: "12", name: "IGST@12%" },
-    { value: "18", name: "IGST@18%" },
-    { value: "18", name: "GST@18%" },
-    { value: "28", name: "IGST@28%" },
-    { value: "28", name: "GST @28%" },
+    { value: 0, name: "IGST@0%" },
+    { value: 0, name: "GST@0%" },
+    { value: 0.5, name: "IGST@0.25%" },
+    { value: 0.5, name: "GST@0.25%" },
+    { value: 3, name: "IGST@3%" },
+    { value: 3, name: "GST@3%" },
+    { value: 5, name: "IGST@5%" },
+    { value: 5, name: "GST@5%" },
+    { value: 12, name: "IGST@12%" },
+    { value: 18, name: "IGST@18%" },
+    { value: 18, name: "GST@18%" },
+    { value: 28, name: "IGST@28%" },
+    { value: 28, name: "GST @28%" },
   ];
+  // data.tax && setData({ ...data, tax: tax });
 
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+  useEffect(() => {
+    const today = new Date();
+    setInvoice_date(formatDate(today));
+  }, []);
   return (
     <div id="addsales">
       <div className="top">
@@ -232,7 +264,8 @@ export default function AddSales({ data, setData, change, setChange }) {
           <div
             className={toggle ? "toggle" : "toggle opp"}
             onClick={() => {
-              setpaymentType(toggle ? "Cash" : "Credit");
+              // setpaymentType(toggle ? "Cash" : "Credit");
+              setPaymentStatus(toggle ? "paid" : "pending");
               setToggle(!toggle);
             }}
           >
@@ -307,19 +340,21 @@ export default function AddSales({ data, setData, change, setChange }) {
           <div className="r">
             <div className="">
               <span>Invoice Number</span>
-              <input
+              <p>{invoice_number}</p>
+              {/* <input
                 type="number"
-                value={invoice_number}
+                value=
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
                 placeholder="input..."
                 id=""
-              />
+              /> */}
             </div>
             <div className="">
               <span>Invoice Date</span>
               <input
                 type="date"
+                value={invoice_date}
                 onChange={(e) => setInvoice_date(e.target.value)}
                 id="birthday"
                 name="birthday"
@@ -329,12 +364,36 @@ export default function AddSales({ data, setData, change, setChange }) {
               <span>State of supply</span>
               <input
                 type="text"
-                value={state_of_supply}
-                onChange={(e) => setState_of_supply(e.target.value)}
+                value={state_of_supply.state}
+                onChange={(e) =>
+                  setState_of_supply({ state: e.target.value, isDone: false })
+                }
                 name="State"
                 placeholder="input..."
                 id=""
               />
+            </div>
+            <div className="ne">
+              {state_of_supply.state && !state_of_supply.isDone && (
+                <div className="dropdown">
+                  {statesAndUnionTerritoriesOfIndia
+                    .filter((e) =>
+                      e
+                        .toLocaleLowerCase()
+                        .includes(state_of_supply.state.toLocaleLowerCase())
+                    )
+                    .map((e, index) => (
+                      <p
+                        key={index}
+                        onClick={() =>
+                          setState_of_supply({ state: e, isDone: true })
+                        }
+                      >
+                        {e}
+                      </p>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -345,7 +404,7 @@ export default function AddSales({ data, setData, change, setChange }) {
             <p>UNIT</p>
             <p>PRICE/UNIT</p>
             <p>DISCOUNT</p>
-            <p>TAX</p>
+            {/* <p>TAX</p> */}
             <p>AMOUNT</p>
           </div>
           {rows.map((row, rowIndex) => (
@@ -384,7 +443,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                           key={item.code}
                           onClick={() => {
                             handleInputChange(rowIndex, "item", item.Name);
-                            handleInputChange(rowIndex, "tax", item.tax);
+                            // handleInputChange(rowIndex, "tax", item.tax);
                             handleInputChange(
                               rowIndex,
                               "discount",
@@ -395,10 +454,13 @@ export default function AddSales({ data, setData, change, setChange }) {
                               "price_per_unit",
                               item.salesPrice
                             );
-                            console.log(item.Name);
-                            console.log(rows?.rowIndex?.item);
-                            // setName(item.Name);
-                            // setPhone_no(item.phoneNo);
+                            item.unit
+                              ? handleInputChange(rowIndex, "unit", item.unit)
+                              : handleInputChange(
+                                  rowIndex,
+                                  "unit",
+                                  "Not Available"
+                                );
                             setSearch({});
                           }}
                         >
@@ -436,13 +498,17 @@ export default function AddSales({ data, setData, change, setChange }) {
                 {Search?.rowIndex?.unit && (
                   <ul>
                     <li className="add" onClick={() => Navigate("/addParties")}>
-                      Add Items +
+                      Add Units +
                     </li>
                     {data.units
                       .filter((unit) =>
                         unit.name
                           .toLowerCase()
-                          .includes(rows[rowIndex].unit.toLowerCase())
+                          .includes(
+                            rows[rowIndex].unit
+                              ? rows[rowIndex].unit.toLowerCase()
+                              : ""
+                          )
                       )
                       .map((unit) => (
                         <li
@@ -483,7 +549,7 @@ export default function AddSales({ data, setData, change, setChange }) {
               <div>
                 <input
                   type="number"
-                  value={row.col4}
+                  value={rows[rowIndex].price_per_unit}
                   onChange={(e) =>
                     handleInputChange(
                       rowIndex,
@@ -496,7 +562,7 @@ export default function AddSales({ data, setData, change, setChange }) {
               <div>
                 <input
                   type="number"
-                  value={row.col5}
+                  value={rows[rowIndex].discount}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "discount", e.target.value)
                   }
@@ -535,49 +601,10 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <option value="28">GST @28%</option>
                 </select>
               </div> */}
-              <div className="search">
-                <input
-                  value={
-                    rows[rowIndex]?.tax
-                      ? rows[rowIndex].tax
-                      : Search
-                      ? Search[rowIndex]?.tax
-                      : ""
-                  }
-                  onChange={(e) =>
-                    setSearch({ rowIndex: { tax: e.target.value } })
-                  }
-                />
-                {Search?.rowIndex?.tax && (
-                  <ul>
-                    {tax
-                      .filter((unit) =>
-                        unit.value
-                          .toLowerCase()
-                          .includes(rows[rowIndex].tax.toLowerCase())
-                      )
-                      .map((unit) => (
-                        <li
-                          key={unit.name}
-                          onClick={() => {
-                            // i should probably add more than a name to improve future search filter
-                            handleInputChange(rowIndex, "tax", unit.value);
-                            setSearch({});
-                          }}
-                        >
-                          {unit.name}
-                        </li>
-                      ))}
-                    {/* <li className="add" onClick={() => Navigate("/addParties")}>
-                      Add Ta +
-                    </li> */}
-                  </ul>
-                )}
-              </div>
               <div>
                 <input
                   type="number"
-                  value={row.amount}
+                  value={rows[rowIndex].amount}
                   onChange={(e) =>
                     handleInputChange(rowIndex, "amount", e.target.value)
                   }
@@ -629,7 +656,7 @@ export default function AddSales({ data, setData, change, setChange }) {
             </button> */}
           </div>
           <div className="">
-            {paymentStatus === "pending" && (
+            {/* {paymentStatus === "pending" && (
               <div className="a">
                 <span>Amount paid: </span>
                 <input
@@ -638,17 +665,58 @@ export default function AddSales({ data, setData, change, setChange }) {
                   onChange={(e) => setPaid(e.target.value)}
                 />
               </div>
-            )}
+            )} */}
+
+            <div className="">
+              {/* <input
+                value={
+                  rows[rowIndex]?.tax
+                    ? rows[rowIndex].tax
+                    : Search
+                    ? Search[rowIndex]?.tax
+                    : ""
+                }
+                onChange={(e) =>
+                  setSearch({ rowIndex: { tax: e.target.value } })
+                }
+              /> */}
+              <select
+                name=""
+                id=""
+                onChange={(e) => {
+                  // alert(e.target.value);
+                  setTotalTax((e.target.value / 100).toFixed(2) * totalAmount);
+                }}
+              >
+                {data.tax.map((unit) => (
+                  <option key={unit.name} value={unit.value}>
+                    {unit.name}
+                  </option>
+                ))}
+              </select>
+              {/* <p className="r">{totalTax}</p> */}
+              {/* {Search?.rowIndex?.tax && (
+                <ul> */}
+              {/* <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Ta +
+                    </li> */}
+              {/* </ul>
+              )} */}
+            </div>
+            <div className="r">
+              <span>Tax</span>
+              <p className="sub">{totalTax}</p>
+            </div>
             <div className="r">
               <span>Total</span>
               <span>Rs.</span>
-              <p>{totalAmount}</p>
+              <p>{totalAmount + totalTax}</p>
             </div>
           </div>
         </div>
         <div className="ai4">{/* <p>{paymentStatus}</p> */}</div>
         <div className="ai5">
-          <label>
+          {/* <label>
             Paid
             <input
               type="radio"
@@ -666,7 +734,7 @@ export default function AddSales({ data, setData, change, setChange }) {
               checked={paymentStatus === "pending"}
               onChange={(e) => setPaymentStatus(e.target.value)}
             />
-          </label>
+          </label> */}
           <button className="save1" onClick={() => sendData_and_get_pdf()}>
             Save & Generate Invoice
           </button>
@@ -684,3 +752,42 @@ export default function AddSales({ data, setData, change, setChange }) {
     </div>
   );
 }
+
+const statesAndUnionTerritoriesOfIndia = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Lakshadweep",
+  "Delhi",
+  "Puducherry",
+  "Ladakh",
+  "Jammu and Kashmir",
+];
