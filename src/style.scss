@@ -227,8 +227,12 @@ input[type="number"] {
   z-index: 10;
   .inp {
     width: 100%;
+    height: 100%;
+
+    padding: 5px 0;
     margin: 10px;
     input {
+      height: 100%;
       width: 100%;
       padding: 7px 20px;
       border-radius: 50px;
@@ -313,7 +317,7 @@ input[type="number"] {
       }
     }
     &.addMore {
-      border-radius: 10px;
+      border-radius: 50px;
       background-color: transparent;
       border: 3px solid #8ca8f6;
       color: #346aff;
@@ -345,7 +349,8 @@ input[type="number"] {
         border-radius: 5px;
         background-color: rgb(255, 255, 255);
         padding: 10px;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         justify-content: center;
         align-items: start;
         transform: translate(-50%, 10%);
@@ -365,16 +370,21 @@ input[type="number"] {
           border-bottom: 1px solid gray;
           padding-bottom: 5px;
         }
-        button {
-          width: fit-content;
-          text-align: center;
-          color: gray;
-          padding: 5px;
-          border-bottom: 1px solid #002a9d00;
-          &:hover {
-            color: #002a9d;
-            border-bottom: 1px solid #002a9d;
-          }
+      }
+      button {
+        width: fit-content;
+        text-align: center;
+        color: gray;
+        padding: 5px;
+        border-bottom: 1px solid #002a9d00;
+        // text-wrap: nowrap;
+        min-width: 150px;
+        font-weight: 600;
+        &:hover {
+          color: #00a7f5;
+          font-weight: 600;
+          text-decoration: underline;
+          // border-bottom: 1px solid #002a9d;
         }
       }
     }
@@ -3657,6 +3667,10 @@ input[type="number"] {
         background-color: rgb(160, 222, 255);
       }
     }
+    img {
+      max-width: 80vw;
+      height: auto;
+    }
   }
 }
 
@@ -3706,6 +3720,23 @@ input[type="number"] {
       &:hover {
         background-color: rgb(232, 232, 232);
       }
+    }
+  }
+  img {
+    box-shadow: 0 0 10px gray;
+    border-radius: 5px;
+    margin: 10px 0;
+  }
+  button {
+    padding: 10px 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px gray;
+    background-color: orange;
+    margin: 30px 10px;
+    color: white;
+    &:hover {
+      box-shadow: 0 0 10px gray;
+      background-color: rgb(197, 128, 0);
     }
   }
 }

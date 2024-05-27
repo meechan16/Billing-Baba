@@ -99,7 +99,7 @@ export default function AddItem({
             <p>service</p>
           </div>
           <div className="r">
-            <button>
+            <button onClick={() => Navigate("/settings")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#000"
@@ -134,10 +134,13 @@ export default function AddItem({
               onChange={(e) => setitemCategory(e.target.value)}
               className="box"
             >
-              <option selected disabled value="">
-                category
+              <option value="" style={{ color: "blue", fontWeight: "600" }}>
+                + add category
               </option>
-              <option value="">+ add category</option>
+              <option className="grey">Not Available</option>
+              {data.category?.map((c, index) => (
+                <option className="grey">{c.name || "-"}</option>
+              ))}
             </select>
             {/* <input type="text" className="box" /> */}
             <CustomInput

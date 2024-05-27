@@ -95,34 +95,19 @@ export default function Parties({ data, setData }) {
               <p>Balance</p>
               <p className="side">-</p>
             </div>
-            {selectedParty.transactions?.map((transaction, index) => (
-              <div className="cl" key={index}>
-                <p className="side">-</p>
-                <p className="grey">Sale</p>
-                <p className="grey">1</p>
-                <p className="grey">03/02/24</p>
-                <p className="grey">{transaction.total}</p>
-                <p className="grey">{transaction.balance}</p>
-                <p className="side">
-                  <Dropdown
-                    menuItems={[
-                      "View/Edit",
-                      "cancel",
-                      "Delete",
-                      "Duplicate",
-                      "Print",
-                    ]}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </p>
-              </div>
-            ))}
+            {data?.sales
+              ?.filter((item) => item.name === selectedParty.partyName)
+              .map((sale, index) => (
+                <div className="cl" key={index}>
+                  <p className="grey">{sale.payment_type}</p>
+                  <p className="grey">{sale.invoice_number}</p>
+                  {/* <p className="grey">{sale.name}</p> */}
+                  <p className="">{sale.invoice_date}</p>
+                  {/* <p className="grey">{sale.items?.length}</p> */}
+                  <p className="grey">{sale.total}</p>
+                  <p className="">{sale.total - sale.paid}</p>
+                </div>
+              ))}
           </div>
         )}
       </div>

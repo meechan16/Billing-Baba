@@ -92,20 +92,30 @@ export default function Home({ children, part, subpart, data, setData }) {
           <button className="addMore" onClick={() => setToggle(!toggle)}>
             Add More <span>{"+"}</span>
             <div className={toggle ? "drop active" : "drop"}>
-              <div className="l">
-                <p>Sales</p>
-                <button onClick={() => Navigate("/addsales")}>Add Sales</button>
-                <button>-</button>
-                <button>-</button>
+              <button onClick={() => Navigate("/addsales")}>Add Sales</button>
+              <button onClick={() => Navigate("/addpurchase")}>
+                Add Purchase
+              </button>
+              <button onClick={() => Navigate("/AddParties")}>
+                Add Parties
+              </button>
+              <button onClick={() => Navigate("/add-items")}>Add Items</button>
+              <button onClick={() => Navigate("/add-sales-order")}>
+                Add Sales Orders
+              </button>
+              <button onClick={() => Navigate("/add-purchase-order")}>
+                Add Purchase Orders
+              </button>
+              <button onClick={() => Navigate("/quick-billing")}>
+                Quick Billing
+              </button>
+              {/* <div className="l">
+
               </div>
               <div className="r">
-                <p>purchase</p>
-                <button onClick={() => Navigate("/addpurchase")}>
-                  Add Purchase
-                </button>
                 <button>-</button>
                 <button>-</button>
-              </div>
+              </div> */}
             </div>
           </button>
         </div>

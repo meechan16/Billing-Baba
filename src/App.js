@@ -44,6 +44,10 @@ import OnlineStore from "./pages/OnlineStore";
 import Setting from "./pages/Setting";
 import ServerError from "./pages/serverError";
 import BarcodeMaker from "./pages/barcodeMaker";
+import VerifyData from "./pages/verifyData";
+import ImportItems from "./pages/importItems";
+import ImportParties from "./pages/importParties";
+import Bulkupdateitems from "./pages/bulkupdateitems";
 
 function App() {
   // const Navigate = useNavigate();
@@ -63,8 +67,8 @@ function App() {
   const [Error, setError] = useState(true);
 
   useEffect(() => {
-    console.log(data);
-    console.log("data before fetch");
+    // console.log(data);
+    // console.log("data before fetch");
     fetchData();
   }, []);
 
@@ -233,6 +237,76 @@ function App() {
                 setData={setData}
               >
                 <BarcodeMaker data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/import-items"
+            exact
+            element={
+              <Home
+                part="utils"
+                subpart="import-items"
+                data={data}
+                setData={setData}
+              >
+                <ImportItems data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/import-parties"
+            exact
+            element={
+              <Home
+                part="utils"
+                subpart="import-parties"
+                data={data}
+                setData={setData}
+              >
+                <ImportParties data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/bulk-update-items"
+            exact
+            element={
+              <Home
+                part="utils"
+                subpart="bulk-update-items"
+                data={data}
+                setData={setData}
+              >
+                <Bulkupdateitems data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/export-items"
+            exact
+            element={
+              <Home
+                part="utils"
+                subpart="export-items"
+                data={data}
+                setData={setData}
+              >
+                <VerifyData data={data} setData={setData} />
+              </Home>
+            }
+          />
+          <Route
+            path="/check-data"
+            exact
+            element={
+              <Home
+                part="utils"
+                subpart="export-items"
+                data={data}
+                setData={setData}
+              >
+                <VerifyData data={data} setData={setData} />
               </Home>
             }
           />

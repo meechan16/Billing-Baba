@@ -316,42 +316,44 @@ export default function Sidebar({ part, subpart, data = null }) {
                   Generate Barcode
                 </li>
               </Link>
-              <Link to="/utils">
+              <Link to="/import-items">
                 <li className={subpart === "import-items" ? "selected" : ""}>
                   Import Items
                 </li>
               </Link>
-              <Link to="/utils">
-                <li className={subpart === "bulkUpdateItems" ? "selected" : ""}>
+              <Link to="/bulk-update-items">
+                <li
+                  className={subpart === "bulk-update-items" ? "selected" : ""}
+                >
                   Bulk Update items
                 </li>
               </Link>
-              <Link to="/utils">
+              <Link to="/import-parties">
                 <li className={subpart === "import-parties" ? "selected" : ""}>
                   import parties
                 </li>
               </Link>
-              <Link to="/utils">
+              {/* <Link to="/utils">
                 <li className={subpart === "export-to-tally" ? "selected" : ""}>
                   Export To Tally
                 </li>
-              </Link>
-              <Link to="/utils">
-                <li className={subpart === "export-items" ? "selected" : ""}>
-                  Export Items
-                </li>
-              </Link>
-              <Link to="/utils">
+            </Link>*/}
+              <Link to="/check-data">
                 <li className={subpart === "verify-my-data" ? "selected" : ""}>
                   Verify My Data
                 </li>
               </Link>
-              <Link to="/utils">
+              <Link to="/export-items">
+                <li className={subpart === "export-items" ? "selected" : ""}>
+                  Export Items
+                </li>
+              </Link>
+              {/* <Link to="/utils">
                 <li className={subpart === "recycle-bin" ? "selected" : ""}>
                   Recycle Bin
                 </li>
-              </Link>
-              <Link to="/utils">
+              </Link> */}
+              {/* <Link to="/utils">
                 <li
                   className={
                     subpart === "close-financial-year" ? "selected" : ""
@@ -359,7 +361,7 @@ export default function Sidebar({ part, subpart, data = null }) {
                 >
                   Close Financial Year
                 </li>
-              </Link>
+              </Link> */}
             </ul>
             {/* </Link> */}
             <Link className="" to="/settings">

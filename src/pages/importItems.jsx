@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export default function ImportParties() {
+export default function ImportItems() {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -30,10 +30,10 @@ export default function ImportParties() {
   return (
     <div id="sale-Order" className="onlineStore">
       <div className="service">
-        <img src="./assets/parties_excel.png" alt="" />
-        <h1>Upload Excel sheet with Parties Formatted</h1>
+        <img src="./assets/items_excel.png" alt="" />
+        <h1>Upload Excel sheet with Items Formatted</h1>
         <p>
-          Please make sure format of parties data matches one shown in pic above
+          Please make sure format of items data matches one shown in pic above
         </p>
         {/* <button onClick={() => Navigate("/add-purchase-order")}> */}
 

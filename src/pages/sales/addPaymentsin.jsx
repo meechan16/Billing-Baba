@@ -89,7 +89,7 @@ export default function AddPaymentsin({ data, setData, t = true }) {
                 <p>service</p> */}
           </div>
           <div className="r">
-            <button>
+            <button onClick={() => Navigate("/settings")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#000"

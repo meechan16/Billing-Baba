@@ -443,6 +443,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                           key={item.code}
                           onClick={() => {
                             handleInputChange(rowIndex, "item", item.Name);
+                            handleInputChange(rowIndex, "item_details", item);
                             // handleInputChange(rowIndex, "tax", item.tax);
                             handleInputChange(
                               rowIndex,

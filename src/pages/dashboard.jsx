@@ -17,7 +17,7 @@ export default function Dashboard({ data, setData }) {
   const [taskStatus, setTaskStatus] = useState({});
   useEffect(() => {
     if (data?.todo_list) {
-      console.log(data?.todo_list);
+      // console.log(data?.todo_list);
       setTaskStatus(data?.todo_list);
     }
     if (data.serverError) {
@@ -66,7 +66,7 @@ export default function Dashboard({ data, setData }) {
         >
           Dashboard
         </button>
-        <button
+        {/* <button
           className={page === "overview" ? "selected" : ""}
           onClick={() => setPage("overview")}
         >
@@ -77,7 +77,7 @@ export default function Dashboard({ data, setData }) {
           onClick={() => setPage("history")}
         >
           History
-        </button>
+        </button> */}
         <button
           className={page === "search" ? "selected" : ""}
           onClick={() => setPage("search")}

@@ -231,17 +231,23 @@ export default function Items({ data, setData, change, setChange }) {
                   <p>Status</p>
                 </div>
 
-                {selecteditems.transactions?.map((transaction, index) => (
-                  <div className="cl">
-                    <p>Tech</p>
-                    <p className="grey">231</p>
-                    <p className="grey">Boat</p>
-                    <p className="grey">03/02/2024</p>
-                    <p className="grey">10</p>
-                    <p className="grey">3000</p>
-                    <p className="grey">Unpaid</p>
-                  </div>
-                ))}
+                {data?.sales
+                  ?.filter((item) => {
+                    return item.items.some(
+                      (term) => term.item === selecteditems.Name
+                    );
+                  })
+                  .map((sale, index) => (
+                    <div className="cl" key={index}>
+                      <p className="grey">{sale.payment_type}</p>
+                      <p className="grey">{sale.invoice_number}</p>
+                      <p className="grey">{sale.name}</p>
+                      <p className="">{sale.invoice_date}</p>
+                      <p className="grey">{sale.items?.length}</p>
+                      <p className="grey">{sale.total}</p>
+                      <p className="">{sale.total - sale.paid}</p>
+                    </div>
+                  ))}
                 {/* <div className="cl">
                 <p>Tech</p>
                 <p className="grey">231</p>
@@ -423,13 +429,24 @@ export default function Items({ data, setData, change, setChange }) {
                   <p>Quantity</p>
                   <p>Stock Value</p>
                 </div>
-                {selectedCategory.transactions?.map((transaction, index) => (
-                  <div className="cl">
-                    <p className="grey">Boat Headphones</p>
-                    <p className="grey">10</p>
-                    <p className="grey">0.0</p>
-                  </div>
-                ))}
+                {data?.sales
+                  ?.filter((item) => {
+                    console.log(selectedCategory);
+                    return item.items.some(
+                      (term) => term.item_details?.category === selectedCategory
+                    );
+                  })
+                  .map((sale, index) => (
+                    <div className="cl" key={index}>
+                      <p className="grey">{sale.payment_type}</p>
+                      <p className="grey">{sale.invoice_number}</p>
+                      <p className="grey">{sale.name}</p>
+                      <p className="">{sale.invoice_date}</p>
+                      <p className="grey">{sale.items?.length}</p>
+                      <p className="grey">{sale.total}</p>
+                      <p className="">{sale.total - sale.paid}</p>
+                    </div>
+                  ))}
                 {/* <div className="cl">
                   <p className="grey">Gucci Watch</p>
                   <p className="grey">2</p>
@@ -506,104 +523,6 @@ export default function Items({ data, setData, change, setChange }) {
                   </div>
                 </div>
               ))}
-              {/* <div className="tile selected">
-                <h1>BAGS</h1>
-                <div className="">
-                  <p>BAGS</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>Bottle</h1>
-                <div className="">
-                  <p>Btl</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>BOX</h1>
-                <div className="">
-                  <p>box</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>BUNDLE</h1>
-                <div className="">
-                  <p>bndl</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>CANS</h1>
-                <div className="">
-                  <p>Can</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>CATON</h1>
-                <div className="">
-                  <p>ctn</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>BOX</h1>
-                <div className="">
-                  <p>box</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div> */}
             </div>
           </div>
           <div className="right">
@@ -612,24 +531,6 @@ export default function Items({ data, setData, change, setChange }) {
                 <h1>{selectedunits?.name || "no unit selected"}</h1>
                 <button>Add Conversions</button>
               </div>
-              {/* <div className="tile">
-                <p>
-                  SALE PRICE <span> ₹ 100.00</span>(excl)
-                </p>
-                <p>
-                  Stock Qty: <span className="red"> 10</span>
-                </p>
-              </div>
-              <div className="tile">
-                <p>
-                  PURCHASE PRICE <span> ₹ 00.00</span>(excl)
-                </p>
-                <p>
-                  Stock Qty: <span className="red"> 10</span>
-                </p>
-              </div> */}
-              {/* <div className="tile"></div>
-              <div className="tile"></div> */}
             </div>
             <div className="content">
               <div className="t">
