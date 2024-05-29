@@ -236,7 +236,7 @@ export default function AddSales({ data, setData, change, setChange }) {
     { value: 28, name: "IGST@28%" },
     { value: 28, name: "GST @28%" },
   ];
-  // data.tax && setData({ ...data, tax: tax });
+  if (!data.tax) setData({ ...data, tax: tax });
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -689,7 +689,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   setTotalTax((e.target.value / 100).toFixed(2) * totalAmount);
                 }}
               >
-                {data.tax.map((unit) => (
+                {data.tax?.map((unit) => (
                   <option key={unit.name} value={unit.value}>
                     {unit.name}
                   </option>
