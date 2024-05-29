@@ -102,7 +102,7 @@ export default function AddSales({ data, setData, change, setChange }) {
   const [phone_no, setPhone_no] = useState(); // Initial index count
   const [invoice_number, setInvoice_number] = useState(
     data.sales
-      ? parseInt(data.sales[data.sales.length - 1].invoice_number) + 1
+      ? parseInt(data.sales[data.sales.length - 1]?.invoice_number) + 1
       : 0
   ); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
