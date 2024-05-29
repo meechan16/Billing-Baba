@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CustomInput from "../../components/customInput";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 
 export default function AddPaymentsin({ data, setData, t = true }) {
   const Navigate = useNavigate();

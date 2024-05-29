@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
 import StockAdjust from "../components/stock_Adjustment";
-import { dev_url } from "../url";
+import dev_url from "../url";
 import Loader from "./Loader";
 
 export default function Items({ data, setData, change, setChange }) {

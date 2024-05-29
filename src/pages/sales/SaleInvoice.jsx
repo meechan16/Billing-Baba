@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
 import { useNavigate } from "react-router-dom";
 

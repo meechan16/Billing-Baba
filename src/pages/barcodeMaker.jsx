@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { dev_url } from "../url";
+import dev_url from "../url";
 
 export default function BarcodeMaker({ data, setData }) {
   let [loading, setLoading] = useState(false);

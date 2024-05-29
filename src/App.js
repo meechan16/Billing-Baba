@@ -23,7 +23,7 @@ import PurchaseOrder from "./pages/purchase/PurchaseOrder";
 import PaymentOut from "./pages/purchase/PaymentOut";
 import PurchaseBill from "./pages/purchase/PurchaseBill";
 import PurchaseReturn from "./pages/purchase/PurchaseReturn";
-import { dev_url } from "./url";
+import dev_url from "./url";
 import QuickBilling from "./pages/QuickBilling";
 import AddEstimations from "./pages/sales/addEstimations";
 import AddPaymentsin from "./pages/sales/addPaymentsin";
@@ -764,7 +764,7 @@ function App() {
             <circle
               fill="#FF156D"
               stroke="#FF156D"
-              stroke-width="15"
+              strokeWidth="15"
               r="15"
               cx="35"
               cy="100"
@@ -782,7 +782,7 @@ function App() {
             <circle
               fill="#FF156D"
               stroke="#FF156D"
-              stroke-width="15"
+              strokeWidth="15"
               opacity=".8"
               r="15"
               cx="35"
@@ -801,7 +801,7 @@ function App() {
             <circle
               fill="#FF156D"
               stroke="#FF156D"
-              stroke-width="15"
+              strokeWidth="15"
               opacity=".6"
               r="15"
               cx="35"
@@ -820,7 +820,7 @@ function App() {
             <circle
               fill="#FF156D"
               stroke="#FF156D"
-              stroke-width="15"
+              strokeWidth="15"
               opacity=".4"
               r="15"
               cx="35"
@@ -839,7 +839,7 @@ function App() {
             <circle
               fill="#FF156D"
               stroke="#FF156D"
-              stroke-width="15"
+              strokeWidth="15"
               opacity=".2"
               r="15"
               cx="35"

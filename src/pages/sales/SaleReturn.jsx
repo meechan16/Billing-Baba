@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
 
 export default function SaleReturn({ data, setData }) {

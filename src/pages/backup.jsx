@@ -12,7 +12,7 @@ export default function Backup({ data, setData }) {
         width="480"
         height="446"
         frameBorder="0"
-        class="giphy-embed"
+        className="giphy-embed"
         allowFullScreen
       ></iframe> */}
       {/* <h2>🔑 Feature locked for Desktop/Mobile Application only</h2> */}

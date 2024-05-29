@@ -1,7 +1,7 @@
 import React from "react";
 import { logout, saveUidToLocalStorage } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../url";
+import dev_url from "../url";
 
 export default function Profile({ data, setData }) {
   const Navigate = useNavigate();

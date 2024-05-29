@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 import Loader from "../Loader";
 
 export default function AddPurchase({ data, setData }) {

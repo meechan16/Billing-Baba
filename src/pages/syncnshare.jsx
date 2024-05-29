@@ -11,7 +11,7 @@ export default function Syncnshare() {
         width="480"
         height="249"
         frameBorder="0"
-        class="giphy-embed"
+        className="giphy-embed"
         allowFullScreen
       ></iframe> */}
       {/* <h2>🔒 This Feature is for Desktop/Mobile Application only,</h2> */}

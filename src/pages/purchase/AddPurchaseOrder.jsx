@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 
 export default function AddPurchaseOrder({ data }) {
   const Navigate = useNavigate();

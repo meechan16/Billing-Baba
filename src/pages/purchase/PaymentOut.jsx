@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
 
 export default function PaymentOut({ data, setData }) {

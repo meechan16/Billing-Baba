@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dev_url } from "../../url";
+import dev_url from "../../url";
 import CustomInput from "../../components/customInput";
 
 export default function AddSales({ data, setData, change, setChange }) {

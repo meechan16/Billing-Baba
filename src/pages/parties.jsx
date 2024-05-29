@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
-import { dev_url } from "../url";
+import dev_url from "../url";
 
 export default function Parties({ data, setData }) {
   const Navigate = useNavigate();

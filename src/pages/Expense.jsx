@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 // import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
 // import StockAdjust from "../components/stock_Adjustment";
-import { dev_url } from "../url";
+import dev_url from "../url";
 export default function Expense({ data, setData }) {
   var [page, setPage] = useState("category");
   // var [StockPage, setStockPage] = useState(false);
