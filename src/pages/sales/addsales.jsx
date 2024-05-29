@@ -81,8 +81,8 @@ export default function AddSales({ data, setData, change, setChange }) {
       newRows[index][column] = value;
       return newRows;
     });
-    console.log("rows");
-    console.log(rows[0]);
+    // console.log("rows");
+    // console.log(rows[0]);
   };
 
   // const addItemToRow = async (index, item) => {
@@ -192,9 +192,12 @@ export default function AddSales({ data, setData, change, setChange }) {
         },
         body: JSON.stringify(newData),
       });
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
+      // const blob = await response.blob();
+      // const url = URL.createObjectURL(blob);
+      const url = response.json();
+      alert(url);
+      console.log(url);
+      window.open(url.link, "_blank");
       window.location.href = "/";
     } catch (error) {
       alert("unable to generate PDF");
