@@ -195,6 +195,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       // const blob = await response.blob();
       // const url = URL.createObjectURL(blob);
       const url = response.json();
+      newData.invoice_link = url.link;
       alert(url);
       console.log(url);
       window.open(url.link, "_blank");
