@@ -138,7 +138,6 @@ export default function AddSales({ data, setData, change, setChange }) {
       total: totalAmount ? totalAmount + totalTax : "",
       total_tax: totalTax,
       description: Description ? Description : "",
-      payment_status: paymentStatus ? paymentStatus : "",
       pending: pending ? pending : "",
       paid: paid,
       type: "sale",
@@ -192,17 +191,24 @@ export default function AddSales({ data, setData, change, setChange }) {
         },
         body: JSON.stringify(newData),
       });
+      console.log(response);
+      const url = await response.json();
+      if (url.link) {
+        newData.invoice_link = url.link;
+        console.log(url);
+        window.open(url.link, "_blank");
+        window.location.href = "/";
+      } else {
+        alert("unable to generate PDF");
+        console.error(url);
+        return;
+      }
       // const blob = await response.blob();
       // const url = URL.createObjectURL(blob);
-      const url = response.json();
-      newData.invoice_link = url.link;
-      alert(url);
-      console.log(url);
-      window.open(url.link, "_blank");
-      window.location.href = "/";
     } catch (error) {
       alert("unable to generate PDF");
       console.error("Error generating PDF:", error);
+      return;
     }
 
     let newDa = data;
@@ -269,7 +275,7 @@ export default function AddSales({ data, setData, change, setChange }) {
             className={toggle ? "toggle" : "toggle opp"}
             onClick={() => {
               // setpaymentType(toggle ? "Cash" : "Credit");
-              setPaymentStatus(toggle ? "paid" : "pending");
+              setpaymentType(toggle ? "cash" : "credit");
               setToggle(!toggle);
             }}
           >
@@ -345,7 +351,7 @@ export default function AddSales({ data, setData, change, setChange }) {
             <div className="">
               <span>Invoice Number</span>
               <p>{invoice_number}</p>
-              {/* <input
+              {/* <input  
                 type="number"
                 value=
                 onChange={(e) => setInvoice_number(e.target.value)}
@@ -402,18 +408,33 @@ export default function AddSales({ data, setData, change, setChange }) {
           </div>
         </div>
         <div className="ai2">
-          <div className="cl top">
-            <p>item</p>
-            <p>QTY</p>
-            <p>UNIT</p>
-            <p>PRICE/UNIT</p>
-            <p>DISCOUNT</p>
+          <div className="rounded-sm flex justify-between gap-1 md-2 items-center">
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              item
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              QTY
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              UNIT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              PRICE/UNIT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              DISCOUNT
+            </p>
             {/* <p>TAX</p> */}
-            <p>AMOUNT</p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              AMOUNT
+            </p>
           </div>
           {rows.map((row, rowIndex) => (
-            <div className="cl" key={rowIndex}>
-              <div className="search">
+            <div
+              className="rounded-sm flex justify-between my-1 gap-1 items-center"
+              key={rowIndex}
+            >
+              <div className="w-full relative">
                 <input
                   // value={
                   //   rows?[rowIndex]
@@ -422,6 +443,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   //     ? Search.rowIndex.item
                   //     : "")
                   // }
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                   value={
                     rows[rowIndex].item
                       ? rows[rowIndex].item
@@ -435,7 +457,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 />
                 {/* {console.log(rows[rowIndex].item)} */}
                 {Search?.rowIndex?.item && (
-                  <ul>
+                  <ul className="absolute bg-white w-full">
                     {data.items
                       .filter((item) =>
                         item.Name.toLowerCase().includes(
@@ -468,27 +490,33 @@ export default function AddSales({ data, setData, change, setChange }) {
                                 );
                             setSearch({});
                           }}
+                          className="p-2 border-b border-gray-300 hover:bg-gray-200 cursor-pointer"
                         >
                           {item.Name}
                         </li>
                       ))}
-                    <li className="add" onClick={() => Navigate("/addParties")}>
+                    <li
+                      className="p-2 text-blue-500 font-semibold hover:bg-gray-200 cursor-pointer"
+                      onClick={() => Navigate("/addParties")}
+                    >
                       Add Party +
                     </li>
                   </ul>
                 )}
               </div>
-              <div>
+              <input
+                type="number"
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                value={row.col2}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "qty", e.target.value)
+                }
+              />
+              {/* <div>
+              </div> */}
+              <div className="w-full">
                 <input
-                  type="number"
-                  value={row.col2}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "qty", e.target.value)
-                  }
-                />
-              </div>
-              <div className="search">
-                <input
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                   value={
                     rows[rowIndex].unit
                       ? rows[rowIndex].unit
@@ -551,28 +579,24 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <option value="UNIT">UNIT</option>
                 </select> */}
               </div>
-              <div>
-                <input
-                  type="number"
-                  value={rows[rowIndex].price_per_unit}
-                  onChange={(e) =>
-                    handleInputChange(
-                      rowIndex,
-                      "price_per_unit",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-              <div>
-                <input
-                  type="number"
-                  value={rows[rowIndex].discount}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "discount", e.target.value)
-                  }
-                />
-              </div>
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                type="number"
+                value={rows[rowIndex].price_per_unit}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "price_per_unit", e.target.value)
+                }
+              />
+              {/* <div></div>
+              <div></div> */}
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                type="number"
+                value={rows[rowIndex].discount}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "discount", e.target.value)
+                }
+              />
               {/* <div>
                 <input
                   value={row.col6}
@@ -606,15 +630,15 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <option value="28">GST @28%</option>
                 </select>
               </div> */}
-              <div>
-                <input
-                  type="number"
-                  value={rows[rowIndex].amount}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "amount", e.target.value)
-                  }
-                />
-              </div>
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                type="number"
+                value={rows[rowIndex].amount}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "amount", e.target.value)
+                }
+              />
+              {/* <div></div> */}
             </div>
           ))}
         </div>

@@ -280,7 +280,7 @@ export default function Expense({ data, setData }) {
                   <p>transaction type</p>
                 </div>
                 {data.expense
-                  .filter((ele) => ele.Category === selectedCategory.name)
+                  ?.filter((ele) => ele.Category === selectedCategory.name)
                   .map((transaction, index) => (
                     <div className="cl">
                       <p>{transaction.invoice_date}</p>

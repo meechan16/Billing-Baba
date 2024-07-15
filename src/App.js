@@ -1,5 +1,5 @@
 import Home from "./pages/home";
-import Login from "./pages/kogin";
+import Login from "./pages/login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import "./style.scss";
@@ -48,6 +48,7 @@ import VerifyData from "./pages/verifyData";
 import ImportItems from "./pages/importItems";
 import ImportParties from "./pages/importParties";
 import Bulkupdateitems from "./pages/bulkupdateitems";
+import ExportItems from "./pages/ExportItems";
 
 function App() {
   // const Navigate = useNavigate();
@@ -105,6 +106,7 @@ function App() {
   };
   useEffect(() => {
     updateData();
+    console.log(data);
   }, [data, change]);
 
   const fetchData = () => {
@@ -292,7 +294,7 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <VerifyData data={data} setData={setData} />
+                <ExportItems data={data} setData={setData} />
               </Home>
             }
           />

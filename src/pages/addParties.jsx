@@ -3,6 +3,7 @@ import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import Loader from "./Loader";
+import TextField from "@mui/material/TextField";
 
 export default function AddParties({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -134,40 +135,65 @@ export default function AddParties({ data, setData, change, setChange }) {
             </button>
           </div>
           {page == "GST" && (
-            <div className="div">
-              <div className="t">
-                <select onChange={(e) => setGstType} name="" id="">
-                  <option disabled selected value="">
-                    {" "}
-                    GST Type
-                  </option>
-                  <option value="Unregistere/Counsumer">
-                    {" "}
-                    Unregistere/Counsumer
-                  </option>
-                  <option value="Registered Business - Regular">
-                    {" "}
-                    Registered Business - Regular
-                  </option>
-                  <option value="Registered Business - Consumer">
-                    {" "}
-                    Registered Business - Consumer
-                  </option>
-                </select>
-                <CustomInput
-                  inputValue={state}
-                  setInputValue={setState}
-                  placeholder={"State"}
-                />
-                <CustomInput
-                  inputValue={Email}
-                  setInputValue={setEmail}
-                  placeholder={"Email Id"}
-                />
-                <CustomInput
-                  inputValue={Add}
-                  setInputValue={setAdd}
-                  placeholder={"Billing Address"}
+            <div className="p-4">
+              <div className="flex gap-4">
+                <div className="flex flex-col gap-2">
+                  <select
+                    onChange={(e) => setGstType}
+                    name=""
+                    id=""
+                    className="w-full p-2 border-1 border-gray-800"
+                  >
+                    <option disabled selected value="">
+                      {" "}
+                      GST Type
+                    </option>
+                    <option value="Unregistere/Counsumer">
+                      {" "}
+                      Unregistere/Counsumer
+                    </option>
+                    <option value="Registered Business - Regular">
+                      {" "}
+                      Registered Business - Regular
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      {" "}
+                      Registered Business - Consumer
+                    </option>
+                  </select>
+                  {/* <CustomInput
+                    inputValue={state}
+                    setInputValue={setState}
+                    placeholder={"State"}
+                  /> */}
+                  <TextField
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    id="outlined-basic"
+                    label="State"
+                    variant="outlined"
+                  />
+                  <TextField
+                    value={Email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    id="outlined-basic"
+                    label="Email"
+                    variant="outlined"
+                  />
+                  {/* <CustomInput
+                    inputValue={Email}
+                    setInputValue={setEmail}
+                    placeholder={"Email Id"}
+                  /> */}
+                </div>
+                <TextField
+                  value={Add}
+                  onAbort={(e) => setAdd(e.target.value)}
+                  id="outlined-multiline-static"
+                  label="Billing Address"
+                  multiline
+                  rows={4}
+                  defaultValue=""
                 />
               </div>
               {/* <div className="b">

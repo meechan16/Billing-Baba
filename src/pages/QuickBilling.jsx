@@ -34,9 +34,30 @@ export default function QuickBilling({ data, setData, t = true }) {
     { name: "Customer 3" },
   ];
 
-  const handleItemSelect = (item) => {
-    // setSelectedItem(item);
-    setBillingItems([...billingItems, item]);
+  const handleItemSelect = async (item) => {
+    const existingItemIndex = billingItems.findIndex(
+      (billingItem) => billingItem.id === item.id
+    );
+
+    if (existingItemIndex !== -1) {
+      // Item exists, increment the quantity
+      const updatedBillingItems = billingItems.map((billingItem, index) => {
+        if (index === existingItemIndex) {
+          return {
+            ...billingItem,
+            quantity: billingItem.quantity + 1,
+            total: billingItem.total + item.total, // Update total if needed
+          };
+        }
+        return billingItem;
+      });
+
+      setBillingItems(updatedBillingItems);
+    } else {
+      // Item does not exist, add it to the array with a quantity of 1
+      setBillingItems([...billingItems, { ...item, quantity: 1 }]);
+    }
+
     setTotalAmount(totalAmount + item.total);
   };
 
@@ -50,7 +71,7 @@ export default function QuickBilling({ data, setData, t = true }) {
 
   let [barcodes, setbarcodes] = useState([]);
 
-  document.addEventListener("keydown", (event) => {
+  document.addEventListener("keydown", async (event) => {
     const currentTime = Date.now();
 
     // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
@@ -66,71 +87,128 @@ export default function QuickBilling({ data, setData, t = true }) {
 
     if (event.key === "Enter") {
       if (barcode) {
-        setbarcodes([...barcodes, barcode]);
+        // setbarcodes([...barcodes, barcode]);
+        let item = data.items.find((item, i) => item.Code === barcode);
+        if (item) {
+          await handleItemSelect(item);
+        } else {
+          alert("Item not found");
+        }
         barcode = ""; // Clear the barcode after processing
       }
     }
   });
 
+  useEffect(() => {
+    console.log(barcodes);
+  }, [barcodes]);
+
   return (
     <div id="QuickBilling">
       {/* Left side */}
       <div className="l">
-        <div className="top">
-          <input
-            type="text"
-            placeholder="Search item..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <ul>
-              {items
-                .filter((item) =>
-                  item.name.toLowerCase().includes(searchTerm.toLowerCase())
-                )
-                .map((item) => (
-                  <li
-                    key={item.itemCode}
-                    onClick={() => {
-                      handleItemSelect(item);
-                      setSearchTerm("");
-                    }}
-                  >
-                    {item.name}
-                  </li>
-                ))}
-            </ul>
-          )}
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>ITEM CODE</th>
-                <th className="name">NAME</th>
-                <th>QTY</th>
-                <th>Unit</th>
-                <th>PRICE / UNIT</th>
-                <th>DESCOUNT</th>
-                <th>TAX</th>
-                <th>TOTAL</th>
+        <div className="w-[75vw]">
+          <div className="relative w-full my-1">
+            <input
+              type="text"
+              placeholder="Search item..."
+              className="p-2 w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <ul className="absolute w-full bg-white z-10 shadow-lg rounded-lg overflow-hidden">
+                {console.log(data.items)}
+                {data.items
+                  ?.filter((item, index) =>
+                    item.Name.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((item) => (
+                    <li
+                      key={item.Code}
+                      onClick={() => {
+                        handleItemSelect({ ...item, quantity: 1 });
+                        setSearchTerm("");
+                      }}
+                      className="flex w-full justify-between items-center p-2"
+                    >
+                      <p>
+                        {item.Code} - {item.Name}
+                      </p>
+                      <p>{item.salesPrice}</p>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
+          <table className="w-full">
+            <thead className="w-full my-1">
+              <tr className="rounded-sm flex w-full justify-between gap-1 md-2 items-center">
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  #
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  ITEM CODE
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  NAME
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  QTY
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  Unit
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  PRICE / UNIT
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  DESCOUNT
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  TAX
+                </th>
+                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+                  TOTAL
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="w-full">
               {billingItems.map((item, index) => (
                 <tr
                   key={index}
-                  className={CurrentItems === index ? "selected" : ""}
+                  // className={CurrentItems === index ? "selected" : ""}
+                  className={`rounded-sm my-1 flex justify-between gap-1 md-2 items-center ${
+                    CurrentItems === index && "selected"
+                  }`}
                 >
-                  <td>{index}</td>
-                  <td>{item.itemCode}</td>
-                  <td className="name">{item.name}</td>
-                  <td>{item.quantity}</td>
-                  <td>{item.unit}</td>
-                  <td>{item.price_per_unit}</td>
-                  <td>{item.discount}</td>
-                  <td>{item.tax}</td>
-                  <td>{item.total}</td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.Code}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {index}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.Name}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.quantity}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.unit || "none"}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.salesPrice}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.discount}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.Tax}
+                  </td>
+                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
+                    {item.salesPrice}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -149,10 +227,13 @@ export default function QuickBilling({ data, setData, t = true }) {
       </div>
       {/* // Right side */}
       <div className="r">
-        <div className="t1">
-          <h1>Customer details</h1>
+        <div className="rounded-lg border border-gray-300 p-2 w-full">
+          <h1 className="text-lg font-Poppins font-semibold">
+            Customer details
+          </h1>
           <input
             type="text"
+            className="w-full p-2 border border-gray-300 rounded-md"
             placeholder="Search customer..."
             value={
               selectedCustomer ? selectedCustomer.name : customerSearchTerm
@@ -162,31 +243,71 @@ export default function QuickBilling({ data, setData, t = true }) {
           />
           {customerSearchTerm && (
             <ul>
-              {customers
+              {data.parties
                 .filter((customer) =>
-                  customer.name
+                  customer.partyName
                     .toLowerCase()
                     .includes(customerSearchTerm.toLowerCase())
                 )
                 .map((customer) => (
                   <li
-                    key={customer.name}
+                    key={customer.partyName}
                     onClick={() => {
                       setSelectedCustomer(customer);
                       setCustomerSearchTerm("");
                     }}
                   >
-                    {customer.name}
+                    {customer.partyName}
                   </li>
                 ))}
             </ul>
           )}
         </div>
-        <div className="t2">
+        <div className="rounded-lg border h-full border-gray-300 p-2">
+          <h1>Bill Details</h1>
+          <div className="flex justify-between">
+            <h2>Sub Total:</h2>
+          </div>
+          <div className="flex justify-between">
+            <h2>Total Descounts</h2>
+          </div>
+          <div className="flex justify-between">
+            <h2>Total Tax</h2>
+          </div>
           <h1>Total Amount: {totalAmount}</h1>
         </div>
-        <div className="t3">
-          <button onClick={() => Navigate("/")}>Save Bill</button>
+        <div className="rounded-lg border border-gray-300 p-3 mt-1">
+          <h1 className="text-md font-semibold"> CASH/UPI</h1>
+          <div className="flex justify-between w-full">
+            <p className="my-2 text-md">Payment Method</p>
+            <select
+              name=""
+              className="p-2 my-2 border border-b-gray-500 rounded-md"
+              id=""
+            >
+              <option value="cash">Cash</option>
+              <option value="credit">Credit</option>
+            </select>
+          </div>
+          <div className="flex justify-between w-full">
+            <p className="my-2 text-md">Amount Recieved</p>
+            <input
+              name=""
+              className="p-2 my-2 border border-b-gray-500 rounded-md"
+              id=""
+            />
+          </div>
+          <div className="flex justify-between w-full">
+            <p className="my-2 text-xl">Change to return</p>
+            <p className="my-2 text-xl">{totalAmount}</p>
+          </div>
+
+          <button
+            className="bg-red-500 text-white p-3 hover:bg-white hover:text-red-500 border-red-500 border-1 rounded-md w-full text-center"
+            onClick={() => Navigate("/")}
+          >
+            Save Bill
+          </button>
         </div>
       </div>
     </div>

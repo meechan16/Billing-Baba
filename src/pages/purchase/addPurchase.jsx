@@ -245,114 +245,122 @@ export default function AddPurchase({ data, setData }) {
           </div>
         </div>
         <div className="ai2">
-          <div className="cl top">
-            <p>item</p>
-            <p>QTY</p>
-            <p>UNIT</p>
-            <p>PRICE/UNIT</p>
-            <p>DISCOUNT</p>
-            <p>TAX</p>
-            <p>AMOUNT</p>
+          <div className="rounded-sm flex justify-between gap-1 md-2 items-center">
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              ITEM
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              QTY
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              UNIT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              PRICE/UNIT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              DISCOUNT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              TAX
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              AMOUNT
+            </p>
           </div>
           {rows.map((row, rowIndex) => (
-            <div className="cl" key={rowIndex}>
-              <div>
-                <input
-                  value={row.col1}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "item", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                <input
-                  value={row.col2}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "qty", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                {/* <input
-                  value={row.col3}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "unit", e.target.value)
-                  }
-                /> */}
-                <select
-                  name=""
-                  id=""
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "unit", e.target.value)
-                  }
-                >
-                  <option value="">None</option>
-                  <option value="BAG">Bag</option>
-                  <option value="Gram">Gram</option>
-                  <option value="UNIT">UNIT</option>
-                </select>
-              </div>
-              <div>
-                <input
-                  value={row.col4}
-                  onChange={(e) =>
-                    handleInputChange(
-                      rowIndex,
-                      "price_per_unit",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-              <div>
-                <input
-                  value={row.col5}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "discount", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                {/* <input
-                  value={row.col6}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "tax", e.target.value)
-                  }
-                /> */}
-                <select
-                  name=""
-                  id=""
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "tax", e.target.value)
-                  }
-                >
-                  <option value="0">IGST@0%</option>
-                  <option value="0">GST@0%</option>
-                  <option value="0.25">IGST@0.25%</option>
-                  <option value="0.25">GST@0.25%</option>
-                  <option value="3">IGST@3%</option>
-                  <option value="3">GST@3%</option>
-                  <option value="5">IGST@5%</option>
-                  <option value="5">GST@5%</option>
-                  <option value="12">IGST@12%</option>
+            <div
+              className="rounded-sm flex justify-between my-1 gap-1 items-center"
+              key={rowIndex}
+            >
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                value={row.col1}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "item", e.target.value)
+                }
+              />
+              {/* <div>
+              </div> */}
+              <input
+                value={row.col2}
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "qty", e.target.value)
+                }
+              />
+              {/* <div>
+              </div> */}
+              {/* <div>
+              </div> */}
+              <select
+                name=""
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                id=""
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "unit", e.target.value)
+                }
+              >
+                <option value="">None</option>
+                <option value="BAG">Bag</option>
+                <option value="Gram">Gram</option>
+                <option value="UNIT">UNIT</option>
+              </select>
+              {/* <div>
+              </div> */}
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                value={row.col4}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "price_per_unit", e.target.value)
+                }
+              />
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                value={row.col5}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "discount", e.target.value)
+                }
+              />
+              {/* <div>
+              </div> */}
+              {/* <div>
+              </div> */}
+              <select
+                name=""
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                id=""
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "tax", e.target.value)
+                }
+              >
+                <option value="0">IGST@0%</option>
+                <option value="0">GST@0%</option>
+                <option value="0.25">IGST@0.25%</option>
+                <option value="0.25">GST@0.25%</option>
+                <option value="3">IGST@3%</option>
+                <option value="3">GST@3%</option>
+                <option value="5">IGST@5%</option>
+                <option value="5">GST@5%</option>
+                <option value="12">IGST@12%</option>
 
-                  <option value="18">IGST@18%</option>
+                <option value="18">IGST@18%</option>
 
-                  <option value="18">GST@18%</option>
+                <option value="18">GST@18%</option>
 
-                  <option value="28">IGST@28%</option>
+                <option value="28">IGST@28%</option>
 
-                  <option value="28">GST @28%</option>
-                </select>
-              </div>
-              <div>
-                <input
-                  value={row.amount}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "amount", e.target.value)
-                  }
-                />
-              </div>
+                <option value="28">GST @28%</option>
+              </select>
+              {/* <div>
+              </div> */}
+              <input
+                value={row.amount}
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "amount", e.target.value)
+                }
+              />
             </div>
           ))}
         </div>

@@ -27,10 +27,11 @@ export default function AddItem({
   var [asDate, setAsDate] = useState();
   var [minToMaintain, setMinToMaintain] = useState();
   var [location, setLocation] = useState();
+  var [primaryUnit, setprimaryUnit] = useState();
+  var [SecondaryUnit, setSecondaryUnit] = useState();
 
   var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
-
   useEffect(() => {
     if (sellPrice < discount) {
       alert("discount can't be more than sales price");
@@ -38,6 +39,14 @@ export default function AddItem({
       alert("purchase price more than sale price, please fix");
     }
   }, [purchaseprice, sellPrice]);
+
+  function generate13DigitNumberString() {
+    let numberString = "";
+    for (let i = 0; i < 13; i++) {
+      numberString += Math.floor(Math.random() * 10).toString();
+    }
+    return numberString;
+  }
 
   let uid = data.uid;
   const addItemReq = async () => {
@@ -53,12 +62,14 @@ export default function AddItem({
         discount: discount ? discount : "",
         purchasePrice: purchaseprice ? purchaseprice : "",
         Tax: tax ? tax : "",
-        openingQuantity: openingQuantity ? openingQuantity : "",
+        openingQuantity: openingQuantity ? openingQuantity : 0,
         atPrice: atPrice ? atPrice : "",
         asDate: asDate ? asDate : "",
         minToMaintain: minToMaintain ? minToMaintain : "",
         location: location ? location : "",
         profit: sellPrice - discount - purchaseprice,
+        stock: openingQuantity || 0,
+        itemType: "product",
       };
     } else {
       newData = {
@@ -70,6 +81,7 @@ export default function AddItem({
         discount: discount ? discount : "",
         Tax: tax ? tax : "",
         profit: sellPrice - discount,
+        itemType: "service",
       };
     }
     console.log(data);
@@ -80,6 +92,41 @@ export default function AddItem({
     setChange(!change);
     Navigate("/items");
   };
+
+  // barcode locha
+  let [BarcodeToggle, setBarcodeToggle] = useState(false);
+  // let [barcodes, setbarcodes] = useState();
+
+  // if (BarcodeToggle) {
+  let barcode = "";
+  let lastKeyTime = Date.now();
+
+  document.addEventListener("keydown", (event) => {
+    const currentTime = Date.now();
+
+    // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
+    if (currentTime - lastKeyTime > 50) {
+      barcode = ""; // Reset barcode if too much time has passed
+    }
+    lastKeyTime = currentTime;
+
+    // Filter out non-character keys
+    if (event.key.length === 1) {
+      barcode += event.key;
+    }
+
+    if (event.key === "Enter") {
+      if (barcode) {
+        setitemCode(barcode);
+        barcode = ""; // Clear the barcode after processing
+      }
+    }
+  });
+
+  useEffect(() => {
+    console.log(itemCode);
+  }, [itemCode]);
+  // }
 
   if (loading) return <Loader />;
 
@@ -127,7 +174,16 @@ export default function AddItem({
               setInputValue={setitemHSN}
               placeholder={toggle ? "Item HSN" : "Service HSN"}
             />
-            {/* <button>Select Unit</button> */}
+            <CustomInput
+              inputValue={primaryUnit}
+              setInputValue={setprimaryUnit}
+              placeholder={"Primary Unit"}
+            />
+            <CustomInput
+              inputValue={SecondaryUnit}
+              setInputValue={setSecondaryUnit}
+              placeholder={"Secondary Unit"}
+            />
           </div>
           <div className="p1">
             <select
@@ -143,11 +199,44 @@ export default function AddItem({
               ))}
             </select>
             {/* <input type="text" className="box" /> */}
-            <CustomInput
-              inputValue={itemCode}
-              setInputValue={setitemCode}
-              placeholder={toggle ? "Item Code" : "Service Code"}
-            />
+            <div className="flex">
+              <CustomInput
+                inputValue={itemCode}
+                setInputValue={setitemCode}
+                placeholder={toggle ? "Item Code" : "Service Code"}
+              />
+              <button
+                className="h-full my-[10px] p-3 bg-gray-200 font-semibold"
+                onClick={() => {
+                  let cd = generate13DigitNumberString();
+                  console.log(cd);
+                  setitemCode(cd);
+                }}
+              >
+                Generate random code
+              </button>
+            </div>
+            {itemCode && (
+              <button className="font-semibold hover:underline">
+                Generate Barcode Image
+              </button>
+            )}
+            <button className="text-blue-400 font-semibold mx-2 items-center fill-blue-400 flex gap-1">
+              <span className="hover:underline">Add Product Images</span>{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                className="w-4 h-4"
+              >
+                <path d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+              </svg>
+            </button>
+          </div>
+          <div className="p1">
+            <p className="text-gray-500 font-semibold">
+              * scan existing barcode to set custom item code from pre-existing
+              barcode
+            </p>
           </div>
         </div>
         <div className="c2">
@@ -168,32 +257,106 @@ export default function AddItem({
             )}
           </div>
           {page === "pricing" ? (
-            <div className="div">
-              <div className="t">
-                <CustomInput
-                  inputValue={sellPrice}
-                  setInputValue={setSellPrice}
-                  placeholder={"Sale Price"}
-                />
-                <CustomInput
-                  inputValue={discount}
-                  setInputValue={setDescount}
-                  placeholder={"Descount"}
-                />
+            <div className="">
+              <div className="rounded-lg bg-gray-200 m-3 p-3">
+                <h1 className="text-xl mt-[10px] font-semibold">Sale Price</h1>
+                <div className="flex gap-3">
+                  <div className="flex items-center gap-0">
+                    <CustomInput
+                      inputValue={sellPrice}
+                      setInputValue={setSellPrice}
+                      placeholder={"Sale Price"}
+                    />
+                    <select
+                      name=""
+                      id=""
+                      className="px-2 h-fit bg-transparent m-0"
+                    >
+                      <option value="" className="p-2">
+                        With Taxes
+                      </option>
+                      <option value="" className="p-2">
+                        Without Taxes
+                      </option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-0">
+                    <CustomInput
+                      inputValue={discount}
+                      setInputValue={setDescount}
+                      placeholder={"Descount"}
+                    />
+                    <select
+                      name=""
+                      id=""
+                      className="px-2 h-fit bg-transparent m-0"
+                    >
+                      <option value="" className="p-2">
+                        With Taxes
+                      </option>
+                      <option value="" className="p-2">
+                        Without Taxes
+                      </option>
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div className="b">
-                {toggle && (
-                  <CustomInput
-                    inputValue={purchaseprice}
-                    setInputValue={setPurchasePrice}
-                    placeholder={"Purchase Price"}
-                  />
-                )}
-                <CustomInput
-                  inputValue={tax}
-                  setInputValue={setTax}
-                  placeholder={"Taxes"}
-                />
+              <div className="rounded-lg  bg-gray-200 m-3 p-3">
+                <h1 className="text-xl mt-[10px] font-semibold">
+                  Purchase Price
+                </h1>
+                <div className="flex gap-3">
+                  {toggle && (
+                    <div className="flex items-center gap-0">
+                      <CustomInput
+                        inputValue={purchaseprice}
+                        setInputValue={setPurchasePrice}
+                        placeholder={"Purchase Price"}
+                      />
+                      <select
+                        name=""
+                        id=""
+                        className="px-2 h-fit bg-transparent m-0"
+                      >
+                        <option value="" className="p-2">
+                          With Taxes
+                        </option>
+                        <option value="" className="p-2">
+                          Without Taxes
+                        </option>
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-0">
+                    <select
+                      name=""
+                      className="p-3 m-2 border-gray-300 border rounded-md"
+                      id=""
+                    >
+                      {data.tax.map((item) => (
+                        <option value={item.value}>{item.name}</option>
+                      ))}
+                    </select>
+                    {/* <CustomInput
+                      inputValue={tax}
+                      setInputValue={setTax}
+                      placeholder={"Taxes"}
+                    />
+                    <select
+                      name=""
+                      id=""
+                      className="px-2 h-fit bg-transparent m-0"
+                    >
+                      <option value="" className="p-2">
+                        With Taxes
+                      </option>
+                      <option value="" className="p-2">
+                        Without Taxes
+                      </option>
+                    </select> */}
+                  </div>
+                </div>
               </div>
             </div>
           ) : (

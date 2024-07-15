@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import QuickBilling from "./QuickBilling";
 import { useNavigate } from "react-router-dom";
 
-const Tabs = () => {
+const Tabs = ({ data, setData }) => {
   const Navigate = useNavigate();
   const [tabs, setTabs] = useState([{ id: 1, isOpen: true }]);
   const [tabIndex, setTabIndex] = useState(1);
@@ -62,7 +62,7 @@ const Tabs = () => {
           key={tab.id}
           style={{ display: tab.isOpen ? "block" : "none" }}
         >
-          <QuickBilling key={tab.id} />
+          <QuickBilling key={tab.id} data={data} setData={setData} />
         </div>
       ))}
       {/* </div> */}

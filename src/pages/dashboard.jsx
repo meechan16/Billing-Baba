@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Undone from "../components/undone";
 import TodoList from "../components/todoList";
 import dev_url from "../url";
-import LogIn from "./kogin";
+import LogIn from "./login";
 import AddInfo from "./addInfo";
 import { useNavigate } from "react-router-dom";
 import OnlineStore from "./OnlineStore";
@@ -270,7 +270,10 @@ export default function Dashboard({ data, setData }) {
               </div>
               <div className="mid">
                 <h1>₹ {data?.total_purchase}</h1>
-                <p>You have no purchases for today</p>
+                <p>
+                  {data?.total_purchase === 0 &&
+                    "You have no purchases for today"}
+                </p>
               </div>
               <div className="profile">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -305,7 +308,7 @@ export default function Dashboard({ data, setData }) {
                 </select>
               </div>
               <div className="mid">
-                <h1>₹ 320.00</h1>
+                <h1>₹ {data?.total_expense}</h1>
               </div>
               <div className="profile">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

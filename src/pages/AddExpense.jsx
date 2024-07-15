@@ -91,7 +91,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
     };
 
     let newDa = data;
-    newDa.expense ? newDa.expense.push(newData) : (newDa.sales = [newData]);
+    newDa.expense ? newDa.expense.push(newData) : (newDa.expense = [newData]);
     newDa.total_expense
       ? (newDa.total_expense += parseFloat(newData.total))
       : (newDa.total_expense = parseFloat(newData.total));

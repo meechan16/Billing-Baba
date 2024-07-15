@@ -6,7 +6,6 @@ import {
   saveUidToLocalStorage,
   signInWithGoogle,
 } from "../firebase";
-import CustomInput from "../components/customInput";
 
 export default function LogIn({ sw = false }) {
   const [Switch, setSwitch] = useState(sw ? "add-info" : "login");
@@ -18,6 +17,7 @@ export default function LogIn({ sw = false }) {
   const [Mobile, setMobil] = useState("");
   const [password, setPassword] = useState("");
 
+  const history = useNavigate();
   const signup = () => {
     let res = registerWithEmailAndPassword(email, password, name);
     console.log(res);
@@ -27,13 +27,13 @@ export default function LogIn({ sw = false }) {
     history("/");
   };
 
-  const history = useNavigate();
   const login = () => {
     let res = logInWithEmailAndPassword(email, password);
     console.log(res);
     alert(res);
     saveUidToLocalStorage(res.data);
-    history("/");
+    // history("/");
+    window.location.href = "/";
     setSwitch("signup");
   };
   return (
@@ -73,6 +73,7 @@ export default function LogIn({ sw = false }) {
                   let res = await signInWithGoogle();
                   saveUidToLocalStorage(res.data.uid);
                   // alert(res.data.uid);
+                  window.location.href = "/";
                   history("/");
                 }}
                 className="google"
@@ -114,7 +115,9 @@ export default function LogIn({ sw = false }) {
                 onClick={async (e) => {
                   let res = await signInWithGoogle();
                   saveUidToLocalStorage(res.data.uid);
-                  history("/");
+                  
+                  window.location.href = "/";
+                  // history("/");
                 }}
                 className="google"
               >

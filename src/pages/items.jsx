@@ -132,26 +132,30 @@ export default function Items({ data, setData, change, setChange }) {
                 <h2>Items</h2>
                 <h2>Qty</h2>
               </div>
-              {data?.items?.map((item, index) => (
-                <div
-                  className={`tile ${selecteditems === item ? "selected" : ""}`}
-                  key={index}
-                  onClick={() => setSelectedItems(item)}
-                >
-                  <h1>{item.Name}</h1>
-                  <div className="">
-                    <p>₹ {item.ammount || "-"}</p>
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
-                      >
-                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                      </svg>
-                    </Dropdown>
+              {data?.items
+                ?.filter((item) => item.itemType !== "service")
+                .map((item, index) => (
+                  <div
+                    className={`tile ${
+                      selecteditems === item ? "selected" : ""
+                    }`}
+                    key={index}
+                    onClick={() => setSelectedItems(item)}
+                  >
+                    <h1>{item.Name}</h1>
+                    <div className="">
+                      <p>{item.stock ? item.stock : item.openingQty || 0}</p>
+                      <Dropdown menuItems={["View/Edit", "Delete"]}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 128 512"
+                        >
+                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                        </svg>
+                      </Dropdown>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <div className="right">
@@ -263,16 +267,162 @@ export default function Items({ data, setData, change, setChange }) {
         </div>
       )}
       {page === "service" && (
-        <div className="service">
-          <img src="./assets/itemService.png" alt="" />
-          <p>
-            Add services to your customers and create sale invoices for them
-            faster.
-          </p>
-          <button onClick={() => Navigate("/add-items")}>
-            Add Your Services
-          </button>
-        </div>
+        <>
+          {data?.items?.some((item) => item.itemType === "service") ? (
+            <div className="items">
+              <div className="left">
+                <div className="top">
+                  <button onClick={() => Navigate("/add-items")}>
+                    Add Item +
+                  </button>
+                  <div className="">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
+                    <Dropdown
+                      menuItems={[
+                        "Bulk inactive",
+                        "Bulk Active",
+                        "Bulk Assign Code",
+                        "Assign Units",
+                        "Bulk Update Items",
+                      ]}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 128 512"
+                      >
+                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                      </svg>
+                    </Dropdown>
+                  </div>
+                </div>
+                <div className="content">
+                  <div className="head">
+                    <h2>Items</h2>
+                  </div>
+                  {data?.items
+                    ?.filter((item) => item.itemType === "service")
+                    .map((item, index) => (
+                      <div
+                        className={`tile ${
+                          selecteditems === item ? "selected" : ""
+                        }`}
+                        key={index}
+                        onClick={() => setSelectedItems(item)}
+                      >
+                        <h1>{item.Name}</h1>
+                        <div className="">
+                          <Dropdown menuItems={["View/Edit", "Delete"]}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+              <div className="right">
+                <div className="title">
+                  <div className="tile">
+                    <h1>
+                      {selecteditems ? selecteditems.Name : "No Item Selected"}
+                    </h1>
+                    <button onClick={() => setStockPage(!StockPage)}>
+                      + Adujust Items
+                    </button>
+                    {StockPage && <StockAdjust setClose={setStockPage} />}
+                  </div>
+
+                  {selecteditems && (
+                    <div className="tile">
+                      <p>
+                        SALE PRICE{" "}
+                        <span>
+                          {" "}
+                          ₹ {selecteditems ? selecteditems.salesPrice : "Null"}
+                        </span>
+                        (excl)
+                      </p>
+                    </div>
+                  )}
+                  <div className="tile"></div>
+                  <div className="tile"></div>
+                </div>
+                {selecteditems && (
+                  <div className="content">
+                    <div className="t">
+                      <h1>TRANSACTIONS</h1>
+                      <div className="search">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                        </svg>
+                        <input type="" />
+                      </div>
+                    </div>
+                    <div className="cl top">
+                      <p>Type</p>
+                      <p>Invoice/Ref</p>
+                      <p>Name</p>
+                      <p>Date</p>
+                      <p>Quantity</p>
+                      <p>Price</p>
+                      <p>Status</p>
+                    </div>
+
+                    {data?.sales
+                      ?.filter((item) => {
+                        return item.items.some(
+                          (term) => term.item === selecteditems.Name
+                        );
+                      })
+                      .map((sale, index) => (
+                        <div className="cl" key={index}>
+                          <p className="grey">{sale.payment_type}</p>
+                          <p className="grey">{sale.invoice_number}</p>
+                          <p className="grey">{sale.name}</p>
+                          <p className="">{sale.invoice_date}</p>
+                          <p className="grey">{sale.items?.length}</p>
+                          <p className="grey">{sale.total}</p>
+                          <p className="">{sale.total - sale.paid}</p>
+                        </div>
+                      ))}
+                    {/* <div className="cl">
+                <p>Tech</p>
+                <p className="grey">231</p>
+                <p className="grey">Boat</p>
+                <p className="grey">03/02/2024</p>
+                <p className="grey">10</p>
+                <p className="grey">3000</p>
+                <p className="grey">Unpaid</p>
+              </div> */}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="service">
+              <img src="./assets/itemService.png" alt="" />
+              <p>
+                Add services to your customers and create sale invoices for them
+                faster.
+              </p>
+              <button onClick={() => Navigate("/add-items")}>
+                Add Your Services
+              </button>
+            </div>
+          )}
+        </>
       )}
       {page === "category" && (
         <div className="items category">
