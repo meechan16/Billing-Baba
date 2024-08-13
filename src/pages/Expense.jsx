@@ -93,7 +93,11 @@ export default function Expense({ data, setData }) {
                   <h1>{item.invoice_number}</h1>
                   <div className="">
                     <p>₹ {item.total || "-"}</p>
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
+                    <Dropdown menuItems={[
+                                { label: "View/Edit"},
+                                { label: "Delete"},
+                              ]} isLabelOnly={true}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -238,7 +242,11 @@ export default function Expense({ data, setData }) {
                   <h1>{item.name}</h1>
                   <div className="">
                     {/* <p>₹ {item.name || "-"}</p> */}
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
+                    <Dropdown menuItems={[
+                                { label: "View/Edit"},
+                                { label: "Delete"},
+                              ]} isLabelOnly={true}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"

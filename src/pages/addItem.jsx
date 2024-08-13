@@ -334,7 +334,7 @@ export default function AddItem({
                       className="p-3 m-2 border-gray-300 border rounded-md"
                       id=""
                     >
-                      {data.tax.map((item) => (
+                      {data.tax?.map((item) => (
                         <option value={item.value}>{item.name}</option>
                       ))}
                     </select>
