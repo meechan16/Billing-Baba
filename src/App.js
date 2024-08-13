@@ -68,16 +68,41 @@ function App() {
   const [Error, setError] = useState(true);
 
   useEffect(() => {
-    // console.log(data);
-    // console.log("data before fetch");
     fetchData();
   }, []);
+
+  const fetchData = () => {
+    fetch(dev_url + "/get_user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: uid, // Modify this if necessary
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("fetched");
+        // console.log("Data fetch:", data);
+        setData(data.data || []); // Ensure data is always an array
+        setloading(false);
+      })
+      .catch((error) => {
+        setloading(false);
+        setError(true);
+        console.error("Error:", error);
+        setData({ serverError: true });
+      }
+    );
+  };
 
   const uid = localStorage.getItem("uid");
 
   const updateData = () => {
     setloading2(true);
     localStorage.setItem("data", data);
+    console.log("Edit triggered");
+    console.log(data);
+    console.log(JSON.stringify(data));
     try {
       let url = dev_url + "editData";
       fetch(url, {
@@ -104,33 +129,12 @@ function App() {
       alert("unable to save to remote server");
     }
   };
-  useEffect(() => {
-    updateData();
-    console.log(data);
-  }, [data, change]);
 
-  const fetchData = () => {
-    fetch(dev_url + "/get_user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("fetched");
-        // console.log("Data fetch:", data);
-        setData(data.data || []); // Ensure data is always an array
-        setloading(false);
-      })
-      .catch((error) => {
-        setloading(false);
-        setError(true);
-        console.error("Error:", error);
-        setData({ serverError: true });
-      });
-  };
+  useEffect(() => {
+    console.log("updateD");
+    console.log(data);
+    updateData();
+  }, [data, change]);
 
   if (loading || !data) {
     return <Loader />;

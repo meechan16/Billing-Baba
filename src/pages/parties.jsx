@@ -199,10 +199,13 @@ export default function Parties({ data, setData }) {
               <div className="flex flex-col justify-between items-start">
                 <p>Phone Number: {selectedParty.partyName}</p>
                 <p>email: {selectedParty.partyName}</p>
-                <p>
-                  No Credit limit set{" "}
-                  <span className=" text-blue-500">Set Credit Limit</span>
-                </p>
+                {selectedParty.creditLimit?(selectedParty.creditLimit):(
+                  <p>
+                    No Credit limit set{" "}
+                    <span className=" text-blue-500">Set Credit Limit</span>
+                  </p>    
+                )
+                }
               </div>
               <div className="flex flex-col justify-start items-end">
                 <h1>share</h1>
@@ -250,7 +253,7 @@ export default function Parties({ data, setData }) {
               )
               .map((sale, index) => (
                 <div className="cl" key={index}>
-                  <p className="grey">{sale.payment_type}</p>
+                  <p className="grey">Sales</p>
                   <p className="grey">{sale.invoice_number}</p>
                   {/* <p className="grey">{sale.name}</p> */}
                   <p className="">{sale.invoice_date}</p>

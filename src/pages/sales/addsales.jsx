@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import dev_url from "../../url";
-import CustomInput from "../../components/customInput";
+import dev_url from "../../url";;
 
 export default function AddSales({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -81,8 +80,6 @@ export default function AddSales({ data, setData, change, setChange }) {
       newRows[index][column] = value;
       return newRows;
     });
-    // console.log("rows");
-    // console.log(rows[0]);
   };
 
   // const addItemToRow = async (index, item) => {
@@ -145,19 +142,20 @@ export default function AddSales({ data, setData, change, setChange }) {
 
     let newDa = data;
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-    newDa.sale_pending
-      ? (newDa.sale_pending += parseFloat(newData.pending))
-      : (newDa.sale_pending = parseFloat(newData.pending));
-    newDa.sale_paid
-      ? (newDa.sale_paid += parseFloat(newData.paid))
-      : (newDa.sale_paid = parseFloat(newData.paid));
-    newDa.paymentStatus === pending
-      ? (newDa.to_collect += parseFloat(newData.pending))
-      : (newDa.to_collect = parseFloat(newData.pending));
+    if (newData.payment_type == "credit"){
+      newDa.sale_pending
+        ? (newDa.sale_pending += parseFloat(newData.total))
+        : (newDa.sale_pending = parseFloat(newData.total));
+        newDa.to_collect?newDa.to_collect += parseFloat(newData.pending) :newDa.to_collect = parseFloat(newData.pending)
+    }else{
+      newDa.sale_paid
+        ? (newDa.sale_paid += parseFloat(newData.total))
+        : (newDa.sale_paid = parseFloat(newData.total));
+    }
     newDa.total_sales
       ? (newDa.total_sales += parseFloat(newData.total))
       : (newDa.total_sales = parseFloat(newData.total));
-    console.log(newDa);
+    // console.log(newDa);
     setData(newDa);
     setChange(!change);
     Navigate("/sale-invoice");
@@ -512,8 +510,6 @@ export default function AddSales({ data, setData, change, setChange }) {
                   handleInputChange(rowIndex, "qty", e.target.value)
                 }
               />
-              {/* <div>
-              </div> */}
               <div className="w-full">
                 <input
                   className="w-full  py-3  text-center bg-gray-100 rounded-sm"

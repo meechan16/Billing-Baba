@@ -17,6 +17,7 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [Email, setEmail] = useState("");
   var [Add, setAdd] = useState("");
   var [OpeningBalance, setOpeningBalance] = useState("");
+  var [creditLimit, setcreditLimit] = useState(0);
   var [asDate, setAsDate] = useState("");
   var [AddF1, setAddF1] = useState("");
   var [AddF2, setAddF2] = useState("");
@@ -38,6 +39,7 @@ export default function AddParties({ data, setData, change, setChange }) {
       AddF1: AddF1 ? AddF1 : "",
       AddF2: AddF2 ? AddF2 : "",
       AddF3: AddF3 ? AddF3 : "",
+      creditLimit: creditLimit,
       transactions: [],
       ammount: 0,
       balance: 0,
@@ -203,6 +205,7 @@ export default function AddParties({ data, setData, change, setChange }) {
             </div>
           )}
           {page == "Credit" && (
+            <div className="flex flex-col">
             <div className="div s">
               <CustomInput
                 inputValue={OpeningBalance}
@@ -215,6 +218,18 @@ export default function AddParties({ data, setData, change, setChange }) {
                 id="birthday"
                 name="birthday"
               ></input>
+            </div>
+            <div className="div">
+              <div className="flex flex-col">
+              <h1 className="text-lg font-semibold">Set Credit Limit</h1>
+
+              <CustomInput
+                inputValue={creditLimit}
+                setInputValue={setcreditLimit}
+                placeholder={"Set Credit Limit"}
+              />
+              </div>
+            </div>
             </div>
           )}
           {page == "AddF" && (

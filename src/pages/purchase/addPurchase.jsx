@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 import Loader from "../Loader";
 
-export default function AddPurchase({ data, setData }) {
+export default function AddPurchase({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   var [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(true);
+  const [Search, setSearch] = useState();
   const [rows, setRows] = useState([
     {
       index: 1,
@@ -53,15 +54,16 @@ export default function AddPurchase({ data, setData }) {
         const qty = parseInt(newRows[index]["qty"]);
         const pricePerUnit = parseInt(newRows[index]["price_per_unit"]);
         const discount = parseInt(newRows[index]["discount"]);
-        const taxPercentage = parseInt(newRows[index]["tax"]);
+        // const taxPercentage = parseInt(newRows[index]["tax"]);
 
         console.log(qty);
         console.log(pricePerUnit);
         console.log(discount);
-        const tax = (pricePerUnit - discount) * (taxPercentage / 100);
-        console.log(tax);
+        // const tax = (pricePerUnit - discount) * (taxPercentage / 100);
+        // console.log(tax);
         // Calculate amount
-        const amount = qty * (pricePerUnit - discount + tax);
+        // const amount = qty * (pricePerUnit - discount + tax);
+        const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
 
         // Update total amount
@@ -72,18 +74,18 @@ export default function AddPurchase({ data, setData }) {
         setTotalAmount(newTotalAmount);
 
         // Update total tax
-        const newTotalTax = newRows.reduce(
-          (total, row) => total + (row.amount ? tax : 0),
-          0
-        );
-        setTotalTax(newTotalTax);
+        // const newTotalTax = newRows.reduce(
+        //   (total, row) => total + (row.amount ? tax : 0),
+        //   0
+        // );
+        // setTotalTax(newTotalTax);
       }
       newRows[index][column] = value;
       return newRows;
     });
   };
 
-  const [Name, setName] = useState();
+  const [Name, setName] = useState("");
   const [phone_no, setPhone_no] = useState();
   const [invoice_number, setInvoice_number] = useState();
   const [invoice_date, setInvoice_date] = useState("");
@@ -94,39 +96,58 @@ export default function AddPurchase({ data, setData }) {
 
   let uid = data.uid;
   let sendData = () => {
-    setLoading(true);
-    const data = {
+    const newData = {
+      name: Name,
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply ? state_of_supply : "",
-      payment_type: paymentType ? paymentType : "",
+      payment_type: toggle?"credit":"cash",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount : "",
       total_tax: totalTax ? totalTax : "",
       description: Description ? Description : "",
     };
-    let url = dev_url + "addpurchase";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("purchase: ", data);
-        setLoading(false);
-        window.location.href = "/purchase-bill";
-        // Navigate("/");
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error:", error);
-      });
+    let newDa = data;
+    newDa.purchase ? newDa.purchase.push(newData) : (newDa.purchase = [newData]);
+    if (newData.payment_type == "credit"){
+      newDa.sale_pending
+        ? (newDa.puchase_pending += parseFloat(newData.total))
+        : (newDa.puchase_pending = parseFloat(newData.total));
+        newDa.to_pay?newDa.to_pay += parseFloat(newData.pending) :newDa.to_pay = parseFloat(newData.pending)
+    }else{
+      newDa.purchase_paid
+        ? (newDa.purchase_paid += parseFloat(newData.total))
+        : (newDa.purchase_paid = parseFloat(newData.total));
+    }
+    newDa.total_purchase
+      ? (newDa.total_purchase += parseFloat(newData.total))
+      : (newDa.total_purchase = parseFloat(newData.total));
+    // console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/purchase-bill");
+    // let url = dev_url + "addpurchase";
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: uid, // Modify this if necessary
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log("purchase: ", data);
+    //     setLoading(false);
+    //     window.location.href = "/purchase-bill";
+    //     // Navigate("/");
+    //   })
+    //   .catch((error) => {
+    //     setLoading(false);
+    //     console.error("Error:", error);
+    //   });
   };
 
   if (loading) return <Loader />;
@@ -160,14 +181,42 @@ export default function AddPurchase({ data, setData }) {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
               </svg>
+              <div className="search">
               <input
-                type="text"
-                name="name"
-                value={Name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Search by Name/Phone"
-                id=""
-              />
+              type="text"
+              name="name"
+              value={Name ? Name : Search?.party ? Search?.party : ""}
+              onChange={(e) => setSearch({ party: e.target.value })}
+              placeholder="Search by Name/Phone"
+              id=""
+            />
+            {Search?.party && (
+                <ul>
+                  {data.parties
+                    .filter((customer) =>
+                      customer.partyName
+                        .toLowerCase()
+                        .includes(Search.party.toLowerCase())
+                    )
+                    .map((customer) => (
+                      <li
+                        key={customer.phone_no}
+                        onClick={() => {
+                          // i should probably add more than a name to improve future search filter
+                          setName(customer.partyName);
+                          setPhone_no(customer.phoneNo);
+                          setSearch();
+                        }}
+                      >
+                        {customer.partyName}
+                      </li>
+                    ))}
+                  <li className="add" onClick={() => Navigate("/addParties")}>
+                    Add Party +
+                  </li>
+                </ul>
+              )}
+              </div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               </svg>
@@ -261,9 +310,9 @@ export default function AddPurchase({ data, setData }) {
             <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
               DISCOUNT
             </p>
-            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+            {/* <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
               TAX
-            </p>
+            </p> */}
             <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
               AMOUNT
             </p>
@@ -273,13 +322,83 @@ export default function AddPurchase({ data, setData }) {
               className="rounded-sm flex justify-between my-1 gap-1 items-center"
               key={rowIndex}
             >
-              <input
+              {/* <input
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                 value={row.col1}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "item", e.target.value)
                 }
-              />
+              /> */}
+              <div className="w-full relative">
+                <input
+                  // value={
+                  //   rows?[rowIndex]
+                  //     ? rows[rowIndex].item
+                  //     : (Search?.rowIndex?.item
+                  //     ? Search.rowIndex.item
+                  //     : "")
+                  // }
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                  value={
+                    rows[rowIndex].item
+                      ? rows[rowIndex].item
+                      : Search
+                      ? Search[rowIndex]?.item
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setSearch({ rowIndex: { item: e.target.value } })
+                  }
+                />
+                {/* {console.log(rows[rowIndex].item)} */}
+                {Search?.rowIndex?.item && (
+                  <ul className="absolute bg-white w-full">
+                    {data.items
+                      .filter((item) =>
+                        item.Name.toLowerCase().includes(
+                          rows[rowIndex].item.toLowerCase()
+                        )
+                      )
+                      .map((item) => (
+                        <li
+                          key={item.code}
+                          onClick={() => {
+                            handleInputChange(rowIndex, "item", item.Name);
+                            handleInputChange(rowIndex, "item_details", item);
+                            // handleInputChange(rowIndex, "tax", item.tax);
+                            handleInputChange(
+                              rowIndex,
+                              "discount",
+                              item.discount
+                            );
+                            handleInputChange(
+                              rowIndex,
+                              "price_per_unit",
+                              item.salesPrice
+                            );
+                            item.unit
+                              ? handleInputChange(rowIndex, "unit", item.unit)
+                              : handleInputChange(
+                                  rowIndex,
+                                  "unit",
+                                  "Not Available"
+                                );
+                            setSearch({});
+                          }}
+                          className="p-2 border-b border-gray-300 hover:bg-gray-200 cursor-pointer"
+                        >
+                          {item.Name}
+                        </li>
+                      ))}
+                    <li
+                      className="p-2 text-blue-500 font-semibold hover:bg-gray-200 cursor-pointer"
+                      onClick={() => Navigate("/addParties")}
+                    >
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
+              </div>
               {/* <div>
               </div> */}
               <input
@@ -293,7 +412,7 @@ export default function AddPurchase({ data, setData }) {
               </div> */}
               {/* <div>
               </div> */}
-              <select
+              {/* <select
                 name=""
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                 id=""
@@ -305,19 +424,72 @@ export default function AddPurchase({ data, setData }) {
                 <option value="BAG">Bag</option>
                 <option value="Gram">Gram</option>
                 <option value="UNIT">UNIT</option>
-              </select>
+              </select> */}
+              <div className="w-full">
+                <input
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                  value={
+                    rows[rowIndex].unit
+                      ? rows[rowIndex].unit
+                      : Search
+                      ? Search[rowIndex]?.unit
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setSearch({ rowIndex: { unit: e.target.value } })
+                  }
+                />
+                {Search?.rowIndex?.unit && (
+                  <ul>
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Units +
+                    </li>
+                    {data.units
+                      .filter((unit) =>
+                        unit.name
+                          .toLowerCase()
+                          .includes(
+                            rows[rowIndex].unit
+                              ? rows[rowIndex].unit.toLowerCase()
+                              : ""
+                          )
+                      )
+                      .map((unit) => (
+                        <li
+                          key={unit.name}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            handleInputChange(rowIndex, "unit", unit.name);
+                            setSearch({});
+                          }}
+                        >
+                          {unit.name}
+                        </li>
+                      ))}
+                    <li
+                      className="extra"
+                      onClick={() => {
+                        handleInputChange(rowIndex, "unit", "-");
+                        setSearch({});
+                      }}
+                    >
+                      --- none ---
+                    </li>
+                  </ul>
+                )}
+              </div>
               {/* <div>
               </div> */}
               <input
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                value={row.col4}
+                value={rows[rowIndex].price_per_unit}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "price_per_unit", e.target.value)
                 }
               />
               <input
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                value={row.col5}
+                value={rows[rowIndex].discount}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "discount", e.target.value)
                 }
@@ -326,7 +498,7 @@ export default function AddPurchase({ data, setData }) {
               </div> */}
               {/* <div>
               </div> */}
-              <select
+              {/* <select
                 name=""
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                 id=""
@@ -351,11 +523,11 @@ export default function AddPurchase({ data, setData }) {
                 <option value="28">IGST@28%</option>
 
                 <option value="28">GST @28%</option>
-              </select>
+              </select> */}
               {/* <div>
               </div> */}
               <input
-                value={row.amount}
+                value={rows[rowIndex].amount}
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                 onChange={(e) =>
                   handleInputChange(rowIndex, "amount", e.target.value)
@@ -381,16 +553,13 @@ export default function AddPurchase({ data, setData }) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add Description..."
             />
-            <select onChange={(e) => setpaymentType(e.target.value)}>
-              {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
-              </svg>{" "} */}
+            {/* <select onChange={(e) => setpaymentType(e.target.value)}>
               <option disabled selected value="">
                 PAYMENT TYPE
               </option>
               <option value="">CASH</option>
               <option value="">CHECK</option>
-            </select>
+            </select> */}
             <button onClick={addRow}>ADD ROW</button>
             {/* <button
               onClick={() => {

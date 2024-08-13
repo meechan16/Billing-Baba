@@ -65,15 +65,15 @@ export default function PurchaseBill({ data, setData }) {
             <p>Balance Due</p>
             <p className="side">-</p>
           </div>
-          {data?.sales?.map((sale, index) => (
+          {data?.purchase?.map((sale, index) => (
             <div className="cl" key={index}>
               <p className="">{sale.invoice_date}</p>
               <p className="grey">{sale.invoice_number}</p>
               <p className="grey">{sale.name}</p>
-              <p className="grey">{sale.type}</p>
-              <p className="grey">{sale.payType}</p>
+              <p className="grey">Purchase</p>
+              <p className="grey">{sale.payment_type}</p>
               <p className="grey">{sale.total}</p>
-              <p className="grey">{sale.balance}</p>
+              <p className="grey">{sale.balance? sale.balance:sale.total}</p>
               <p className="side">
                 <Dropdown
                   menuItems={[
