@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import Loader from "./Loader";
 
-export default function AddItem({
+export default function EditItem({
   data,
+  item,
   setData,
   t = true,
   change,
@@ -34,8 +35,12 @@ export default function AddItem({
   // var [toggle, set] = useState();
   useEffect(() => {
     if (sellPrice < discount) {
+        console.log("purchase price",purchaseprice);
+        console.log("saleprice: ",sellPrice);
       alert("discount can't be more than sales price");
     } else if (purchaseprice >= sellPrice - discount) {
+        console.log("purchase price",purchaseprice);
+        console.log("saleprice: ",sellPrice);
       alert("purchase price more than sale price, please fix");
     }
   }, [purchaseprice, sellPrice]);
@@ -49,7 +54,8 @@ export default function AddItem({
   }
 
   let uid = data.uid;
-  console.log(data);
+
+
   const addItemReq = async () => {
     setLoading(true);
     let newData;
@@ -88,7 +94,7 @@ export default function AddItem({
     console.log(data);
     let newDa = data;
     newDa.items ? newDa.items.push(newData) : (newDa.items = [newData]);
-    console.log(newDa);
+    console.log("NewDa",);
     setData(newDa);
     setChange(!change);
     Navigate("/items");

@@ -82,6 +82,12 @@ export default function Items({ data, setData, change, setChange }) {
     setData(updatedData);
     setChange(!change);
   };
+  const handleEdit = (item) => {
+    console.log("Item when edit is clicked",item);
+    localStorage.setItem("item",JSON.stringify(item));
+    console.log(localStorage.getItem("item"));
+    Navigate("/edit-items");
+  };
 
 
   if (loading) return <Loader />;
@@ -164,7 +170,7 @@ export default function Items({ data, setData, change, setChange }) {
                     <div className="">
                       <p>{item.stock ? item.stock : item.openingQty || 0}</p>
                       <Dropdown menuItems={[
-                                { label: "View/Edit", action: () =>Navigate("/edit-items") },
+                                { label: "View/Edit", action: () =>handleEdit(item) },
                                 { label: "Delete", action: () => handleDelete(item) },
                               ]} >
                         <svg
