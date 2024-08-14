@@ -183,7 +183,7 @@ export default function EditItem({
       <div className="container">
         <div className="top">
           <div className="l">
-            <h1>Add Item</h1>
+            <h1>Edit Item</h1>
             <p>Product</p>
             <div
               className={toggle ? "toggle" : "toggle opp"}
