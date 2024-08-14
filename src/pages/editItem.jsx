@@ -165,7 +165,7 @@ export default function EditItem({
   let uid = data.uid;
 
 
-  const addItemReq = async () => {
+  const editItemReq = async () => {
     setLoading(true);
     let newData;
     if (toggle) {
@@ -200,13 +200,22 @@ export default function EditItem({
         itemType: "service",
       };
     }
-    console.log(data);
-    let newDa = data;
-    newDa.items ? newDa.items.push(newData) : (newDa.items = [newData]);
-    console.log("NewDa",);
-    setData(newDa);
-    setChange(!change);
-    Navigate("/items");
+      const itemIndex = data.items.findIndex((i) => i.Code === itemCode);
+
+  if (itemIndex !== -1) {
+    // Update the existing item
+    data.items[itemIndex] = newData;
+  } else {
+    // If the item does not exist, add it (this should not happen if itemCode is correct)
+    data.items.push(newData);
+  }
+
+  console.log("Updated Data:", data);
+
+  // Save the updated data
+  setData(data);
+  setChange(!change);
+  Navigate("/items");
   };
 
   // barcode locha
@@ -507,8 +516,7 @@ export default function EditItem({
           )}
         </div>
         <div className="c3">
-          <button onClick={() => addItemReq()}>Save & New</button>
-          <button onClick={() => addItemReq()}>Save</button>
+          <button onClick={() => editItemReq()}>Save</button>
         </div>
       </div>
     </div>
