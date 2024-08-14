@@ -1,93 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import Loader from "./Loader";
-
-// export default function EditItem({
-//   data,
-//   item,
-//   setData,
-//   t = true,
-//   change,
-//   setChange,
-// }) {
-//   const Navigate = useNavigate();
-//   var [toggle, setToggle] = useState(t);
-//   var [page, setPage] = useState("pricing");
-//   var [itemName, setitemName] = useState();
-//   var [itemHSN, setitemHSN] = useState();
-//   var [itemCategory, setitemCategory] = useState();
-//   var [itemCode, setitemCode] = useState();
-//   var [sellPrice, setSellPrice] = useState();
-//   var [discount, setDescount] = useState();
-//   var [purchaseprice, setPurchasePrice] = useState();
-//   var [tax, setTax] = useState();
-//   var [openingQuantity, setOpeningQuantity] = useState();
-//   var [atPrice, setAtPrice] = useState();
-//   var [asDate, setAsDate] = useState();
-//   var [minToMaintain, setMinToMaintain] = useState();
-//   var [location, setLocation] = useState();
-//   var [primaryUnit, setprimaryUnit] = useState();
-//   var [SecondaryUnit, setSecondaryUnit] = useState();
-
-//   var [loading, setLoading] = useState(false);
-//   // var [toggle, set] = useState();
-//   useEffect(() => {
-//     if (sellPrice < discount) {
-//         console.log("purchase price",purchaseprice);
-//         console.log("saleprice: ",sellPrice);
-//       alert("discount can't be more than sales price");
-//     } else if (purchaseprice >= sellPrice - discount) {
-//         console.log("purchase price",purchaseprice);
-//         console.log("saleprice: ",sellPrice);
-//       alert("purchase price more than sale price, please fix");
-//     }
-//   }, [purchaseprice, sellPrice]);
-
-
-// export default function EditItem({
-//   data,
-//   item,          // Receiving the item to be edited
-//   setData,
-//   t = true,
-//   change,
-//   setChange,
-// }) {
-//   const Navigate = useNavigate();
-//   var [toggle, setToggle] = useState(t);
-//   var [page, setPage] = useState("pricing");
-  
-//   // Initialize state variables with item data if it exists
-//   var [itemName, setitemName] = useState(item?.Name || "");
-//   var [itemHSN, setitemHSN] = useState(item?.HSN || "");
-//   var [itemCategory, setitemCategory] = useState(item?.Category || "");
-//   var [itemCode, setitemCode] = useState(item?.Code || "");
-//   var [sellPrice, setSellPrice] = useState(item?.salesPrice || "");
-//   var [discount, setDescount] = useState(item?.discount || "");
-//   var [purchaseprice, setPurchasePrice] = useState(item?.purchasePrice || "");
-//   var [tax, setTax] = useState(item?.Tax || "");
-//   var [openingQuantity, setOpeningQuantity] = useState(item?.openingQuantity || "");
-//   var [atPrice, setAtPrice] = useState(item?.atPrice || "");
-//   var [asDate, setAsDate] = useState(item?.asDate || "");
-//   var [minToMaintain, setMinToMaintain] = useState(item?.minToMaintain || "");
-//   var [location, setLocation] = useState(item?.location || "");
-//   var [primaryUnit, setprimaryUnit] = useState(item?.primaryUnit || "");
-//   var [SecondaryUnit, setSecondaryUnit] = useState(item?.SecondaryUnit || "");
-  
-//   var [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     if (sellPrice < discount) {
-//       console.log("purchase price", purchaseprice);
-//       console.log("saleprice: ", sellPrice);
-//       alert("discount can't be more than sales price");
-//     } else if (purchaseprice >= sellPrice - discount) {
-//       console.log("purchase price", purchaseprice);
-//       console.log("saleprice: ", sellPrice);
-//       alert("purchase price more than sale price, please fix");
-//     }
-//   }, [purchaseprice, sellPrice]);
 
 export default function EditItem({
   data,
@@ -119,6 +34,7 @@ export default function EditItem({
   var [SecondaryUnit, setSecondaryUnit] = useState("");
 
   var [loading, setLoading] = useState(false);
+  const [isInitialRender, setIsInitialRender] = useState(true);
 
   // Load item data from localStorage when the component mounts
   useEffect(() => {
@@ -142,17 +58,24 @@ export default function EditItem({
     }
   }, []);
 
+
   useEffect(() => {
-    if (sellPrice < discount) {
-      console.log("purchase price", purchaseprice);
-      console.log("saleprice: ", sellPrice);
-      alert("discount can't be more than sales price");
-    } else if (purchaseprice >= sellPrice - discount) {
-      console.log("purchase price", purchaseprice);
-      console.log("saleprice: ", sellPrice);
-      alert("purchase price more than sale price, please fix");
-    }
-  }, [purchaseprice, sellPrice]);
+    if(!isInitialRender){
+      if (sellPrice < discount) {
+        console.log("purchase price", purchaseprice);
+        console.log("saleprice: ", sellPrice);
+        alert("discount can't be more than sales price");
+      } else if (purchaseprice >= sellPrice - discount) {
+        console.log("purchase price", purchaseprice);
+        console.log("saleprice: ", sellPrice);
+        alert("purchase price more than sale price, please fix");
+      }}
+  }, [purchaseprice, sellPrice,isInitialRender]);
+
+  useEffect(() => {
+    // Set the initial render flag to false after the first render
+    setIsInitialRender(false);
+  }, []);
 
   function generate13DigitNumberString() {
     let numberString = "";
