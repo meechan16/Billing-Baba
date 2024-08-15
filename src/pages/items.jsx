@@ -72,6 +72,23 @@ export default function Items({ data, setData, change, setChange }) {
     setChange(!change);
     setCategory(false);
   };
+  const handleDelete = (item) => {
+    console.log("Happening");
+    const updatedData = {
+      ...data,
+      items: data.items.filter((i) => i !== item),
+    };
+
+    setData(updatedData);
+    setChange(!change);
+  };
+  const handleEdit = (item) => {
+    console.log("Item when edit is clicked",item);
+    localStorage.setItem("item",JSON.stringify(item));
+    console.log(localStorage.getItem("item"));
+    Navigate("/edit-items");
+  };
+
 
   if (loading) return <Loader />;
 
@@ -112,15 +129,22 @@ export default function Items({ data, setData, change, setChange }) {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
-                <Dropdown
+                {/* <Dropdown
                   menuItems={[
-                    "Bulk inactive",
-                    "Bulk Active",
-                    "Bulk Assign Code",
-                    "Assign Units",
-                    "Bulk Update Items",
+                    "Bulk inactive"
+                    "Bulk Active"
+                    "Bulk Assign Code"
+                    "Assign Units"
+                    "Bulk Update Items"
                   ]}
-                >
+                > */}
+                  <Dropdown menuItems={[
+                                { label: "Bulk inactive"},
+                                { label: "Bulk Active"},
+                                { label: "Bulk Assign Code"},
+                                { label: "Assign Units"},
+                                { label: "Bulk Update Items"}
+                              ]} isLabelOnly={true}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                     <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                   </svg>
@@ -145,7 +169,10 @@ export default function Items({ data, setData, change, setChange }) {
                     <h1>{item.Name}</h1>
                     <div className="">
                       <p>{item.stock ? item.stock : item.openingQty || 0}</p>
-                      <Dropdown menuItems={["View/Edit", "Delete"]}>
+                      <Dropdown menuItems={[
+                                { label: "View/Edit", action: () =>handleEdit(item) },
+                                { label: "Delete", action: () => handleDelete(item) },
+                              ]} >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 128 512"
@@ -164,11 +191,9 @@ export default function Items({ data, setData, change, setChange }) {
                 <h1>
                   {selecteditems ? selecteditems.Name : "No Item Selected"}
                 </h1>
-                {selecteditems && (
-                  <button onClick={() => setStockPage(!StockPage)}>
+                <button onClick={() => setStockPage(!StockPage)}>
                   + Adujust Items
                 </button>
-                )}
                 {StockPage && <StockAdjust setClose={setStockPage} />}
               </div>
 
@@ -284,7 +309,7 @@ export default function Items({ data, setData, change, setChange }) {
                     >
                       <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                     </svg>
-                    <Dropdown
+                    {/* <Dropdown
                       menuItems={[
                         "Bulk inactive",
                         "Bulk Active",
@@ -292,7 +317,14 @@ export default function Items({ data, setData, change, setChange }) {
                         "Assign Units",
                         "Bulk Update Items",
                       ]}
-                    >
+                    > */}
+                                        <Dropdown menuItems={[
+                                { label: "Bulk inactive"},
+                                { label: "Bulk Active"},
+                                { label: "Bulk Assign Code"},
+                                { label: "Assign Units"},
+                                { label: "Bulk Update Items"}
+                              ]} isLabelOnly={true}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -318,7 +350,11 @@ export default function Items({ data, setData, change, setChange }) {
                       >
                         <h1>{item.Name}</h1>
                         <div className="">
-                          <Dropdown menuItems={["View/Edit", "Delete"]}>
+                          {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
+                                              <Dropdown menuItems={[
+                                { label: "View/Edit"},
+                                { label: "Delete"},
+                              ]} isLabelOnly={true}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 128 512"
@@ -340,7 +376,7 @@ export default function Items({ data, setData, change, setChange }) {
                     <button onClick={() => setStockPage(!StockPage)}>
                       + Adujust Items
                     </button>
-                    {StockPage && <StockAdjust  setClose={setStockPage} />}
+                    {StockPage && <StockAdjust setClose={setStockPage} />}
                   </div>
 
                   {selecteditems && (
@@ -482,7 +518,11 @@ export default function Items({ data, setData, change, setChange }) {
                   <h1>{item.name}</h1>
                   <div className="">
                     {/* <p>{item.name || "-"}</p> */}
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
+                    <Dropdown menuItems={[
+                                { label: "View/Edit"},
+                                { label: "Delete"},
+                              ]} isLabelOnly={true}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -664,7 +704,10 @@ export default function Items({ data, setData, change, setChange }) {
                   <h1>{item.name}</h1>
                   <div className="">
                     <p>{item.shortHand || "-"}</p>
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
+                    <Dropdown menuItems={[
+                                { label: "View/Edit"},
+                                { label: "Delete"},
+                              ]} isLabelOnly={true}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"

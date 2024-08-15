@@ -65,17 +65,17 @@ export default function PurchaseBill({ data, setData }) {
             <p>Balance Due</p>
             <p className="side">-</p>
           </div>
-          {data?.purchase?.map((sale, index) => (
+          {data?.sales?.map((sale, index) => (
             <div className="cl" key={index}>
               <p className="">{sale.invoice_date}</p>
               <p className="grey">{sale.invoice_number}</p>
               <p className="grey">{sale.name}</p>
-              <p className="grey">Purchase</p>
-              <p className="grey">{sale.payment_type}</p>
+              <p className="grey">{sale.type}</p>
+              <p className="grey">{sale.payType}</p>
               <p className="grey">{sale.total}</p>
-              <p className="grey">{sale.balance? sale.balance:sale.total}</p>
+              <p className="grey">{sale.balance}</p>
               <p className="side">
-                <Dropdown
+                {/* <Dropdown
                   menuItems={[
                     "print",
                     "forward",
@@ -87,7 +87,18 @@ export default function PurchaseBill({ data, setData }) {
                     "Duplicate",
                     "Print",
                   ]}
-                >
+                > */}
+                <Dropdown menuItems={[
+                                { label: "print"},
+                                { label: "forward"},
+                                { label: "generate Invoice"},
+                                { label: "recieve payment"},
+                                { label: "View/Edit"},
+                                { label: "cancel"},
+                                { label: "Delete"},
+                                { label: "Duplicate"},
+                                { label: "Print"}
+                              ]} isLabelOnly={true}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                     <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                   </svg>

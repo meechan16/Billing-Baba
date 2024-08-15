@@ -214,11 +214,7 @@ export default function Dashboard({ data, setData }) {
                   </svg>
                   <div className="">
                     <h1>To pay</h1>
-                    <h2>
-                    {data?.purchase?.filter((obj) => obj.payment_type === "credit").reduce((acc, obj) => acc + obj.total, 0)
-                        ? data.purchase.filter((obj) => obj.payment_type === "credit").reduce((acc, obj) => acc + obj.total, 0)
-                        : "0"}
-                    </h2>
+                    <h2>₹ 20,738</h2>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">

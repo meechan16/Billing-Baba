@@ -105,7 +105,7 @@ export default function SaleInvoice({ data, setData }) {
               <p className="grey">{sale.total}</p>
               <p className="">{sale.total - sale.paid}</p>
               <p className="side">
-                <Dropdown
+                {/* <Dropdown
                   menuItems={[
                     "print",
                     "forward",
@@ -117,7 +117,18 @@ export default function SaleInvoice({ data, setData }) {
                     "Duplicate",
                     "Print",
                   ]}
-                >
+                > */}
+                                  <Dropdown menuItems={[
+                                { label: "print"},
+                                { label: "forward"},
+                                { label: "generate Invoice"},
+                                { label: "recieve payment"},
+                                { label: "View/Edit"},
+                                { label: "cancel"},
+                                { label: "Delete"},
+                                { label: "Duplicate"},
+                                { label: "Print"}
+                              ]} isLabelOnly={true}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                     <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                   </svg>

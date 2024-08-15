@@ -12,6 +12,7 @@ import Profile from "./pages/profilePage";
 import AddSales from "./pages/sales/addsales";
 import AddPurchase from "./pages/purchase/addPurchase";
 import AddItem from "./pages/addItem";
+import EditItem from "./pages/editItem";
 import AddParties from "./pages/addParties";
 import SaleInvoice from "./pages/sales/SaleInvoice";
 import EstimatedQuortation from "./pages/sales/estimatedQuortation";
@@ -60,49 +61,28 @@ function App() {
       setMobile(false);
     }
   }, []);
-
+  const storedItem = localStorage.getItem("item");
+  console.log("Retrieved from localStorage:", storedItem);
+  const item2 = storedItem ? JSON.parse(storedItem) : null;
+  console.log("Parsed item:", item2);
   const [data, setData] = useState(localStorage.getItem("data"));
+  const [item, setItem] = useState(item2);
   const [change, setChange] = useState(false);
   const [loading, setloading] = useState(true);
   const [loading2, setloading2] = useState(false);
   const [Error, setError] = useState(true);
 
   useEffect(() => {
+    // console.log(data);
+    // console.log("data before fetch");
     fetchData();
   }, []);
-
-  const fetchData = () => {
-    fetch(dev_url + "/get_user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("fetched");
-        // console.log("Data fetch:", data);
-        setData(data.data || []); // Ensure data is always an array
-        setloading(false);
-      })
-      .catch((error) => {
-        setloading(false);
-        setError(true);
-        console.error("Error:", error);
-        setData({ serverError: true });
-      }
-    );
-  };
 
   const uid = localStorage.getItem("uid");
 
   const updateData = () => {
     setloading2(true);
     localStorage.setItem("data", data);
-    console.log("Edit triggered");
-    console.log(data);
-    console.log(JSON.stringify(data));
     try {
       let url = dev_url + "editData";
       fetch(url, {
@@ -129,12 +109,33 @@ function App() {
       alert("unable to save to remote server");
     }
   };
-
   useEffect(() => {
-    console.log("updateD");
-    console.log(data);
     updateData();
+    console.log(data);
   }, [data, change]);
+
+  const fetchData = () => {
+    fetch(dev_url + "/get_user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: uid, // Modify this if necessary
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("fetched");
+        // console.log("Data fetch:", data);
+        setData(data.data || []); // Ensure data is always an array
+        setloading(false);
+      })
+      .catch((error) => {
+        setloading(false);
+        setError(true);
+        console.error("Error:", error);
+        setData({ serverError: true });
+      });
+  };
 
   if (loading || !data) {
     return <Loader />;
@@ -323,6 +324,21 @@ function App() {
               <Home part="items" data={data} setData={setData}>
                 <AddItem
                   data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
+              </Home>
+            }
+          />
+          <Route
+            path="/edit-items"
+            exact
+            element={
+              <Home part="items" data={data} setData={setData}>
+                <EditItem
+                data={data}
+                  item={item}
                   setData={setData}
                   change={change}
                   setChange={setChange}

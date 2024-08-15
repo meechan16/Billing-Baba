@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import Loader from "./Loader";
 
-export default function AddItem({
+export default function EditItem({
   data,
+  item,
   setData,
   t = true,
   change,
@@ -14,31 +15,67 @@ export default function AddItem({
   const Navigate = useNavigate();
   var [toggle, setToggle] = useState(t);
   var [page, setPage] = useState("pricing");
-  var [itemName, setitemName] = useState();
-  var [itemHSN, setitemHSN] = useState();
-  var [itemCategory, setitemCategory] = useState();
-  var [itemCode, setitemCode] = useState();
-  var [sellPrice, setSellPrice] = useState();
-  var [discount, setDescount] = useState();
-  var [purchaseprice, setPurchasePrice] = useState();
-  var [tax, setTax] = useState();
-  var [openingQuantity, setOpeningQuantity] = useState();
-  var [atPrice, setAtPrice] = useState();
-  var [asDate, setAsDate] = useState();
-  var [minToMaintain, setMinToMaintain] = useState();
-  var [location, setLocation] = useState();
-  var [primaryUnit, setprimaryUnit] = useState();
-  var [SecondaryUnit, setSecondaryUnit] = useState();
+
+  // State variables
+  var [itemName, setitemName] = useState("");
+  var [itemHSN, setitemHSN] = useState("");
+  var [itemCategory, setitemCategory] = useState("");
+  var [itemCode, setitemCode] = useState("");
+  var [sellPrice, setSellPrice] = useState("");
+  var [discount, setDescount] = useState("");
+  var [purchaseprice, setPurchasePrice] = useState("");
+  var [tax, setTax] = useState("");
+  var [openingQuantity, setOpeningQuantity] = useState("");
+  var [atPrice, setAtPrice] = useState("");
+  var [asDate, setAsDate] = useState("");
+  var [minToMaintain, setMinToMaintain] = useState("");
+  var [location, setLocation] = useState("");
+  var [primaryUnit, setprimaryUnit] = useState("");
+  var [SecondaryUnit, setSecondaryUnit] = useState("");
 
   var [loading, setLoading] = useState(false);
-  // var [toggle, set] = useState();
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
+  // Load item data from localStorage when the component mounts
   useEffect(() => {
-    if (sellPrice < discount) {
-      alert("discount can't be more than sales price");
-    } else if (purchaseprice >= sellPrice - discount) {
-      alert("purchase price more than sale price, please fix");
+    const storedItem = JSON.parse(localStorage.getItem("item"));
+    if (storedItem) {
+      setitemName(storedItem.Name || "");
+      setitemHSN(storedItem.HSN || "");
+      setitemCategory(storedItem.Category || "");
+      setitemCode(storedItem.Code || "");
+      setSellPrice(storedItem.salesPrice || "");
+      setDescount(storedItem.discount || "");
+      setPurchasePrice(storedItem.purchasePrice || "");
+      setTax(storedItem.Tax || "");
+      setOpeningQuantity(storedItem.openingQuantity || "");
+      setAtPrice(storedItem.atPrice || "");
+      setAsDate(storedItem.asDate || "");
+      setMinToMaintain(storedItem.minToMaintain || "");
+      setLocation(storedItem.location || "");
+      setprimaryUnit(storedItem.primaryUnit || "");
+      setSecondaryUnit(storedItem.SecondaryUnit || "");
     }
-  }, [purchaseprice, sellPrice]);
+  }, []);
+
+
+  useEffect(() => {
+    if(!isInitialRender){
+      if (sellPrice < discount) {
+        console.log("purchase price", purchaseprice);
+        console.log("saleprice: ", sellPrice);
+        alert("discount can't be more than sales price");
+      } else if (purchaseprice >= sellPrice - discount) {
+        console.log("purchase price", purchaseprice);
+        console.log("saleprice: ", sellPrice);
+        alert("purchase price more than sale price, please fix");
+      }}
+  }, [purchaseprice, sellPrice,isInitialRender]);
+
+  useEffect(() => {
+    // Set the initial render flag to false after the first render
+    setIsInitialRender(false);
+  }, []);
 
   function generate13DigitNumberString() {
     let numberString = "";
@@ -49,8 +86,9 @@ export default function AddItem({
   }
 
   let uid = data.uid;
-  console.log(data);
-  const addItemReq = async () => {
+
+
+  const editItemReq = async () => {
     setLoading(true);
     let newData;
     if (toggle) {
@@ -85,13 +123,22 @@ export default function AddItem({
         itemType: "service",
       };
     }
-    console.log(data);
-    let newDa = data;
-    newDa.items ? newDa.items.push(newData) : (newDa.items = [newData]);
-    console.log(newDa);
-    setData(newDa);
-    setChange(!change);
-    Navigate("/items");
+      const itemIndex = data.items.findIndex((i) => i.Code === itemCode);
+
+  if (itemIndex !== -1) {
+    // Update the existing item
+    data.items[itemIndex] = newData;
+  } else {
+    // If the item does not exist, add it (this should not happen if itemCode is correct)
+    data.items.push(newData);
+  }
+
+  console.log("Updated Data:", data);
+
+  // Save the updated data
+  setData(data);
+  setChange(!change);
+  Navigate("/items");
   };
 
   // barcode locha
@@ -136,7 +183,7 @@ export default function AddItem({
       <div className="container">
         <div className="top">
           <div className="l">
-            <h1>Add Item</h1>
+            <h1>Edit Item</h1>
             <p>Product</p>
             <div
               className={toggle ? "toggle" : "toggle opp"}
@@ -392,8 +439,7 @@ export default function AddItem({
           )}
         </div>
         <div className="c3">
-          <button onClick={() => addItemReq()}>Save & New</button>
-          <button onClick={() => addItemReq()}>Save</button>
+          <button onClick={() => editItemReq()}>Save</button>
         </div>
       </div>
     </div>

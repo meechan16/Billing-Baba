@@ -1618,60 +1618,7 @@ input[type="number"] {
             height: 100vh;
             width: 100vw;
             background: rgba(0, 0, 0, 0.445);
-            .top {
-              padding: 20px;
-              border-bottom: 1px solid rgb(195, 195, 195);
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              &.t {
-                margin: 0 10px;
-                justify-content: start;
-                gap: 30px;
-              }
-              div {
-                display: flex;
-                align-items: center;
-
-                gap: 10px;
-                h1 {
-                  font-size: 1.2rem;
-                  font-weight: 600;
-                  margin-right: 30px;
-                }
-              }
-              .l {
-                .toggle {
-                  width: 50px;
-                  height: 25px;
-                  background-color: #4eaaff;
-                  border-radius: 50px;
-                  display: flex;
-                  justify-content: start;
-                  align-items: center;
-                  transition: 100ms ease;
-                  &.opp {
-                    justify-content: end;
-                    transition: 100ms ease;
-                  }
-                  .button {
-                    width: 20px;
-                    margin: 0px 4px;
-                    height: 20px;
-                    background-color: #1653f9;
-                    border-radius: 50px;
-                  }
-                }
-              }
-              .r {
-                svg {
-                  fill: rgb(129, 129, 129);
-                  height: 1.4rem;
-                  margin-left: 20px;
-                }
-              }
-            }
-            .cont {
+            .container {
               background-color: white;
               border-radius: 0px;
               box-shadow: 0 0 10px rgba(111, 111, 111, 0.396);
@@ -1680,6 +1627,59 @@ input[type="number"] {
               flex-direction: column;
               justify-content: space-between;
               height: fit-content;
+              .top {
+                padding: 20px;
+                border-bottom: 1px solid rgb(195, 195, 195);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                &.t {
+                  margin: 0 10px;
+                  justify-content: start;
+                  gap: 30px;
+                }
+                div {
+                  display: flex;
+                  align-items: center;
+
+                  gap: 10px;
+                  h1 {
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    margin-right: 30px;
+                  }
+                }
+                .l {
+                  .toggle {
+                    width: 50px;
+                    height: 25px;
+                    background-color: #4eaaff;
+                    border-radius: 50px;
+                    display: flex;
+                    justify-content: start;
+                    align-items: center;
+                    transition: 100ms ease;
+                    &.opp {
+                      justify-content: end;
+                      transition: 100ms ease;
+                    }
+                    .button {
+                      width: 20px;
+                      margin: 0px 4px;
+                      height: 20px;
+                      background-color: #1653f9;
+                      border-radius: 50px;
+                    }
+                  }
+                }
+                .r {
+                  svg {
+                    fill: rgb(129, 129, 129);
+                    height: 1.4rem;
+                    margin-left: 20px;
+                  }
+                }
+              }
               .c1 {
                 padding: 20px;
                 & > div {
