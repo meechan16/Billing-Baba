@@ -14,7 +14,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       unit: "",
       price_per_unit: "",
       discount: "",
-      // tax: "",
+      profit: 0,
       amount: "",
     },
   ]);
@@ -30,7 +30,7 @@ export default function AddSales({ data, setData, change, setChange }) {
         unit: "",
         price_per_unit: "",
         discount: "",
-        // tax: "",
+        profit: 0,
         amount: "",
       },
     ]);
@@ -38,6 +38,7 @@ export default function AddSales({ data, setData, change, setChange }) {
   };
 
   const [totalAmount, setTotalAmount] = useState(0);
+  const [profit, setProfit] = useState(0);
   const [totalTax, setTotalTax] = useState(0);
 
   const handleInputChange = async (index, column, value) => {
@@ -63,13 +64,19 @@ export default function AddSales({ data, setData, change, setChange }) {
         // const amount = qty * (pricePerUnit - discount + tax);
         const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
+        newRows[index]["profit"] = newRows[index]["profit"] || 0;
 
         // Update total amount
         const newTotalAmount = newRows.reduce(
           (total, row) => total + (row.amount || 0),
           0
         );
+        const profit = newRows.reduce(
+          (total, row) => total + (row.profit || 0),
+          0
+        );
         setTotalAmount(newTotalAmount);
+        setProfit(profit);
 
         // Update total tax
         // const newTotalTax = newRows.reduce(
@@ -136,6 +143,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
+      profit: profit ? profit : "",
       total_tax: totalTax,
       description: Description ? Description : "",
       pending: pending ? pending : "",
@@ -174,6 +182,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
+      profit: profit ? profit : "",
       total_tax: totalTax,
       description: Description ? Description : "",
       payment_status: paymentStatus ? paymentStatus : "",

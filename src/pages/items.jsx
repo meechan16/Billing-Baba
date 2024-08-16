@@ -73,6 +73,60 @@ export default function Items({ data, setData, change, setChange }) {
     setCategory(false);
   };
 
+  let [sortedArray, setSortedArray] = useState([]);
+  let [sortbase, setSortBase] = useState({ name: "", stage: 0 });
+
+  let sortFunction = (array, key, type = "number") => {
+    if (sortbase.name === key) {
+      if (sortbase.stage >= 1) {
+        setSortedArray(array);
+        setSortBase({ stage: 0, name: "" });
+        return;
+      }
+      if (type === "string") {
+        setSortedArray(
+          array.sort((a, b) => a[key]?.localeCompare(b[key])).reverse()
+        );
+      } else {
+        setSortedArray(array.sort((a, b) => a[key] - b[key]).reverse());
+      }
+      setSortBase({ ...sortbase, stage: 1 });
+      return;
+    } else {
+      if (type === "string") {
+        setSortedArray(array.sort((a, b) => a[key]?.localeCompare(b[key])));
+      } else {
+        setSortedArray(array.sort((a, b) => a[key] - b[key]));
+      }
+      setSortBase({ stage: 0, name: key });
+      return;
+    }
+  };
+
+  let [DataArr, setDataArr] = useState([]);
+
+  useState(() => {
+    if (selecteditems) {
+      setDataArr(
+        [...data?.sales, ...data?.purchase].filter((item) => {
+          return item.items.some((term) => term.item === selecteditems.Name);
+        })
+      );
+    }
+  }, [selecteditems]);
+
+  const callbackFn = (fn, item, index) => {
+    if (fn === "View/Edit") {
+      // Navigate("/edit-item", { state: { data: item, index: index } });
+      console.log("edit hit");
+    } else if (fn === "Delete") {
+      let newDa = data;
+      newDa.items.splice(index, 1);
+      setData(newDa);
+      setChange(!change);
+    }
+  };
+
   if (loading) return <Loader />;
 
   return (
@@ -145,7 +199,12 @@ export default function Items({ data, setData, change, setChange }) {
                     <h1>{item.Name}</h1>
                     <div className="">
                       <p>{item.stock ? item.stock : item.openingQty || 0}</p>
-                      <Dropdown menuItems={["View/Edit", "Delete"]}>
+                      <Dropdown
+                        menuItems={["View/Edit", "Delete"]}
+                        callback={(e) => callbackFn(e)}
+                        pIndex={item}
+                        pItem={index}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 128 512"
@@ -228,30 +287,58 @@ export default function Items({ data, setData, change, setChange }) {
                 <div className="cl top">
                   <p>Type</p>
                   <p>Invoice/Ref</p>
-                  <p>Name</p>
+                  <p
+                    className="hover:underline"
+                    onClick={() => sortFunction(data.sales, "name", "string")}
+                  >
+                    Name
+                  </p>
                   <p>Date</p>
                   <p>Quantity</p>
-                  <p>Price</p>
+                  <p
+                    className="hover:underline"
+                    onClick={() => sortFunction(data.sales, "total")}
+                  >
+                    Price
+                  </p>
                   <p>Status</p>
                 </div>
 
-                {data?.sales
-                  ?.filter((item) => {
-                    return item.items.some(
-                      (term) => term.item === selecteditems.Name
-                    );
-                  })
-                  .map((sale, index) => (
-                    <div className="cl" key={index}>
-                      <p className="grey">{sale.payment_type}</p>
-                      <p className="grey">{sale.invoice_number}</p>
-                      <p className="grey">{sale.name}</p>
-                      <p className="">{sale.invoice_date}</p>
-                      <p className="grey">{sale.items?.length}</p>
-                      <p className="grey">{sale.total}</p>
-                      <p className="">{sale.total - sale.paid}</p>
-                    </div>
-                  ))}
+                {sortedArray.length > 0
+                  ? sortedArray
+                      .filter((item) => {
+                        return item.items.some(
+                          (term) => term.item === selecteditems.Name
+                        );
+                      })
+                      .map((sale, index) => (
+                        <div className="cl" key={index}>
+                          <p className="grey">{sale.type}</p>
+                          {/* <p className="grey">{sale.payment_type}</p> */}
+                          <p className="grey">{sale.invoice_number}</p>
+                          <p className="grey">{sale.name}</p>
+                          <p className="">{sale.invoice_date}</p>
+                          <p className="grey">{sale.items?.length}</p>
+                          <p className="grey">{sale.total}</p>
+                          <p className="">
+                            {sale.payment_type === "credit" ? "Unpaid" : "Paid"}
+                          </p>
+                        </div>
+                      ))
+                  : DataArr.map((sale, index) => (
+                      <div className="cl" key={index}>
+                        <p className="grey">{sale.type}</p>
+                        {/* <p className="grey">{sale.payment_type}</p> */}
+                        <p className="grey">{sale.invoice_number}</p>
+                        <p className="grey">{sale.name}</p>
+                        <p className="">{sale.invoice_date}</p>
+                        <p className="grey">{sale.items?.length}</p>
+                        <p className="grey">{sale.total}</p>
+                        <p className="">
+                          {sale.payment_type === "credit" ? "Unpaid" : "Paid"}
+                        </p>
+                      </div>
+                    ))}
                 {/* <div className="cl">
                 <p>Tech</p>
                 <p className="grey">231</p>
@@ -377,7 +464,7 @@ export default function Items({ data, setData, change, setChange }) {
                       <p>Date</p>
                       <p>Quantity</p>
                       <p>Price</p>
-                      <p>Status</p>
+                      <p>profit</p>
                     </div>
 
                     {data?.sales
@@ -394,7 +481,7 @@ export default function Items({ data, setData, change, setChange }) {
                           <p className="">{sale.invoice_date}</p>
                           <p className="grey">{sale.items?.length}</p>
                           <p className="grey">{sale.total}</p>
-                          <p className="">{sale.total - sale.paid}</p>
+                          <p className="">{sale.profit || 0}</p>
                         </div>
                       ))}
                     {/* <div className="cl">

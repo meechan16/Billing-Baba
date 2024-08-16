@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 
-function Dropdown({ children, menuItems }) {
+function Dropdown({
+  children,
+  menuItems,
+  callback,
+  pItem = null,
+  pIndex = null,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -10,7 +16,9 @@ function Dropdown({ children, menuItems }) {
 
   const handleItemClick = (item) => {
     // You can perform any action with the selected item here
+    callback(item, pItem, pIndex);
     console.log(`Selected item: ${item}`);
+
     setIsOpen(false); // Close the dropdown after selecting an item
   };
 

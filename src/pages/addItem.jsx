@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
+import TextField from "@mui/material/TextField";
 import Loader from "./Loader";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function AddItem({
   data,
@@ -29,6 +32,7 @@ export default function AddItem({
   var [location, setLocation] = useState();
   var [primaryUnit, setprimaryUnit] = useState();
   var [SecondaryUnit, setSecondaryUnit] = useState();
+  var [ImageURL, setImageUrl] = useState();
 
   var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
@@ -48,7 +52,35 @@ export default function AddItem({
     return numberString;
   }
 
-  let uid = data.uid;
+  var generateurl = async (ItemNumber) => {
+    setLoading(true);
+    try {
+      await fetch(dev_url + "generate-barcode", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: data.uid,
+        },
+        body: JSON.stringify({ itemNumber: ItemNumber }),
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          // console.log("updated");
+          setLoading(false);
+          // console.log(res);
+          setImageUrl({ url: res.url, code: ItemNumber });
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.error("Error:", error);
+        });
+    } catch (error) {
+      setLoading(false);
+      alert("unable to generate PDF");
+      console.error("Error generating PDF:", error);
+    }
+  };
+
   const addItemReq = async () => {
     setLoading(true);
     let newData;
@@ -58,16 +90,20 @@ export default function AddItem({
         HSN: itemHSN ? itemHSN : "",
         Category: itemCategory ? itemCategory : "",
         Code: itemCode ? itemCode : "",
-        salesPrice: sellPrice ? sellPrice : "",
+        salesPrice: sellPrice.withTax
+          ? sellPrice.value * (1 - tax)
+          : sellPrice.value,
         discount: discount ? discount : "",
-        purchasePrice: purchaseprice ? purchaseprice : "",
+        purchasePrice: purchaseprice.withTax
+          ? purchaseprice.value * (1 - tax)
+          : purchaseprice.value,
         Tax: tax ? tax : "",
         openingQuantity: openingQuantity ? openingQuantity : 0,
         atPrice: atPrice ? atPrice : "",
         asDate: asDate ? asDate : "",
         minToMaintain: minToMaintain ? minToMaintain : "",
         location: location ? location : "",
-        profit: sellPrice - discount - purchaseprice,
+        profit: sellPrice - discount - purchaseprice.value - (tax ? tax : 0),
         stock: openingQuantity || 0,
         itemType: "product",
       };
@@ -217,9 +253,20 @@ export default function AddItem({
               </button>
             </div>
             {itemCode && (
-              <button className="font-semibold hover:underline">
-                Generate Barcode Image
-              </button>
+              <>
+                {ImageURL ? (
+                  <a href={ImageURL.url} target="_blank">
+                    Click to see Barcode
+                  </a>
+                ) : (
+                  <button
+                    className="font-semibold hover:underline"
+                    onClick={() => generateurl(itemCode)}
+                  >
+                    Generate Barcode Image
+                  </button>
+                )}
+              </>
             )}
             <button className="text-blue-400 font-semibold mx-2 items-center fill-blue-400 flex gap-1">
               <span className="hover:underline">Add Product Images</span>{" "}
@@ -259,10 +306,10 @@ export default function AddItem({
           {page === "pricing" ? (
             <div className="">
               <div className="rounded-lg bg-gray-200 m-3 p-3">
-                <h1 className="text-xl mt-[10px] font-semibold">Sale Price</h1>
+                <h1 className="text-xl my-[10px] font-semibold">Sale Price</h1>
                 <div className="flex gap-3">
                   <div className="flex items-center gap-0">
-                    <CustomInput
+                    {/* <CustomInput
                       inputValue={sellPrice}
                       setInputValue={setSellPrice}
                       placeholder={"Sale Price"}
@@ -278,10 +325,45 @@ export default function AddItem({
                       <option value="" className="p-2">
                         Without Taxes
                       </option>
+                    </select> */}
+                    <TextField
+                      id="outlined-search"
+                      value={sellPrice?.value}
+                      onChange={(e) =>
+                        setSellPrice({
+                          ...sellPrice,
+                          value: e.target.value,
+                        })
+                      }
+                      label="Purchase Price"
+                      sx={{
+                        background: "white",
+                        width: "100%",
+                      }}
+                      type="search"
+                      itemType="number"
+                    />
+                    <select
+                      name=""
+                      id=""
+                      className="px-2 h-fit bg-transparent m-0"
+                      onChange={(e) =>
+                        setSellPrice({
+                          ...sellPrice,
+                          withTax: e.target.value,
+                        })
+                      }
+                    >
+                      <option value={true} className="p-2">
+                        With Taxes
+                      </option>
+                      <option value={false} className="p-2">
+                        Without Taxes
+                      </option>
                     </select>
                   </div>
                   <div className="flex items-center gap-0">
-                    <CustomInput
+                    {/* <CustomInput
                       inputValue={discount}
                       setInputValue={setDescount}
                       placeholder={"Descount"}
@@ -297,38 +379,83 @@ export default function AddItem({
                       <option value="" className="p-2">
                         Without Taxes
                       </option>
-                    </select>
+                    </select> */}
+                    <TextField
+                      id="outlined-search"
+                      value={discount?.value}
+                      onChange={(e) => setDescount(e.target.value)}
+                      label="Descount"
+                      itemType="number"
+                      sx={{
+                        background: "white",
+                        width: "100%",
+                      }}
+                      type="search"
+                    />
                   </div>
                 </div>
               </div>
               <div className="rounded-lg  bg-gray-200 m-3 p-3">
-                <h1 className="text-xl mt-[10px] font-semibold">
+                <h1 className="text-xl my-[10px] font-semibold">
                   Purchase Price
                 </h1>
-                <div className="flex gap-3">
+                <div className="flex gap-3 items-center">
                   {toggle && (
-                    <div className="flex items-center gap-0">
-                      <CustomInput
+                    <div className="flex items-center  gap-0">
+                      {/* <CustomInput
                         inputValue={purchaseprice}
                         setInputValue={setPurchasePrice}
                         placeholder={"Purchase Price"}
+                      /> */}
+                      <TextField
+                        id="outlined-search"
+                        value={purchaseprice?.value}
+                        onChange={(e) =>
+                          setPurchasePrice({
+                            ...purchaseprice,
+                            value: e.target.value,
+                          })
+                        }
+                        label="Purchase Price"
+                        sx={{
+                          background: "white",
+                          width: "100%",
+                        }}
+                        type="search"
+                        itemType="number"
                       />
                       <select
                         name=""
                         id=""
                         className="px-2 h-fit bg-transparent m-0"
+                        onChange={(e) =>
+                          setPurchasePrice({
+                            ...purchaseprice,
+                            withTax: e.target.value,
+                          })
+                        }
                       >
-                        <option value="" className="p-2">
+                        <option value={true} className="p-2">
                           With Taxes
                         </option>
-                        <option value="" className="p-2">
+                        <option value={false} className="p-2">
                           Without Taxes
                         </option>
                       </select>
                     </div>
                   )}
-
-                  <div className="flex items-center gap-0">
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Taxes"
+                    value={tax}
+                    onChange={(e) => setTax(e.target.value)}
+                  >
+                    {data.tax.map((item) => (
+                      <MenuItem value={item.value}>{item.name}</MenuItem>
+                    ))}
+                  </Select>
+                  {/* <div className="flex items-center gap-0">
                     <select
                       name=""
                       className="p-3 m-2 border-gray-300 border rounded-md"
@@ -354,8 +481,8 @@ export default function AddItem({
                       <option value="" className="p-2">
                         Without Taxes
                       </option>
-                    </select> */}
-                  </div>
+                    </select>
+                  </div> */}
                 </div>
               </div>
             </div>

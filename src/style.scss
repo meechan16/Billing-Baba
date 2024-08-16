@@ -1210,14 +1210,18 @@ input[type="number"] {
       display: flex;
       justify-content: space-between;
       padding: 10px;
-      button {
+      .btn {
+        display: flex;
         background: orange;
         border: none;
         padding: 5px 15px;
         color: white;
+        svg {
+          fill: white;
+        }
         border-radius: 10px;
         transition: 100ms eas;
-        &:hover {
+        button:hover {
           background-color: rgb(255, 180, 40);
           transition: 100ms eas;
         }
