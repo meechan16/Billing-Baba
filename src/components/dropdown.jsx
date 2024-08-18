@@ -1,12 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-function Dropdown({
-  children,
-  menuItems,
-  callback,
-  pItem = null,
-  pIndex = null,
-}) {
+function Dropdown({ children, menuItems, isLabelOnly = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -15,11 +9,10 @@ function Dropdown({
   };
 
   const handleItemClick = (item) => {
-    // You can perform any action with the selected item here
-    callback(item, pItem, pIndex);
-    console.log(`Selected item: ${item}`);
-
-    setIsOpen(false); // Close the dropdown after selecting an item
+    if (!isLabelOnly && item.action) {
+      item.action();
+      setIsOpen(false); // Close the dropdown after selecting an item if action is performed
+    }
   };
 
   const handleDocumentClick = (event) => {
@@ -44,8 +37,12 @@ function Dropdown({
       {isOpen && (
         <ul className="dropdown-menu">
           {menuItems.map((item, index) => (
-            <li key={index} onClick={() => handleItemClick(item)}>
-              {item}
+            <li
+              key={index}
+              onClick={() => handleItemClick(item)}
+              className={isLabelOnly ? "label-only" : ""}
+            >
+              {item.label} {/* Display the label of the item */}
             </li>
           ))}
         </ul>
