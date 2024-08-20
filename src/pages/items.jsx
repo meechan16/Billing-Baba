@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
@@ -6,41 +6,27 @@ import StockAdjust from "../components/stock_Adjustment";
 import Loader from "./Loader";
 
 export default function Items({ data, setData, change, setChange }) {
+  const params = new URLSearchParams(window.location.search);
+  let urlPram = params.get("data");
+  useEffect(() => {
+    if (urlPram == "addUnit") {
+      setPage("unit");
+      setUnits(true);
+    }
+  }, []);
+
   var [page, setPage] = useState("product");
   var [StockPage, setStockPage] = useState(false);
+
   const Navigate = useNavigate();
+
   var [Category, setCategory] = useState();
   var [Units, setUnits] = useState();
-  // var [addToggle, setAddToggle] = useState(false);
-  // var [itemsToggle, setItemsToggle] = useState(false);
-
   const [selecteditems, setSelectedItems] = useState(null);
   const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   var [loading, setloading] = useState(false);
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = () => {
-  //   fetch(dev_url + "/get_user", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "nulll", // Modify this if necessary
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Data fetch:", data);
-  //       setData(data.data || []); // Ensure data is always an array
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
 
   var [unitName, setUnitName] = useState("");
   var [unitShorthand, setUnitShorthand] = useState("");

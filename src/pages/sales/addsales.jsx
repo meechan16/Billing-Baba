@@ -445,13 +445,6 @@ export default function AddSales({ data, setData, change, setChange }) {
             >
               <div className="w-full relative">
                 <input
-                  // value={
-                  //   rows?[rowIndex]
-                  //     ? rows[rowIndex].item
-                  //     : (Search?.rowIndex?.item
-                  //     ? Search.rowIndex.item
-                  //     : "")
-                  // }
                   className="w-full  py-3  text-center bg-gray-100 rounded-sm"
                   value={
                     rows[rowIndex].item
@@ -516,7 +509,7 @@ export default function AddSales({ data, setData, change, setChange }) {
               <input
                 type="number"
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                value={row.col2}
+                value={rows[rowIndex].qty}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "qty", e.target.value)
                 }
@@ -539,7 +532,10 @@ export default function AddSales({ data, setData, change, setChange }) {
                 />
                 {Search?.rowIndex?.unit && (
                   <ul>
-                    <li className="add" onClick={() => Navigate("/addParties")}>
+                    <li
+                      className="add"
+                      onClick={() => Navigate("/items?data=addUnit")}
+                    >
                       Add Units +
                     </li>
                     {data.units

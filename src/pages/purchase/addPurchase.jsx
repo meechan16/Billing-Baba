@@ -21,6 +21,7 @@ export default function AddPurchase({ data, setData }) {
   ]);
 
   const [indexCount, setIndexCount] = useState();
+  const [Search, setSearch] = useState();
   const addRow = () => {
     setRows([
       ...rows,
@@ -87,6 +88,10 @@ export default function AddPurchase({ data, setData }) {
   const [phone_no, setPhone_no] = useState();
   const [invoice_number, setInvoice_number] = useState();
   const [invoice_date, setInvoice_date] = useState("");
+  useEffect(() => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    setInvoice_date(currentDate);
+  }, []);
   const [state_of_supply, setState_of_supply] = useState();
   const [round_off, setRound_off] = useState();
   const [paymentType, setpaymentType] = useState();
@@ -160,14 +165,42 @@ export default function AddPurchase({ data, setData }) {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
               </svg>
-              <input
-                type="text"
-                name="name"
-                value={Name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Search by Name/Phone"
-                id=""
-              />
+              <div className="search">
+                <input
+                  type="text"
+                  name="name"
+                  value={Name ? Name : Search?.party ? Search?.party : ""}
+                  onChange={(e) => setSearch({ party: e.target.value })}
+                  placeholder="Search by Name/Phone"
+                  id=""
+                />
+                {Search?.party && (
+                  <ul>
+                    {data.parties
+                      .filter((customer) =>
+                        customer.partyName
+                          .toLowerCase()
+                          .includes(Search.party.toLowerCase())
+                      )
+                      .map((customer) => (
+                        <li
+                          key={customer.phone_no}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            setName(customer.partyName);
+                            setPhone_no(customer.phoneNo);
+                            setSearch();
+                          }}
+                        >
+                          {customer.partyName}
+                        </li>
+                      ))}
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
+              </div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               </svg>
@@ -218,6 +251,7 @@ export default function AddPurchase({ data, setData }) {
               /> */}
               <input
                 type="date"
+                value={invoice_date}
                 onChange={(e) => setInvoice_date(e.target.value)}
                 id="birthday"
                 name="birthday"
@@ -273,18 +307,75 @@ export default function AddPurchase({ data, setData }) {
               className="rounded-sm flex justify-between my-1 gap-1 items-center"
               key={rowIndex}
             >
-              <input
-                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                value={row.col1}
-                onChange={(e) =>
-                  handleInputChange(rowIndex, "item", e.target.value)
-                }
-              />
+              <div className="w-full relative">
+                <input
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                  value={
+                    rows[rowIndex].item
+                      ? rows[rowIndex].item
+                      : Search
+                      ? Search[rowIndex]?.item
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setSearch({ rowIndex: { item: e.target.value } })
+                  }
+                />
+                {/* {console.log(rows[rowIndex].item)} */}
+                {Search?.rowIndex?.item && (
+                  <ul className="absolute bg-white w-full">
+                    {data.items
+                      .filter((item) =>
+                        item.Name.toLowerCase().includes(
+                          rows[rowIndex].item.toLowerCase()
+                        )
+                      )
+                      .map((item) => (
+                        <li
+                          key={item.code}
+                          onClick={() => {
+                            handleInputChange(rowIndex, "item", item.Name);
+                            handleInputChange(rowIndex, "item_details", item);
+                            // handleInputChange(rowIndex, "tax", item.tax);
+                            handleInputChange(
+                              rowIndex,
+                              "discount",
+                              item.discount
+                            );
+                            handleInputChange(
+                              rowIndex,
+                              "price_per_unit",
+                              item.salesPrice
+                            );
+                            item.unit
+                              ? handleInputChange(rowIndex, "unit", item.unit)
+                              : handleInputChange(
+                                  rowIndex,
+                                  "unit",
+                                  "Not Available"
+                                );
+                            setSearch({});
+                          }}
+                          className="p-2 border-b border-gray-300 hover:bg-gray-200 cursor-pointer"
+                        >
+                          {item.Name}
+                        </li>
+                      ))}
+                    <li
+                      className="p-2 text-blue-500 font-semibold hover:bg-gray-200 cursor-pointer"
+                      onClick={() => Navigate("/addParties")}
+                    >
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
+              </div>
               {/* <div>
               </div> */}
               <input
-                value={row.col2}
+                type="number"
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                value={rows[rowIndex].qty}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "qty", e.target.value)
                 }
@@ -293,31 +384,90 @@ export default function AddPurchase({ data, setData }) {
               </div> */}
               {/* <div>
               </div> */}
-              <select
-                name=""
-                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                id=""
-                onChange={(e) =>
-                  handleInputChange(rowIndex, "unit", e.target.value)
-                }
-              >
-                <option value="">None</option>
-                <option value="BAG">Bag</option>
-                <option value="Gram">Gram</option>
-                <option value="UNIT">UNIT</option>
-              </select>
+              <div className="w-full">
+                <input
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                  value={
+                    rows[rowIndex].unit
+                      ? rows[rowIndex].unit
+                      : Search
+                      ? Search[rowIndex]?.unit
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setSearch({ rowIndex: { unit: e.target.value } })
+                  }
+                />
+                {Search?.rowIndex?.unit && (
+                  <ul className="absolute bg-white flex flex-col items-center justify-center shadow-md w-[200px] p-2 rounded-md">
+                    <li
+                      className="text-blue-600 font-semibold py-2"
+                      onClick={() => Navigate("/items?data=addUnit")}
+                    >
+                      Add Units +
+                    </li>
+                    {data.units
+                      .filter((unit) =>
+                        unit.name
+                          .toLowerCase()
+                          .includes(
+                            rows[rowIndex].unit
+                              ? rows[rowIndex].unit.toLowerCase()
+                              : ""
+                          )
+                      )
+                      .map((unit) => (
+                        <li
+                          key={unit.name}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            handleInputChange(rowIndex, "unit", unit.name);
+                            setSearch({});
+                          }}
+                        >
+                          {unit.name}
+                        </li>
+                      ))}
+                    <li
+                      className="extra"
+                      onClick={() => {
+                        handleInputChange(rowIndex, "unit", "-");
+                        setSearch({});
+                      }}
+                    >
+                      --- none ---
+                    </li>
+                  </ul>
+                )}
+                {/* <select
+                  name=""
+                  id=""
+                  onChange={(e) =>
+                    handleInputChange(rowIndex, "unit", e.target.value)
+                  }
+                >
+                  <option value="">None</option>
+                  <option value="BAG">Bag</option>
+                  <option value="Gram">Gram</option>
+                  <option value="UNIT">UNIT</option>
+                </select> */}
+              </div>
               {/* <div>
               </div> */}
               <input
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                value={row.col4}
+                type="number"
+                value={rows[rowIndex].price_per_unit}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "price_per_unit", e.target.value)
                 }
               />
+              {/* <div></div>
+              <div></div> */}
               <input
                 className="w-full  py-3  text-center bg-gray-100 rounded-sm"
-                value={row.col5}
+                type="number"
+                value={rows[rowIndex].discount}
                 onChange={(e) =>
                   handleInputChange(rowIndex, "discount", e.target.value)
                 }

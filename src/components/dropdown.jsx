@@ -42,7 +42,8 @@ function Dropdown({ children, menuItems, isLabelOnly = false }) {
               onClick={() => handleItemClick(item)}
               className={isLabelOnly ? "label-only" : ""}
             >
-              {item.label} {/* Display the label of the item */}
+              {item.label ? item.label : item}{" "}
+              {/* Display the label of the item */}
             </li>
           ))}
         </ul>

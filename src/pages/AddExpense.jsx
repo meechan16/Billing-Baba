@@ -70,6 +70,10 @@ export default function AddExpense({ data, setData, change, setChange }) {
   const [Name, setName] = useState(); // Initial index count
   const [invoice_number, setInvoice_number] = useState(); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
+  useEffect(() => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    setInvoice_date(currentDate);
+  }, []);
   // const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
   const [addExpenseCategory, setAddExpenseCategory] = useState(false); // Initial index count
@@ -240,6 +244,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
               <span>Date</span>
               <input
                 type="date"
+                value={invoice_date}
                 onChange={(e) => setInvoice_date(e.target.value)}
                 id="birthday"
                 name="birthday"
