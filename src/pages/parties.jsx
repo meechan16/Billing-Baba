@@ -160,10 +160,13 @@ export default function Parties({ data, setData }) {
                           .reduce((acc, obj) => acc + obj.pending, 0)}
                       </p>
                       {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
-                      <Dropdown menuItems={[
-                                { label: "View/Edit"},
-                                { label: "Delete"},
-                              ]} isLabelOnly={true}>
+                      <Dropdown
+                        menuItems={[
+                          { label: "View/Edit" },
+                          { label: "Delete" },
+                        ]}
+                        isLabelOnly={true}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 128 512"
@@ -193,10 +196,10 @@ export default function Parties({ data, setData }) {
                         .reduce((acc, obj) => acc + obj.pending, 0)}
                     </p>
                     {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
-                    <Dropdown menuItems={[
-                                { label: "View/Edit"},
-                                { label: "Delete"},
-                              ]} isLabelOnly={true}>
+                    <Dropdown
+                      menuItems={[{ label: "View/Edit" }, { label: "Delete" }]}
+                      isLabelOnly={true}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -217,10 +220,14 @@ export default function Parties({ data, setData }) {
               <div className="flex flex-col justify-between items-start">
                 <p>Phone Number: {selectedParty.partyName}</p>
                 <p>email: {selectedParty.partyName}</p>
-                <p>
-                  No Credit limit set{" "}
-                  <span className=" text-blue-500">Set Credit Limit</span>
-                </p>
+                {selectedParty.creditLimit ? (
+                  selectedParty.creditLimit
+                ) : (
+                  <p>
+                    No Credit limit set{" "}
+                    <span className=" text-blue-500">Set Credit Limit</span>
+                  </p>
+                )}
               </div>
               <div className="flex flex-col justify-start items-end">
                 <h1>share</h1>
@@ -268,7 +275,7 @@ export default function Parties({ data, setData }) {
               )
               .map((sale, index) => (
                 <div className="cl" key={index}>
-                  <p className="grey">{sale.payment_type}</p>
+                  <p className="grey">Sale</p>
                   <p className="grey">{sale.invoice_number}</p>
                   {/* <p className="grey">{sale.name}</p> */}
                   <p className="">{sale.invoice_date}</p>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
-import CustomInput from "../../components/customInput";
 
 export default function AddSales({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -153,15 +152,18 @@ export default function AddSales({ data, setData, change, setChange }) {
 
     let newDa = data;
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-    newDa.sale_pending
-      ? (newDa.sale_pending += parseFloat(newData.pending))
-      : (newDa.sale_pending = parseFloat(newData.pending));
-    newDa.sale_paid
-      ? (newDa.sale_paid += parseFloat(newData.paid))
-      : (newDa.sale_paid = parseFloat(newData.paid));
-    newDa.paymentStatus === pending
-      ? (newDa.to_collect += parseFloat(newData.pending))
-      : (newDa.to_collect = parseFloat(newData.pending));
+    if (newData.payment_type == "credit") {
+      newDa.sale_pending
+        ? (newDa.sale_pending += parseFloat(newData.total))
+        : (newDa.sale_pending = parseFloat(newData.total));
+      newDa.to_collect
+        ? (newDa.to_collect += parseFloat(newData.pending))
+        : (newDa.to_collect = parseFloat(newData.pending));
+    } else {
+      newDa.sale_paid
+        ? (newDa.sale_paid += parseFloat(newData.total))
+        : (newDa.sale_paid = parseFloat(newData.total));
+    }
     newDa.total_sales
       ? (newDa.total_sales += parseFloat(newData.total))
       : (newDa.total_sales = parseFloat(newData.total));

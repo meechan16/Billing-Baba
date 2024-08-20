@@ -25,7 +25,7 @@ export default function StockAdjust({ setClose }) {
   //   <div id="addItem">
   return (
     <div id="stockAdjust">
-      <div className="container">
+      <div className="rounded-md flex flex-col bg-white gap-3">
         <div className="top">
           <div className="l">
             <h1>Stock Ajustment</h1>
@@ -46,39 +46,43 @@ export default function StockAdjust({ setClose }) {
             </button>
           </div>
         </div>
-        <div className="c1">
-          <div className="p1">
-            <CustomInput
-              inputValue={Name}
-              setInputValue={setNane}
-              disab="true"
-              placeholder="Item Name *"
-            />
-            <input type="date" onChange={(e) => setDate(e.target.value)} />
-            {/* <button>Select Unit</button> */}
-          </div>
-          <div className="p1">
-            <CustomInput
-              inputValue={Qty}
-              setInputValue={setQty}
-              placeholder="TotalQty"
-            />
-            <CustomInput
-              inputValue={Price}
-              setInputValue={setPrice}
-              placeholder="At Price"
-            />
-          </div>
-          <div className="p1">
-            <CustomInput
-              inputValue={Details}
-              setInputValue={setDetails}
-              placeholder="Details"
-            />
-          </div>
+        <div className="grid grid-flow-row grid-cols-2 bg-white p-3 ">
+          <CustomInput
+            inputValue={Name}
+            setInputValue={setNane}
+            disab="true"
+            placeholder="Item Name *"
+          />
+          <input type="date" onChange={(e) => setDate(e.target.value)} />
+          {/* <button>Select Unit</button> */}
+          {/* </div>
+          <div className="p1"> */}
+          <CustomInput
+            inputValue={Qty}
+            setInputValue={setQty}
+            placeholder="TotalQty"
+          />
+          <CustomInput
+            inputValue={Price}
+            setInputValue={setPrice}
+            placeholder="At Price"
+          />
+          {/* </div>
+          <div className="p1"> */}
+          <CustomInput
+            inputValue={Details}
+            setInputValue={setDetails}
+            placeholder="Details"
+          />
+          {/* </div> */}
         </div>
-        <div className="c3">
-          <button onClick={() => addItemReq()}>Save</button>
+        <div className="p-3">
+          <button
+            className="p-3 rounded-md border-2 border-gray-600 w-full"
+            onClick={() => addItemReq()}
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

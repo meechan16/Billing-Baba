@@ -12,6 +12,7 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [partyName, setPartyName] = useState("");
   var [GSTIN, setGSTIN] = useState("");
   var [phoneNo, setPhoneNo] = useState("");
+  var [creditLimit, setcreditLimit] = useState(0);
   var [GstType, setGstType] = useState("");
   var [state, setState] = useState("");
   var [Email, setEmail] = useState("");
@@ -39,6 +40,7 @@ export default function AddParties({ data, setData, change, setChange }) {
       AddF2: AddF2 ? AddF2 : "",
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
+      creditLimit: creditLimit,
       ammount: 0,
       balance: 0,
     };
@@ -203,18 +205,31 @@ export default function AddParties({ data, setData, change, setChange }) {
             </div>
           )}
           {page == "Credit" && (
-            <div className="div s">
-              <CustomInput
-                inputValue={OpeningBalance}
-                setInputValue={setOpeningBalance}
-                placeholder={"Opening balance"}
-              />
-              <input
-                type="date"
-                onChange={(e) => setAsDate(e.target.value)}
-                id="birthday"
-                name="birthday"
-              ></input>
+            <div className="flex flex-col">
+              <div className="div s">
+                <CustomInput
+                  inputValue={OpeningBalance}
+                  setInputValue={setOpeningBalance}
+                  placeholder={"Opening balance"}
+                />
+                <input
+                  type="date"
+                  onChange={(e) => setAsDate(e.target.value)}
+                  id="birthday"
+                  name="birthday"
+                ></input>
+              </div>
+              <div className="div">
+                <div className="flex flex-col">
+                  <h1 className="text-lg font-semibold">Set Credit Limit</h1>
+
+                  <CustomInput
+                    inputValue={creditLimit}
+                    setInputValue={setcreditLimit}
+                    placeholder={"Set Credit Limit"}
+                  />
+                </div>
+              </div>
             </div>
           )}
           {page == "AddF" && (
