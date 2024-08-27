@@ -38,7 +38,7 @@ export default function PaymentIn({ data, setData }) {
           <div className="l">
             <select name="" id="">
               <option selected value="">
-                All Sales Invoice
+                All Payments In
               </option>
               <option value="">This Month</option>
               <option value="">This Quater</option>
@@ -97,7 +97,9 @@ export default function PaymentIn({ data, setData }) {
             <p>BALANCE</p>
             <p className="side">-</p>
           </div>
-          {data?.sales?.map((sale, index) => (
+          {data?.Transations?.filter(
+            (transaction, index) => transaction.type === "Payment-In"
+          ).map((sale, index) => (
             <div className="cl" key={index}>
               <p className="side">{index + 1}</p>
               <p className="">{sale.invoice_date}</p>
@@ -122,17 +124,20 @@ export default function PaymentIn({ data, setData }) {
                     "Print",
                   ]}
                 > */}
-                                  <Dropdown menuItems={[
-                                { label: "print"},
-                                { label: "forward"},
-                                { label: "generate Invoice"},
-                                { label: "recieve payment"},
-                                { label: "View/Edit"},
-                                { label: "cancel"},
-                                { label: "Delete"},
-                                { label: "Duplicate"},
-                                { label: "Print"}
-                              ]} isLabelOnly={true}>
+                <Dropdown
+                  menuItems={[
+                    { label: "print" },
+                    { label: "forward" },
+                    { label: "generate Invoice" },
+                    { label: "recieve payment" },
+                    { label: "View/Edit" },
+                    { label: "cancel" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Print" },
+                  ]}
+                  isLabelOnly={true}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                     <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                   </svg>

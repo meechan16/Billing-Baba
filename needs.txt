@@ -11,3 +11,6 @@ hover to show full name in search part of items and parties - done
 
 
 "add Payment Mode" in quick billing
+
+
+https://www.youtube.com/watch?v=Qfio0FexdMI

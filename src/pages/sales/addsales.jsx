@@ -9,7 +9,7 @@ export default function AddSales({ data, setData, change, setChange }) {
     {
       index: 1,
       item: "",
-      qty: "",
+      qty: 1,
       unit: "",
       price_per_unit: "",
       discount: "",
@@ -25,7 +25,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       {
         index: indexCount,
         item: "",
-        qty: "",
+        qty: 1,
         unit: "",
         price_per_unit: "",
         discount: "",
@@ -46,6 +46,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       if (
         column === "qty" ||
         column === "price_per_unit" ||
+        column === "profit" ||
         column === "discount"
         // column === "tax"
       ) {
@@ -63,17 +64,25 @@ export default function AddSales({ data, setData, change, setChange }) {
         // const amount = qty * (pricePerUnit - discount + tax);
         const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
-        newRows[index]["profit"] = newRows[index]["profit"] || 0;
+
+        console.log(newRows[index]["profit_per_item"]);
+        console.log(qty);
+        console.log(newRows[index]["profit_per_item"] * qty);
+        newRows[index]["profit"] = newRows[index]["profit_per_item"]
+          ? newRows[index]["profit_per_item"] * qty
+          : 0;
 
         // Update total amount
         const newTotalAmount = newRows.reduce(
           (total, row) => total + (row.amount || 0),
           0
         );
+
         const profit = newRows.reduce(
           (total, row) => total + (row.profit || 0),
           0
         );
+
         setTotalAmount(newTotalAmount);
         setProfit(profit);
 
@@ -85,6 +94,7 @@ export default function AddSales({ data, setData, change, setChange }) {
         // setTotalTax(newTotalTax);
       }
       newRows[index][column] = value;
+      console.log(newRows);
       return newRows;
     });
     // console.log("rows");
@@ -138,7 +148,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       invoice_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      tramsactionType: "Sale",
+      transactionType: "Sale",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
@@ -151,7 +161,24 @@ export default function AddSales({ data, setData, change, setChange }) {
     };
 
     let newDa = data;
+
+    // UPDATING ITEM's Stock
+    newData.items.map((ele) => {
+      const foundItem = newDa.items.find((ele1) => ele1.Name === ele.item);
+      if (foundItem) {
+        foundItem.stock = foundItem.stock
+          ? parseInt(foundItem.stock) - parseInt(ele.qty)
+          : -parseInt(ele.qty);
+      }
+    });
+
+    // UPDATING DATA
+    newDa.Transations
+      ? newDa.Transations.push(newData)
+      : (newDa.Transations = [newData]);
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
+
+    // change everywehre this is used to the sum of sales where payment type is credit
     if (newData.payment_type == "credit") {
       newDa.sale_pending
         ? (newDa.sale_pending += parseFloat(newData.total))
@@ -159,10 +186,23 @@ export default function AddSales({ data, setData, change, setChange }) {
       newDa.to_collect
         ? (newDa.to_collect += parseFloat(newData.pending))
         : (newDa.to_collect = parseFloat(newData.pending));
+
+      let party = newDa.parties.find(
+        (ele, index) => ele.partyName === Name || ele.name === Name
+      );
+      party?.credit
+        ? (newDa.parties.find(
+            (ele, index) => ele.partyName === Name || ele.name === Name
+          ).credit += parseFloat(newData.pending))
+        : (newDa.parties.find(
+            (ele, index) => ele.partyName === Name || ele.name === Name
+          ).credit = parseFloat(newData.pending));
     } else {
-      newDa.sale_paid
-        ? (newDa.sale_paid += parseFloat(newData.total))
-        : (newDa.sale_paid = parseFloat(newData.total));
+      console.log("CASH IN HAND INCREASED");
+      newDa.cash_in_hands
+        ? (newDa.cash_in_hands += parseFloat(newData.total))
+        : (newDa.cash_in_hands = parseFloat(newData.total));
+      console.log(newDa);
     }
     newDa.total_sales
       ? (newDa.total_sales += parseFloat(newData.total))
@@ -223,19 +263,30 @@ export default function AddSales({ data, setData, change, setChange }) {
     }
 
     let newDa = data;
+    newDa.Transations
+      ? newDa.Transations.push(newData)
+      : (newDa.Transations = [newData]);
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-    newDa.sale_pending
-      ? (newDa.sale_pending += parseFloat(newData.pending))
-      : (newDa.sale_pending = parseFloat(newData.pending));
-    newDa.sale_paid
-      ? (newDa.sale_paid += parseFloat(newData.paid))
-      : (newDa.sale_paid = parseFloat(newData.paid));
-    newDa.paymentStatus === pending
-      ? (newDa.to_collect += parseFloat(newData.pending))
-      : (newDa.to_collect = parseFloat(newData.pending));
-    newDa.total_sales
-      ? (newDa.total_sales += parseFloat(newData.total))
-      : (newDa.total_sales = parseFloat(newData.total));
+
+    // change everywehre this is used to the sum of sales where payment type is credit
+    if (newData.payment_type == "credit") {
+      newDa.sale_pending
+        ? (newDa.sale_pending += parseFloat(newData.total))
+        : (newDa.sale_pending = parseFloat(newData.total));
+      newDa.to_collect
+        ? (newDa.to_collect += parseFloat(newData.pending))
+        : (newDa.to_collect = parseFloat(newData.pending));
+
+      newDa.parties.find((index, ele) => ele.name === Name).credit
+        ? (newDa.parties.find((index, ele) => ele.name === Name).credit +=
+            parseFloat(newData.pending))
+        : (newDa.parties.find((index, ele) => ele.name === Name).credit =
+            +parseFloat(newData.pending));
+    } else {
+      newDa.cash_in_hands
+        ? (newDa.cash_in_hands += parseFloat(newData.total))
+        : (newDa.cash_in_hands = parseFloat(newData.total));
+    }
     console.log(newDa);
     setData(newDa);
     setChange(!change);
@@ -359,9 +410,30 @@ export default function AddSales({ data, setData, change, setChange }) {
           </div>
 
           <div className="r">
-            <div className="">
+            <div className="relative group flex items-center">
               <span>Invoice Number</span>
-              <p>{invoice_number}</p>
+              {/* <p className="text-right group">{invoice_number}</p> */}
+              <div className="flex flex-col">
+                <input
+                  type="number"
+                  value={invoice_number}
+                  onChange={(e) => setInvoice_number(e.target.value)}
+                  name="InvNo"
+                  placeholder="input..."
+                  className="px-1"
+                />
+                {(!invoice_number ||
+                  invoice_number === 0 ||
+                  invoice_number === undefined) && (
+                  <button className="bg-white-500 text-blue text-sm rounded hover:underline transition-all duration-300 hidden group-hover:block">
+                    Generate random
+                  </button>
+                )}
+              </div>
+
+              {/* <button className="absolute right-0 top-0 mt-1 mr-1 bg-blue-500 text-white p-1 rounded hover:bg-blue-600 transition-opacity duration-300"> */}
+              {/* Generate random
+              </button> */}
               {/* <input  
                 type="number"
                 value=
@@ -484,6 +556,12 @@ export default function AddSales({ data, setData, change, setChange }) {
                               rowIndex,
                               "price_per_unit",
                               item.salesPrice
+                            );
+                            handleInputChange(rowIndex, "profit", item.profit);
+                            handleInputChange(
+                              rowIndex,
+                              "profit_per_item",
+                              item.profit
                             );
                             item.unit
                               ? handleInputChange(rowIndex, "unit", item.unit)

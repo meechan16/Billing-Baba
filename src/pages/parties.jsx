@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
 import dev_url from "../url";
+import EditParties from "./editParties";
 
-export default function Parties({ data, setData }) {
+export default function Parties({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   const [selectedParty, setSelectedParty] = useState(null);
   const [TransactionSearc, setTransactionSearch] = useState("");
   const [search, setSearch] = useState(false);
+  const [impPtDrp, setimpPtDrp] = useState(false);
+  const [toggleParties, setToggle] = useState(false);
   const [SearchQuerry, setSearchQuerry] = useState("");
   // const [data, setData] = useState([]);
 
@@ -36,6 +39,28 @@ export default function Parties({ data, setData }) {
   const handlePartySelect = (party) => {
     setSelectedParty(party);
   };
+  const handlePartyRemove = (party) => {
+    let newDa = data;
+    newDa.parties = newDa.parties.filter(
+      (ele) => ele.partyName !== party.partyName
+    );
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    setSelectedParty();
+  };
+
+  if (toggleParties)
+    return (
+      <EditParties
+        data={data}
+        setData={setData}
+        setToggle={setToggle}
+        party={selectedParty}
+        change={change}
+        setChange={setChange}
+      />
+    );
 
   return (
     <div id="parties">
@@ -66,41 +91,6 @@ export default function Parties({ data, setData }) {
                 <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
               </svg>
             </button>
-            {/* {SearchQuerry && search && (
-              <div className="absolute mt-7 min-w-[200px]">
-                {data?.parties
-                  ?.filter((e) =>
-                    e.partyName
-                      .toLowerCase()
-                      .includes(SearchQuerry.toLowerCase())
-                  )
-                  .map((party, index) => (
-                    <div
-                      className="flex justify-between gap-3 p-2 rounded-md shadow-md shadow-gray-700 bg-white"
-                      key={index}
-                      onClick={() => handlePartySelect(party)}
-                    >
-                      <h1>{party.partyName}</h1>
-                      <div className="">
-                        <p>
-                          ₹{" "}
-                          {data?.sales
-                            ?.filter((item) => item.name === party.partyName)
-                            .reduce((acc, obj) => acc + obj.pending, 0)}
-                        </p>
-                        <Dropdown menuItems={["View/Edit", "Delete"]}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 128 512"
-                          >
-                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                          </svg>
-                        </Dropdown>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            )} */}
           </div>
         ) : (
           <div className="top">
@@ -108,10 +98,21 @@ export default function Parties({ data, setData }) {
               <button onClick={() => Navigate("/AddParties")}>
                 Add Party +
               </button>
-              <button onClick={() => Navigate("/import-parties")}>
+              <button
+                className="relative"
+                onClick={() => setimpPtDrp(!impPtDrp)}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" />
                 </svg>
+                {impPtDrp && (
+                  <button
+                    className="absolute top-[20px] font-semibold left-0 p-2 bg-slate-200 text-black w-[180px] rounded-md shadow-md text-white no-wrap"
+                    onClick={() => Navigate("/import-parties")}
+                  >
+                    Import Parties
+                  </button>
+                )}
               </button>
             </div>
 
@@ -155,11 +156,15 @@ export default function Parties({ data, setData }) {
                     <div className="">
                       <p>
                         ₹{" "}
-                        {data?.sales
-                          ?.filter((item) => item.name === party.partyName)
-                          .reduce((acc, obj) => acc + obj.pending, 0)}
+                        {party.credit
+                          ? party.credit
+                          : data?.sales
+                              ?.filter((item) => item.name === party.partyName)
+                              .reduce((acc, obj) => acc + obj.pending, 0)}
                       </p>
                       {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
+
+                      <h2 className="hovEle">{party.partyName}</h2>
                       <Dropdown
                         menuItems={[
                           { label: "View/Edit" },
@@ -191,12 +196,14 @@ export default function Parties({ data, setData }) {
                   <div className="">
                     <p>
                       ₹{" "}
-                      {data?.sales
-                        ?.filter((item) => item.name === party.partyName)
-                        .reduce((acc, obj) => acc + obj.pending, 0)}
+                      {party.credit
+                        ? party.credit
+                        : data?.sales
+                            ?.filter((item) => item.name === party.partyName)
+                            .reduce((acc, obj) => acc + obj.pending, 0)}
                     </p>
                     {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
-                    <Dropdown
+                    {/* <Dropdown
                       menuItems={[{ label: "View/Edit" }, { label: "Delete" }]}
                       isLabelOnly={true}
                     >
@@ -206,7 +213,7 @@ export default function Parties({ data, setData }) {
                       >
                         <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                       </svg>
-                    </Dropdown>
+                    </Dropdown> */}
                   </div>
                 </div>
               ))}
@@ -218,22 +225,28 @@ export default function Parties({ data, setData }) {
             <h1 className="text-xl font-semibold">{selectedParty.partyName}</h1>
             <div className="flex justify-between w-full">
               <div className="flex flex-col justify-between items-start">
-                <p>Phone Number: {selectedParty.partyName}</p>
-                <p>email: {selectedParty.partyName}</p>
-                {selectedParty.creditLimit ? (
-                  selectedParty.creditLimit
-                ) : (
-                  <p>
-                    No Credit limit set{" "}
-                    <span className=" text-blue-500">Set Credit Limit</span>
-                  </p>
-                )}
+                <p>Phone Number: {selectedParty.phoneNo}</p>
+                <p>email: {selectedParty.email}</p>
+                <p>Credit Limit:{selectedParty.creditLimit}</p>
               </div>
               <div className="flex flex-col justify-start items-end">
-                <h1>share</h1>
-                <p>Address: {selectedParty.partyName}</p>
-                <p>GSTIN: {selectedParty.partyName}</p>
+                <p>Address: {selectedParty.Add}</p>
+                <p>GSTIN: {selectedParty.GSTIN}</p>
               </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                className="text-blue-500 font-semibold hover:text-blue-700 text-lg mt-2"
+                onClick={() => setToggle(true)}
+              >
+                Edit Party Details
+              </button>
+              <button
+                className="text-red-500 font-semibold hover:text-red-600 text-lg mt-2"
+                onClick={() => handlePartyRemove(selectedParty)}
+              >
+                Remove Party
+              </button>
             </div>
           </div>
         ) : (
@@ -258,7 +271,7 @@ export default function Parties({ data, setData }) {
             </div>
             <div className="cl">
               {/* <p className="side">-</p> */}
-              <p>Type</p>
+              <p>Payment Type</p>
               <p>Number</p>
               <p>Date</p>
               <p>Total</p>
@@ -275,7 +288,7 @@ export default function Parties({ data, setData }) {
               )
               .map((sale, index) => (
                 <div className="cl" key={index}>
-                  <p className="grey">Sale</p>
+                  <p className="grey">{sale.payment_type}</p>
                   <p className="grey">{sale.invoice_number}</p>
                   {/* <p className="grey">{sale.name}</p> */}
                   <p className="">{sale.invoice_date}</p>

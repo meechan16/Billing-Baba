@@ -88,7 +88,8 @@ export default function AddExpense({ data, setData, change, setChange }) {
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
       // payment_type: paymentType ? paymentType : "",
-      tramsactionType: "Sale",
+      transactionType: "",
+      Type: "Expense",
       items: rows ? rows : "",
       total: totalAmount ? totalAmount : "",
       description: Description ? Description : "",
@@ -96,22 +97,26 @@ export default function AddExpense({ data, setData, change, setChange }) {
 
     let newDa = data;
     newDa.expense ? newDa.expense.push(newData) : (newDa.expense = [newData]);
+
+    newDa.Transations
+      ? newDa.Transations.push(newData)
+      : (newDa.Transations = [newData]);
+
     newDa.total_expense
       ? (newDa.total_expense += parseFloat(newData.total))
       : (newDa.total_expense = parseFloat(newData.total));
+
     console.log("newData");
     console.log(newDa);
     setData(newDa);
     setChange(!change);
     Navigate("/expenses");
   };
+
   const [categoryName, setCategoryName] = useState(""); // Initial index count
   const [categoryType, setCategoryType] = useState(""); // Initial index count
 
   let addExpCategory = () => {
-    console.log("hit");
-    // return;
-
     const newData = {
       name: categoryName ? categoryName : "",
       type: categoryType ? categoryType : "",
@@ -127,6 +132,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
     setCategoryType("");
     setAddExpenseCategory(!addExpenseCategory);
   };
+
   return (
     <div id="addsales">
       {addExpenseCategory && (

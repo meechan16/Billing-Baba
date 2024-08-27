@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 import Loader from "../Loader";
 
-export default function AddPurchase({ data, setData }) {
+export default function AddPurchase({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   var [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(true);
@@ -11,11 +11,11 @@ export default function AddPurchase({ data, setData }) {
     {
       index: 1,
       item: "",
-      qty: "",
+      qty: 1,
       unit: "",
       price_per_unit: "",
       discount: "",
-      tax: "",
+      tax: 0,
       amount: "",
     },
   ]);
@@ -28,11 +28,11 @@ export default function AddPurchase({ data, setData }) {
       {
         index: indexCount,
         item: "",
-        qty: "",
+        qty: 1,
         unit: "",
         price_per_unit: "",
         discount: "",
-        tax: "",
+        tax: 0,
         amount: "",
       },
     ]);
@@ -92,46 +92,121 @@ export default function AddPurchase({ data, setData }) {
     const currentDate = new Date().toISOString().split("T")[0];
     setInvoice_date(currentDate);
   }, []);
-  const [state_of_supply, setState_of_supply] = useState();
+  const [state_of_supply, setState_of_supply] = useState({
+    state: "",
+    isDone: false,
+  });
   const [round_off, setRound_off] = useState();
   const [paymentType, setpaymentType] = useState();
   const [Description, setDescription] = useState();
 
   let uid = data.uid;
   let sendData = () => {
+    if (!invoice_number) {
+      alert("please enter an invoice number");
+      return;
+    }
+
+    if (!Name) {
+      alert("please enter a party name");
+      return;
+    }
+
     setLoading(true);
-    const data = {
+    const newData = {
+      name: Name ? Name : "",
+      partyName: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply ? state_of_supply : "",
-      payment_type: paymentType ? paymentType : "",
+      payment_type: toggle ? "credit" : "cash",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount : "",
       total_tax: totalTax ? totalTax : "",
       description: Description ? Description : "",
+      transactionType: "purchase",
+      type: "purchase",
     };
-    let url = dev_url + "addpurchase";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("purchase: ", data);
-        setLoading(false);
-        window.location.href = "/purchase-bill";
-        // Navigate("/");
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error:", error);
-      });
+
+    let newDa = data;
+
+    // update item's stock
+    newData.items.map((ele) => {
+      const foundItem = newDa.items.find((ele1) => ele1.Name === ele.item);
+      if (foundItem) {
+        foundItem.stock = foundItem.stock
+          ? parseInt(foundItem.stock) + parseInt(ele.qty)
+          : parseInt(ele.qty);
+      }
+    });
+
+    // Update transactions
+    newDa.Transations
+      ? newDa.Transations.push(newData)
+      : (newDa.Transations = [newData]);
+    newDa.purchase
+      ? newDa.purchase.push(newData)
+      : (newDa.purchase = [newData]);
+
+    // change everywehre this is used to the sum of sales where payment type is credit
+    if (newData.payment_type == "credit") {
+      newDa.purchase_pending
+        ? (newDa.purchase_pending += parseFloat(newData.total))
+        : (newDa.purchase_pending = parseFloat(newData.total));
+
+      newDa.to_pay
+        ? (newDa.to_pay += parseFloat(newData.total))
+        : (newDa.to_pay = parseFloat(newData.total));
+      console.log(newDa.parties);
+      let party = newDa.parties.find(
+        (ele, index) => ele.partyName === Name || ele.name === Name
+      );
+      console.log(party);
+      console.log(Name);
+
+      party?.credit
+        ? (newDa.parties.find(
+            (ele, index) => ele.partyName === Name || ele.name === Name
+          ).credit -= parseFloat(newData.pending))
+        : (newDa.parties.find(
+            (ele, index) => ele.partyName === Name || ele.name === Name
+          ).credit = -parseFloat(newData.pending));
+    } else {
+      newDa.cash_in_hands
+        ? (newDa.cash_in_hands -= parseFloat(newData.pending))
+        : (newDa.cash_in_hands = -parseFloat(newData.pending));
+    }
+    newDa.total_purchase
+      ? (newDa.total_purchase += parseFloat(newData.total))
+      : (newDa.total_purchase = parseFloat(newData.total));
+
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/purchase-bill");
+
+    // let url = dev_url + "addpurchase";
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: uid, // Modify this if necessary
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log("purchase: ", data);
+    //     setLoading(false);
+    //     window.location.href = "/purchase-bill";
+    //     // Navigate("/");
+    //   })
+    //   .catch((error) => {
+    //     setLoading(false);
+    //     console.error("Error:", error);
+    //   });
   };
 
   if (loading) return <Loader />;
@@ -269,12 +344,36 @@ export default function AddPurchase({ data, setData }) {
               <span>State of supply</span>
               <input
                 type="text"
-                value={state_of_supply}
-                onChange={(e) => setState_of_supply(e.target.value)}
+                value={state_of_supply?.state}
+                onChange={(e) =>
+                  setState_of_supply({ state: e.target.value, isDone: false })
+                }
                 name="State"
                 placeholder="input..."
                 id=""
               />
+            </div>
+            <div className="ne">
+              {state_of_supply.state && !state_of_supply.isDone && (
+                <div className="dropdown">
+                  {statesAndUnionTerritoriesOfIndia
+                    .filter((e) =>
+                      e
+                        .toLocaleLowerCase()
+                        .includes(state_of_supply.state.toLocaleLowerCase())
+                    )
+                    .map((e, index) => (
+                      <p
+                        key={index}
+                        onClick={() =>
+                          setState_of_supply({ state: e, isDone: true })
+                        }
+                      >
+                        {e}
+                      </p>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -582,3 +681,42 @@ export default function AddPurchase({ data, setData }) {
     </div>
   );
 }
+
+const statesAndUnionTerritoriesOfIndia = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Lakshadweep",
+  "Delhi",
+  "Puducherry",
+  "Ladakh",
+  "Jammu and Kashmir",
+];

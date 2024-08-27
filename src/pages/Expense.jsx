@@ -94,10 +94,10 @@ export default function Expense({ data, setData }) {
                   <div className="">
                     <p>₹ {item.total || "-"}</p>
                     {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
-                    <Dropdown menuItems={[
-                                { label: "View/Edit"},
-                                { label: "Delete"},
-                              ]} isLabelOnly={true}>
+                    <Dropdown
+                      menuItems={[{ label: "View/Edit" }, { label: "Delete" }]}
+                      isLabelOnly={true}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -243,10 +243,10 @@ export default function Expense({ data, setData }) {
                   <div className="">
                     {/* <p>₹ {item.name || "-"}</p> */}
                     {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
-                    <Dropdown menuItems={[
-                                { label: "View/Edit"},
-                                { label: "Delete"},
-                              ]} isLabelOnly={true}>
+                    <Dropdown
+                      menuItems={[{ label: "View/Edit" }, { label: "Delete" }]}
+                      isLabelOnly={true}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -294,7 +294,7 @@ export default function Expense({ data, setData }) {
                       <p>{transaction.invoice_date}</p>
                       <p>{transaction.invoice_number}</p>
                       <p>{transaction.total}</p>
-                      <p>{transaction.tramsactionType}</p>
+                      <p>{transaction.transactionType}</p>
                       {/* <p>{transaction.Category}</p>
                       <p className="grey">Boat Headphones</p>
                       <p className="grey">10</p>

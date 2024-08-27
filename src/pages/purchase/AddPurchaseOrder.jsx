@@ -100,7 +100,7 @@ export default function AddPurchaseOrder({ data }) {
       invoice_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply ? state_of_supply : "",
       payment_type: paymentType ? paymentType : "",
-      tramsactionType: "Sale",
+      transactionType: "Sale",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount : "",

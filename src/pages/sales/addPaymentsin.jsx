@@ -5,72 +5,51 @@ import dev_url from "../../url";
 
 export default function AddPaymentsin({ data, setData, t = true }) {
   const Navigate = useNavigate();
-  var [toggle, setToggle] = useState(t);
-  var [page, setPage] = useState("pricing");
-  var [itemName, setitemName] = useState();
-  var [itemHSN, setitemHSN] = useState();
-  var [itemCategory, setitemCategory] = useState();
-  var [itemCode, setitemCode] = useState();
-  var [sellPrice, setSellPrice] = useState();
-  var [discount, setDescount] = useState();
-  var [purchaseprice, setPurchasePrice] = useState();
-  var [tax, setTax] = useState();
-  var [openingQuantity, setOpeningQuantity] = useState();
-  var [atPrice, setAtPrice] = useState();
-  var [asDate, setAsDate] = useState();
-  var [minToMaintain, setMinToMaintain] = useState();
-  var [location, setLocation] = useState();
-  // var [toggle, set] = useState();
-  let uid = data.uid;
+  var [Name, setName] = useState();
+  var [paymentType, setPaymentType] = useState();
+  var [Desc, setDesc] = useState();
+  var [date, setdate] = useState();
+  var [reciptno, setReciptNo] = useState();
+  var [ammount, setAmmount] = useState();
   const addItemReq = async () => {
-    let data;
-    if (toggle) {
-      data = {
-        Name: itemName ? itemName : "",
-        HSN: itemHSN ? itemHSN : "",
-        Category: itemCategory ? itemCategory : "",
-        Code: itemCode ? itemCode : "",
-        salesPrice: sellPrice ? sellPrice : "",
-        discount: discount ? discount : "",
-        purchasePrice: purchaseprice ? purchaseprice : "",
-        Tax: tax ? tax : "",
-        openingQuantity: openingQuantity ? openingQuantity : "",
-        atPrice: atPrice ? atPrice : "",
-        asDate: asDate ? asDate : "",
-        minToMaintain: minToMaintain ? minToMaintain : "",
-        location: location ? location : "",
-      };
-    } else {
-      data = {
-        Name: itemName ? itemName : "",
-        HSN: itemHSN ? itemHSN : "",
-        Category: itemCategory ? itemCategory : "",
-        Code: itemCode ? itemCode : "",
-        salesPrice: sellPrice ? sellPrice : "",
-        discount: discount ? discount : "",
-        Tax: tax ? tax : "",
-      };
-    }
-    console.log(data);
+    let newData = {
+      Name: Name ? Name : "",
+      paymentType: paymentType ? paymentType : "cash",
+      description: Desc ? Desc : "",
+      date: date ? date : "",
+      reciptno: reciptno ? reciptno : "",
+      ammount: ammount ? ammount : "",
+      type: "Payment-In",
+      transactionType: "Payment-In",
+    };
+
+    let newDa = data;
+    newDa.TransationsE
+      ? newDa.Transations.push(newData)
+      : (newDa.Transations = [newData]);
+
+    // change everywehre this is used to the sum of sales where payment type is credit
+    newDa.to_collect
+      ? (newDa.to_collect -= parseFloat(newData.ammount))
+      : (newDa.to_collect = -parseFloat(newData.ammount));
+
+    newDa.parties.find((index, ele) => ele.name === Name).credit
+      ? (newDa.parties.find((index, ele) => ele.name === Name).credit -=
+          parseFloat(newData.ammount))
+      : (newDa.parties.find((index, ele) => ele.name === Name).credit =
+          -parseFloat(newData.ammount));
+    newDa.cash_in_hands
+      ? (newDa.cash_in_hands += parseFloat(newData.ammount))
+      : (newDa.cash_in_hands = parseFloat(newData.ammount));
+
+    newData.balance = newDa.parties.find(
+      (index, ele) => ele.name === Name
+    ).credit;
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    Navigate("/payment-in");
     return;
-    let url = dev_url + "additems";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sales: ", data);
-        alert("done");
-        Navigate("/items");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
   };
 
   return (
@@ -105,48 +84,54 @@ export default function AddPaymentsin({ data, setData, t = true }) {
             </button>
           </div>
         </div>
-        <div className="c1">
-          <div className="p1">
+        <div className="flex justify-between p-3 px-6">
+          <div className="flex flex-col gap-3 p-3">
             <CustomInput
-              inputValue={itemName}
-              setInputValue={setitemName}
+              inputValue={Name}
+              setInputValue={setName}
               placeholder={"party *"}
             />
             <select
-              onChange={(e) => setitemCategory(e.target.value)}
-              className="box"
+              onChange={(e) => setPaymentType(e.target.value)}
+              className="box border-b-2 border-gray-400 p-3"
             >
               <option selected disabled value="">
                 Payment type
               </option>
               <option value="">Cash</option>
-              <option value="">Credit</option>
+              <option value="">Check</option>
             </select>
-            {/* <button>Select Unit</button> */}
-          </div>
-          <div className="p1">
-            {/* <input type="text" className="box" /> */}
             <CustomInput
-              inputValue={itemHSN}
-              setInputValue={setitemHSN}
+              inputValue={Desc}
+              setInputValue={setDesc}
               placeholder={"Payment Description"}
             />
+            {/* <button>Select Unit</button> */}
+          </div>
+          <div className="flex flex-col gap-3 p-3">
+            {/* <input type="text" className="box" /> */}
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setdate(e.target.value)}
+              id="birthday"
+              className="p-3 border-b-2 border-gray-400"
+              name="birthday"
+            ></input>
+
             <CustomInput
-              inputValue={itemCode}
-              setInputValue={setitemCode}
+              inputValue={reciptno}
+              setInputValue={setReciptNo}
               placeholder={"Recipt number"}
             />
-          </div>
-        </div>
-        <div className="c2">
-          <div className="div">
-            <div className="t">
-              <CustomInput
-                inputValue={sellPrice}
-                setInputValue={setSellPrice}
-                placeholder={"Recieved"}
-              />
-            </div>
+            <br />
+            <br />
+            <br />
+            <CustomInput
+              inputValue={ammount}
+              setInputValue={setAmmount}
+              placeholder={"Recieved Ammount"}
+            />
           </div>
         </div>
         <div className="c3">

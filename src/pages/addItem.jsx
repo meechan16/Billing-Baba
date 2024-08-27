@@ -25,10 +25,10 @@ export default function AddItem({
   var [discount, setDescount] = useState();
   var [purchaseprice, setPurchasePrice] = useState();
   var [tax, setTax] = useState();
-  var [openingQuantity, setOpeningQuantity] = useState();
+  var [openingQuantity, setOpeningQuantity] = useState(0);
   var [atPrice, setAtPrice] = useState();
   var [asDate, setAsDate] = useState();
-  var [minToMaintain, setMinToMaintain] = useState();
+  var [minToMaintain, setMinToMaintain] = useState(10);
   var [location, setLocation] = useState();
   var [primaryUnit, setprimaryUnit] = useState();
   var [SecondaryUnit, setSecondaryUnit] = useState();

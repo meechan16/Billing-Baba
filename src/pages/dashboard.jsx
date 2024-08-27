@@ -185,7 +185,12 @@ export default function Dashboard({ data, setData }) {
                   <div className="">
                     <h1>To Collect</h1>
                     <h2>
-                      {data?.sales?.reduce((acc, obj) => acc + obj.pending, 0)
+                      {data.to_collect
+                        ? data.to_collect
+                        : data?.sales?.reduce(
+                            (acc, obj) => acc + obj.pending,
+                            0
+                          )
                         ? data.sales.reduce((acc, obj) => acc + obj.pending, 0)
                         : "0"}
                     </h2>
@@ -365,7 +370,7 @@ export default function Dashboard({ data, setData }) {
 
                   <div className="">
                     <h1>Cash In hand</h1>
-                    <p>₹ 20,738</p>
+                    <p>₹ {data.cash_in_hands}</p>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
@@ -493,7 +498,15 @@ export default function Dashboard({ data, setData }) {
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
               </div>
-              <h1>₹ 695</h1>
+              <h1>
+                ₹{" "}
+                {data.items
+                  .filter((ele) => ele.stock > 0)
+                  .reduce(
+                    (acc, obj) => acc + parseInt(obj.purchasePrice) * obj.stock,
+                    0
+                  )}
+              </h1>
             </div>
             <div className="list">
               <div className="title">
@@ -503,14 +516,23 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
               <div className="people">
-                <div className="li">
+                {data.items
+                  .filter(
+                    (ele) =>
+                      ele.stock < (ele.minToMaintain ? ele.minToMaintain : 10)
+                  )
+                  .map((ele) => (
+                    <div className="flex justify-between w-4/5">
+                      <p>{ele.Name}</p>
+                      <p className="text-red-500 font-semibold text-lg">
+                        {ele.stock}
+                      </p>
+                    </div>
+                  ))}
+                {/* <div className="li">
                   <img src="" alt="" />
                   <p>Low Stock</p>
-                </div>
-                <div className="li">
-                  <img src="" alt="" />
-                  <p>Low Stock</p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

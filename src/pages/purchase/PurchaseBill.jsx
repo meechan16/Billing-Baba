@@ -71,7 +71,7 @@ export default function PurchaseBill({ data, setData }) {
               <p className="grey">{sale.invoice_number}</p>
               <p className="grey">{sale.name}</p>
               <p className="grey">Purchase</p>
-              <p className="grey">{sale.paymentType}</p>
+              <p className="grey">{sale.payment_type}</p>
               <p className="grey">{sale.total}</p>
               <p className="grey">{sale.balance ? sale.balance : sale.total}</p>
               <p className="side">

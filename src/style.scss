@@ -1220,10 +1220,14 @@ input[type="number"] {
           fill: white;
         }
         border-radius: 10px;
-        transition: 100ms eas;
+        transition: 100ms ease;
         button:hover {
-          background-color: rgb(255, 180, 40);
-          transition: 100ms eas;
+          svg {
+            fill: rgb(48, 48, 48);
+            transition: 100ms ease;
+          }
+          color: rgb(48, 48, 48);
+          transition: 100ms ease;
         }
       }
       div {

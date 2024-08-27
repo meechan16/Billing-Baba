@@ -18,6 +18,9 @@ export default function Items({ data, setData, change, setChange }) {
   var [page, setPage] = useState("product");
   var [StockPage, setStockPage] = useState(false);
 
+  const [search, setSearch] = useState(false);
+  const [SearchQuerry, setSearchQuerry] = useState("");
+
   const Navigate = useNavigate();
 
   var [Category, setCategory] = useState();
@@ -32,6 +35,12 @@ export default function Items({ data, setData, change, setChange }) {
   var [unitShorthand, setUnitShorthand] = useState("");
 
   var [addCategory, setAddCategory] = useState("");
+  var [unitConv, setUnitConv] = useState({
+    open: false,
+    unit1: null,
+    unit2: null,
+    rate: null,
+  });
 
   const addthings = async () => {
     let newDa = data;
@@ -89,13 +98,14 @@ export default function Items({ data, setData, change, setChange }) {
 
   let [DataArr, setDataArr] = useState([]);
 
-  useState(() => {
+  useEffect(() => {
+    console.log("hit");
     if (selecteditems) {
-      setDataArr(
-        [...data?.sales, ...data?.purchase].filter((item) => {
-          return item.items.some((term) => term.item === selecteditems.Name);
-        })
-      );
+      let arr = [...data?.sales, ...data?.purchase].filter((item) => {
+        return item.items.some((term) => term.item === selecteditems.Name);
+      });
+      console.log(arr);
+      setDataArr(arr);
     }
   }, [selecteditems]);
 
@@ -144,76 +154,155 @@ export default function Items({ data, setData, change, setChange }) {
       {page === "product" && (
         <div className="items">
           <div className="left">
-            <div className="top">
-              <button onClick={() => Navigate("/add-items")}>Add Item +</button>
-              <div className="">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            {search ? (
+              <div className="flex p-2 relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  className="w-[20px]  mx-2"
+                >
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
-                <Dropdown
-                  menuItems={[
-                    "Bulk inactive",
-                    "Bulk Active",
-                    "Bulk Assign Code",
-                    "Assign Units",
-                    "Bulk Update Items",
-                  ]}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
-                    <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={SearchQuerry}
+                  onChange={(e) => setSearchQuerry(e.target.value)}
+                  className="w-full bg-transparent border-b-2 border-gray-700"
+                />
+                <button onClick={() => setSearch(!search)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 384 512"
+                    className="w-[20px] mx-2"
+                  >
+                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                   </svg>
-                </Dropdown>
+                </button>
               </div>
-            </div>
+            ) : (
+              <div className="top">
+                <button onClick={() => Navigate("/add-items")}>
+                  Add Item +
+                </button>
+                <div className="">
+                  <div className="" onClick={() => setSearch(!search)}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
+                  </div>
+                  <Dropdown
+                    menuItems={[
+                      "Bulk inactive",
+                      "Bulk Active",
+                      "Bulk Assign Code",
+                      "Assign Units",
+                      "Bulk Update Items",
+                    ]}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 128 512"
+                    >
+                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                    </svg>
+                  </Dropdown>
+                </div>
+              </div>
+            )}
             <div className="content">
               <div className="head">
                 <h2>Items</h2>
                 <h2>Qty</h2>
               </div>
-              {data?.items
-                ?.filter((item) => item.itemType !== "service")
-                .map((item, index) => (
-                  <div
-                    className={`tile ${
-                      selecteditems === item ? "selected" : ""
-                    }`}
-                    key={index}
-                    onClick={() => setSelectedItems(item)}
-                  >
-                    <h1>{item.Name}</h1>
-                    <div className="">
-                      <p>{item.stock ? item.stock : item.openingQty || 0}</p>
-                      <Dropdown
-                        menuItems={["View/Edit", "Delete"]}
-                        callback={(e) => callbackFn(e)}
-                        pIndex={item}
-                        pItem={index}
+
+              {SearchQuerry && search
+                ? data?.items
+                    ?.filter((item) => item.itemType !== "service")
+                    ?.filter(
+                      (e) =>
+                        SearchQuerry.toLowerCase()
+                          .split(" ")
+                          .every((word) => e.Name.toLowerCase().includes(word))
+                      // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                    )
+                    .map((item, index) => (
+                      <div
+                        className={`tile ${
+                          selecteditems === item ? "selected" : ""
+                        }`}
+                        key={index}
+                        onClick={() => setSelectedItems(item)}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 128 512"
-                        >
-                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                        </svg>
-                      </Dropdown>
-                    </div>
-                  </div>
-                ))}
+                        <h1>{item.Name}</h1>
+                        <div className="">
+                          <p>
+                            {item.stock ? item.stock : item.openingQty || 0}
+                          </p>
+                          <Dropdown
+                            menuItems={["View/Edit", "Delete"]}
+                            callback={(e) => callbackFn(e)}
+                            pIndex={item}
+                            pItem={index}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown>
+                        </div>
+                      </div>
+                    ))
+                : data?.items
+                    ?.filter((item) => item.itemType !== "service")
+                    .map((item, index) => (
+                      <div
+                        className={`tile ${
+                          selecteditems === item ? "selected" : ""
+                        }`}
+                        key={index}
+                        onClick={() => setSelectedItems(item)}
+                      >
+                        <h1>{item.Name}</h1>
+                        <div className="">
+                          <p>
+                            {item.stock ? item.stock : item.openingQty || 0}
+                          </p>
+                          {/* <Dropdown
+                            menuItems={["View/Edit", "Delete"]}
+                            callback={(e) => callbackFn(e)}
+                            pIndex={item}
+                            pItem={index}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown> */}
+                        </div>
+                      </div>
+                    ))}
             </div>
           </div>
           <div className="right">
-            <div className="title">
-              <div className="tile">
-                <h1>
-                  {selecteditems ? selecteditems.Name : "No Item Selected"}
-                </h1>
-                <button onClick={() => setStockPage(!StockPage)}>
-                  + Adujust Items
-                </button>
-                {StockPage && <StockAdjust setClose={setStockPage} />}
-              </div>
+            {selecteditems ? (
+              <div className="title">
+                <div className="tile">
+                  <h1>{selecteditems.Name}</h1>
+                  <button onClick={() => setStockPage(!StockPage)}>
+                    + Adujust Items
+                  </button>
+                  {StockPage && <StockAdjust setClose={setStockPage} />}
+                </div>
 
-              {selecteditems && (
                 <div className="tile">
                   <p>
                     SALE PRICE{" "}
@@ -221,7 +310,6 @@ export default function Items({ data, setData, change, setChange }) {
                       {" "}
                       ₹ {selecteditems ? selecteditems.salesPrice : "Null"}
                     </span>
-                    (excl)
                   </p>
                   <p>
                     Stock Qty:{" "}
@@ -231,8 +319,6 @@ export default function Items({ data, setData, change, setChange }) {
                     </span>
                   </p>
                 </div>
-              )}
-              {selecteditems && (
                 <div className="tile">
                   <p>
                     PURCHASE PRICE{" "}
@@ -240,20 +326,27 @@ export default function Items({ data, setData, change, setChange }) {
                       {" "}
                       ₹ {selecteditems ? selecteditems.purchasePrice : "-"}
                     </span>
-                    (excl)
-                  </p>
-                  <p>
-                    Stock Qty:{" "}
-                    <span className="red">
-                      {" "}
-                      {selecteditems ? selecteditems.purchaseStock : "-"}
-                    </span>
                   </p>
                 </div>
-              )}
-              <div className="tile"></div>
-              <div className="tile"></div>
-            </div>
+
+                <div className="flex mx-3 gap-3">
+                  <button className="text-blue-500 font-semibold hover:text-blue-700 text-md mt-2">
+                    Edit Item Details
+                  </button>
+                  <button className="text-red-500 font-semibold hover:text-red-600 text-md mt-2">
+                    Remove Item
+                  </button>
+                </div>
+                {/* <div className="tile"></div>
+              <div className="tile"></div> */}
+              </div>
+            ) : (
+              <div className="title">
+                <div className="tile">
+                  <h1>No Item Selected</h1>
+                </div>
+              </div>
+            )}
             {selecteditems && (
               <div className="content">
                 <div className="t">
@@ -287,8 +380,7 @@ export default function Items({ data, setData, change, setChange }) {
                   </p>
                   <p>Status</p>
                 </div>
-
-                {sortedArray.length > 0
+                {sortedArray?.length >= 1
                   ? sortedArray
                       .filter((item) => {
                         return item.items.some(
@@ -342,62 +434,126 @@ export default function Items({ data, setData, change, setChange }) {
           {data?.items?.some((item) => item.itemType === "service") ? (
             <div className="items">
               <div className="left">
-                <div className="top">
-                  <button onClick={() => Navigate("/add-items")}>
-                    Add Item +
-                  </button>
-                  <div className="">
+                {search ? (
+                  <div className="flex p-2 relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
+                      className="w-[20px]  mx-2"
                     >
                       <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                     </svg>
-                    <Dropdown
-                      menuItems={[
-                        "Bulk inactive",
-                        "Bulk Active",
-                        "Bulk Assign Code",
-                        "Assign Units",
-                        "Bulk Update Items",
-                      ]}
-                    >
+                    <input
+                      type="text"
+                      name=""
+                      id=""
+                      value={SearchQuerry}
+                      onChange={(e) => setSearchQuerry(e.target.value)}
+                      className="w-full bg-transparent border-b-2 border-gray-700"
+                    />
+                    <button onClick={() => setSearch(!search)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
+                        viewBox="0 0 384 512"
+                        className="w-[20px] mx-2"
                       >
-                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                       </svg>
-                    </Dropdown>
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <div className="top">
+                    <button onClick={() => Navigate("/add-items")}>
+                      Add Item +
+                    </button>
+                    <div className="">
+                      <div className="" onClick={() => setSearch(!search)}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                        >
+                          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                        </svg>
+                      </div>
+                      <Dropdown
+                        menuItems={[
+                          "Bulk inactive",
+                          "Bulk Active",
+                          "Bulk Assign Code",
+                          "Assign Units",
+                          "Bulk Update Items",
+                        ]}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 128 512"
+                        >
+                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                        </svg>
+                      </Dropdown>
+                    </div>
+                  </div>
+                )}
                 <div className="content">
                   <div className="head">
                     <h2>Items</h2>
                   </div>
-                  {data?.items
-                    ?.filter((item) => item.itemType === "service")
-                    .map((item, index) => (
-                      <div
-                        className={`tile ${
-                          selecteditems === item ? "selected" : ""
-                        }`}
-                        key={index}
-                        onClick={() => setSelectedItems(item)}
-                      >
-                        <h1>{item.Name}</h1>
-                        <div className="">
-                          <Dropdown menuItems={["View/Edit", "Delete"]}>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 128 512"
-                            >
-                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                            </svg>
-                          </Dropdown>
-                        </div>
-                      </div>
-                    ))}
+                  {SearchQuerry && search
+                    ? data?.items
+                        ?.filter((item) => item.itemType === "service")
+                        ?.filter(
+                          (e) =>
+                            SearchQuerry.toLowerCase()
+                              .split(" ")
+                              .every((word) =>
+                                e.Name.toLowerCase().includes(word)
+                              )
+                          // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                        )
+                        .map((item, index) => (
+                          <div
+                            className={`tile ${
+                              selecteditems === item ? "selected" : ""
+                            }`}
+                            key={index}
+                            onClick={() => setSelectedItems(item)}
+                          >
+                            <h1>{item.Name}</h1>
+                            <div className="">
+                              <Dropdown menuItems={["View/Edit", "Delete"]}>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 128 512"
+                                >
+                                  <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                                </svg>
+                              </Dropdown>
+                            </div>
+                          </div>
+                        ))
+                    : data?.items
+                        ?.filter((item) => item.itemType === "service")
+                        .map((item, index) => (
+                          <div
+                            className={`tile ${
+                              selecteditems === item ? "selected" : ""
+                            }`}
+                            key={index}
+                            onClick={() => setSelectedItems(item)}
+                          >
+                            <h1>{item.Name}</h1>
+                            <div className="">
+                              <Dropdown menuItems={["View/Edit", "Delete"]}>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 128 512"
+                                >
+                                  <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                                </svg>
+                              </Dropdown>
+                            </div>
+                          </div>
+                        ))}
                 </div>
               </div>
               <div className="right">
@@ -498,70 +654,135 @@ export default function Items({ data, setData, change, setChange }) {
       {page === "category" && (
         <div className="items category">
           <div className="left">
-            <div className="top">
-              <button onClick={() => setCategory(!Category)}>
-                Add Category +
-              </button>
-              <div className="">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            {search ? (
+              <div className="flex p-2 relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  className="w-[20px]  mx-2"
+                >
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={SearchQuerry}
+                  onChange={(e) => setSearchQuerry(e.target.value)}
+                  className="w-full bg-transparent border-b-2 border-gray-700"
+                />
+                <button onClick={() => setSearch(!search)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 384 512"
+                    className="w-[20px] mx-2"
+                  >
+                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                  </svg>
+                </button>
               </div>
-              {Category && (
-                <div id="ItemCategory">
-                  <div className="center">
-                    <div className="t">
-                      <h1>Add Category</h1>
-                      <button onClick={() => setCategory(!Category)}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 384 512"
-                        >
-                          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="m">
-                      <span>Enter Category Name</span>
-                      <input
-                        type="text"
-                        value={addCategory}
-                        onChange={(e) => setAddCategory(e.target.value)}
-                        placeholder="eg. Grocery"
-                      />
-                      <button onClick={() => addthings()}>Create</button>
-                    </div>
+            ) : (
+              <div className="top">
+                <button onClick={() => setCategory(!Category)}>
+                  Add Category +
+                </button>
+                <div className="">
+                  <div className="" onClick={() => setSearch(!search)}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
                   </div>
                 </div>
-              )}
-            </div>
+                {Category && (
+                  <div id="ItemCategory">
+                    <div className="center">
+                      <div className="t">
+                        <h1>Add Category</h1>
+                        <button onClick={() => setCategory(!Category)}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 384 512"
+                          >
+                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="m">
+                        <span>Enter Category Name</span>
+                        <input
+                          type="text"
+                          value={addCategory}
+                          onChange={(e) => setAddCategory(e.target.value)}
+                          placeholder="eg. Grocery"
+                        />
+                        <button onClick={() => addthings()}>Create</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             <div className="content">
               <div className="head">
                 <h2>CATEGORY NAME</h2>
                 {/* <h2>In Short</h2> */}
               </div>
-              {data?.category?.map((item, index) => (
-                <div
-                  className={`tile ${
-                    selectedCategory === item ? "selected" : ""
-                  }`}
-                  key={index}
-                  onClick={() => setSelectedCategory(item)}
-                >
-                  <h1>{item.name}</h1>
-                  <div className="">
-                    {/* <p>{item.name || "-"}</p> */}
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
+              {SearchQuerry && search
+                ? data?.category
+                    ?.filter(
+                      (e) =>
+                        SearchQuerry.toLowerCase()
+                          .split(" ")
+                          .every((word) => e.name.toLowerCase().includes(word))
+                      // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                    )
+                    .map((item, index) => (
+                      <div
+                        className={`tile ${
+                          selectedCategory === item ? "selected" : ""
+                        }`}
+                        key={index}
+                        onClick={() => setSelectedCategory(item)}
                       >
-                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                      </svg>
-                    </Dropdown>
-                  </div>
-                </div>
-              ))}
+                        <h1>{item.name}</h1>
+                        <div className="">
+                          {/* <p>{item.name || "-"}</p> */}
+                          <Dropdown menuItems={["View/Edit", "Delete"]}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown>
+                        </div>
+                      </div>
+                    ))
+                : data?.category?.map((item, index) => (
+                    <div
+                      className={`tile ${
+                        selectedCategory === item ? "selected" : ""
+                      }`}
+                      key={index}
+                      onClick={() => setSelectedCategory(item)}
+                    >
+                      <h1>{item.name}</h1>
+                      <div className="">
+                        {/* <p>{item.name || "-"}</p> */}
+                        <Dropdown menuItems={["View/Edit", "Delete"]}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 128 512"
+                          >
+                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                          </svg>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  ))}
               {/* <div className="tile selected">
                 <h1>electronics</h1>
                 <div className="">
@@ -681,76 +902,213 @@ export default function Items({ data, setData, change, setChange }) {
       {page === "unit" && (
         <div className="items unit">
           <div className="left">
-            <div className="top">
-              <button onClick={() => setUnits(!Units)}>Add Units +</button>
-              <div className="">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            {search ? (
+              <div className="flex p-2 relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  className="w-[20px]  mx-2"
+                >
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={SearchQuerry}
+                  onChange={(e) => setSearchQuerry(e.target.value)}
+                  className="w-full bg-transparent border-b-2 border-gray-700"
+                />
+                <button onClick={() => setSearch(!search)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 384 512"
+                    className="w-[20px] mx-2"
+                  >
+                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                  </svg>
+                </button>
               </div>
-              {Units && (
-                <div id="ItemCategory">
-                  <div className="center">
-                    <div className="t">
-                      <h1>New Units</h1>
-                      <button onClick={() => setUnits(!Units)}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 384 512"
-                        >
-                          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="m">
-                      <CustomInput
-                        inputValue={unitName}
-                        setInputValue={setUnitName}
-                        placeholder={"Unit Name"}
-                      />
-                      <CustomInput
-                        inputValue={unitShorthand}
-                        setInputValue={setUnitShorthand}
-                        placeholder={"Short Name"}
-                      />
-                      <button onClick={() => addthings()}>Save</button>
+            ) : (
+              <div className="top">
+                <button onClick={() => setUnits(!Units)}>Add Units +</button>
+                <div className="" onClick={() => setSearch(!search)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                  </svg>
+                </div>
+                {Units && (
+                  <div id="ItemCategory">
+                    <div className="center">
+                      <div className="t">
+                        <h1>New Units</h1>
+                        <button onClick={() => setUnits(!Units)}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 384 512"
+                          >
+                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="m">
+                        <CustomInput
+                          inputValue={unitName}
+                          setInputValue={setUnitName}
+                          placeholder={"Unit Name"}
+                        />
+                        <CustomInput
+                          inputValue={unitShorthand}
+                          setInputValue={setUnitShorthand}
+                          placeholder={"Short Name"}
+                        />
+                        <button onClick={() => addthings()}>Save</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
             <div className="content">
               <div className="head">
                 <h2>FULLNAME</h2>
                 <h2>SHORTNAME</h2>
               </div>
-              {data?.units?.map((item, index) => (
-                <div
-                  className={`tile ${selectedunits === item ? "selected" : ""}`}
-                  key={index}
-                  onClick={() => setSelectedUnits(item)}
-                >
-                  <h1>{item.name}</h1>
-                  <div className="">
-                    <p>{item.shortHand || "-"}</p>
-                    <Dropdown menuItems={["View/Edit", "Delete"]}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
+              {SearchQuerry && search
+                ? data?.units
+                    ?.filter(
+                      (e) =>
+                        SearchQuerry.toLowerCase()
+                          .split(" ")
+                          .every((word) => e.name.toLowerCase().includes(word))
+                      // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                    )
+                    .map((item, index) => (
+                      <div
+                        className={`tile ${
+                          selectedunits === item ? "selected" : ""
+                        }`}
+                        key={index}
+                        onClick={() => setSelectedUnits(item)}
                       >
-                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                      </svg>
-                    </Dropdown>
-                  </div>
-                </div>
-              ))}
+                        <h1>{item.name}</h1>
+                        <div className="">
+                          <p>{item.shortHand || "-"}</p>
+                          <Dropdown menuItems={["View/Edit", "Delete"]}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown>
+                        </div>
+                      </div>
+                    ))
+                : data?.units?.map((item, index) => (
+                    <div
+                      className={`tile ${
+                        selectedunits === item ? "selected" : ""
+                      }`}
+                      key={index}
+                      onClick={() => setSelectedUnits(item)}
+                    >
+                      <h1>{item.name}</h1>
+                      <div className="">
+                        <p>{item.shortHand || "-"}</p>
+                        <Dropdown menuItems={["View/Edit", "Delete"]}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 128 512"
+                          >
+                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                          </svg>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  ))}
             </div>
           </div>
+          {unitConv.open && (
+            <div className="fixed h-screen w-screen top-0 left-0 bg-gray-800 bg-opacity-35 flex justify-center items-center">
+              <div className=" bg-white">
+                <div className="w-full p-3 bg-gray-300 flex justify-between items-center">
+                  <h1 className="text-xl">Add Conversions</h1>{" "}
+                  <button
+                    onClick={() => setUnitConv({ ...unitConv, open: false })}
+                  >
+                    X
+                  </button>
+                </div>
+                <div className=" p-3 flex gap-1 items-end">
+                  <div className="">
+                    <h1 className="text-sm">Base Unit</h1>
+                    <input
+                      type="text"
+                      className=" border-2 border-gray-400"
+                      value={unitConv.unit1}
+                      onChange={(e) =>
+                        setUnitConv({ ...unitConv, unit1: e.target.value })
+                      }
+                    />
+                  </div>
+                  =
+                  <div className="">
+                    <h1 className="text-sm">Rate</h1>
+                    <input
+                      type="text"
+                      className=" border-2 border-gray-400"
+                      value={unitConv.rate}
+                      onChange={(e) =>
+                        setUnitConv({ ...unitConv, rate: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="">
+                    <h1 className="text-sm">Secondary Unit</h1>
+                    <input
+                      type="text"
+                      className=" border-2 border-gray-400"
+                      value={unitConv.unit2}
+                      onChange={(e) =>
+                        setUnitConv({ ...unitConv, unit2: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="p-3">
+                  <button
+                    className="p-3 bg-slate-300 w-full rounded-sm hover:bg-slate-400"
+                    onClick={() => {
+                      setData({
+                        ...data,
+                        unitConversions: [
+                          ...data.unitConversions,
+                          {
+                            unit1: unitConv.unit1,
+                            rate: unitConv.rate,
+                            unit2: unitConv.unit2,
+                          },
+                        ],
+                      });
+                      setUnitConv({ ...unitConv, open: false });
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="right">
             <div className="title">
               <div className="tile">
                 <h1>{selectedunits?.name || "no unit selected"}</h1>
-                <button>Add Conversions</button>
+                <button
+                  onClick={() => setUnitConv({ ...unitConv, open: true })}
+                >
+                  Add Conversions
+                </button>
               </div>
             </div>
             <div className="content">

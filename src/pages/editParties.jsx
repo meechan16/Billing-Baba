@@ -5,25 +5,36 @@ import dev_url from "../url";
 import Loader from "./Loader";
 import TextField from "@mui/material/TextField";
 
-export default function AddParties({ data, setData, change, setChange }) {
+export default function EditParties({
+  data,
+  setData,
+  change,
+  setChange,
+  party,
+  setToggle,
+}) {
   const Navigate = useNavigate();
   // var [toggle, setToggle] = useState(true);
   var [page, setPage] = useState("GST");
-  var [partyName, setPartyName] = useState("");
-  var [GSTIN, setGSTIN] = useState("");
-  var [phoneNo, setPhoneNo] = useState("");
-  var [creditLimit, setcreditLimit] = useState(0);
-  var [GstType, setGstType] = useState("");
-  var [state, setState] = useState("");
-  var [Email, setEmail] = useState("");
-  var [Add, setAdd] = useState("");
-  var [OpeningBalance, setOpeningBalance] = useState(0);
-  var [asDate, setAsDate] = useState("");
-  var [AddF1, setAddF1] = useState("");
-  var [AddF2, setAddF2] = useState("");
-  var [AddF3, setAddF3] = useState("");
+  var [partyName, setPartyName] = useState(
+    party.partyName ? party.partyName : party.name
+  );
+  var [GSTIN, setGSTIN] = useState(party.GSTIN);
+  var [phoneNo, setPhoneNo] = useState(party.phoneNo);
+  var [creditLimit, setcreditLimit] = useState(party.creditLimit);
+  var [credit, setcredit] = useState(party.credit);
+  var [GstType, setGstType] = useState(party.GstType);
+  var [state, setState] = useState(party.state);
+  var [Email, setEmail] = useState(party.Email);
+  var [Add, setAdd] = useState(party.Add);
+  var [OpeningBalance, setOpeningBalance] = useState(party.OpeningBalance);
+  var [asDate, setAsDate] = useState(party.asDate);
+  var [AddF1, setAddF1] = useState(party.AddF1);
+  var [AddF2, setAddF2] = useState(party.AddF2);
+  var [AddF3, setAddF3] = useState(party.AddF3);
   var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
+  if (!party) return <h1>Party Not Found</h1>;
   let uid = data.uid;
   const addPartiesReq = async () => {
     let newData = {
@@ -40,13 +51,21 @@ export default function AddParties({ data, setData, change, setChange }) {
       AddF2: AddF2 ? AddF2 : "",
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
-      creditLimit: creditLimit,
+      creditLimit: parseInt(creditLimit),
       // convert openingbalance into integer below
-      credit: parseInt(OpeningBalance ? OpeningBalance : 0),
+      credit: parseInt(credit),
     };
 
     let newDa = data;
-    newDa.parties ? newDa.parties.push(newData) : (newDa.parties = [newData]);
+
+    console.log(newDa.parties.find((ele) => ele.partyName === party.partyName));
+    const index = newDa.parties.findIndex(
+      (ele) => ele.partyName === party.partyName
+    );
+    if (index !== -1) {
+      newDa.parties[index] = { ...newDa.parties[index], ...newData };
+    }
+    console.log(newDa.parties[index]);
 
     OpeningBalance
       ? newDa.Transations.push({
@@ -76,7 +95,7 @@ export default function AddParties({ data, setData, change, setChange }) {
     console.log(newDa);
     setData(newDa);
     setChange(!change);
-    Navigate("/parties");
+    setToggle(false);
   };
 
   if (loading) return <Loader />;
@@ -85,7 +104,7 @@ export default function AddParties({ data, setData, change, setChange }) {
       <div className="container">
         <div className="top">
           <div className="l">
-            <h1>Add Party</h1>
+            <h1>Edit Party</h1>
             {/* <p>Product</p>
             <div
               className={toggle ? "toggle" : "toggle opp"}
@@ -105,7 +124,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                 <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
               </svg>
             </button>
-            <button onClick={() => Navigate("/parties")}>
+            <button onClick={() => setToggle(false)}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
                 <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
               </svg>
@@ -128,6 +147,11 @@ export default function AddParties({ data, setData, change, setChange }) {
               inputValue={phoneNo}
               setInputValue={setPhoneNo}
               placeholder={"Phone Number"}
+            />
+            <CustomInput
+              inputValue={credit}
+              setInputValue={setcredit}
+              placeholder={"Credit amount"}
             />
             {/* <button>Select Unit</button> */}
           </div>
