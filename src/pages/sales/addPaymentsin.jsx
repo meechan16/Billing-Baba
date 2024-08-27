@@ -3,7 +3,13 @@ import CustomInput from "../../components/customInput";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 
-export default function AddPaymentsin({ data, setData, t = true }) {
+export default function AddPaymentsin({
+  data,
+  setData,
+  t = true,
+  setChange,
+  change,
+}) {
   const Navigate = useNavigate();
   var [Name, setName] = useState();
   var [paymentType, setPaymentType] = useState();
