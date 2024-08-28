@@ -370,7 +370,7 @@ export default function Dashboard({ data, setData }) {
 
                   <div className="">
                     <h1>Cash In hand</h1>
-                    <p>₹ {data.cash_in_hands}</p>
+                    <p>₹ {data.cash_in_hands ? data.cash_in_hands : 0}</p>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">

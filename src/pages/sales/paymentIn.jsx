@@ -102,14 +102,14 @@ export default function PaymentIn({ data, setData }) {
           ).map((sale, index) => (
             <div className="cl" key={index}>
               <p className="side">{index + 1}</p>
-              <p className="">{sale.invoice_date}</p>
-              <p className="">{sale.ref_number}</p>
-              <p className="">{sale.name}</p>
-              <p className="">{sale.categoryName}</p>
+              <p className="">{sale.date}</p>
+              <p className="">{index}</p>
+              <p className="">{sale.Name}</p>
+              <p className="">{}</p>
               <p className="">{sale.type}</p>
-              <p className="">{sale.total}</p>
-              <p className="">{sale.paid}</p>
-              <p className="">{sale.total - sale.paid}</p>
+              <p className="">{sale.credit}</p>
+              <p className="">{sale.ammount}</p>
+              <p className="">{sale.balance}</p>
               <p className="side">
                 {/* <Dropdown
                   menuItems={[

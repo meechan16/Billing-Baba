@@ -30,7 +30,7 @@ export default function AddPaymentsin({
     };
 
     let newDa = data;
-    newDa.TransationsE
+    newDa.Transations
       ? newDa.Transations.push(newData)
       : (newDa.Transations = [newData]);
 
@@ -39,18 +39,21 @@ export default function AddPaymentsin({
       ? (newDa.to_collect -= parseFloat(newData.ammount))
       : (newDa.to_collect = -parseFloat(newData.ammount));
 
-    newDa.parties.find((index, ele) => ele.name === Name).credit
-      ? (newDa.parties.find((index, ele) => ele.name === Name).credit -=
+    newData.credit = newDa.parties.find((ele) => ele.partyName === Name).credit;
+
+    newDa.parties.find((ele) => ele.partyName === Name).credit
+      ? (newDa.parties.find((ele) => ele.partyName === Name).credit -=
           parseFloat(newData.ammount))
-      : (newDa.parties.find((index, ele) => ele.name === Name).credit =
+      : (newDa.parties.find((ele) => ele.partyName === Name).credit =
           -parseFloat(newData.ammount));
     newDa.cash_in_hands
       ? (newDa.cash_in_hands += parseFloat(newData.ammount))
       : (newDa.cash_in_hands = parseFloat(newData.ammount));
 
     newData.balance = newDa.parties.find(
-      (index, ele) => ele.name === Name
+      (ele) => ele.partyName === Name
     ).credit;
+
     console.log(newDa);
     setData(newDa);
     setChange(!change);
@@ -92,11 +95,30 @@ export default function AddPaymentsin({
         </div>
         <div className="flex justify-between p-3 px-6">
           <div className="flex flex-col gap-3 p-3">
-            <CustomInput
-              inputValue={Name}
-              setInputValue={setName}
-              placeholder={"party *"}
-            />
+            <div className="">
+              <CustomInput
+                inputValue={Name}
+                setInputValue={setName}
+                placeholder={"party *"}
+              />
+              <div className="p-2 flex flex-col gap-2">
+                {data?.parties
+                  ?.filter(
+                    (e) =>
+                      Name?.toLowerCase()
+                        .split(" ")
+                        .every((word) =>
+                          e.partyName.toLowerCase().includes(word)
+                        )
+                    // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                  )
+                  .map((party, index) => (
+                    <h1 onClick={() => setName(party.partyName)}>
+                      {party.partyName}
+                    </h1>
+                  ))}
+              </div>
+            </div>
             <select
               onChange={(e) => setPaymentType(e.target.value)}
               className="box border-b-2 border-gray-400 p-3"
