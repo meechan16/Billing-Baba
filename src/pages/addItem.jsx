@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import TextField from "@mui/material/TextField";
 import Loader from "./Loader";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { useLocation } from "react-router-dom";
 
 export default function AddItem({
   data,
@@ -14,6 +13,7 @@ export default function AddItem({
   change,
   setChange,
 }) {
+  const params = new URLSearchParams(window.location.search);
   const Navigate = useNavigate();
   var [toggle, setToggle] = useState(t);
   var [page, setPage] = useState("pricing");
@@ -22,9 +22,11 @@ export default function AddItem({
   var [itemCategory, setitemCategory] = useState();
   var [itemCode, setitemCode] = useState();
   var [sellPrice, setSellPrice] = useState();
+  var [WholeSalePrice, setWholeSalePrice] = useState();
+  var [description, setdescription] = useState();
   var [discount, setDescount] = useState();
   var [purchaseprice, setPurchasePrice] = useState();
-  var [tax, setTax] = useState();
+  var [tax, setTax] = useState(0);
   var [openingQuantity, setOpeningQuantity] = useState(0);
   var [atPrice, setAtPrice] = useState();
   var [asDate, setAsDate] = useState();
@@ -36,6 +38,13 @@ export default function AddItem({
 
   var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
+  let urlPram = params.get("data");
+  useEffect(() => {
+    if (urlPram == "services") {
+      setToggle(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (sellPrice < discount) {
       alert("discount can't be more than sales price");
@@ -90,6 +99,8 @@ export default function AddItem({
         HSN: itemHSN ? itemHSN : "",
         Category: itemCategory ? itemCategory : "",
         Code: itemCode ? itemCode : "",
+        wholeSalePrice: WholeSalePrice ? WholeSalePrice : "",
+        description: description ? description : "",
         salesPrice: sellPrice.withTax
           ? sellPrice.value * (1 - tax)
           : sellPrice.value,
@@ -130,31 +141,35 @@ export default function AddItem({
   };
 
   // barcode locha
-  let [BarcodeToggle, setBarcodeToggle] = useState(false);
+  // let [BarcodeToggle, setBarcodeToggle] = useState(false);
   // let [barcodes, setbarcodes] = useState();
 
   // if (BarcodeToggle) {
   let barcode = "";
   let lastKeyTime = Date.now();
 
+  let urllocation = useLocation();
+
   document.addEventListener("keydown", (event) => {
-    const currentTime = Date.now();
+    if (urllocation?.pathname === "/addItem") {
+      const currentTime = Date.now();
 
-    // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
-    if (currentTime - lastKeyTime > 50) {
-      barcode = ""; // Reset barcode if too much time has passed
-    }
-    lastKeyTime = currentTime;
+      // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
+      if (currentTime - lastKeyTime > 50) {
+        barcode = ""; // Reset barcode if too much time has passed
+      }
+      lastKeyTime = currentTime;
 
-    // Filter out non-character keys
-    if (event.key.length === 1) {
-      barcode += event.key;
-    }
+      // Filter out non-character keys
+      if (event.key.length === 1) {
+        barcode += event.key;
+      }
 
-    if (event.key === "Enter") {
-      if (barcode) {
-        setitemCode(barcode);
-        barcode = ""; // Clear the barcode after processing
+      if (event.key === "Enter") {
+        if (barcode) {
+          setitemCode(barcode);
+          barcode = ""; // Clear the barcode after processing
+        }
       }
     }
   });
@@ -279,6 +294,20 @@ export default function AddItem({
               </svg>
             </button>
           </div>
+          <div className="flex items-center gap-0">
+            <TextField
+              id="outlined-search"
+              value={description}
+              onChange={(e) => setdescription(e.target.value)}
+              label="Description"
+              itemType="number"
+              sx={{
+                background: "white",
+                width: "400px",
+              }}
+              type="search"
+            />
+          </div>
           <div className="p1">
             <p className="text-gray-500 font-semibold">
               * scan existing barcode to set custom item code from pre-existing
@@ -307,7 +336,7 @@ export default function AddItem({
             <div className="">
               <div className="rounded-lg bg-gray-200 m-3 p-3">
                 <h1 className="text-xl my-[10px] font-semibold">Sale Price</h1>
-                <div className="flex gap-3">
+                <div className="flex">
                   <div className="flex items-center gap-0">
                     {/* <CustomInput
                       inputValue={sellPrice}
@@ -346,7 +375,7 @@ export default function AddItem({
                     <select
                       name=""
                       id=""
-                      className="px-2 h-fit bg-transparent m-0"
+                      className="p-4 m-2 border-gray-300 border rounded-md"
                       onChange={(e) =>
                         setSellPrice({
                           ...sellPrice,
@@ -362,7 +391,7 @@ export default function AddItem({
                       </option>
                     </select>
                   </div>
-                  <div className="flex items-center gap-0">
+                  <div className="flex items-center ml-10 gap-0">
                     {/* <CustomInput
                       inputValue={discount}
                       setInputValue={setDescount}
@@ -382,7 +411,7 @@ export default function AddItem({
                     </select> */}
                     <TextField
                       id="outlined-search"
-                      value={discount?.value}
+                      value={discount}
                       onChange={(e) => setDescount(e.target.value)}
                       label="Descount"
                       itemType="number"
@@ -394,14 +423,28 @@ export default function AddItem({
                     />
                   </div>
                 </div>
+
+                <div className="flex items-center mt-2">
+                  <TextField
+                    id="outlined-search"
+                    value={WholeSalePrice}
+                    onChange={(e) => setWholeSalePrice(e.target.value)}
+                    label="Wholesale Price"
+                    itemType="number"
+                    sx={{
+                      background: "white",
+                    }}
+                    type="search"
+                  />
+                </div>
               </div>
-              <div className="rounded-lg  bg-gray-200 m-3 p-3">
-                <h1 className="text-xl my-[10px] font-semibold">
-                  Purchase Price
-                </h1>
-                <div className="flex gap-3 items-center">
-                  {toggle && (
-                    <div className="flex items-center  gap-0">
+              <div className=" flex gap-2 w-full">
+                {toggle && (
+                  <div className="rounded-lg flex-1 bg-gray-200 m-3 p-3">
+                    <h1 className="text-xl my-[10px] font-semibold">
+                      Purchase Price
+                    </h1>
+                    <div className="flex gap-3 items-center">
                       {/* <CustomInput
                         inputValue={purchaseprice}
                         setInputValue={setPurchasePrice}
@@ -427,7 +470,7 @@ export default function AddItem({
                       <select
                         name=""
                         id=""
-                        className="px-2 h-fit bg-transparent m-0"
+                        className="p-4 m-2 border-gray-300 border rounded-md"
                         onChange={(e) =>
                           setPurchasePrice({
                             ...purchaseprice,
@@ -443,28 +486,41 @@ export default function AddItem({
                         </option>
                       </select>
                     </div>
-                  )}
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Taxes"
-                    value={tax}
-                    onChange={(e) => setTax(e.target.value)}
-                  >
-                    {data.tax.map((item) => (
-                      <MenuItem value={item.value}>{item.name}</MenuItem>
-                    ))}
-                  </Select>
-                  {/* <div className="flex items-center gap-0">
+                  </div>
+                )}
+                <div className="rounded-lg flex-1 bg-gray-200 m-3 p-3">
+                  <h1 className="text-xl my-[10px] font-semibold">Taxes</h1>
+                  <div className="flex gap-3 items-center">
+                    {/* <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Taxes"
+                      value={tax}
+                      onChange={(e) => setTax(e.target.value)}
+                      >
+                      {data.tax.map((item) => (
+                        <MenuItem
+                        value={item.value}
+                        selected={item.value == 0 }
+                        >
+                        {item.name}
+                        </MenuItem>
+                        ))}
+                      </Select> */}
                     <select
                       name=""
-                      className="p-3 m-2 border-gray-300 border rounded-md"
+                      className="p-4 my-2 border-gray-300 border rounded-md"
                       id=""
+                      value={tax}
+                      onChange={(e) => setTax(e.target.value)}
                     >
                       {data.tax?.map((item) => (
-                        <option value={item.value}>{item.name}</option>
+                        <option value={item.value} selected={item.value == 0}>
+                          {item.name}
+                        </option>
                       ))}
                     </select>
+                    {/* <div className="flex items-center gap-0">
                     {/* <CustomInput
                       inputValue={tax}
                       setInputValue={setTax}
@@ -483,6 +539,7 @@ export default function AddItem({
                       </option>
                     </select>
                   </div> */}
+                  </div>
                 </div>
               </div>
             </div>

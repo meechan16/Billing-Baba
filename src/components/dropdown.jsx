@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 
-function Dropdown({ children, menuItems, isLabelOnly = false }) {
+function Dropdown({
+  children,
+  menuItems,
+  isLabelOnly = false,
+  callback = null,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 

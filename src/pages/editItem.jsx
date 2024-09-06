@@ -1,18 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
-import dev_url from "../url";
 import Loader from "./Loader";
 
 export default function EditItem({
   data,
-  item,
   setData,
-  t = true,
+  Index,
   change,
   setChange,
+  setClose,
+  t = true,
 }) {
-  const Navigate = useNavigate();
   var [toggle, setToggle] = useState(t);
   var [page, setPage] = useState("pricing");
 
@@ -38,29 +37,30 @@ export default function EditItem({
 
   // Load item data from localStorage when the component mounts
   useEffect(() => {
-    const storedItem = JSON.parse(localStorage.getItem("item"));
-    if (storedItem) {
-      setitemName(storedItem.Name || "");
-      setitemHSN(storedItem.HSN || "");
-      setitemCategory(storedItem.Category || "");
-      setitemCode(storedItem.Code || "");
-      setSellPrice(storedItem.salesPrice || "");
-      setDescount(storedItem.discount || "");
-      setPurchasePrice(storedItem.purchasePrice || "");
-      setTax(storedItem.Tax || "");
-      setOpeningQuantity(storedItem.openingQuantity || "");
-      setAtPrice(storedItem.atPrice || "");
-      setAsDate(storedItem.asDate || "");
-      setMinToMaintain(storedItem.minToMaintain || "");
-      setLocation(storedItem.location || "");
-      setprimaryUnit(storedItem.primaryUnit || "");
-      setSecondaryUnit(storedItem.SecondaryUnit || "");
+    let Item = data.items[Index];
+    if (Item) {
+      setitemName(Item.Name || "");
+      setitemHSN(Item.HSN || "");
+      setitemCategory(Item.Category || "");
+      setitemCode(Item.Code || "");
+      setSellPrice(Item.salesPrice || "");
+      setDescount(Item.discount || "");
+      setPurchasePrice(Item.purchasePrice || "");
+      setTax(Item.Tax || "");
+      setOpeningQuantity(Item.openingQuantity || "");
+      setAtPrice(Item.atPrice || "");
+      setAsDate(Item.asDate || "");
+      setMinToMaintain(Item.minToMaintain || "");
+      setLocation(Item.location || "");
+      setprimaryUnit(Item.primaryUnit || "");
+      setSecondaryUnit(Item.SecondaryUnit || "");
+    } else {
+      console.log("item not found");
     }
   }, []);
 
-
   useEffect(() => {
-    if(!isInitialRender){
+    if (!isInitialRender) {
       if (sellPrice < discount) {
         console.log("purchase price", purchaseprice);
         console.log("saleprice: ", sellPrice);
@@ -69,8 +69,9 @@ export default function EditItem({
         console.log("purchase price", purchaseprice);
         console.log("saleprice: ", sellPrice);
         alert("purchase price more than sale price, please fix");
-      }}
-  }, [purchaseprice, sellPrice,isInitialRender]);
+      }
+    }
+  }, [purchaseprice, sellPrice, isInitialRender]);
 
   useEffect(() => {
     // Set the initial render flag to false after the first render
@@ -86,7 +87,6 @@ export default function EditItem({
   }
 
   let uid = data.uid;
-
 
   const editItemReq = async () => {
     setLoading(true);
@@ -123,22 +123,21 @@ export default function EditItem({
         itemType: "service",
       };
     }
-      const itemIndex = data.items.findIndex((i) => i.Code === itemCode);
 
-  if (itemIndex !== -1) {
-    // Update the existing item
-    data.items[itemIndex] = newData;
-  } else {
-    // If the item does not exist, add it (this should not happen if itemCode is correct)
-    data.items.push(newData);
-  }
+    data.items[Index] = newData;
+    // if (Index !== -1) {
+    //   // Update the existing item
+    // } else {
+    //   // If the item does not exist, add it (this should not happen if itemCode is correct)
+    //   data.items.push(newData);
+    // }
 
-  console.log("Updated Data:", data);
+    console.log("Updated Data:", data);
 
-  // Save the updated data
-  setData(data);
-  setChange(!change);
-  Navigate("/items");
+    // Save the updated data
+    // setData(data);
+    // setChange(!change);
+    // setClose(-1)
   };
 
   // barcode locha
@@ -166,7 +165,7 @@ export default function EditItem({
     if (event.key === "Enter") {
       if (barcode) {
         setitemCode(barcode);
-        barcode = ""; // Clear the barcode after processing
+        barcode = "";
       }
     }
   });
@@ -175,9 +174,6 @@ export default function EditItem({
     console.log(itemCode);
   }, [itemCode]);
   // }
-
-  if (loading) return <Loader />;
-
   return (
     <div id="addItem">
       <div className="container">

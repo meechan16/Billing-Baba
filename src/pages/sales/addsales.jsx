@@ -190,6 +190,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       let party = newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
       );
+
       party?.credit
         ? (newDa.parties.find(
             (ele, index) => ele.partyName === Name || ele.name === Name
@@ -197,6 +198,7 @@ export default function AddSales({ data, setData, change, setChange }) {
         : (newDa.parties.find(
             (ele, index) => ele.partyName === Name || ele.name === Name
           ).credit = parseFloat(newData.pending));
+
     } else {
       console.log("CASH IN HAND INCREASED");
       newDa.cash_in_hands

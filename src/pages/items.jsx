@@ -4,6 +4,7 @@ import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
 import StockAdjust from "../components/stock_Adjustment";
 import Loader from "./Loader";
+import EditItem from "./editItem";
 
 export default function Items({ data, setData, change, setChange }) {
   const params = new URLSearchParams(window.location.search);
@@ -13,9 +14,41 @@ export default function Items({ data, setData, change, setChange }) {
       setPage("unit");
       setUnits(true);
     }
+    if (!data.UnitUpdate) {
+      const units = [
+        { name: "BAGS", shorthand: "Bag" },
+        { name: "BOTTLES", shorthand: "Btl" },
+        { name: "BOX", shorthand: "Box" },
+        { name: "BUNDLES", shorthand: "Bdl" },
+        { name: "CANS", shorthand: "Can" },
+        { name: "CARTONS", shorthand: "Ctn" },
+        { name: "DOZENS", shorthand: "Dzn" },
+        { name: "GRAMMES", shorthand: "Gm" },
+        { name: "KILOGRAMS", shorthand: "Kg" },
+        { name: "LITRE", shorthand: "Ltr" },
+        { name: "METERS", shorthand: "Mtr" },
+        { name: "MILLILITRE", shorthand: "Ml" },
+        { name: "NUMBERS", shorthand: "Nos" },
+        { name: "PACKS", shorthand: "Pac" },
+        { name: "PAIRS", shorthand: "Prs" },
+        { name: "PIECES", shorthand: "Pcs" },
+        { name: "QUINTAL", shorthand: "Qtl" },
+        { name: "ROLLS", shorthand: "Rol" },
+        { name: "SQUARE FEET", shorthand: "Sqf" },
+        { name: "SQUARE METERS", shorthand: "Sqm" },
+        { name: "TABLETS", shorthand: "Tbs" },
+      ];
+      let TData = data;
+
+      TData.units = [...TData.units, ...units];
+      TData.UnitUpdate = true;
+      setData({ ...TData });
+      setChange(!change);
+    }
   }, []);
 
   var [page, setPage] = useState("product");
+  var [page2, setPage2] = useState("");
   var [StockPage, setStockPage] = useState(false);
 
   const [search, setSearch] = useState(false);
@@ -29,7 +62,7 @@ export default function Items({ data, setData, change, setChange }) {
   const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  var [loading, setloading] = useState(false);
+  var [EditIndex, setEditIndex] = useState(-1);
 
   var [unitName, setUnitName] = useState("");
   var [unitShorthand, setUnitShorthand] = useState("");
@@ -109,44 +142,66 @@ export default function Items({ data, setData, change, setChange }) {
     }
   }, [selecteditems]);
 
-  const callbackFn = (fn, item, index) => {
-    if (fn === "View/Edit") {
-      // Navigate("/edit-item", { state: { data: item, index: index } });
-      console.log("edit hit");
-    } else if (fn === "Delete") {
-      let newDa = data;
-      newDa.items.splice(index, 1);
-      setData(newDa);
-      setChange(!change);
-    }
-  };
+  // const callbackFn = (fn, item, index) => {
+  //   if (fn === "View/Edit") {
+  //     Navigate("/edit-item", { state: { data: item, index: index } });
+  //     console.log("edit hit");
+  //   } else if (fn === "Delete") {
+  //     let newDa = data;
+  //     newDa.items.splice(index, 1);
+  //     setData(newDa);
+  //     setChange(!change);
+  //   }
+  // };
 
-  if (loading) return <Loader />;
+  if (EditIndex != -1)
+    return (
+      <EditItem
+        data={data}
+        setData={setData}
+        change={change}
+        setChange={setChange}
+        Index={EditIndex}
+        setClose={setEditIndex}
+      />
+    );
 
   return (
     <div id="items">
       <div className="topbar">
         <button
           className={page === "product" ? "selected" : ""}
-          onClick={() => setPage("product")}
+          onClick={() => {
+            setPage("product");
+            setSelectedItems();
+          }}
         >
           Product
         </button>
         <button
           className={page === "service" ? "selected" : ""}
-          onClick={() => setPage("service")}
+          onClick={() => {
+            setPage("service");
+            setSelectedItems();
+          }}
         >
           Services
         </button>
         <button
           className={page === "category" ? "selected" : ""}
-          onClick={() => setPage("category")}
+          onClick={() => {
+            setPage("category");
+            setSelectedItems();
+          }}
         >
           Category
         </button>
         <button
           className={page === "unit" ? "selected" : ""}
-          onClick={() => setPage("unit")}
+          onClick={() => {
+            setPage("unit");
+            setSelectedItems();
+          }}
         >
           Unit
         </button>
@@ -197,11 +252,28 @@ export default function Items({ data, setData, change, setChange }) {
                   </div>
                   <Dropdown
                     menuItems={[
-                      "Bulk inactive",
-                      "Bulk Active",
-                      "Bulk Assign Code",
-                      "Assign Units",
-                      "Bulk Update Items",
+                      {
+                        label: "Bulk inactive",
+                        action: () => setPage2("BInactive"),
+                      },
+                      {
+                        label: "Bulk Active",
+                        action: () => setPage2("BActive"),
+                      },
+                      {
+                        label: "Bulk Assign Code",
+                        action: () => setPage2("BCodes"),
+                      },
+                      {
+                        label: "Assign Units",
+                        action: () => setPage2("BUnits"),
+                      },
+                      {
+                        label: "Bulk Update Items",
+                        action: () => {
+                          Navigate("/bulk-update-items");
+                        },
+                      },
                     ]}
                   >
                     <svg
@@ -244,10 +316,27 @@ export default function Items({ data, setData, change, setChange }) {
                             {item.stock ? item.stock : item.openingQty || 0}
                           </p>
                           <Dropdown
-                            menuItems={["View/Edit", "Delete"]}
-                            callback={(e) => callbackFn(e)}
-                            pIndex={item}
-                            pItem={index}
+                            menuItems={[
+                              {
+                                label: "View/Edit",
+                                action: () =>
+                                  Navigate("/edit-item", {
+                                    state: { data: item, index: index },
+                                  }),
+                              },
+                              {
+                                label: "Delete",
+                                action: () => {
+                                  let newDa = data;
+                                  newDa.items.splice(index, 1);
+                                  setData(newDa);
+                                  setChange(!change);
+                                },
+                              },
+                            ]}
+                            // callback={(e) => callbackFn(e)}
+                            // pIndex={item}
+                            // pItem={index}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -274,11 +363,22 @@ export default function Items({ data, setData, change, setChange }) {
                           <p>
                             {item.stock ? item.stock : item.openingQty || 0}
                           </p>
-                          {/* <Dropdown
-                            menuItems={["View/Edit", "Delete"]}
-                            callback={(e) => callbackFn(e)}
-                            pIndex={item}
-                            pItem={index}
+                          <Dropdown
+                            menuItems={[
+                              {
+                                label: "View/Edit",
+                                action: () => setEditItemPg(true),
+                              },
+                              {
+                                label: "Delete",
+                                action: () => {
+                                  let newDa = data;
+                                  newDa.items.splice(index, 1);
+                                  setData(newDa);
+                                  setChange(!change);
+                                },
+                              },
+                            ]}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -286,12 +386,39 @@ export default function Items({ data, setData, change, setChange }) {
                             >
                               <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                             </svg>
-                          </Dropdown> */}
+                          </Dropdown>
                         </div>
                       </div>
                     ))}
             </div>
           </div>
+          {page2 === "BInactive" && (
+            <BulkInactive
+              data={data}
+              setData={setData}
+              change={change}
+              setChange={setChange}
+              setClose={setPage2}
+            />
+          )}
+          {page2 === "BActive" && (
+            <BulkActive
+              data={data}
+              setData={setData}
+              change={change}
+              setChange={setChange}
+              setClose={setPage2}
+            />
+          )}
+          {page2 === "BCodes" && (
+            <BulkItemCode
+              data={data}
+              setData={setData}
+              change={change}
+              setChange={setChange}
+              setClose={setPage2}
+            />
+          )}
           <div className="right">
             {selecteditems ? (
               <div className="title">
@@ -463,8 +590,10 @@ export default function Items({ data, setData, change, setChange }) {
                   </div>
                 ) : (
                   <div className="top">
-                    <button onClick={() => Navigate("/add-items")}>
-                      Add Item +
+                    <button
+                      onClick={() => Navigate("/add-items?data=services")}
+                    >
+                      Add Service +
                     </button>
                     <div className="">
                       <div className="" onClick={() => setSearch(!search)}>
@@ -624,15 +753,6 @@ export default function Items({ data, setData, change, setChange }) {
                           <p className="">{sale.profit || 0}</p>
                         </div>
                       ))}
-                    {/* <div className="cl">
-                <p>Tech</p>
-                <p className="grey">231</p>
-                <p className="grey">Boat</p>
-                <p className="grey">03/02/2024</p>
-                <p className="grey">10</p>
-                <p className="grey">3000</p>
-                <p className="grey">Unpaid</p>
-              </div> */}
                   </div>
                 )}
               </div>
@@ -644,7 +764,7 @@ export default function Items({ data, setData, change, setChange }) {
                 Add services to your customers and create sale invoices for them
                 faster.
               </p>
-              <button onClick={() => Navigate("/add-items")}>
+              <button onClick={() => Navigate("/add-items?data=services")}>
                 Add Your Services
               </button>
             </div>
@@ -783,74 +903,33 @@ export default function Items({ data, setData, change, setChange }) {
                       </div>
                     </div>
                   ))}
-              {/* <div className="tile selected">
-                <h1>electronics</h1>
-                <div className="">
-                  <p>tech</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>bag</h1>
-                <div className="">
-                  <p>bag</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div>
-              <div className="tile">
-                <h1>cloths</h1>
-                <div className="">
-                  <p>cloths</p>
-                  <Dropdown menuItems={["View/Edit", "Delete"]}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 128 512"
-                    >
-                      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                    </svg>
-                  </Dropdown>
-                </div>
-              </div> */}
             </div>
           </div>
+          {page2 === "moveCat" && (
+            <MoveToGroup
+              data={data}
+              setData={setData}
+              change={change}
+              category={selectedCategory}
+              setChange={setChange}
+              setClose={setPage2}
+            />
+          )}
           <div className="right">
-            <div className="title">
-              <div className="tile">
-                <h1>{selectedCategory?.name || "no name selected"}</h1>
-                <button>Move to this category</button>
+            <div className="bg-green-100 rounded-md p-3 w-full">
+              <div className="flex justify-between w-full items-center">
+                <h1 className="text-xl font-semibold ">
+                  {selectedCategory?.name || "no name selected"}
+                </h1>
+                {selectedCategory && (
+                  <button
+                    className="py-1 px-2 rounded-lg bg-blue-500 text-white font-semibold"
+                    onClick={() => setPage2("moveCat")}
+                  >
+                    Move to this category
+                  </button>
+                )}
               </div>
-              {/* <div className="tile">
-                <p>
-                  SALE PRICE <span> ₹ 100.00</span>(excl)
-                </p>
-                <p>
-                  Stock Qty: <span className="red"> 10</span>
-                </p>
-              </div>
-              <div className="tile">
-                <p>
-                  PURCHASE PRICE <span> ₹ 00.00</span>(excl)
-                </p>
-                <p>
-                  Stock Qty: <span className="red"> 10</span>
-                </p>
-              </div> */}
-              <div className="tile"></div>
-              <div className="tile"></div>
             </div>
             {selectedCategory && (
               <div className="content">
@@ -871,22 +950,25 @@ export default function Items({ data, setData, change, setChange }) {
                   <p>Quantity</p>
                   <p>Stock Value</p>
                 </div>
-                {data?.sales
-                  ?.filter((item) => {
-                    console.log(selectedCategory);
-                    return item.items.some(
-                      (term) => term.item_details?.category === selectedCategory
-                    );
-                  })
-                  .map((sale, index) => (
+                {data?.items
+                  ?.filter((item) =>
+                    item.Category.toLowerCase()
+                      .split(" ")
+                      .every((word) =>
+                        selectedCategory.name.toLowerCase().includes(word)
+                      )
+                  )
+                  .map((item, index) => (
                     <div className="cl" key={index}>
-                      <p className="grey">{sale.payment_type}</p>
-                      <p className="grey">{sale.invoice_number}</p>
-                      <p className="grey">{sale.name}</p>
-                      <p className="">{sale.invoice_date}</p>
-                      <p className="grey">{sale.items?.length}</p>
-                      <p className="grey">{sale.total}</p>
-                      <p className="">{sale.total - sale.paid}</p>
+                      <p className="grey">{item.Name}</p>
+                      <p className="grey">
+                        {item.stock ? item.stock : "not set"}
+                      </p>
+                      <p className="grey">
+                        {item.stock
+                          ? item.stock * parseInt(item.purchasePrice)
+                          : "not set"}
+                      </p>
                     </div>
                   ))}
                 {/* <div className="cl">
@@ -1134,3 +1216,271 @@ export default function Items({ data, setData, change, setChange }) {
     </div>
   );
 }
+
+const BulkActive = ({ data, setData, setClose, change, setChange }) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (itemName) => {
+    setSelectedItems((prevSelected) => {
+      if (prevSelected.includes(itemName)) {
+        return prevSelected.filter((name) => name !== itemName);
+      } else {
+        return [...prevSelected, itemName];
+      }
+    });
+  };
+
+  const handleAddInactive = () => {
+    const updatedItems = data.items.map((item) => {
+      if (selectedItems.includes(item.Name)) {
+        return { ...item, state: "active" };
+      }
+      return item;
+    });
+
+    setData({ ...data, items: updatedItems });
+    setChange(!change);
+    setSelectedItems([]); // Clear the selection after updating
+    setClose();
+  };
+
+  return (
+    <div className="flex justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
+      <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md">
+        <h3 className="text-lg font-semibold mb-4">Select Items</h3>
+        <ul className="mb-4">
+          {data.items
+            .filter((item) => item.state !== "active")
+            .map((item) => (
+              <li key={item.Name} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectedItems.includes(item.Name)}
+                  onChange={() => handleSelect(item.Name)}
+                />
+                <span>{item.Name}</span>
+              </li>
+            ))}
+        </ul>
+        <button
+          onClick={handleAddInactive}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Set active
+        </button>
+        <button
+          onClick={() => setClose()}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+const BulkInactive = ({ data, setData, setClose, change, setChange }) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (itemName) => {
+    setSelectedItems((prevSelected) => {
+      if (prevSelected.includes(itemName)) {
+        return prevSelected.filter((name) => name !== itemName);
+      } else {
+        return [...prevSelected, itemName];
+      }
+    });
+  };
+
+  const handleAddInactive = () => {
+    const updatedItems = data.items.map((item) => {
+      if (selectedItems.includes(item.Name)) {
+        return { ...item, state: "inactive" };
+      }
+      return item;
+    });
+
+    setData({ ...data, items: updatedItems });
+    setChange(!change);
+    setSelectedItems([]); // Clear the selection after updating
+    setClose();
+  };
+
+  return (
+    <div className="flex justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
+      <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md">
+        <h3 className="text-lg font-semibold mb-4">Select Items</h3>
+        <ul className="mb-4">
+          {data.items
+            .filter((item) => item.state !== "inactive")
+            .map((item) => (
+              <li key={item.Name} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectedItems.includes(item.Name)}
+                  onChange={() => handleSelect(item.Name)}
+                />
+                <span>{item.Name}</span>
+              </li>
+            ))}
+        </ul>
+        <button
+          onClick={handleAddInactive}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Set Inactive
+        </button>
+        <button
+          onClick={() => setClose()}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+const BulkItemCode = ({ data, setData, setClose, change, setChange }) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (itemName) => {
+    setSelectedItems((prevSelected) => {
+      if (prevSelected.includes(itemName)) {
+        return prevSelected.filter((name) => name !== itemName);
+      } else {
+        return [...prevSelected, itemName];
+      }
+    });
+  };
+  function generate13DigitNumberString() {
+    let numberString = "";
+    for (let i = 0; i < 13; i++) {
+      numberString += Math.floor(Math.random() * 10).toString();
+    }
+    return numberString;
+  }
+
+  const handleAddInactive = () => {
+    const updatedItems = data.items.map((item) => {
+      if (selectedItems.includes(item.Name)) {
+        let cd = generate13DigitNumberString();
+        return { ...item, Code: cd };
+      }
+      return item;
+    });
+
+    setData({ ...data, items: updatedItems });
+    setChange(!change);
+    setSelectedItems([]); // Clear the selection after updating
+    setClose();
+  };
+
+  return (
+    <div className="flex justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
+      <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md">
+        <h3 className="text-lg font-semibold mb-4">
+          Select Items for bulk code assign
+        </h3>
+        <ul className="mb-4">
+          {data.items
+            .filter((item) => item.Code === "")
+            .map((item) => (
+              <li key={item.Name} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectedItems.includes(item.Name)}
+                  onChange={() => handleSelect(item.Name)}
+                />
+                <span>{item.Name}</span>
+              </li>
+            ))}
+        </ul>
+        <p className="text-sm text-gray-600">Showing items without item code</p>
+        <button
+          onClick={handleAddInactive}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Add Code
+        </button>
+        <button
+          onClick={() => setClose()}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+const MoveToGroup = ({
+  data,
+  setData,
+  setClose,
+  change,
+  setChange,
+  category,
+}) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (itemName) => {
+    setSelectedItems((prevSelected) => {
+      if (prevSelected.includes(itemName)) {
+        return prevSelected.filter((name) => name !== itemName);
+      } else {
+        return [...prevSelected, itemName];
+      }
+    });
+  };
+
+  const handleAddInactive = () => {
+    const updatedItems = data.items.map((item) => {
+      if (selectedItems.includes(item.Name)) {
+        return { ...item, Category: category.name };
+      }
+      return item;
+    });
+
+    setData({ ...data, items: updatedItems });
+    setChange(!change);
+    setSelectedItems([]); // Clear the selection after updating
+    setClose();
+  };
+
+  return (
+    <div className="flex justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
+      <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md">
+        <h3 className="text-lg font-semibold mb-4">
+          Select Items to be moved to {category.name} group
+        </h3>
+        <ul className="mb-4">
+          {data.items.map((item) => (
+            <li key={item.Name} className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={selectedItems.includes(item.Name)}
+                onChange={() => handleSelect(item.Name)}
+              />
+              <span>{item.Name}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="text-sm text-gray-600">Showing All Items</p>
+        <button
+          onClick={handleAddInactive}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Add To Group
+        </button>
+        <button
+          onClick={() => setClose()}
+          className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};

@@ -16,6 +16,7 @@ export default function Parties({ data, setData, change, setChange }) {
 
   const [GrpPg, setGrpPg] = useState(0);
   const [GrpPgInps, setGrpPgInps] = useState("");
+  var [inactivePg, setinactivePg] = useState(false);
 
   // Grp Page
   const AddGrp = (grp) => {
@@ -130,7 +131,7 @@ export default function Parties({ data, setData, change, setChange }) {
               </div>
             ) : (
               <div className="top">
-                <div className="btn">
+                <div className="btn text-sm">
                   <button onClick={() => Navigate("/AddParties")}>
                     Add Party +
                   </button>
@@ -142,7 +143,7 @@ export default function Parties({ data, setData, change, setChange }) {
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 448 512"
                     >
-                      <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" />
+                      <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
                     </svg>
                     {impPtDrp && (
                       <button
@@ -169,7 +170,7 @@ export default function Parties({ data, setData, change, setChange }) {
                 </div>
               </div>
             )}
-            <div className="content">
+            <div className="content text-sm">
               <div className="head">
                 <h2>Name</h2>
                 <h2>Amount</h2>
@@ -210,10 +211,15 @@ export default function Parties({ data, setData, change, setChange }) {
                           <h2 className="hovEle">{party.partyName}</h2>
                           <Dropdown
                             menuItems={[
-                              { label: "View/Edit" },
-                              { label: "Delete" },
+                              {
+                                label: "View/Edit",
+                                action: () => setToggle(true),
+                              },
+                              {
+                                label: "Delete",
+                                action: () => handlePartyRemove(party),
+                              },
                             ]}
-                            isLabelOnly={true}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -248,53 +254,116 @@ export default function Parties({ data, setData, change, setChange }) {
                                 .reduce((acc, obj) => acc + obj.pending, 0)}
                         </p>
                         {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
-                        {/* <Dropdown
-                      menuItems={[{ label: "View/Edit" }, { label: "Delete" }]}
-                      isLabelOnly={true}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 128 512"
-                      >
-                        <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                      </svg>
-                    </Dropdown> */}
+                        <Dropdown
+                          menuItems={[
+                            {
+                              label: "View/Edit",
+                              action: () => setToggle(true),
+                            },
+                            {
+                              label: "Delete",
+                              action: () => handlePartyRemove(party),
+                            },
+                          ]}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 128 512"
+                          >
+                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                          </svg>
+                        </Dropdown>
                       </div>
                     </div>
                   ))}
             </div>
           </div>
+          {inactivePg && (
+            <PartyList
+              data={data}
+              setData={setData}
+              change={change}
+              setChange={setChange}
+              setClose={setinactivePg}
+            />
+          )}
           <div className="right">
             {selectedParty ? (
               <div className="rounded-md bg-green-100 mb-2 p-3">
-                <h1 className="text-xl font-semibold">
+                <h1 className="text-xl font-semibold flex justify-between items-center w-full">
                   {selectedParty.partyName}
+                  <div className="flex gap-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                      className="h-5 w-5"
+                    >
+                      <path d="M160 368c26.5 0 48 21.5 48 48l0 16 72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6L448 368c8.8 0 16-7.2 16-16l0-288c0-8.8-7.2-16-16-16L64 48c-8.8 0-16 7.2-16 16l0 288c0 8.8 7.2 16 16 16l96 0zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3l0-21.3 0-6.4 0-.3 0-4 0-48-48 0-48 0c-35.3 0-64-28.7-64-64L0 64C0 28.7 28.7 0 64 0L448 0c35.3 0 64 28.7 64 64l0 288c0 35.3-28.7 64-64 64l-138.7 0L208 492z" />
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                      className="h-5 w-5"
+                    >
+                      <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                      className="h-5 w-5"
+                    >
+                      <path d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 25.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416l400 0c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4l0-25.4c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm0 96c61.9 0 112 50.1 112 112l0 25.4c0 47.9 13.9 94.6 39.7 134.6L72.3 368C98.1 328 112 281.3 112 233.4l0-25.4c0-61.9 50.1-112 112-112zm64 352l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z" />
+                    </svg>
+                  </div>
                 </h1>
-                <div className="flex justify-between w-full">
+                <div className="flex justify-between w-full text-sm">
                   <div className="flex flex-col justify-between items-start">
-                    <p>Phone Number: {selectedParty.phoneNo}</p>
-                    <p>email: {selectedParty.email}</p>
-                    <p>Credit Limit:{selectedParty.creditLimit}</p>
+                    <p>
+                      Phone Number:{" "}
+                      <span className="font-semibold">
+                        {selectedParty.phoneNo}
+                      </span>
+                    </p>
+                    <p>
+                      email:{" "}
+                      <span className="font-semibold">
+                        {selectedParty.Email}
+                      </span>
+                    </p>
+                    <p>
+                      Credit Limit:{" "}
+                      <span className="font-semibold">
+                        {selectedParty.creditLimit}
+                      </span>
+                    </p>
                   </div>
                   <div className="flex flex-col justify-start items-end">
-                    <p>Address: {selectedParty.Add}</p>
-                    <p>GSTIN: {selectedParty.GSTIN}</p>
+                    <p>
+                      Address:{" "}
+                      <span className="font-semibold">{selectedParty.Add}</span>
+                    </p>
+                    <p>
+                      GSTIN:{" "}
+                      <span className="font-semibold">
+                        {selectedParty.GSTIN}
+                      </span>
+                    </p>
                   </div>
                 </div>
-                <div className="flex gap-3">
+                {/* <div className="flex gap-3">
                   <button
-                    className="text-blue-500 font-semibold hover:text-blue-700 text-lg mt-2"
+                    className="text-blue-500 font-semibold hover:text-blue-700 text-sm mt-2"
                     onClick={() => setToggle(true)}
                   >
                     Edit Party Details
                   </button>
                   <button
-                    className="text-red-500 font-semibold hover:text-red-600 text-lg mt-2"
+                    className="text-red-500 font-semibold hover:text-red-600 text-sm mt-2"
                     onClick={() => handlePartyRemove(selectedParty)}
                   >
                     Remove Party
                   </button>
-                </div>
+                </div> */}
               </div>
             ) : (
               <div className="flex rounded-md bg-green-100 mb-2 p-3 justify-between">
@@ -319,7 +388,7 @@ export default function Parties({ data, setData, change, setChange }) {
                     />
                   </div>
                 </div>
-                <div className="cl">
+                <div className="cl text-sm">
                   {/* <p className="side">-</p> */}
                   <p>Payment Type</p>
                   <p>Number</p>
@@ -337,7 +406,7 @@ export default function Parties({ data, setData, change, setChange }) {
                         .includes(TransactionSearc.toLowerCase())
                   )
                   .map((sale, index) => (
-                    <div className="cl" key={index}>
+                    <div className="cl text-sm" key={index}>
                       <p className="grey">{sale.payment_type}</p>
                       <p className="grey">{sale.invoice_number}</p>
                       {/* <p className="grey">{sale.name}</p> */}
@@ -345,6 +414,28 @@ export default function Parties({ data, setData, change, setChange }) {
                       {/* <p className="grey">{sale.items?.length}</p> */}
                       <p className="grey">{sale.total}</p>
                       <p className="">{sale.total - sale.paid}</p>
+                      <Dropdown
+                        menuItems={[
+                          { label: "View" },
+                          { label: "Delete" },
+                          { label: "Duplicate" },
+                          { label: "Open PDF" },
+                          { label: "Print" },
+                          { label: "Preview" },
+                          { label: "Preview as delivery chalan" },
+                          { label: "convert to return" },
+                          { label: "Recieve payment" },
+                          { label: "View History" },
+                        ]}
+                        isLabelOnly={true}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 128 512"
+                        >
+                          <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                        </svg>
+                      </Dropdown>
                     </div>
                   ))}
               </div>
@@ -353,7 +444,7 @@ export default function Parties({ data, setData, change, setChange }) {
         </div>
       ) : page == "groups" ? (
         <div id="parties">
-          <div className="left">
+          <div className="left text-sm">
             {search ? (
               <div className="flex p-2 relative">
                 <svg
@@ -524,13 +615,14 @@ export default function Parties({ data, setData, change, setChange }) {
               </div>
             </div>
           )}
+
           <div className="right">
             {selectedParty ? (
               <div className="rounded-md bg-green-100 mb-2 p-3">
                 <div className="flex justify-between w-full items-center">
-                  <h1 className="text-xl font-semibold">{selectedParty}</h1>
+                  <h1 className="text-lg font-semibold">{selectedParty}</h1>
                   <button
-                    className="text-blue-500 font-semibold hover:text-blue-700 text-lg mt-2"
+                    className="text-blue-500 font-semibold hover:text-blue-700 text-lg"
                     onClick={() => setGrpPg(2)}
                   >
                     Move To This Group
@@ -560,7 +652,7 @@ export default function Parties({ data, setData, change, setChange }) {
                     />
                   </div>
                 </div>
-                <div className="cl">
+                <div className="cl text-sm">
                   {/* <p className="side">-</p> */}
                   <p>PARTY NAME</p>
                   <p>AMOUNT</p>
@@ -569,7 +661,7 @@ export default function Parties({ data, setData, change, setChange }) {
                 {data?.parties
                   ?.filter((item) => item.group === selectedParty)
                   .map((sale, index) => (
-                    <div className="cl" key={index}>
+                    <div className="cl text-sm" key={index}>
                       <p className="grey">{sale.partyName}</p>
                       <p className="">{sale.credit}</p>
                     </div>
@@ -582,16 +674,14 @@ export default function Parties({ data, setData, change, setChange }) {
         <div id="parties">
           <div className="right">
             <div className="p-4 rounded-lg m-2 bg-green-100 flex gap-3">
-              <p className="flex-1 p-3 rounded-md text-white bg-blue-200  text-2xl">
+              <p className="flex-1 p-3 rounded-md text-white font-semibold bg-blue-500  text-md">
                 {0} <span>total reward points awarded</span>
               </p>
-              <p className="flex-1 p-3 rounded-md text-white bg-red-200  text-2xl">
-                {0}
-                <span>Ammount Given as discount</span>
+              <p className="flex-1 p-3 rounded-md text-white font-semibold bg-red-500  text-md">
+                {0} <span>Ammount Given as discount</span>
               </p>
-              <p className="flex-1 p-3 rounded-md text-white bg-green-200  text-2xl">
-                {0}
-                <span>Parties with active Points</span>
+              <p className="flex-1 p-3 rounded-md text-white font-semibold bg-green-500  text-md">
+                {0} <span>Parties with active Points</span>
               </p>
             </div>
             {/* {selectedParty ? (
@@ -683,3 +773,54 @@ export default function Parties({ data, setData, change, setChange }) {
     </div>
   );
 }
+
+const PartyList = ({ data, setData, change, setChange, setClose }) => {
+  const [selectedParties, setSelectedParties] = useState([]);
+
+  const handleSelect = (partyName) => {
+    setSelectedParties((prevSelected) => {
+      if (prevSelected.includes(partyName)) {
+        return prevSelected.filter((name) => name !== partyName);
+      } else {
+        return [...prevSelected, partyName];
+      }
+    });
+  };
+
+  const handleAdd = () => {
+    const updatedParties = data.parties.map((party) => {
+      if (selectedParties.includes(party.partyName)) {
+        return { ...party, state: "inactive" };
+      }
+      return party;
+    });
+
+    console.log(updatedParties);
+
+    // setData({ ...data, parties: updatedParties });
+    // setChange(!change);
+    // setClose(false)
+    setSelectedParties([]); // Clear the selection after updating
+  };
+
+  return (
+    <div>
+      <h3>Select Parties</h3>
+      <ul>
+        {data.parties.map((party) => (
+          <li key={party.partyName}>
+            <label>
+              <input
+                type="checkbox"
+                checked={selectedParties.includes(party.partyName)}
+                onChange={() => handleSelect(party.partyName)}
+              />
+              {party.partyName}
+            </label>
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleAdd}>Add</button>
+    </div>
+  );
+};

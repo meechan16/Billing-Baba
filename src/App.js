@@ -48,8 +48,8 @@ import BarcodeMaker from "./pages/barcodeMaker";
 import VerifyData from "./pages/verifyData";
 import ImportItems from "./pages/importItems";
 import ImportParties from "./pages/importParties";
-import Bulkupdateitems from "./pages/bulkupdateitems";
 import ExportItems from "./pages/ExportItems";
+import BulkUpdateItems from "./pages/UpdateItemsBulk";
 
 function App() {
   // const Navigate = useNavigate();
@@ -285,7 +285,12 @@ function App() {
                 data={data}
                 setData={setData}
               >
-                <Bulkupdateitems data={data} setData={setData} />
+                <BulkUpdateItems
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
               </Home>
             }
           />
@@ -337,7 +342,7 @@ function App() {
             element={
               <Home part="items" data={data} setData={setData}>
                 <EditItem
-                data={data}
+                  data={data}
                   item={item}
                   setData={setData}
                   change={change}

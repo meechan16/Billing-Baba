@@ -49,7 +49,7 @@ export default function AddParties({ data, setData, change, setChange }) {
     newDa.parties ? newDa.parties.push(newData) : (newDa.parties = [newData]);
 
     OpeningBalance
-      ? newDa.Transations.push({
+      ? newDa.Transactions.push({
           type: "Opening Balance",
           name: partyName,
           date: new Date(Date.now()).toLocaleString("en-GB", {
@@ -60,7 +60,7 @@ export default function AddParties({ data, setData, change, setChange }) {
           // date: Date.now(),
           amount: parseFloat(OpeningBalance),
         })
-      : (newDa.Transations = [
+      : (newDa.Transactions = [
           {
             type: "Opening Balance",
             name: partyName,
@@ -96,7 +96,7 @@ export default function AddParties({ data, setData, change, setChange }) {
             <p>service</p> */}
           </div>
           <div className="r">
-            <button>
+            <button onClick={() => Navigate("/settings")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#000"
