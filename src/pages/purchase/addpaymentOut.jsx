@@ -3,7 +3,7 @@ import CustomInput from "../../components/customInput";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 
-export default function AddPaymentsin({
+export default function AddPaymentsOut({
   data,
   setData,
   t = true,
@@ -25,8 +25,8 @@ export default function AddPaymentsin({
       date: date ? date : "",
       reciptno: reciptno ? reciptno : "",
       ammount: ammount ? ammount : "",
-      type: "Payment-In",
-      transactionType: "Payment-In",
+      type: "Payment-Out",
+      transactionType: "Payment-Out",
     };
 
     let newDa = data;
@@ -35,20 +35,20 @@ export default function AddPaymentsin({
       : (newDa.Transactions = [newData]);
 
     // change everywehre this is used to the sum of sales where payment type is credit
-    newDa.to_collect
-      ? (newDa.to_collect -= parseFloat(newData.ammount))
-      : (newDa.to_collect = -parseFloat(newData.ammount));
+    newDa.to_pay
+      ? (newDa.to_pay += parseFloat(newData.ammount))
+      : (newDa.to_pay = +parseFloat(newData.ammount));
 
     newData.credit = newDa.parties.find((ele) => ele.partyName === Name).credit;
 
     newDa.parties.find((ele) => ele.partyName === Name).credit
-      ? (newDa.parties.find((ele) => ele.partyName === Name).credit -=
+      ? (newDa.parties.find((ele) => ele.partyName === Name).credit +=
           parseFloat(newData.ammount))
       : (newDa.parties.find((ele) => ele.partyName === Name).credit =
-          -parseFloat(newData.ammount));
+          parseFloat(newData.ammount));
     newDa.cash_in_hands
-      ? (newDa.cash_in_hands += parseFloat(newData.ammount))
-      : (newDa.cash_in_hands = parseFloat(newData.ammount));
+      ? (newDa.cash_in_hands -= parseFloat(newData.ammount))
+      : (newDa.cash_in_hands = -parseFloat(newData.ammount));
 
     newData.balance = newDa.parties.find(
       (ele) => ele.partyName === Name
@@ -57,7 +57,7 @@ export default function AddPaymentsin({
     console.log(newDa);
     setData(newDa);
     setChange(!change);
-    Navigate("/payment-in");
+    Navigate("/payment-out");
     return;
   };
 
@@ -66,7 +66,7 @@ export default function AddPaymentsin({
       <div className="container">
         <div className="top">
           <div className="l">
-            <h1>Payment-In</h1>
+            <h1>Payment-Out</h1>
             {/* <p>Product</p>
                 <div
                   className={toggle ? "toggle" : "toggle opp"}

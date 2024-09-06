@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 
-export default function AddSalesOrder({ data, setData, change, setChange }) {
+export default function AddDeliveryChallan({
+  data,
+  setData,
+  change,
+  setChange,
+}) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -11,11 +16,11 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       item: "",
       qty: 1,
       unit: "",
-      hsn: "",
       price_per_unit: "",
       discount: "",
       profit: 0,
       amount: "",
+      hsn: "",
     },
   ]);
 
@@ -29,10 +34,10 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
         qty: 1,
         unit: "",
         price_per_unit: "",
-        hsn: "",
         discount: "",
         profit: 0,
         amount: "",
+        hsn: "",
       },
     ]);
     setIndexCount(indexCount + 1);
@@ -48,7 +53,6 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       if (
         column === "qty" ||
         column === "price_per_unit" ||
-        column === "profit" ||
         column === "discount"
         // column === "tax"
       ) {
@@ -66,25 +70,17 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
         // const amount = qty * (pricePerUnit - discount + tax);
         const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
-
-        console.log(newRows[index]["profit_per_item"]);
-        console.log(qty);
-        console.log(newRows[index]["profit_per_item"] * qty);
-        newRows[index]["profit"] = newRows[index]["profit_per_item"]
-          ? newRows[index]["profit_per_item"] * qty
-          : 0;
+        newRows[index]["profit"] = newRows[index]["profit"] || 0;
 
         // Update total amount
         const newTotalAmount = newRows.reduce(
           (total, row) => total + (row.amount || 0),
           0
         );
-
         const profit = newRows.reduce(
           (total, row) => total + (row.profit || 0),
           0
         );
-
         setTotalAmount(newTotalAmount);
         setProfit(profit);
 
@@ -96,7 +92,6 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
         // setTotalTax(newTotalTax);
       }
       newRows[index][column] = value;
-      console.log(newRows);
       return newRows;
     });
     // console.log("rows");
@@ -118,23 +113,25 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
   // };
   const [Name, setName] = useState(); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(
-    parseInt(
-      data.sales[0] ? data.sales[data.sales.length - 1].invoice_number : 0
-    ) + 1
-  ); // Initial index count
+  const [invoice_number, setInvoice_number] = useState(0); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
-  const [due_date, setDue_date] = useState(""); // Initial index count
+  const [Due_date, setDue_date] = useState(""); // Initial index count
   const [state_of_supply, setState_of_supply] = useState({
     state: "",
     isDone: false,
   }); // Initial index count
   const [round_off, setRound_off] = useState(); // Initial index count
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
-  const [Description, setDescription] = useState();
+  const [Description, setDescription] = useState(); // Initial index count
+  const [paymentStatus, setPaymentStatus] = useState("pending");
   const [paid, setPaid] = useState(0);
+  const [pending, setPending] = useState(0);
 
   const [Search, setSearch] = useState(); // Initial index count
+  const [searchFocus, setSearchFoucs] = useState(); // Initial index count
+  useEffect(() => {
+    setPending(totalAmount - paid);
+  }, [totalAmount, paid]);
 
   let uid = data.uid;
   let sendData = () => {
@@ -143,155 +140,34 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      due_date: due_date ? due_date : "",
+      due_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      transactionType: "Sale order",
+      transactionType: "Delivery chalan",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
       profit: profit ? profit : "",
       total_tax: totalTax,
       description: Description ? Description : "",
-      pending: totalAmount && paid ? totalAmount - paid : 0,
+      pending: pending ? pending : "",
       paid: paid,
-      type: "Sale order",
+      type: "Delivery chalan",
     };
 
     let newDa = data;
-
-    // UPDATING ITEM's Stock
-    // newData.items.map((ele) => {
-    //   const foundItem = newDa.items.find((ele1) => ele1.Name === ele.item);
-    //   if (foundItem) {
-    //     foundItem.stock = foundItem.stock
-    //       ? parseInt(foundItem.stock) - parseInt(ele.qty)
-    //       : -parseInt(ele.qty);
-    //   }
-    // });
-
-    // UPDATING DATA
+    newDa.DeliveryChalan
+      ? newDa.DeliveryChalan.push(newData)
+      : (newDa.DeliveryChalan = [newData]);
     newDa.Transactions
       ? newDa.Transactions.push(newData)
       : (newDa.Transactions = [newData]);
-    newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-
-    // change everywehre this is used to the sum of sales where payment type is credit
-    // if (newData.payment_type == "credit") {
-    //   newDa.sale_pending
-    //     ? (newDa.sale_pending += parseFloat(newData.total))
-    //     : (newDa.sale_pending = parseFloat(newData.total));
-    //   newDa.to_collect
-    //     ? (newDa.to_collect += parseFloat(newData.pending))
-    //     : (newDa.to_collect = parseFloat(newData.pending));
-
-    //   let party = newDa.parties.find(
-    //     (ele, index) => ele.partyName === Name || ele.name === Name
-    //   );
-
-    //   party?.credit
-    //     ? (newDa.parties.find(
-    //         (ele, index) => ele.partyName === Name || ele.name === Name
-    //       ).credit += parseFloat(newData.pending))
-    //     : (newDa.parties.find(
-    //         (ele, index) => ele.partyName === Name || ele.name === Name
-    //       ).credit = parseFloat(newData.pending));
-    // } else {
-    //   console.log("CASH IN HAND INCREASED");
-    //   newDa.cash_in_hands
-    //     ? (newDa.cash_in_hands += parseFloat(newData.total))
-    //     : (newDa.cash_in_hands = parseFloat(newData.total));
-    //   console.log(newDa);
-    // }
-    // newDa.total_sales
-    //   ? (newDa.total_sales += parseFloat(newData.total))
-    //   : (newDa.total_sales = parseFloat(newData.total));
     console.log(newDa);
     setData(newDa);
     setChange(!change);
     let intex = newDa.Transactions?.length - 1;
-    Navigate("/sales-order-bill?index=" + intex);
+    Navigate("/bills?index=" + intex);
   };
-
-  // let sendData_and_get_pdf = async () => {
-  //   const newData = {
-  //     name: Name ? Name : "",
-  //     phone_no: phone_no ? phone_no : "",
-  //     invoice_number: invoice_number ? invoice_number : "",
-  //     invoice_date: invoice_date ? invoice_date : "",
-  //     state_of_supply: state_of_supply.state ? state_of_supply.state : "",
-  //     payment_type: paymentType ? paymentType : "",
-  //     items: rows ? rows : "",
-  //     round_off: round_off ? round_off : "",
-  //     total: totalAmount ? totalAmount + totalTax : "",
-  //     profit: profit ? profit : "",
-  //     total_tax: totalTax,
-  //     description: Description ? Description : "",
-  //     payment_status: paymentStatus ? paymentStatus : "",
-  //     pending: pending ? pending : "",
-  //     paid: paid,
-  //   };
-
-  //   try {
-  //     let url1 = dev_url + "get-sales-invoice-pdf";
-  //     const response = await fetch(url1, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: uid,
-  //       },
-  //       body: JSON.stringify(newData),
-  //     });
-  //     console.log(response);
-  //     const url = await response.json();
-  //     if (url.link) {
-  //       newData.invoice_link = url.link;
-  //       console.log(url);
-  //       window.open(url.link, "_blank");
-  //       window.location.href = "/";
-  //     } else {
-  //       alert("unable to generate PDF");
-  //       console.error(url);
-  //       return;
-  //     }
-  //     // const blob = await response.blob();
-  //     // const url = URL.createObjectURL(blob);
-  //   } catch (error) {
-  //     alert("unable to generate PDF");
-  //     console.error("Error generating PDF:", error);
-  //     return;
-  //   }
-
-  //   let newDa = data;
-  //   newDa.Transactions
-  //     ? newDa.Transactions.push(newData)
-  //     : (newDa.Transactions = [newData]);
-  //   newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-
-  //   // change everywehre this is used to the sum of sales where payment type is credit
-  //   if (newData.payment_type == "credit") {
-  //     newDa.sale_pending
-  //       ? (newDa.sale_pending += parseFloat(newData.total))
-  //       : (newDa.sale_pending = parseFloat(newData.total));
-  //     newDa.to_collect
-  //       ? (newDa.to_collect += parseFloat(newData.pending))
-  //       : (newDa.to_collect = parseFloat(newData.pending));
-
-  //     newDa.parties.find((index, ele) => ele.name === Name).credit
-  //       ? (newDa.parties.find((index, ele) => ele.name === Name).credit +=
-  //           parseFloat(newData.pending))
-  //       : (newDa.parties.find((index, ele) => ele.name === Name).credit =
-  //           +parseFloat(newData.pending));
-  //   } else {
-  //     newDa.cash_in_hands
-  //       ? (newDa.cash_in_hands += parseFloat(newData.total))
-  //       : (newDa.cash_in_hands = parseFloat(newData.total));
-  //   }
-  //   console.log(newDa);
-  //   setData(newDa);
-  //   setChange(!change);
-  //   Navigate("/sale-invoice");
-  // };
 
   let tax = [
     { value: 0, name: "IGST@0%" },
@@ -329,7 +205,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
               <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
             </svg>
           </button>
-          <h1>Sale Order</h1>
+          <h1>Delivery Chalan</h1>
         </div>
         <div className="">
           <p>Credit</p>
@@ -410,38 +286,17 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
           </div>
 
           <div className="r">
-            <div className="relative group flex items-center">
-              <span>Invoice Number</span>
-              {/* <p className="text-right group">{invoice_number}</p> */}
-              <div className="flex flex-col">
-                <input
-                  type="number"
-                  value={invoice_number}
-                  onChange={(e) => setInvoice_number(e.target.value)}
-                  name="InvNo"
-                  placeholder="input..."
-                  className="px-1"
-                />
-                {(!invoice_number ||
-                  invoice_number === 0 ||
-                  invoice_number === undefined) && (
-                  <button className="bg-white-500 text-blue text-sm rounded hover:underline transition-all duration-300 hidden group-hover:block">
-                    Generate random
-                  </button>
-                )}
-              </div>
-
-              {/* <button className="absolute right-0 top-0 mt-1 mr-1 bg-blue-500 text-white p-1 rounded hover:bg-blue-600 transition-opacity duration-300"> */}
-              {/* Generate random
-              </button> */}
-              {/* <input  
+            <div className="">
+              <span>Chalan Number</span>
+              {/* <p>{invoice_number}</p> */}
+              <input
                 type="number"
-                value=
+                value={invoice_number}
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
                 placeholder="input..."
                 id=""
-              /> */}
+              />
             </div>
             <div className="">
               <span>Invoice Date</span>
@@ -457,7 +312,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
               <span>Due Date</span>
               <input
                 type="date"
-                value={due_date}
+                value={Due_date}
                 onChange={(e) => setDue_date(e.target.value)}
                 id="birthday"
                 name="birthday"
@@ -567,13 +422,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
                               "price_per_unit",
                               item.salesPrice
                             );
-                            handleInputChange(rowIndex, "profit", item.profit);
                             handleInputChange(rowIndex, "hsn", item.HSN);
-                            handleInputChange(
-                              rowIndex,
-                              "profit_per_item",
-                              item.profit
-                            );
                             item.unit
                               ? handleInputChange(rowIndex, "unit", item.unit)
                               : handleInputChange(
@@ -839,7 +688,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
             </div>
           </div>
         </div>
-        <div className="ai4">add advance amount and balance</div>
+        <div className="ai4">{/* <p>{paymentStatus}</p> */}</div>
         <div className="ai5">
           {/* <label>
             Paid

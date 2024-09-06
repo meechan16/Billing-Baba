@@ -50,6 +50,15 @@ import ImportItems from "./pages/importItems";
 import ImportParties from "./pages/importParties";
 import ExportItems from "./pages/ExportItems";
 import BulkUpdateItems from "./pages/UpdateItemsBulk";
+import BillComponent from "./pages/Bill";
+import AddDeliveryChallan from "./pages/sales/addChalan";
+import SaleOrderBill from "./pages/SalesOrderBill";
+import AddSalesReturn from "./pages/sales/addSaleReturn";
+import SaleReturnBill from "./pages/sales/SaleReturnbill";
+import PurchaseOrderBill from "./pages/purchase/PurchaseOrderBill";
+import AddPaymentsOut from "./pages/purchase/addpaymentOut";
+import AddPurchaseReturn from "./pages/purchase/addPurchaseReturn";
+import PurchaseReturnBill from "./pages/purchase/PurchaseReturnBill";
 
 function App() {
   // const Navigate = useNavigate();
@@ -295,6 +304,18 @@ function App() {
             }
           />
           <Route
+            path="/bills"
+            exact
+            element={
+              <BillComponent
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
+          />
+          <Route
             path="/export-items"
             exact
             element={
@@ -503,12 +524,26 @@ function App() {
             }
           />
           <Route
-            path="/delievery-chalan"
+            path="/sales-order-bill"
+            exact
+            element={
+              // <Home part="sale" data={data} setData={setData}>
+              <SaleOrderBill
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+              // </Home>
+            }
+          />
+          <Route
+            path="/delivery-chalan"
             exact
             element={
               <Home
                 part="sale"
-                subpart="delievery-chalan"
+                subpart="delivery-chalan"
                 data={data}
                 setData={setData}
               >
@@ -519,6 +554,18 @@ function App() {
                   setChange={setChange}
                 />
               </Home>
+            }
+          />
+          <Route
+            path="/add-delivery-chalan"
+            exact
+            element={
+              <AddDeliveryChallan
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
             }
           />
           <Route
@@ -538,6 +585,30 @@ function App() {
                   setChange={setChange}
                 />
               </Home>
+            }
+          />
+          <Route
+            path="/add-sales-return"
+            exact
+            element={
+              <AddSalesReturn
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
+          />
+          <Route
+            path="/sales-return-bill"
+            exact
+            element={
+              <SaleReturnBill
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
             }
           />
           <Route
@@ -574,6 +645,20 @@ function App() {
             }
           />
           <Route
+            path="/purchase-order-bill"
+            exact
+            element={
+              // <Home part="purchase" data={data} setData={setData}>
+              <PurchaseOrderBill
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+              // </Home>l
+            }
+          />
+          <Route
             path="/payment-out"
             exact
             element={
@@ -584,6 +669,25 @@ function App() {
                 setData={setData}
               >
                 <PaymentOut
+                  data={data}
+                  setData={setData}
+                  change={change}
+                  setChange={setChange}
+                />
+              </Home>
+            }
+          />
+          <Route
+            path="/add-payment-out"
+            exact
+            element={
+              <Home
+                part="purchase"
+                subpart="payment-out"
+                data={data}
+                setData={setData}
+              >
+                <AddPaymentsOut
                   data={data}
                   setData={setData}
                   change={change}
@@ -628,6 +732,30 @@ function App() {
                   setChange={setChange}
                 />
               </Home>
+            }
+          />
+          <Route
+            path="/add-purchase-return"
+            exact
+            element={
+              <AddPurchaseReturn
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
+          />
+          <Route
+            path="/purchase-return-bill"
+            exact
+            element={
+              <PurchaseReturnBill
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
             }
           />
           <Route

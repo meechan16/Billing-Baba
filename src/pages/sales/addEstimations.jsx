@@ -150,9 +150,9 @@ export default function AddSales({ data, setData, change, setChange }) {
     newDa.sales_estimations
       ? newDa.sales_estimations.push(newData)
       : (newDa.sales_estimations = [newData]);
-    newDa.Transations
-      ? newDa.Transations.push(newData)
-      : (newDa.Transations = [newData]);
+    newDa.Transactions
+      ? newDa.Transactions.push(newData)
+      : (newDa.Transactions = [newData]);
     console.log(newDa);
     setData(newDa);
     setChange(!change);

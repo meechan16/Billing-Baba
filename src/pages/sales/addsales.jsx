@@ -173,9 +173,9 @@ export default function AddSales({ data, setData, change, setChange }) {
     });
 
     // UPDATING DATA
-    newDa.Transations
-      ? newDa.Transations.push(newData)
-      : (newDa.Transations = [newData]);
+    newDa.Transactions
+      ? newDa.Transactions.push(newData)
+      : (newDa.Transactions = [newData]);
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
 
     // change everywehre this is used to the sum of sales where payment type is credit
@@ -198,7 +198,6 @@ export default function AddSales({ data, setData, change, setChange }) {
         : (newDa.parties.find(
             (ele, index) => ele.partyName === Name || ele.name === Name
           ).credit = parseFloat(newData.pending));
-
     } else {
       console.log("CASH IN HAND INCREASED");
       newDa.cash_in_hands
@@ -265,9 +264,9 @@ export default function AddSales({ data, setData, change, setChange }) {
     }
 
     let newDa = data;
-    newDa.Transations
-      ? newDa.Transations.push(newData)
-      : (newDa.Transations = [newData]);
+    newDa.Transactions
+      ? newDa.Transactions.push(newData)
+      : (newDa.Transactions = [newData]);
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
 
     // change everywehre this is used to the sum of sales where payment type is credit

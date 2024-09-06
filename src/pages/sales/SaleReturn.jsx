@@ -1,34 +1,10 @@
 import React, { useState, useEffect } from "react";
-
-import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
+import { useNavigate } from "react-router-dom";
 
-export default function SaleReturn({ data, setData }) {
-  // filter result by paid payments
+export default function SaleReturn({ data, setData, change, setChange }) {
+  const Navigate = useNavigate();
 
-  // const [data, setData] = useState([]);
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = () => {
-  //   fetch(dev_url + "/get_user", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "nulll",
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Data fetch:", data.data.sales);
-  //       setData(data.data || []);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
   return (
     <div id="saleInvoice">
       <div className="title">
@@ -36,7 +12,7 @@ export default function SaleReturn({ data, setData }) {
           <div className="l">
             <select name="" id="">
               <option selected value="">
-                All Sales Invoice
+                All Sales Return Invoice
               </option>
               <option value="">This Month</option>
               <option value="">This Quater</option>
@@ -80,7 +56,9 @@ export default function SaleReturn({ data, setData }) {
               </svg>
               <input type="" />
             </div>
-            <button>+ Add Credit Note</button>
+            <button onClick={() => Navigate("/add-sales-return")}>
+              + Add Credit Note
+            </button>
           </div>
           <div className="cl">
             <p className="side">#</p>
@@ -94,7 +72,9 @@ export default function SaleReturn({ data, setData }) {
             <p>BALANCE</p>
             <p className="side">-</p>
           </div>
-          {data?.sales?.map((sale, index) => (
+          {data?.Transactions.filter(
+            (sale) => sale.type === "Sale Return"
+          )?.map((sale, index) => (
             <div className="cl" key={index}>
               <p className="side">{index + 1}</p>
               <p className="">{sale.invoice_date}</p>
@@ -119,17 +99,20 @@ export default function SaleReturn({ data, setData }) {
                     "Print",
                   ]}
                 > */}
-                 <Dropdown menuItems={[
-                                { label: "print"},
-                                { label: "forward"},
-                                { label: "generate Invoice"},
-                                { label: "recieve payment"},
-                                { label: "View/Edit"},
-                                { label: "cancel"},
-                                { label: "Delete"},
-                                { label: "Duplicate"},
-                                { label: "Print"}
-                              ]} isLabelOnly={true}>
+                <Dropdown
+                  menuItems={[
+                    { label: "print" },
+                    { label: "forward" },
+                    { label: "generate Invoice" },
+                    { label: "recieve payment" },
+                    { label: "View/Edit" },
+                    { label: "cancel" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Print" },
+                  ]}
+                  isLabelOnly={true}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                     <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
                   </svg>

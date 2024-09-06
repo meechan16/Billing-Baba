@@ -68,7 +68,7 @@ export default function EditParties({
     console.log(newDa.parties[index]);
 
     OpeningBalance
-      ? newDa.Transations.push({
+      ? newDa.Transactions.push({
           type: "Opening Balance",
           name: partyName,
           date: new Date(Date.now()).toLocaleString("en-GB", {
@@ -79,7 +79,7 @@ export default function EditParties({
           // date: Date.now(),
           amount: parseFloat(OpeningBalance),
         })
-      : (newDa.Transations = [
+      : (newDa.Transactions = [
           {
             type: "Opening Balance",
             name: partyName,

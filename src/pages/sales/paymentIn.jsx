@@ -97,7 +97,7 @@ export default function PaymentIn({ data, setData }) {
             <p>BALANCE</p>
             <p className="side">-</p>
           </div>
-          {data?.Transations?.filter(
+          {data?.Transactions?.filter(
             (transaction, index) => transaction.type === "Payment-In"
           ).map((sale, index) => (
             <div className="cl" key={index}>

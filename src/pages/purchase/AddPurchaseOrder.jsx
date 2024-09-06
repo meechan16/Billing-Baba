@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 
-export default function AddPurchaseOrder({ data }) {
+export default function AddPurchaseOrder({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
     {
       index: 1,
       item: "",
-      qty: "",
+      qty: 1,
       unit: "",
+      hsn: "",
       price_per_unit: "",
       discount: "",
-      tax: "",
+      profit: 0,
       amount: "",
     },
   ]);
@@ -25,11 +26,12 @@ export default function AddPurchaseOrder({ data }) {
       {
         index: indexCount,
         item: "",
-        qty: "",
+        qty: 1,
         unit: "",
         price_per_unit: "",
+        hsn: "",
         discount: "",
-        tax: "",
+        profit: 0,
         amount: "",
       },
     ]);
@@ -37,6 +39,7 @@ export default function AddPurchaseOrder({ data }) {
   };
 
   const [totalAmount, setTotalAmount] = useState(0);
+  const [profit, setProfit] = useState(0);
   const [totalTax, setTotalTax] = useState(0);
 
   const handleInputChange = async (index, column, value) => {
@@ -45,97 +48,203 @@ export default function AddPurchaseOrder({ data }) {
       if (
         column === "qty" ||
         column === "price_per_unit" ||
-        column === "discount" ||
-        column === "tax"
+        column === "profit" ||
+        column === "discount"
+        // column === "tax"
       ) {
         const qty = parseInt(newRows[index]["qty"]);
         const pricePerUnit = parseInt(newRows[index]["price_per_unit"]);
         const discount = parseInt(newRows[index]["discount"]);
-        const taxPercentage = parseInt(newRows[index]["tax"]);
+        // const taxPercentage = parseInt(newRows[index]["tax"]);
 
-        console.log(qty);
-        console.log(pricePerUnit);
-        console.log(discount);
-        const tax = (pricePerUnit - discount) * (taxPercentage / 100);
-        console.log(tax);
+        // console.log(qty);
+        // console.log(pricePerUnit);
+        // console.log(discount);
+        // const tax = (pricePerUnit - discount) * (taxPercentage / 100);
+        // console.log(tax);
         // Calculate amount
-        const amount = qty * (pricePerUnit - discount + tax);
+        // const amount = qty * (pricePerUnit - discount + tax);
+        const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
+
+        console.log(newRows[index]["profit_per_item"]);
+        console.log(qty);
+        console.log(newRows[index]["profit_per_item"] * qty);
+        newRows[index]["profit"] = newRows[index]["profit_per_item"]
+          ? newRows[index]["profit_per_item"] * qty
+          : 0;
 
         // Update total amount
         const newTotalAmount = newRows.reduce(
           (total, row) => total + (row.amount || 0),
           0
         );
-        setTotalAmount(newTotalAmount);
 
-        // Update total tax
-        const newTotalTax = newRows.reduce(
-          (total, row) => total + (row.amount ? tax : 0),
+        const profit = newRows.reduce(
+          (total, row) => total + (row.profit || 0),
           0
         );
-        setTotalTax(newTotalTax);
+
+        setTotalAmount(newTotalAmount);
+        setProfit(profit);
+
+        // Update total tax
+        // const newTotalTax = newRows.reduce(
+        //   (total, row) => total + (row.amount ? tax : 0),
+        //   0
+        // );
+        // setTotalTax(newTotalTax);
       }
       newRows[index][column] = value;
+      console.log(newRows);
       return newRows;
     });
+    // console.log("rows");
+    // console.log(rows[0]);
   };
 
+  // const addItemToRow = async (index, item) => {
+  //   setRows([
+  //     ...rows,
+  //     (rows[index] = {
+  //       index: index,
+  //       item: item.name,
+  //       unit: item.unit,
+  //       price_per_unit: item.price_per_unit,
+  //       discount: item.discount,
+  //       amount: "",
+  //     }),
+  //   ]);
+  // };
   const [Name, setName] = useState(); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(); // Initial index count
+  const [invoice_number, setInvoice_number] = useState(
+    parseInt(
+      data.sales[0] ? data.sales[data.sales.length - 1].invoice_number : 0
+    ) + 1
+  ); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
-  const [state_of_supply, setState_of_supply] = useState(); // Initial index count
+  const [due_date, setDue_date] = useState(""); // Initial index count
+  const [state_of_supply, setState_of_supply] = useState({
+    state: "",
+    isDone: false,
+  }); // Initial index count
   const [round_off, setRound_off] = useState(); // Initial index count
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
-  const [Description, setDescription] = useState(); // Initial index count
-  const [paymentStatus, setPaymentStatus] = useState("pending");
+  const [Description, setDescription] = useState();
+  const [paid, setPaid] = useState(0);
+
+  const [Search, setSearch] = useState(); // Initial index count
+
   let uid = data.uid;
   let sendData = () => {
-    return;
-    const data = {
+    const newData = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      state_of_supply: state_of_supply ? state_of_supply : "",
+      due_date: due_date ? due_date : "",
+      state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      transactionType: "Sale",
+      transactionType: "Purchase order",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
-      total: totalAmount ? totalAmount : "",
-      total_tax: totalTax ? totalTax : "",
+      total: totalAmount ? totalAmount + totalTax : "",
+      profit: profit ? profit : "",
+      total_tax: totalTax,
       description: Description ? Description : "",
-      payment_status: paymentStatus ? paymentStatus : "",
+      pending: totalAmount && paid ? totalAmount - paid : 0,
+      paid: paid,
+      type: "Purchase order",
     };
-    let url = dev_url + "add-purchase-order";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: uid, // Modify this if necessary
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sales: ", data);
-        alert("done");
-        Navigate("/");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+
+    let newDa = data;
+
+    // UPDATING ITEM's Stock
+    // newData.items.map((ele) => {
+    //   const foundItem = newDa.items.find((ele1) => ele1.Name === ele.item);
+    //   if (foundItem) {
+    //     foundItem.stock = foundItem.stock
+    //       ? parseInt(foundItem.stock) - parseInt(ele.qty)
+    //       : -parseInt(ele.qty);
+    //   }
+    // });
+
+    // UPDATING DATA
+    newDa.Transactions
+      ? newDa.Transactions.push(newData)
+      : (newDa.Transactions = [newData]);
+    newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
+
+    // change everywehre this is used to the sum of sales where payment type is credit
+    // if (newData.payment_type == "credit") {
+    //   newDa.sale_pending
+    //     ? (newDa.sale_pending += parseFloat(newData.total))
+    //     : (newDa.sale_pending = parseFloat(newData.total));
+    //   newDa.to_collect
+    //     ? (newDa.to_collect += parseFloat(newData.pending))
+    //     : (newDa.to_collect = parseFloat(newData.pending));
+
+    //   let party = newDa.parties.find(
+    //     (ele, index) => ele.partyName === Name || ele.name === Name
+    //   );
+
+    //   party?.credit
+    //     ? (newDa.parties.find(
+    //         (ele, index) => ele.partyName === Name || ele.name === Name
+    //       ).credit += parseFloat(newData.pending))
+    //     : (newDa.parties.find(
+    //         (ele, index) => ele.partyName === Name || ele.name === Name
+    //       ).credit = parseFloat(newData.pending));
+    // } else {
+    //   console.log("CASH IN HAND INCREASED");
+    //   newDa.cash_in_hands
+    //     ? (newDa.cash_in_hands += parseFloat(newData.total))
+    //     : (newDa.cash_in_hands = parseFloat(newData.total));
+    //   console.log(newDa);
+    // }
+    // newDa.total_sales
+    //   ? (newDa.total_sales += parseFloat(newData.total))
+    //   : (newDa.total_sales = parseFloat(newData.total));
+    console.log(newDa);
+    setData(newDa);
+    setChange(!change);
+    let intex = newDa.Transactions?.length - 1;
+    Navigate("/purchase-order-bill?index=" + intex);
   };
 
+  let tax = [
+    { value: 0, name: "IGST@0%" },
+    { value: 0, name: "GST@0%" },
+    { value: 0.5, name: "IGST@0.25%" },
+    { value: 0.5, name: "GST@0.25%" },
+    { value: 3, name: "IGST@3%" },
+    { value: 3, name: "GST@3%" },
+    { value: 5, name: "IGST@5%" },
+    { value: 5, name: "GST@5%" },
+    { value: 12, name: "IGST@12%" },
+    { value: 18, name: "IGST@18%" },
+    { value: 18, name: "GST@18%" },
+    { value: 28, name: "IGST@28%" },
+    { value: 28, name: "GST @28%" },
+  ];
+  if (!data.tax) setData({ ...data, tax: tax });
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   useEffect(() => {
-    console.log(paymentType);
-  }, [paymentType]);
+    const today = new Date();
+    setInvoice_date(formatDate(today));
+  }, []);
   return (
     <div id="addsales">
       <div className="top">
         <div className="">
-          <button onClick={() => Navigate("/purchase-order")}>
+          <button onClick={() => Navigate("/")}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
               <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
             </svg>
@@ -147,7 +256,8 @@ export default function AddPurchaseOrder({ data }) {
           <div
             className={toggle ? "toggle" : "toggle opp"}
             onClick={() => {
-              setpaymentType(toggle ? "Cash" : "Credit");
+              // setpaymentType(toggle ? "Cash" : "Credit");
+              setpaymentType(toggle ? "cash" : "credit");
               setToggle(!toggle);
             }}
           >
@@ -163,14 +273,43 @@ export default function AddPurchaseOrder({ data }) {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
               </svg>
-              <input
-                type="text"
-                name="name"
-                value={Name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Search by Name/Phone"
-                id=""
-              />
+
+              <div className="search">
+                <input
+                  type="text"
+                  name="name"
+                  value={Name ? Name : Search?.party ? Search?.party : ""}
+                  onChange={(e) => setSearch({ party: e.target.value })}
+                  placeholder="Search by Name/Phone"
+                  id=""
+                />
+                {Search?.party && (
+                  <ul>
+                    {data.parties
+                      .filter((customer) =>
+                        customer.partyName
+                          .toLowerCase()
+                          .includes(Search.party.toLowerCase())
+                      )
+                      .map((customer) => (
+                        <li
+                          key={customer.phone_no}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            setName(customer.partyName);
+                            setPhone_no(customer.phoneNo);
+                            setSearch();
+                          }}
+                        >
+                          {customer.partyName}
+                        </li>
+                      ))}
+                    <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
+              </div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               </svg>
@@ -191,99 +330,259 @@ export default function AddPurchaseOrder({ data }) {
           </div>
 
           <div className="r">
-            {/* <div className="">
-                      <span>Phone No</span>
-                      <input
-                        type="text"
-                        value={phone_no}
-                        onChange={(e) => setPhone_no(e.target.value)}
-                        name="phNo"
-                        placeholder="input..."
-                        id=""
-                      />
-                    </div> */}
-            <div className="">
+            <div className="relative group flex items-center">
               <span>Invoice Number</span>
-              <input
-                type="text"
-                value={invoice_number}
+              {/* <p className="text-right group">{invoice_number}</p> */}
+              <div className="flex flex-col">
+                <input
+                  type="number"
+                  value={invoice_number}
+                  onChange={(e) => setInvoice_number(e.target.value)}
+                  name="InvNo"
+                  placeholder="input..."
+                  className="px-1"
+                />
+                {(!invoice_number ||
+                  invoice_number === 0 ||
+                  invoice_number === undefined) && (
+                  <button className="bg-white-500 text-blue text-sm rounded hover:underline transition-all duration-300 hidden group-hover:block">
+                    Generate random
+                  </button>
+                )}
+              </div>
+
+              {/* <button className="absolute right-0 top-0 mt-1 mr-1 bg-blue-500 text-white p-1 rounded hover:bg-blue-600 transition-opacity duration-300"> */}
+              {/* Generate random
+              </button> */}
+              {/* <input  
+                type="number"
+                value=
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
                 placeholder="input..."
                 id=""
-              />
+              /> */}
             </div>
             <div className="">
               <span>Invoice Date</span>
-              {/* <DatePicker
-                        selected={invoice_date}
-                        onChange={handleChange}
-                        dateFormat="dd/MM/yyyy"
-                      /> */}
               <input
                 type="date"
+                value={invoice_date}
                 onChange={(e) => setInvoice_date(e.target.value)}
                 id="birthday"
                 name="birthday"
               ></input>
-              {/* <input
-                        type="text"
-                        value={invoice_date}
-                        onChange={(e) => setInvoice_date(e.target.value)}
-                        name="InvDate"
-                        placeholder="input..."
-                        id=""
-                      /> */}
+            </div>
+            <div className="">
+              <span>Due Date</span>
+              <input
+                type="date"
+                value={due_date}
+                onChange={(e) => setDue_date(e.target.value)}
+                id="birthday"
+                name="birthday"
+              ></input>
             </div>
             <div className="">
               <span>State of supply</span>
               <input
                 type="text"
-                value={state_of_supply}
-                onChange={(e) => setState_of_supply(e.target.value)}
+                value={state_of_supply.state}
+                onChange={(e) =>
+                  setState_of_supply({ state: e.target.value, isDone: false })
+                }
                 name="State"
                 placeholder="input..."
                 id=""
               />
             </div>
+            <div className="ne">
+              {state_of_supply.state && !state_of_supply.isDone && (
+                <div className="dropdown">
+                  {statesAndUnionTerritoriesOfIndia
+                    .filter((e) =>
+                      e
+                        .toLocaleLowerCase()
+                        .includes(state_of_supply.state.toLocaleLowerCase())
+                    )
+                    .map((e, index) => (
+                      <p
+                        key={index}
+                        onClick={() =>
+                          setState_of_supply({ state: e, isDone: true })
+                        }
+                      >
+                        {e}
+                      </p>
+                    ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="ai2">
-          <div className="cl top">
-            <p>item</p>
-            <p>QTY</p>
-            <p>UNIT</p>
-            <p>PRICE/UNIT</p>
-            <p>DISCOUNT</p>
-            <p>TAX</p>
-            <p>AMOUNT</p>
+          <div className="rounded-sm flex justify-between gap-1 md-2 items-center">
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              item
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              QTY
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              UNIT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              PRICE/UNIT
+            </p>
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              DISCOUNT
+            </p>
+            {/* <p>TAX</p> */}
+            <p className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
+              AMOUNT
+            </p>
           </div>
           {rows.map((row, rowIndex) => (
-            <div className="cl" key={rowIndex}>
-              <div>
+            <div
+              className="rounded-sm flex justify-between my-1 gap-1 items-center"
+              key={rowIndex}
+            >
+              <div className="w-full relative">
                 <input
-                  value={row.col1}
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                  value={
+                    rows[rowIndex].item
+                      ? rows[rowIndex].item
+                      : Search
+                      ? Search[rowIndex]?.item
+                      : ""
+                  }
                   onChange={(e) =>
-                    handleInputChange(rowIndex, "item", e.target.value)
+                    setSearch({ rowIndex: { item: e.target.value } })
                   }
                 />
+                {/* {console.log(rows[rowIndex].item)} */}
+                {Search?.rowIndex?.item && (
+                  <ul className="absolute bg-white w-full">
+                    {data.items
+                      .filter((item) =>
+                        item.Name.toLowerCase().includes(
+                          rows[rowIndex].item.toLowerCase()
+                        )
+                      )
+                      .map((item) => (
+                        <li
+                          key={item.code}
+                          onClick={() => {
+                            handleInputChange(rowIndex, "item", item.Name);
+                            handleInputChange(rowIndex, "item_details", item);
+                            // handleInputChange(rowIndex, "tax", item.tax);
+                            handleInputChange(
+                              rowIndex,
+                              "discount",
+                              item.discount
+                            );
+                            handleInputChange(
+                              rowIndex,
+                              "price_per_unit",
+                              item.salesPrice
+                            );
+                            handleInputChange(rowIndex, "profit", item.profit);
+                            handleInputChange(rowIndex, "hsn", item.HSN);
+                            handleInputChange(
+                              rowIndex,
+                              "profit_per_item",
+                              item.profit
+                            );
+                            item.unit
+                              ? handleInputChange(rowIndex, "unit", item.unit)
+                              : handleInputChange(
+                                  rowIndex,
+                                  "unit",
+                                  "Not Available"
+                                );
+                            setSearch({});
+                          }}
+                          className="p-2 border-b border-gray-300 hover:bg-gray-200 cursor-pointer"
+                        >
+                          {item.Name}
+                        </li>
+                      ))}
+                    <li
+                      className="p-2 text-blue-500 font-semibold hover:bg-gray-200 cursor-pointer"
+                      onClick={() => Navigate("/addParties")}
+                    >
+                      Add Party +
+                    </li>
+                  </ul>
+                )}
               </div>
-              <div>
+              <input
+                type="number"
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                value={rows[rowIndex].qty}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "qty", e.target.value)
+                }
+              />
+              {/* <div>
+              </div> */}
+              <div className="w-full">
                 <input
-                  value={row.col2}
+                  className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                  value={
+                    rows[rowIndex].unit
+                      ? rows[rowIndex].unit
+                      : Search
+                      ? Search[rowIndex]?.unit
+                      : ""
+                  }
                   onChange={(e) =>
-                    handleInputChange(rowIndex, "qty", e.target.value)
+                    setSearch({ rowIndex: { unit: e.target.value } })
                   }
                 />
-              </div>
-              <div>
-                {/* <input
-                          value={row.col3}
-                          onChange={(e) =>
-                            handleInputChange(rowIndex, "unit", e.target.value)
-                          }
-                        /> */}
-                <select
+                {Search?.rowIndex?.unit && (
+                  <ul>
+                    <li
+                      className="add"
+                      onClick={() => Navigate("/items?data=addUnit")}
+                    >
+                      Add Units +
+                    </li>
+                    {data.units
+                      .filter((unit) =>
+                        unit.name
+                          .toLowerCase()
+                          .includes(
+                            rows[rowIndex].unit
+                              ? rows[rowIndex].unit.toLowerCase()
+                              : ""
+                          )
+                      )
+                      .map((unit) => (
+                        <li
+                          key={unit.name}
+                          onClick={() => {
+                            // i should probably add more than a name to improve future search filter
+                            handleInputChange(rowIndex, "unit", unit.name);
+                            setSearch({});
+                          }}
+                        >
+                          {unit.name}
+                        </li>
+                      ))}
+                    <li
+                      className="extra"
+                      onClick={() => {
+                        handleInputChange(rowIndex, "unit", "-");
+                        setSearch({});
+                      }}
+                    >
+                      --- none ---
+                    </li>
+                  </ul>
+                )}
+                {/* <select
                   name=""
                   id=""
                   onChange={(e) =>
@@ -294,35 +593,33 @@ export default function AddPurchaseOrder({ data }) {
                   <option value="BAG">Bag</option>
                   <option value="Gram">Gram</option>
                   <option value="UNIT">UNIT</option>
-                </select>
+                </select> */}
               </div>
-              <div>
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                type="number"
+                value={rows[rowIndex].price_per_unit}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "price_per_unit", e.target.value)
+                }
+              />
+              {/* <div></div>
+              <div></div> */}
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                type="number"
+                value={rows[rowIndex].discount}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "discount", e.target.value)
+                }
+              />
+              {/* <div>
                 <input
-                  value={row.col4}
+                  value={row.col6}
                   onChange={(e) =>
-                    handleInputChange(
-                      rowIndex,
-                      "price_per_unit",
-                      e.target.value
-                    )
+                    handleInputChange(rowIndex, "tax", e.target.value)
                   }
                 />
-              </div>
-              <div>
-                <input
-                  value={row.col5}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "discount", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                {/* <input
-                          value={row.col6}
-                          onChange={(e) =>
-                            handleInputChange(rowIndex, "tax", e.target.value)
-                          }
-                        /> */}
                 <select
                   name=""
                   id=""
@@ -348,28 +645,29 @@ export default function AddPurchaseOrder({ data }) {
 
                   <option value="28">GST @28%</option>
                 </select>
-              </div>
-              <div>
-                <input
-                  value={row.amount}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "amount", e.target.value)
-                  }
-                />
-              </div>
+              </div> */}
+              <input
+                className="w-full  py-3  text-center bg-gray-100 rounded-sm"
+                type="number"
+                value={rows[rowIndex].amount}
+                onChange={(e) =>
+                  handleInputChange(rowIndex, "amount", e.target.value)
+                }
+              />
+              {/* <div></div> */}
             </div>
           ))}
         </div>
         <div className="ai3">
           <div className="l">
             {/* <input type="checkbox" name="" id="" />
-                    <span>Round Off</span>
-                    <input
-                      className="in"
-                      value={round_off}
-                      onChange={(e) => setRound_off(e.target.value)}
-                      type="text"
-                    /> */}
+            <span>Round Off</span>
+            <input
+              className="in"
+              value={round_off}
+              onChange={(e) => setRound_off(e.target.value)}
+              type="text"
+            /> */}
 
             <input
               type="text"
@@ -378,39 +676,92 @@ export default function AddPurchaseOrder({ data }) {
               placeholder="Add Description..."
             />
             {/* <select onChange={(e) => setpaymentType(e.target.value)}>
-        
-                      <option disabled selected value="">
-                        PAYMENT TYPE
-                      </option>
-                      <option value="">CASH</option>
-                      <option value="">CHECK</option>
-                    </select> */}
+
+              <option disabled selected value="">
+                PAYMENT TYPE
+              </option>
+              <option value="">CASH</option>
+              <option value="">CHECK</option>
+            </select> */}
             <button onClick={addRow}>ADD ROW</button>
             {/* <button
-                      onClick={() => {
-                        sendData();
-                      }}
-                    >
-                      send Data
-                    </button> */}
+              onClick={() => {
+                sendData();
+              }}
+            >
+              send Data
+            </button> */}
             {/* <button
-                      onClick={() => {
-                        // console.log(rows);
-                        fetchData();
-                      }}
-                    >
-                      fetch Data
-                    </button> */}
+              onClick={() => {
+                // console.log(rows);
+                fetchData();
+              }}
+            >
+              fetch Data
+            </button> */}
           </div>
-          <div className="r">
-            <span>Total</span>
-            <span>Rs.</span>
-            <p>{totalAmount}</p>
+          <div className="">
+            {/* {paymentStatus === "pending" && (
+              <div className="a">
+                <span>Amount paid: </span>
+                <input
+                  type="number"
+                  value={paid}
+                  onChange={(e) => setPaid(e.target.value)}
+                />
+              </div>
+            )} */}
+
+            <div className="">
+              {/* <input
+                value={
+                  rows[rowIndex]?.tax
+                    ? rows[rowIndex].tax
+                    : Search
+                    ? Search[rowIndex]?.tax
+                    : ""
+                }
+                onChange={(e) =>
+                  setSearch({ rowIndex: { tax: e.target.value } })
+                }
+              /> */}
+              <select
+                name=""
+                id=""
+                onChange={(e) => {
+                  // alert(e.target.value);
+                  setTotalTax((e.target.value / 100).toFixed(2) * totalAmount);
+                }}
+              >
+                {data.tax?.map((unit) => (
+                  <option key={unit.name} value={unit.value}>
+                    {unit.name}
+                  </option>
+                ))}
+              </select>
+              {/* <p className="r">{totalTax}</p> */}
+              {/* {Search?.rowIndex?.tax && (
+                <ul> */}
+              {/* <li className="add" onClick={() => Navigate("/addParties")}>
+                      Add Ta +
+                    </li> */}
+              {/* </ul>
+              )} */}
+            </div>
+            <div className="r">
+              <span>Tax</span>
+              <p className="sub">{totalTax}</p>
+            </div>
+            <div className="r">
+              <span>Total</span>
+              <span>Rs.</span>
+              <p>{totalAmount + totalTax}</p>
+            </div>
           </div>
         </div>
-        <div className="ai4">{/* <p>{paymentStatus}</p> */}</div>
+        <div className="ai4">add advance amount and balance</div>
         <div className="ai5">
-          <label>
+          {/* <label>
             Paid
             <input
               type="radio"
@@ -428,7 +779,10 @@ export default function AddPurchaseOrder({ data }) {
               checked={paymentStatus === "pending"}
               onChange={(e) => setPaymentStatus(e.target.value)}
             />
-          </label>
+          </label> */}
+          {/* <button className="save1" onClick={() => sendData_and_get_pdf()}>
+            Save & Generate Invoice
+          </button> */}
           <button className="save" onClick={() => sendData()}>
             Save
           </button>
@@ -443,3 +797,42 @@ export default function AddPurchaseOrder({ data }) {
     </div>
   );
 }
+
+const statesAndUnionTerritoriesOfIndia = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Lakshadweep",
+  "Delhi",
+  "Puducherry",
+  "Ladakh",
+  "Jammu and Kashmir",
+];

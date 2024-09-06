@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 
-export default function AddSalesOrder({ data, setData, change, setChange }) {
+export default function AddPurchaseReturn({
+  data,
+  setData,
+  change,
+  setChange,
+}) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -143,10 +148,10 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      due_date: due_date ? due_date : "",
+      date: due_date ? due_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      transactionType: "Sale order",
+      transactionType: "Purchase Return",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
@@ -155,7 +160,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       description: Description ? Description : "",
       pending: totalAmount && paid ? totalAmount - paid : 0,
       paid: paid,
-      type: "Sale order",
+      type: "Purchase Return",
     };
 
     let newDa = data;
@@ -210,88 +215,8 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
     setData(newDa);
     setChange(!change);
     let intex = newDa.Transactions?.length - 1;
-    Navigate("/sales-order-bill?index=" + intex);
+    Navigate("/purchase-return-bill?index=" + intex);
   };
-
-  // let sendData_and_get_pdf = async () => {
-  //   const newData = {
-  //     name: Name ? Name : "",
-  //     phone_no: phone_no ? phone_no : "",
-  //     invoice_number: invoice_number ? invoice_number : "",
-  //     invoice_date: invoice_date ? invoice_date : "",
-  //     state_of_supply: state_of_supply.state ? state_of_supply.state : "",
-  //     payment_type: paymentType ? paymentType : "",
-  //     items: rows ? rows : "",
-  //     round_off: round_off ? round_off : "",
-  //     total: totalAmount ? totalAmount + totalTax : "",
-  //     profit: profit ? profit : "",
-  //     total_tax: totalTax,
-  //     description: Description ? Description : "",
-  //     payment_status: paymentStatus ? paymentStatus : "",
-  //     pending: pending ? pending : "",
-  //     paid: paid,
-  //   };
-
-  //   try {
-  //     let url1 = dev_url + "get-sales-invoice-pdf";
-  //     const response = await fetch(url1, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: uid,
-  //       },
-  //       body: JSON.stringify(newData),
-  //     });
-  //     console.log(response);
-  //     const url = await response.json();
-  //     if (url.link) {
-  //       newData.invoice_link = url.link;
-  //       console.log(url);
-  //       window.open(url.link, "_blank");
-  //       window.location.href = "/";
-  //     } else {
-  //       alert("unable to generate PDF");
-  //       console.error(url);
-  //       return;
-  //     }
-  //     // const blob = await response.blob();
-  //     // const url = URL.createObjectURL(blob);
-  //   } catch (error) {
-  //     alert("unable to generate PDF");
-  //     console.error("Error generating PDF:", error);
-  //     return;
-  //   }
-
-  //   let newDa = data;
-  //   newDa.Transactions
-  //     ? newDa.Transactions.push(newData)
-  //     : (newDa.Transactions = [newData]);
-  //   newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-
-  //   // change everywehre this is used to the sum of sales where payment type is credit
-  //   if (newData.payment_type == "credit") {
-  //     newDa.sale_pending
-  //       ? (newDa.sale_pending += parseFloat(newData.total))
-  //       : (newDa.sale_pending = parseFloat(newData.total));
-  //     newDa.to_collect
-  //       ? (newDa.to_collect += parseFloat(newData.pending))
-  //       : (newDa.to_collect = parseFloat(newData.pending));
-
-  //     newDa.parties.find((index, ele) => ele.name === Name).credit
-  //       ? (newDa.parties.find((index, ele) => ele.name === Name).credit +=
-  //           parseFloat(newData.pending))
-  //       : (newDa.parties.find((index, ele) => ele.name === Name).credit =
-  //           +parseFloat(newData.pending));
-  //   } else {
-  //     newDa.cash_in_hands
-  //       ? (newDa.cash_in_hands += parseFloat(newData.total))
-  //       : (newDa.cash_in_hands = parseFloat(newData.total));
-  //   }
-  //   console.log(newDa);
-  //   setData(newDa);
-  //   setChange(!change);
-  //   Navigate("/sale-invoice");
-  // };
 
   let tax = [
     { value: 0, name: "IGST@0%" },
@@ -329,7 +254,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
               <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
             </svg>
           </button>
-          <h1>Sale Order</h1>
+          <h1>Purchase Return</h1>
         </div>
         <div className="">
           <p>Credit</p>
@@ -454,7 +379,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
               ></input>
             </div>
             <div className="">
-              <span>Due Date</span>
+              <span>Date</span>
               <input
                 type="date"
                 value={due_date}

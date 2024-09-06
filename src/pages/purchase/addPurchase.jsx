@@ -143,9 +143,9 @@ export default function AddPurchase({ data, setData, change, setChange }) {
     });
 
     // Update transactions
-    newDa.Transations
-      ? newDa.Transations.push(newData)
-      : (newDa.Transations = [newData]);
+    newDa.Transactions
+      ? newDa.Transactions.push(newData)
+      : (newDa.Transactions = [newData]);
     newDa.purchase
       ? newDa.purchase.push(newData)
       : (newDa.purchase = [newData]);

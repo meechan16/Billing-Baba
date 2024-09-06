@@ -6,8 +6,8 @@ export default function EstimatedQuortation({ data, setData }) {
   const Navigate = useNavigate();
   const [dataList, setDataList] = useState();
   useEffect(() => {
-    console.log(data.Transations);
-    let list = data.Transations?.filter(
+    console.log(data.Transactions);
+    let list = data.Transactions?.filter(
       (ele, index) => ele.transactionType === "Sale Estimation"
     );
     if (list) setDataList(list);

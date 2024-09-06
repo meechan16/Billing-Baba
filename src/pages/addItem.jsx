@@ -13,7 +13,6 @@ export default function AddItem({
   change,
   setChange,
 }) {
-  const params = new URLSearchParams(window.location.search);
   const Navigate = useNavigate();
   var [toggle, setToggle] = useState(t);
   var [page, setPage] = useState("pricing");
@@ -37,7 +36,9 @@ export default function AddItem({
   var [ImageURL, setImageUrl] = useState();
 
   var [loading, setLoading] = useState(false);
+  var [unitToggle, setUnitToggle] = useState(false);
   // var [toggle, set] = useState();
+  const params = new URLSearchParams(window.location.search);
   let urlPram = params.get("data");
   useEffect(() => {
     if (urlPram == "services") {
@@ -225,7 +226,7 @@ export default function AddItem({
               setInputValue={setitemHSN}
               placeholder={toggle ? "Item HSN" : "Service HSN"}
             />
-            <CustomInput
+            {/* <CustomInput
               inputValue={primaryUnit}
               setInputValue={setprimaryUnit}
               placeholder={"Primary Unit"}
@@ -234,8 +235,57 @@ export default function AddItem({
               inputValue={SecondaryUnit}
               setInputValue={setSecondaryUnit}
               placeholder={"Secondary Unit"}
-            />
+            /> */}
+            <button
+              onClick={() => setUnitToggle(true)}
+              className="px-4 py-2 bg-blue-200 mt-2 text-blue-600 rounded hover:bg-blue-300"
+            >
+              Set Unit
+            </button>
           </div>
+          {unitToggle && (
+            <div className="flex z-10 justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
+              <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md">
+                <h3 className="text-lg font-semibold mb-4">
+                  Select Items Units
+                </h3>
+                <div className="flex w-full justify-between my-3">
+                  <CustomInput
+                    inputValue={primaryUnit}
+                    setInputValue={setprimaryUnit}
+                    placeholder={"Primary Unit"}
+                  />
+                  <CustomInput
+                    inputValue={SecondaryUnit}
+                    setInputValue={setSecondaryUnit}
+                    placeholder={"Secondary Unit"}
+                  />
+                </div>
+                <p>
+                  One Secondary unit ={" "}
+                  <input
+                    type="text"
+                    className="p-2 border-b-2 border-gray-400"
+                    name=""
+                    id=""
+                  />{" "}
+                  X Primary Unit
+                </p>
+                <button
+                  // onClick={handleAddInactive}
+                  className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+                >
+                  Add Unit
+                </button>
+                <button
+                  onClick={() => setUnitToggle(false)}
+                  className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
           <div className="p1">
             <select
               onChange={(e) => setitemCategory(e.target.value)}

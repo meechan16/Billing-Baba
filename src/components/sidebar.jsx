@@ -131,10 +131,8 @@ export default function Sidebar({ part, subpart, data = null }) {
                   Sales Order
                 </li>
               </Link>
-              <Link to="/delievery-chalan">
-                <li
-                  className={subpart === "delievery-chalan" ? "selected" : ""}
-                >
+              <Link to="/delivery-chalan">
+                <li className={subpart === "delivery-chalan" ? "selected" : ""}>
                   Delievery Chalan
                 </li>
               </Link>

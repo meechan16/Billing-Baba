@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
+import { useNavigate } from "react-router-dom";
 
 export default function PaymentOut({ data, setData }) {
+  const Navigate = useNavigate();
   return (
     <div id="saleInvoice">
       <div className="title">
@@ -53,50 +55,37 @@ export default function PaymentOut({ data, setData }) {
               </svg>
               <input type="" />
             </div>
-            <button>+ Add Payment Out</button>
+            <button onClick={() => Navigate("/add-payment-out")}>
+              + Add Payment Out
+            </button>
           </div>
 
           <div className="cl">
             <p className="side">-</p>
-            <p>date</p>
-            <p>Ref No</p>
-            <p>Party Name</p>
-            <p>Category name</p>
-            <p>Type</p>
-            <p>Total</p>
-            <p>Recieved/Paid</p>
-            <p>Balance Due</p>
+            <p>DATE</p>
+            <p>REF NO</p>
+            <p>PARTY NAME</p>
+            <p>CATEGORY NAME</p>
+            <p>TYPE</p>
+            <p>TOTAL</p>
+            <p>RECIEVED/PAID</p>
+            <p>BALANCE</p>
             <p className="side">-</p>
           </div>
-          {data?.purchase?.map((sale, index) => (
+          {data?.Transactions?.filter(
+            (transaction, index) => transaction.type === "Payment-Out"
+          ).map((sale, index) => (
             <div className="cl" key={index}>
               <p className="side">{index + 1}</p>
-              <p className="">{sale.invoice_date}</p>
-              <p className="grey">{sale.invoice_number}</p>
-              <p className="grey">{sale.name}</p>
-              <p className="grey">{sale.transactionType}</p>
-              <p className="grey">{sale.payment_type}</p>
-              <p className="grey">{sale.total}</p>
-              <p className="grey">
-                {sale.payment_status !== "pending" ? sale.total : 0}
-              </p>
-              <p className="grey">
-                {sale.payment_status === "pending" ? sale.total : 0}
-              </p>
+              <p className="">{sale.date}</p>
+              <p className="">{index}</p>
+              <p className="">{sale.Name}</p>
+              <p className="">{}</p>
+              <p className="">{sale.type}</p>
+              <p className="">{sale.credit}</p>
+              <p className="">{sale.ammount}</p>
+              <p className="">{sale.balance}</p>
               <p className="side">
-                {/* <Dropdown
-                  menuItems={[
-                    "print",
-                    "forward",
-                    "generate Invoice",
-                    "recieve payment",
-                    "View/Edit",
-                    "cancel",
-                    "Delete",
-                    "Duplicate",
-                    "Print",
-                  ]}
-                > */}{" "}
                 <Dropdown
                   menuItems={[
                     { label: "print" },

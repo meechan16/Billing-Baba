@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../../url";
 
-export default function AddSalesOrder({ data, setData, change, setChange }) {
+export default function AddSalesReturn({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
   const [toggle, setToggle] = useState(true);
   const [rows, setRows] = useState([
@@ -143,10 +143,10 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       phone_no: phone_no ? phone_no : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
-      due_date: due_date ? due_date : "",
+      date: due_date ? due_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      transactionType: "Sale order",
+      transactionType: "Sale Return",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
@@ -155,7 +155,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       description: Description ? Description : "",
       pending: totalAmount && paid ? totalAmount - paid : 0,
       paid: paid,
-      type: "Sale order",
+      type: "Sale Return",
     };
 
     let newDa = data;
@@ -210,7 +210,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
     setData(newDa);
     setChange(!change);
     let intex = newDa.Transactions?.length - 1;
-    Navigate("/sales-order-bill?index=" + intex);
+    Navigate("/sales-return-bill?index=" + intex);
   };
 
   // let sendData_and_get_pdf = async () => {
@@ -329,7 +329,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
               <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
             </svg>
           </button>
-          <h1>Sale Order</h1>
+          <h1>Sale Return</h1>
         </div>
         <div className="">
           <p>Credit</p>
@@ -454,7 +454,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
               ></input>
             </div>
             <div className="">
-              <span>Due Date</span>
+              <span>Date</span>
               <input
                 type="date"
                 value={due_date}

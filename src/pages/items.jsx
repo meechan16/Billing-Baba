@@ -1075,7 +1075,7 @@ export default function Items({ data, setData, change, setChange }) {
                       >
                         <h1>{item.name}</h1>
                         <div className="">
-                          <p>{item.shortHand || "-"}</p>
+                          <p>{item.shorthand || "-"}</p>
                           <Dropdown menuItems={["View/Edit", "Delete"]}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1097,7 +1097,7 @@ export default function Items({ data, setData, change, setChange }) {
                     >
                       <h1>{item.name}</h1>
                       <div className="">
-                        <p>{item.shortHand || "-"}</p>
+                        <p>{item.shorthand || "-"}</p>
                         <Dropdown menuItems={["View/Edit", "Delete"]}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
