@@ -35,6 +35,7 @@ export default function EditItem({
   var [loading, setLoading] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
 
+  const navigate = useNavigate();
   // Load item data from localStorage when the component mounts
   useEffect(() => {
     let Item = data.items[Index];
