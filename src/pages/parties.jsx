@@ -511,7 +511,7 @@ export default function Parties({ data, setData, change, setChange }) {
                           selectedParty === e ? "selected" : ""
                         }`}
                         key={index}
-                        onClick={() => handlePartySelect(party)}
+                        onClick={() => handlePartySelect(e)}
                       >
                         <h1 className="">{e}</h1>
                       </div>

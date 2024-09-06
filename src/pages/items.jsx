@@ -367,7 +367,7 @@ export default function Items({ data, setData, change, setChange }) {
                             menuItems={[
                               {
                                 label: "View/Edit",
-                                action: () => setEditItemPg(true),
+                                action: () => setPage2("editItem"),
                               },
                               {
                                 label: "Delete",
