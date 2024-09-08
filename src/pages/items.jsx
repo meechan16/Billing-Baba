@@ -14,7 +14,7 @@ export default function Items({ data, setData, change, setChange }) {
       setPage("unit");
       setUnits(true);
     }
-    if (!data.UnitUpdate) {
+    if (data && !data.UnitUpdate) {
       const units = [
         { name: "BAGS", shorthand: "Bag" },
         { name: "BOTTLES", shorthand: "Btl" },
@@ -40,7 +40,9 @@ export default function Items({ data, setData, change, setChange }) {
       ];
       let TData = data;
 
-      TData.units = [...TData.units, ...units];
+      console.log(TData);
+      if (!TData.units) TData.units = units;
+      else TData.units = [...TData?.units, ...units];
       TData.UnitUpdate = true;
       setData({ ...TData });
       setChange(!change);

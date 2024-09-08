@@ -501,7 +501,7 @@ export default function Dashboard({ data, setData }) {
               <h1>
                 ₹{" "}
                 {data.items
-                  .filter((ele) => ele.stock > 0)
+                  ?.filter((ele) => ele.stock > 0)
                   .reduce(
                     (acc, obj) => acc + parseInt(obj.purchasePrice) * obj.stock,
                     0
@@ -517,7 +517,7 @@ export default function Dashboard({ data, setData }) {
               </div>
               <div className="people">
                 {data.items
-                  .filter(
+                  ?.filter(
                     (ele) =>
                       ele.stock < (ele.minToMaintain ? ele.minToMaintain : 10)
                   )
