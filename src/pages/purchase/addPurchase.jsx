@@ -86,7 +86,17 @@ export default function AddPurchase({ data, setData, change, setChange }) {
 
   const [Name, setName] = useState();
   const [phone_no, setPhone_no] = useState();
-  const [invoice_number, setInvoice_number] = useState();
+  function generateUniqueInvoiceNumber(data) {
+    const existing = new Set(data.map((item) => item.invoice_number));
+    let invoice;
+    do {
+      invoice = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    } while (existing.has(invoice));
+    return invoice;
+  }
+  const [invoice_number, setInvoice_number] = useState(
+    generateUniqueInvoiceNumber(data.Transactions)
+  );
   const [invoice_date, setInvoice_date] = useState("");
   useEffect(() => {
     const currentDate = new Date().toISOString().split("T")[0];

@@ -123,11 +123,17 @@ export default function AddPurchaseReturn({
   // };
   const [Name, setName] = useState(); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
+  function generateUniqueInvoiceNumber(data) {
+    const existing = new Set(data.map((item) => item.invoice_number));
+    let invoice;
+    do {
+      invoice = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    } while (existing.has(invoice));
+    return invoice;
+  }
   const [invoice_number, setInvoice_number] = useState(
-    parseInt(
-      data.sales[0] ? data.sales[data.sales.length - 1].invoice_number : 0
-    ) + 1
-  ); // Initial index count
+    generateUniqueInvoiceNumber(data.Transactions)
+  );
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
   const [due_date, setDue_date] = useState(""); // Initial index count
   const [state_of_supply, setState_of_supply] = useState({
@@ -151,7 +157,7 @@ export default function AddPurchaseReturn({
       date: due_date ? due_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      transactionType: "Purchase Return",
+      transactionType: "Debit Note",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
@@ -160,7 +166,7 @@ export default function AddPurchaseReturn({
       description: Description ? Description : "",
       pending: totalAmount && paid ? totalAmount - paid : 0,
       paid: paid,
-      type: "Purchase Return",
+      type: "Debit Note",
     };
 
     let newDa = data;
@@ -338,35 +344,14 @@ export default function AddPurchaseReturn({
             <div className="relative group flex items-center">
               <span>Invoice Number</span>
               {/* <p className="text-right group">{invoice_number}</p> */}
-              <div className="flex flex-col">
-                <input
-                  type="number"
-                  value={invoice_number}
-                  onChange={(e) => setInvoice_number(e.target.value)}
-                  name="InvNo"
-                  placeholder="input..."
-                  className="px-1"
-                />
-                {(!invoice_number ||
-                  invoice_number === 0 ||
-                  invoice_number === undefined) && (
-                  <button className="bg-white-500 text-blue text-sm rounded hover:underline transition-all duration-300 hidden group-hover:block">
-                    Generate random
-                  </button>
-                )}
-              </div>
-
-              {/* <button className="absolute right-0 top-0 mt-1 mr-1 bg-blue-500 text-white p-1 rounded hover:bg-blue-600 transition-opacity duration-300"> */}
-              {/* Generate random
-              </button> */}
-              {/* <input  
+              <input
                 type="number"
-                value=
+                value={invoice_number}
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
                 placeholder="input..."
-                id=""
-              /> */}
+                className="px-1"
+              />
             </div>
             <div className="">
               <span>Invoice Date</span>

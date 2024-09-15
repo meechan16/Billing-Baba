@@ -1,53 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import dev_url from "../url";
 
 export default function QuickBilling({ data, setData, t = true }) {
   const Navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   // const [selectedItem, setSelectedItem] = useState(null);
   const [customerSearchTerm, setCustomerSearchTerm] = useState("");
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState({
+    name: "",
+    done: true,
+  });
   const [totalAmount, setTotalAmount] = useState(0);
   const [billingItems, setBillingItems] = useState([]);
 
-  const [CurrentItems, setCurrentItems] = useState();
-
-  // Sample data
-  const items = [
-    { name: "tshirt", itemCode: "001", unit: "pcs", total: 600 },
-    { name: "pants", itemCode: "002", unit: "pcs", total: 2000 },
-    { name: "banana", itemCode: "003", unit: "pcs", total: 70 },
-    { name: "shoes", itemCode: "003", unit: "pcs", total: 6000 },
-    { name: "apple", itemCode: "003", unit: "pcs", total: 100 },
-    { name: "mango", itemCode: "003", unit: "pcs", total: 60 },
-    { name: "shirt", itemCode: "003", unit: "pcs", total: 1000 },
-    { name: "jeans", itemCode: "003", unit: "pcs", total: 3000 },
-    { name: "samsung s24 ultra", itemCode: "003", unit: "pcs", total: 69000 },
-    { name: "apple iphone 15", itemCode: "003", unit: "pcs", total: 125000 },
-  ];
-
-  useEffect(() => {}, [items]);
-  const customers = [
-    { name: "Customer 1" },
-    { name: "Customer 2" },
-    { name: "Customer 3" },
-  ];
+  const [CurrentItems, setCurrentItems] = useState(0);
 
   const handleItemSelect = async (item) => {
     const existingItemIndex = billingItems.findIndex(
-      (billingItem) => billingItem.id === item.id
+      (billingItem) => billingItem.Code === item.Code
     );
 
     if (existingItemIndex !== -1) {
       // Item exists, increment the quantity
       const updatedBillingItems = billingItems.map((billingItem, index) => {
         if (index === existingItemIndex) {
-          return {
+          let tax =
+            (parseFloat(billingItem.salesPrice) * parseFloat(billingItem.Tax)) /
+            100;
+          let qty = parseInt(billingItem.quantity) + 1;
+          let total =
+            (parseInt(billingItem.salesPrice) -
+              parseInt(billingItem.discount) +
+              tax) *
+            qty;
+
+          let row = {
             ...billingItem,
-            quantity: billingItem.quantity + 1,
-            total: billingItem.total + item.total, // Update total if needed
+            quantity: qty,
+            TotalDiscount: parseInt(billingItem.discount) * qty,
+            tax: tax,
+            taxPercentage: billingItem.Tax,
+            total: total.toFixed(2),
           };
+          console.log(row);
+          return row;
         }
         return billingItem;
       });
@@ -55,14 +51,71 @@ export default function QuickBilling({ data, setData, t = true }) {
       setBillingItems(updatedBillingItems);
     } else {
       // Item does not exist, add it to the array with a quantity of 1
-      setBillingItems([...billingItems, { ...item, quantity: 1 }]);
+      setBillingItems([
+        ...billingItems,
+        { ...item, quantity: 1, TotalDiscount: item.discount },
+      ]);
     }
 
     setTotalAmount(totalAmount + item.total);
   };
 
-  const handleCustomerSelect = (customer) => {
-    setSelectedCustomer(customer);
+  const SaveBill = () => {
+    let billData = {
+      name: "harsh",
+      phone_no: "12324323123",
+      BillingAdd: "add 1",
+      ShippingAdd: "add 3",
+      invoice_number: "1490210125",
+      invoice_date: "2024-09-15",
+      state_of_supply: "Delhi",
+      payment_type: "credit",
+      transactionType: "Sale",
+      items: [
+        {
+          index: 1,
+          item: "Kurkure",
+          qty: 1,
+          unit: "Not Available",
+          price_per_unit: "35",
+          discount: "5",
+          discountPercentage: 0,
+          profit: null,
+          amount: 30,
+          tax: 0,
+          taxPercentage: 0,
+          item_details: {
+            Category: "Food",
+            Code: "7707335339429",
+            HSN: "12312423",
+            Name: "Kurkure",
+            Tax: "18",
+            asDate: "2024-09-14",
+            atPrice: "",
+            description: "Oishi",
+            discount: "5",
+            itemType: "product",
+            location: "",
+            minToMaintain: 10,
+            openingQuantity: "50",
+            profit: null,
+            purchasePrice: "20",
+            salesPrice: "35",
+            stock: 49,
+            wholeSalePrice: "25",
+          },
+          profit_per_item: null,
+        },
+      ],
+      round_off: "",
+      amount: 30,
+      profit: "",
+      tax: "0[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]",
+      description: "desc",
+      pending: 30,
+      paid: 0,
+      type: "sale",
+    };
   };
 
   // Barcode Locha
@@ -106,7 +159,7 @@ export default function QuickBilling({ data, setData, t = true }) {
   return (
     <div id="QuickBilling">
       {/* Left side */}
-      <div className="l">
+      <div className="l text-sm">
         <div className="w-[75vw]">
           <div className="relative w-full my-1">
             <input
@@ -127,7 +180,11 @@ export default function QuickBilling({ data, setData, t = true }) {
                     <li
                       key={item.Code}
                       onClick={() => {
-                        handleItemSelect({ ...item, quantity: 1 });
+                        handleItemSelect({
+                          ...item,
+                          quantity: 1,
+                          total: item.salesPrice,
+                        });
                         setSearchTerm("");
                       }}
                       className="flex w-full justify-between items-center p-2"
@@ -141,172 +198,236 @@ export default function QuickBilling({ data, setData, t = true }) {
               </ul>
             )}
           </div>
-          <table className="w-full">
-            <thead className="w-full my-1">
-              <tr className="rounded-sm flex w-full justify-between gap-1 md-2 items-center">
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  #
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  ITEM CODE
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  NAME
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  QTY
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  Unit
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  PRICE / UNIT
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  DESCOUNT
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  TAX
-                </th>
-                <th className="w-full  py-3  text-center bg-emerald-100 rounded-sm">
-                  TOTAL
-                </th>
-              </tr>
-            </thead>
-            <tbody className="w-full">
-              {billingItems.map((item, index) => (
-                <tr
-                  key={index}
-                  // className={CurrentItems === index ? "selected" : ""}
-                  className={`rounded-sm my-1 flex justify-between gap-1 md-2 items-center ${
-                    CurrentItems === index && "selected"
-                  }`}
-                >
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.Code}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {index}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.Name}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.quantity}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.unit || "none"}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.salesPrice}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.discount}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.Tax}
-                  </td>
-                  <td className="w-full  py-3  text-center bg-gray-100 rounded-sm">
-                    {item.salesPrice}
-                  </td>
+          <div className="overflow-x-auto ">
+            <table className="min-w-full table-auto border-collapse border border-gray-300 my-1">
+              <thead className="">
+                <tr className=" bg-gray-100">
+                  <th className="p-2 text-sm text-center  border border-gray-300">
+                    #
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    ITEM CODE
+                  </th>
+                  <th className="p-2 text-sm w-1/3 text-center border border-gray-300">
+                    NAME
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    QTY
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    Unit
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    PRICE / UNIT
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    DESCOUNT
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    TAX
+                  </th>
+                  <th className="p-2 text-sm text-center border border-gray-300">
+                    TOTAL
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="w-full">
+                {billingItems.map((item, index) => (
+                  <tr
+                    key={index}
+                    // className={CurrentItems === index ? "selected" : ""}
+                    className={`text-center ${
+                      CurrentItems === index && "border-2 border-blue-400"
+                    }`}
+                  >
+                    <td className="p-2 text-md text-center border border-gray-300">
+                      {index}
+                    </td>
+                    <td className="p-2 text-md  text-center border border-gray-300">
+                      {item.Code}
+                    </td>
+                    <td className="p-2 w-1/3 text-md text-center border border-gray-300">
+                      {item.Name}
+                    </td>
+                    <td className="p-2 text-md  text-center border border-gray-300">
+                      {item.quantity}
+                    </td>
+                    <td className="p-2 text-md  text-center border border-gray-300">
+                      {item.unit || "none"}
+                    </td>
+                    <td className="p-2 text-md  text-center border border-gray-300">
+                      {item.salesPrice}
+                    </td>
+                    <td className="p-2 text-md  text-center border border-gray-300 ">
+                      {item.TotalDiscount}
+                    </td>
+                    <td className="p-2 text-md  text-center border border-gray-300">
+                      {item.Tax}
+                    </td>
+                    <td className="p-2 text-md text-center border border-gray-300">
+                      {item.total}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="b">
-          <button>Change Quantity</button>
-          <button>Item Descount</button>
-          <button>Remove Item</button>
-          <button className="unavailable">Bill Item</button>
-          <button className="unavailable">Additionl changes</button>
-          <button className="unavailable">Bill discount</button>
-          <button className="unavailable">Loyal points</button>
-          <button className="unavailable">Remarks</button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Change Quantity
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Item Descount
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Remove Item
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Bill Item
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Additionl changes
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Bill discount
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Loyal points
+          </button>
+          <button className="p-2 m-2 bg-blue-100 border border-blue-300 rounded shadow">
+            Remarks
+          </button>
         </div>
       </div>
       {/* // Right side */}
-      <div className="r">
-        <div className="rounded-lg border border-gray-300 p-2 w-full">
-          <h1 className="text-lg font-Poppins font-semibold">
+      <div className="r text-sm">
+        <div className="border border-r-0 border-t-0 border-gray-300 p-2 w-full">
+          <h1 className="text-md font-Poppins mb-2 font-semibold">
             Customer details
           </h1>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="Search customer..."
-            value={
-              selectedCustomer ? selectedCustomer.name : customerSearchTerm
-            }
-            disabled={selectedCustomer ? true : false}
-            onChange={(e) => setCustomerSearchTerm(e.target.value)}
-          />
-          {customerSearchTerm && (
-            <ul>
-              {data.parties
-                .filter((customer) =>
-                  customer.partyName
-                    .toLowerCase()
-                    .includes(customerSearchTerm.toLowerCase())
-                )
-                .map((customer) => (
-                  <li
-                    key={customer.partyName}
-                    onClick={() => {
-                      setSelectedCustomer(customer);
-                      setCustomerSearchTerm("");
-                    }}
-                  >
-                    {customer.partyName}
-                  </li>
-                ))}
-            </ul>
-          )}
+          <div className="relative w-full">
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-"
+              placeholder="Search customer..."
+              value={selectedCustomer.name}
+              onChange={(e) =>
+                setSelectedCustomer({ name: e.target.value, done: false })
+              }
+            />
+            {selectedCustomer.name && !selectedCustomer.done && (
+              <ul className="absolute top-8 left-0 shadow w-full bg-white">
+                {data.parties
+                  .filter((customer) =>
+                    customer.partyName
+                      .toLowerCase()
+                      .includes(customerSearchTerm.toLowerCase())
+                  )
+                  .map((customer) => (
+                    <li
+                      key={customer.partyName}
+                      onClick={() => {
+                        setSelectedCustomer({
+                          name: customer.partyName,
+                          ...customer,
+                          done: true,
+                        });
+                      }}
+                      className="p-2 border flex justify-between border-gray-300 hover:bg-gray-200 cursor-pointer"
+                    >
+                      <h1 className="font-semibold">{customer.partyName}</h1>
+                      <h1>credit: {customer.credit}</h1>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
         </div>
-        <div className="rounded-lg border h-full border-gray-300 p-2">
-          <h1>Bill Details</h1>
-          <div className="flex justify-between">
-            <h2>Sub Total:</h2>
+        <div className="border border-r-0 border-t-0 flex flex-col gap-2 h-full border-gray-300 p-2">
+          <h1 className="text-md font-Poppins font-bold">Bill Details</h1>
+          <div className="flex justify-between text-sm">
+            <h2>Sub Total: </h2>
+            <h2>
+              {billingItems.reduce(
+                (total, row) => total + (parseFloat(row.total) || 0),
+                0
+              )}
+            </h2>
           </div>
-          <div className="flex justify-between">
-            <h2>Total Descounts</h2>
+          <div className="flex justify-between text-sm">
+            <h2>Total Descounts: </h2>
+            <h2>
+              {billingItems.reduce(
+                (total, row) => total + (parseFloat(row.discount) || 0),
+                0
+              )}
+            </h2>
           </div>
-          <div className="flex justify-between">
-            <h2>Total Tax</h2>
+          <div className="flex justify-between text-sm">
+            <h2>Total Tax: </h2>
+            <h2>
+              {billingItems.reduce(
+                (total, row) => total + (parseFloat(row.tax) || 0),
+                0
+              )}
+            </h2>
           </div>
-          <h1>Total Amount: {totalAmount}</h1>
+          <div className="flex border-t border-gray-300 mt-2 pt-2 justify-between">
+            <p className="text-sm">
+              <h1 className="text-lg font-Poppins font-bold">Total </h1>
+              (Items: {billingItems.length}, Quantity:
+              {billingItems.reduce(
+                (total, row) => total + (parseFloat(row.quantity) || 0),
+                0
+              )}
+              )
+            </p>
+            <h1 className="text-lg font-Poppins font-bold">
+              {billingItems.reduce(
+                (total, row) => total + (parseFloat(row.total) || 0),
+                0
+              )}
+            </h1>
+          </div>
         </div>
-        <div className="rounded-lg border border-gray-300 p-3 mt-1">
-          <h1 className="text-md font-semibold"> CASH/UPI</h1>
-          <div className="flex justify-between w-full">
-            <p className="my-2 text-md">Payment Method</p>
+        <div className="border  border-r-0 border-b-0 border-t-0 border-gray-300 p-3 pb-2">
+          <h1 className="text-md font-semibold"> Cash/UPI</h1>
+          <div className="flex my-1 justify-between items-center w-full">
+            <p className="text-sm">Payment Method</p>
             <select
               name=""
-              className="p-2 my-2 border border-b-gray-500 rounded-md"
+              className="p-2 w-[200px] border border-gray-300 rounded-md"
               id=""
             >
               <option value="cash">Cash</option>
               <option value="credit">Credit</option>
             </select>
           </div>
-          <div className="flex justify-between w-full">
-            <p className="my-2 text-md">Amount Recieved</p>
+          <div className="flex my-1 justify-between items-center w-full">
+            <p className=" text-sm">Amount Recieved</p>
             <input
               name=""
-              className="p-2 my-2 border border-b-gray-500 rounded-md"
+              className="p-2 w-[200px] border border-gray-300 rounded-md"
               id=""
             />
           </div>
-          <div className="flex justify-between w-full">
-            <p className="my-2 text-xl">Change to return</p>
-            <p className="my-2 text-xl">{totalAmount}</p>
+          <div className="flex mb-4 text-lg justify-between w-full font-semibold">
+            <p className="text-md">Change to return</p>
+            <p className="text-md">0</p>
           </div>
 
           <button
-            className="bg-red-500 text-white p-3 hover:bg-white hover:text-red-500 border-red-500 border-1 rounded-md w-full text-center"
-            onClick={() => Navigate("/")}
+            className="bg-gray-100 text-black p-2 font-semibold hover:bg-red-300 border-red-300 border-2 rounded  w-full text-center"
+            onClick={() => SaveBill()}
           >
             Save Bill
+          </button>
+          <button
+            className="bg-gray-100 text-black p-2 hover:bg-green-300 border-green-300 border-2 rounded mt-4 w-full text-center"
+            onClick={() => Navigate("/")}
+          >
+            Partialy Pay
           </button>
         </div>
       </div>

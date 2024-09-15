@@ -113,7 +113,17 @@ export default function AddDeliveryChallan({
   // };
   const [Name, setName] = useState(); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(0); // Initial index count
+  function generateUniqueInvoiceNumber(data) {
+    const existing = new Set(data.map((item) => item.invoice_number));
+    let invoice;
+    do {
+      invoice = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    } while (existing.has(invoice));
+    return invoice;
+  }
+  const [invoice_number, setInvoice_number] = useState(
+    generateUniqueInvoiceNumber(data.Transactions)
+  );
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
   const [Due_date, setDue_date] = useState(""); // Initial index count
   const [state_of_supply, setState_of_supply] = useState({

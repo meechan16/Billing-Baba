@@ -19,12 +19,12 @@ export default function AddPaymentsin({
   var [ammount, setAmmount] = useState();
   const addItemReq = async () => {
     let newData = {
-      Name: Name ? Name : "",
+      name: Name ? Name : "",
       paymentType: paymentType ? paymentType : "cash",
       description: Desc ? Desc : "",
       date: date ? date : "",
-      reciptno: reciptno ? reciptno : "",
-      ammount: ammount ? ammount : "",
+      invoice_number: reciptno ? reciptno : "",
+      amount: ammount ? ammount : "",
       type: "Payment-In",
       transactionType: "Payment-In",
     };

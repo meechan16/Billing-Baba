@@ -45,9 +45,9 @@ export default function SaleOrder({ data, setData }) {
                     </div>
                   </div>
                   <div className="cl">
-                    <p>date</p>
                     <p>Party Name</p>
-                    <p>Chalan No</p>
+                    <p>No</p>
+                    <p>Date</p>
                     <p>Due Date</p>
                     <p>Total Ammount</p>
                     <p>Balance</p>
@@ -59,9 +59,9 @@ export default function SaleOrder({ data, setData }) {
                     (ele) => ele.type === "Sale order"
                   ).map((sale, index) => (
                     <div className="cl" key={index}>
-                      <p className="">{sale.invoice_date}</p>
-                      <p className="grey">{sale.name}</p>
                       <p className="grey">{sale.invoice_number}</p>
+                      <p className="grey">{sale.name}</p>
+                      <p className="">{sale.invoice_date}</p>
                       <p className="grey">{sale.due_date}</p>
                       <p className="grey">{sale.total}</p>
                       <p className="grey">{sale.pending}</p>

@@ -125,7 +125,9 @@ export default function AddItem({
         HSN: itemHSN ? itemHSN : "",
         Category: itemCategory ? itemCategory : "",
         Code: itemCode ? itemCode : "",
-        salesPrice: sellPrice ? sellPrice : "",
+        salesPrice: sellPrice.withTax
+          ? sellPrice.value * (1 - tax)
+          : sellPrice.value,
         discount: discount ? discount : "",
         Tax: tax ? tax : "",
         profit: sellPrice - discount,
@@ -288,17 +290,32 @@ export default function AddItem({
           )}
           <div className="p1">
             <select
-              onChange={(e) => setitemCategory(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "addCategory") {
+                  Navigate("/items?data=addCategory");
+                } else {
+                  setitemCategory(value); // Set the selected category
+                }
+              }}
               className="box"
             >
-              <option value="" style={{ color: "blue", fontWeight: "600" }}>
+              <option className="grey" value="N/A">
+                Not Available
+              </option>
+              {data.category?.map((c, index) => (
+                <option key={index} className="grey" value={c.name}>
+                  {c.name || "-"}
+                </option>
+              ))}
+              <option
+                value="addCategory"
+                style={{ color: "blue", fontWeight: "600" }}
+              >
                 + add category
               </option>
-              <option className="grey">Not Available</option>
-              {data.category?.map((c, index) => (
-                <option className="grey">{c.name || "-"}</option>
-              ))}
             </select>
+
             {/* <input type="text" className="box" /> */}
             <div className="flex">
               <CustomInput
@@ -414,7 +431,7 @@ export default function AddItem({
                           value: e.target.value,
                         })
                       }
-                      label="Purchase Price"
+                      label="Sale Price"
                       sx={{
                         background: "white",
                         width: "100%",

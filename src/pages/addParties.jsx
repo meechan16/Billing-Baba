@@ -48,17 +48,24 @@ export default function AddParties({ data, setData, change, setChange }) {
     let newDa = data;
     newDa.parties ? newDa.parties.push(newData) : (newDa.parties = [newData]);
 
-    OpeningBalance
+    OpeningBalance && newDa.Transactions
       ? newDa.Transactions.push({
           type: "Opening Balance",
           name: partyName,
+          invoice_number: "-",
+          invoice_date: new Date(Date.now()).toLocaleString("en-GB", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
           date: new Date(Date.now()).toLocaleString("en-GB", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
           }),
           // date: Date.now(),
-          amount: parseFloat(OpeningBalance),
+          total: parseFloat(OpeningBalance),
+          pending: parseFloat(OpeningBalance),
         })
       : (newDa.Transactions = [
           {
@@ -216,7 +223,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                 </div>
                 <TextField
                   value={Add}
-                  onAbort={(e) => setAdd(e.target.value)}
+                  onChange={(e) => setAdd(e.target.value)}
                   id="outlined-multiline-static"
                   label="Billing Address"
                   multiline

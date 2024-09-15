@@ -68,7 +68,17 @@ export default function AddExpense({ data, setData, change, setChange }) {
 
   const [searchTerm, setSearchTerm] = useState(""); // Initial index count
   const [Name, setName] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(); // Initial index count
+  function generateUniqueInvoiceNumber(data) {
+    const existing = new Set(data.map((item) => item.invoice_number));
+    let invoice;
+    do {
+      invoice = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    } while (existing.has(invoice));
+    return invoice;
+  }
+  const [invoice_number, setInvoice_number] = useState(
+    generateUniqueInvoiceNumber(data.Transactions)
+  );
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
   useEffect(() => {
     const currentDate = new Date().toISOString().split("T")[0];

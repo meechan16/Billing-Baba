@@ -9,7 +9,7 @@ export default function AddSales({ data, setData, change, setChange }) {
     {
       index: 1,
       item: "",
-      qty: "",
+      qty: 1,
       unit: "",
       price_per_unit: "",
       discount: "",
@@ -25,7 +25,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       {
         index: indexCount,
         item: "",
-        qty: "",
+        qty: 1,
         unit: "",
         price_per_unit: "",
         discount: "",
@@ -52,15 +52,6 @@ export default function AddSales({ data, setData, change, setChange }) {
         const qty = parseInt(newRows[index]["qty"]);
         const pricePerUnit = parseInt(newRows[index]["price_per_unit"]);
         const discount = parseInt(newRows[index]["discount"]);
-        // const taxPercentage = parseInt(newRows[index]["tax"]);
-
-        // console.log(qty);
-        // console.log(pricePerUnit);
-        // console.log(discount);
-        // const tax = (pricePerUnit - discount) * (taxPercentage / 100);
-        // console.log(tax);
-        // Calculate amount
-        // const amount = qty * (pricePerUnit - discount + tax);
         const amount = qty * (pricePerUnit - discount);
         newRows[index]["amount"] = amount;
         newRows[index]["profit"] = newRows[index]["profit"] || 0;
@@ -76,51 +67,38 @@ export default function AddSales({ data, setData, change, setChange }) {
         );
         setTotalAmount(newTotalAmount);
         setProfit(profit);
-
-        // Update total tax
-        // const newTotalTax = newRows.reduce(
-        //   (total, row) => total + (row.amount ? tax : 0),
-        //   0
-        // );
-        // setTotalTax(newTotalTax);
       }
       newRows[index][column] = value;
       return newRows;
     });
-    // console.log("rows");
-    // console.log(rows[0]);
   };
-
-  // const addItemToRow = async (index, item) => {
-  //   setRows([
-  //     ...rows,
-  //     (rows[index] = {
-  //       index: index,
-  //       item: item.name,
-  //       unit: item.unit,
-  //       price_per_unit: item.price_per_unit,
-  //       discount: item.discount,
-  //       amount: "",
-  //     }),
-  //   ]);
-  // };
-  const [Name, setName] = useState(); // Initial index count
-  const [phone_no, setPhone_no] = useState(); // Initial index count
-  const [invoice_number, setInvoice_number] = useState(0); // Initial index count
-  const [invoice_date, setInvoice_date] = useState(""); // Initial index count
+  const [Name, setName] = useState();
+  const [phone_no, setPhone_no] = useState();
+  function generateUniqueInvoiceNumber(data) {
+    const existing = new Set(data.map((item) => item.invoice_number));
+    let invoice;
+    do {
+      invoice = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    } while (existing.has(invoice));
+    return invoice;
+  }
+  const [invoice_number, setInvoice_number] = useState(
+    generateUniqueInvoiceNumber(data.Transactions)
+  );
+  const [invoice_date, setInvoice_date] = useState("");
   const [state_of_supply, setState_of_supply] = useState({
     state: "",
     isDone: false,
-  }); // Initial index count
-  const [round_off, setRound_off] = useState(); // Initial index count
-  const [paymentType, setpaymentType] = useState("credit"); // Initial index count
-  const [Description, setDescription] = useState(); // Initial index count
+  });
+  const [round_off, setRound_off] = useState();
+  const [paymentType, setpaymentType] = useState("credit");
+  const [Description, setDescription] = useState();
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [paid, setPaid] = useState(0);
   const [pending, setPending] = useState(0);
 
-  const [Search, setSearch] = useState(); // Initial index count
-  const [searchFocus, setSearchFoucs] = useState(); // Initial index count
+  const [Search, setSearch] = useState();
+  const [searchFocus, setSearchFoucs] = useState();
   useEffect(() => {
     setPending(totalAmount - paid);
   }, [totalAmount, paid]);
@@ -134,7 +112,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       invoice_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
-      transactionType: "Sale Estimation",
+      transactionType: "Estimate",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
@@ -143,7 +121,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       description: Description ? Description : "",
       pending: pending ? pending : "",
       paid: paid,
-      type: "Sale Estimation",
+      type: "Estimate",
     };
 
     let newDa = data;
@@ -156,7 +134,7 @@ export default function AddSales({ data, setData, change, setChange }) {
     console.log(newDa);
     setData(newDa);
     setChange(!change);
-    Navigate("/sale-invoice");
+    Navigate("/estimation");
   };
 
   let sendData_and_get_pdf = async () => {
@@ -335,15 +313,16 @@ export default function AddSales({ data, setData, change, setChange }) {
           <div className="r">
             <div className="">
               <span>Invoice Number</span>
-              <p>{invoice_number}</p>
-              {/* <input  
+              {/* <p>{invoice_number}</p> */}
+              <input
                 type="number"
-                value=
+                value={invoice_number}
                 onChange={(e) => setInvoice_number(e.target.value)}
                 name="InvNo"
                 placeholder="input..."
+                className="border-b-2 border-black py-1 px-2"
                 id=""
-              /> */}
+              />
             </div>
             <div className="">
               <span>Invoice Date</span>

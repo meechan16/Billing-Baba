@@ -5,6 +5,7 @@ import Dropdown from "../../components/dropdown";
 export default function EstimatedQuortation({ data, setData }) {
   const Navigate = useNavigate();
   const [dataList, setDataList] = useState();
+  const [convert, toggleConvert] = useState(false);
   useEffect(() => {
     console.log(data.Transactions);
     let list = data.Transactions?.filter(
@@ -73,12 +74,12 @@ export default function EstimatedQuortation({ data, setData }) {
             </div>
             <div className="cl">
               <p>date</p>
-              <p>invoiceNo</p>
-              <p>PartyName</p>
-              <p>Transaction Type</p>
-              <p>Payment Type</p>
-              <p>Ammount</p>
-              <p>Balance Due</p>
+              <p>Refrence No</p>
+              <p>Name</p>
+              <p>Total Amount</p>
+              <p>Balance</p>
+              <p>Status</p>
+              <p>Action</p>
               <p className="side">-</p>
             </div>
             {dataList.map((est, index) => (
@@ -86,10 +87,27 @@ export default function EstimatedQuortation({ data, setData }) {
                 <p className="">{est.invoice_date}</p>
                 <p className="grey">{est.invoice_number}</p>
                 <p className="grey">{est.name}</p>
-                <p className="grey">{est.transactionType}</p>
-                <p className="grey">{est.payment_type}</p>
                 <p className="grey">{est.total}</p>
-                <p className="">{est.total - est.paid}</p>
+                <p className="grey">{est.total}</p>
+                <p className="grey text-orange-400">Quortation Open</p>
+                <p className="grey relative">
+                  <button
+                    onClick={() => toggleConvert(!convert)}
+                    className="px-2 py-1 shadow-md text-blue-400 bg-white font-semibold"
+                  >
+                    Convert
+                  </button>
+                  {convert && (
+                    <div className="absolute top-8 bg-white right-0 shadow-md rounded-md">
+                      <button className="px-2 w-full py-1 hover:bg-gray-100 text-blue-400 font-semibold">
+                        Covert to Sale
+                      </button>
+                      <button className="px-2 w-full py-1 hover:bg-gray-100 text-blue-400 font-semibold">
+                        Covert to Sale Order
+                      </button>
+                    </div>
+                  )}
+                </p>
                 <p className="side">
                   {/* <Dropdown
                 menuItems={[

@@ -103,8 +103,8 @@ export default function PaymentIn({ data, setData }) {
             <div className="cl" key={index}>
               <p className="side">{index + 1}</p>
               <p className="">{sale.date}</p>
-              <p className="">{index}</p>
-              <p className="">{sale.Name}</p>
+              <p className="">{sale.invoice_number}</p>
+              <p className="">{sale.name ? sale.name : sale.Name}</p>
               <p className="">{}</p>
               <p className="">{sale.type}</p>
               <p className="">{sale.credit}</p>

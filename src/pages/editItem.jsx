@@ -40,6 +40,7 @@ export default function EditItem({
   useEffect(() => {
     let Item = data.items[Index];
     if (Item) {
+      if (Item.itemType == "service") setToggle(!toggle);
       setitemName(Item.Name || "");
       setitemHSN(Item.HSN || "");
       setitemCategory(Item.Category || "");
@@ -136,9 +137,9 @@ export default function EditItem({
     console.log("Updated Data:", data);
 
     // Save the updated data
-    // setData(data);
-    // setChange(!change);
-    // setClose(-1)
+    setData(data);
+    setChange(!change);
+    setClose(-1);
   };
 
   // barcode locha

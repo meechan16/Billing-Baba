@@ -196,10 +196,20 @@ export default function Parties({ data, setData, change, setChange }) {
                       >
                         <h1 className="">{party.partyName}</h1>
                         <div className="">
-                          <p>
+                          <p
+                            className={`${
+                              party.credit
+                                ? party.credit < 0
+                                  ? "textGreen"
+                                  : ""
+                                : ""
+                            }`}
+                          >
                             ₹{" "}
                             {party.credit
-                              ? party.credit
+                              ? party.credit < 0
+                                ? party.credit / -1
+                                : party.credit
                               : data?.sales
                                   ?.filter(
                                     (item) => item.name === party.partyName
@@ -243,15 +253,23 @@ export default function Parties({ data, setData, change, setChange }) {
                       {/* <h1>{party.partyName}</h1> */}
                       <h2 className="hovEle">{party.partyName}</h2>
                       <div className="">
-                        <p>
+                        <p
+                          className={`${
+                            party.credit
+                              ? party.credit < 0
+                                ? "textGreen"
+                                : ""
+                              : ""
+                          }`}
+                        >
                           ₹{" "}
                           {party.credit
-                            ? party.credit
-                            : data?.sales
-                                ?.filter(
-                                  (item) => item.name === party.partyName
-                                )
-                                .reduce((acc, obj) => acc + obj.pending, 0)}
+                            ? party.credit < 0
+                              ? party.credit / -1
+                              : party.credit
+                            : data?.Transactions?.filter(
+                                (item) => item.name === party.partyName
+                              ).reduce((acc, obj) => acc + obj.amount, 0)}
                         </p>
                         {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
                         <Dropdown
@@ -390,43 +408,172 @@ export default function Parties({ data, setData, change, setChange }) {
                 </div>
                 <div className="cl text-sm">
                   {/* <p className="side">-</p> */}
-                  <p>Payment Type</p>
+                  <p>Type</p>
                   <p>Number</p>
                   <p>Date</p>
                   <p>Total</p>
                   <p>Balance</p>
                   <p className="side">-</p>
                 </div>
-                {data?.sales
-                  ?.filter(
+                {data?.Transactions?.map((item, originalIndex) => ({
+                  ...item,
+                  originalIndex,
+                }))
+                  .filter(
                     (item) =>
-                      item.name === selectedParty.partyName &&
-                      item.payment_type
-                        .toLowerCase()
-                        .includes(TransactionSearc.toLowerCase())
+                      item.name === selectedParty.partyName ||
+                      item.name?.includes(
+                        selectedParty.partyName.toLowerCase()
+                      ) ||
+                      (item.partyName
+                        ?.toLowerCase()
+                        .includes(selectedParty.partyName.toLowerCase()) &&
+                        item.payment_type
+                          ?.toLowerCase()
+                          .includes(TransactionSearc.toLowerCase()))
                   )
                   .map((sale, index) => (
                     <div className="cl text-sm" key={index}>
-                      <p className="grey">{sale.payment_type}</p>
+                      <p className="grey">{sale.type}</p>
                       <p className="grey">{sale.invoice_number}</p>
                       {/* <p className="grey">{sale.name}</p> */}
                       <p className="">{sale.invoice_date}</p>
                       {/* <p className="grey">{sale.items?.length}</p> */}
                       <p className="grey">{sale.total}</p>
-                      <p className="">{sale.total - sale.paid}</p>
+                      <p className="">
+                        {sale.pending ? sale.pending : sale.total - sale.paid}
+                      </p>
+
                       <Dropdown
-                        menuItems={[
-                          { label: "View" },
-                          { label: "Delete" },
-                          { label: "Duplicate" },
-                          { label: "Open PDF" },
-                          { label: "Print" },
-                          { label: "Preview" },
-                          { label: "Preview as delivery chalan" },
-                          { label: "convert to return" },
-                          { label: "Recieve payment" },
-                          { label: "View History" },
-                        ]}
+                        menuItems={
+                          sale.type == "Opening Balance"
+                            ? [
+                                // { label: "View" },
+                                {
+                                  label: "Delete",
+                                  action: () => {
+                                    let newDa = {
+                                      ...data,
+                                      Transactions: data.Transactions.filter(
+                                        (_, i) => i !== sale.originalIndex
+                                      ),
+                                    };
+                                    setData(newDa);
+                                    setChange(!change);
+                                  },
+                                },
+                                { label: "Recieve payment" },
+                              ]
+                            : sale.type == "Sale"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Cancel Invoice" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Preview as delivery chalan" },
+                                { label: "Convert to Return" },
+                                { label: "Recieve Payment" },
+                                { label: "View History" },
+                              ]
+                            : sale.type == "Estimate" ||
+                              sale.type == "Sale Estimation"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Cancel Invoice" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Convert to Sale" },
+                                { label: "Convert to Sale Order" },
+                              ]
+                            : sale.type == "Delivery Chalan"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                                { label: "Convert to Sale" },
+                              ]
+                            : sale.type == "Sale Order"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                                { label: "Convert to Sale" },
+                              ]
+                            : sale.type == "Sale Return" ||
+                              sale.type == "Credit Note"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                                { label: "Make Payment" },
+                                { label: "View History" },
+                              ]
+                            : sale.type == "Purchase"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                                { label: "Convert to Return" },
+                                { label: "Make Payment" },
+                                { label: "View History" },
+                              ]
+                            : sale.type == "Purchase Order"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                                { label: "Convert to Purchase" },
+                              ]
+                            : sale.type == "Purchase Return" ||
+                              sale.type == "Debit Note"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                                { label: "Recieve Payments" },
+                              ]
+                            : sale.type == "Payments Out"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                              ]
+                            : sale.type == "Payments In"
+                            ? [
+                                { label: "View/Edit" },
+                                { label: "Delete" },
+                                { label: "Duplicate" },
+                                { label: "Open PDF" },
+                                { label: "Preview" },
+                                { label: "Print" },
+                              ]
+                            : [{ label: "View/Edit" }, { label: "Delete" }]
+                        }
                         isLabelOnly={true}
                       >
                         <svg

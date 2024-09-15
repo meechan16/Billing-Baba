@@ -9,10 +9,16 @@ import EditItem from "./editItem";
 export default function Items({ data, setData, change, setChange }) {
   const params = new URLSearchParams(window.location.search);
   let urlPram = params.get("data");
+
+  var [Category, setCategory] = useState();
+  var [Units, setUnits] = useState();
   useEffect(() => {
     if (urlPram == "addUnit") {
       setPage("unit");
       setUnits(true);
+    } else if (urlPram == "addCategory") {
+      setPage("category");
+      setCategory(!Category);
     }
     if (data && !data.UnitUpdate) {
       const units = [
@@ -58,8 +64,6 @@ export default function Items({ data, setData, change, setChange }) {
 
   const Navigate = useNavigate();
 
-  var [Category, setCategory] = useState();
-  var [Units, setUnits] = useState();
   const [selecteditems, setSelectedItems] = useState(null);
   const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -296,6 +300,7 @@ export default function Items({ data, setData, change, setChange }) {
 
               {SearchQuerry && search
                 ? data?.items
+                    .map((item, originalIndex) => ({ ...item, originalIndex }))
                     ?.filter((item) => item.itemType !== "service")
                     ?.filter(
                       (e) =>
@@ -321,16 +326,17 @@ export default function Items({ data, setData, change, setChange }) {
                             menuItems={[
                               {
                                 label: "View/Edit",
-                                action: () =>
-                                  Navigate("/edit-item", {
-                                    state: { data: item, index: index },
-                                  }),
+                                action: () => setEditIndex(item.originalIndex),
                               },
                               {
                                 label: "Delete",
                                 action: () => {
-                                  let newDa = data;
-                                  newDa.items.splice(index, 1);
+                                  let newDa = {
+                                    ...data,
+                                    items: data.items.filter(
+                                      (_, i) => i !== item.originalIndex
+                                    ),
+                                  };
                                   setData(newDa);
                                   setChange(!change);
                                 },
@@ -351,6 +357,7 @@ export default function Items({ data, setData, change, setChange }) {
                       </div>
                     ))
                 : data?.items
+                    .map((item, originalIndex) => ({ ...item, originalIndex }))
                     ?.filter((item) => item.itemType !== "service")
                     .map((item, index) => (
                       <div
@@ -369,13 +376,17 @@ export default function Items({ data, setData, change, setChange }) {
                             menuItems={[
                               {
                                 label: "View/Edit",
-                                action: () => setPage2("editItem"),
+                                action: () => setEditIndex(item.originalIndex),
                               },
                               {
                                 label: "Delete",
                                 action: () => {
-                                  let newDa = data;
-                                  newDa.items.splice(index, 1);
+                                  let newDa = {
+                                    ...data,
+                                    items: data.items.filter(
+                                      (_, i) => i !== item.originalIndex
+                                    ),
+                                  };
                                   setData(newDa);
                                   setChange(!change);
                                 },
@@ -423,51 +434,45 @@ export default function Items({ data, setData, change, setChange }) {
           )}
           <div className="right">
             {selecteditems ? (
-              <div className="title">
-                <div className="tile">
-                  <h1>{selecteditems.Name}</h1>
-                  <button onClick={() => setStockPage(!StockPage)}>
+              <div className="rounded-md bg-green-100 mb-2 p-3">
+                <div className="w-full flex justify-between">
+                  <h1 className="text-xl font-semibold flex justify-between items-center w-full">
+                    {selecteditems.Name}
+                  </h1>
+                  <button
+                    className="text-sm bg-blue-400  text-nowrap  rounded-full text-white font-semibold px-3 py-1"
+                    onClick={() => setStockPage(!StockPage)}
+                  >
                     + Adujust Items
                   </button>
                   {StockPage && <StockAdjust setClose={setStockPage} />}
                 </div>
 
-                <div className="tile">
-                  <p>
+                <div className="w-full flex justify-between">
+                  <p className="">
                     SALE PRICE{" "}
-                    <span>
+                    <span className="font-semibold">
                       {" "}
                       ₹ {selecteditems ? selecteditems.salesPrice : "Null"}
                     </span>
                   </p>
                   <p>
                     Stock Qty:{" "}
-                    <span className="red">
+                    <span className="font-semibold text-red-400">
                       {" "}
                       {selecteditems ? selecteditems.stock : "-"}
                     </span>
                   </p>
                 </div>
-                <div className="tile">
+                <div className="w-full flex justify-between">
                   <p>
                     PURCHASE PRICE{" "}
-                    <span>
+                    <span className="font-semibold">
                       {" "}
                       ₹ {selecteditems ? selecteditems.purchasePrice : "-"}
                     </span>
                   </p>
                 </div>
-
-                <div className="flex mx-3 gap-3">
-                  <button className="text-blue-500 font-semibold hover:text-blue-700 text-md mt-2">
-                    Edit Item Details
-                  </button>
-                  <button className="text-red-500 font-semibold hover:text-red-600 text-md mt-2">
-                    Remove Item
-                  </button>
-                </div>
-                {/* <div className="tile"></div>
-              <div className="tile"></div> */}
               </div>
             ) : (
               <div className="title">
@@ -544,15 +549,6 @@ export default function Items({ data, setData, change, setChange }) {
                         </p>
                       </div>
                     ))}
-                {/* <div className="cl">
-                <p>Tech</p>
-                <p className="grey">231</p>
-                <p className="grey">Boat</p>
-                <p className="grey">03/02/2024</p>
-                <p className="grey">10</p>
-                <p className="grey">3000</p>
-                <p className="grey">Unpaid</p>
-              </div> */}
               </div>
             )}
           </div>
@@ -608,11 +604,28 @@ export default function Items({ data, setData, change, setChange }) {
                       </div>
                       <Dropdown
                         menuItems={[
-                          "Bulk inactive",
-                          "Bulk Active",
-                          "Bulk Assign Code",
-                          "Assign Units",
-                          "Bulk Update Items",
+                          {
+                            label: "Bulk inactive",
+                            action: () => setPage2("BInactive"),
+                          },
+                          {
+                            label: "Bulk Active",
+                            action: () => setPage2("BActive"),
+                          },
+                          {
+                            label: "Bulk Assign Code",
+                            action: () => setPage2("BCodes"),
+                          },
+                          {
+                            label: "Assign Units",
+                            action: () => setPage2("BUnits"),
+                          },
+                          {
+                            label: "Bulk Update Items",
+                            action: () => {
+                              Navigate("/bulk-update-items");
+                            },
+                          },
                         ]}
                       >
                         <svg
@@ -631,6 +644,10 @@ export default function Items({ data, setData, change, setChange }) {
                   </div>
                   {SearchQuerry && search
                     ? data?.items
+                        .map((item, originalIndex) => ({
+                          ...item,
+                          originalIndex,
+                        }))
                         ?.filter((item) => item.itemType === "service")
                         ?.filter(
                           (e) =>
@@ -651,7 +668,28 @@ export default function Items({ data, setData, change, setChange }) {
                           >
                             <h1>{item.Name}</h1>
                             <div className="">
-                              <Dropdown menuItems={["View/Edit", "Delete"]}>
+                              <Dropdown
+                                menuItems={[
+                                  {
+                                    label: "View/Edit",
+                                    action: () =>
+                                      setEditIndex(item.originalIndex),
+                                  },
+                                  {
+                                    label: "Delete",
+                                    action: () => {
+                                      let newDa = {
+                                        ...data,
+                                        items: data.items.filter(
+                                          (_, i) => i !== item.originalIndex
+                                        ),
+                                      };
+                                      setData(newDa);
+                                      setChange(!change);
+                                    },
+                                  },
+                                ]}
+                              >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 128 512"
@@ -663,6 +701,10 @@ export default function Items({ data, setData, change, setChange }) {
                           </div>
                         ))
                     : data?.items
+                        .map((item, originalIndex) => ({
+                          ...item,
+                          originalIndex,
+                        }))
                         ?.filter((item) => item.itemType === "service")
                         .map((item, index) => (
                           <div
@@ -674,7 +716,28 @@ export default function Items({ data, setData, change, setChange }) {
                           >
                             <h1>{item.Name}</h1>
                             <div className="">
-                              <Dropdown menuItems={["View/Edit", "Delete"]}>
+                              <Dropdown
+                                menuItems={[
+                                  {
+                                    label: "View/Edit",
+                                    action: () =>
+                                      setEditIndex(item.originalIndex),
+                                  },
+                                  {
+                                    label: "Delete",
+                                    action: () => {
+                                      let newDa = {
+                                        ...data,
+                                        items: data.items.filter(
+                                          (_, i) => i !== item.originalIndex
+                                        ),
+                                      };
+                                      setData(newDa);
+                                      setChange(!change);
+                                    },
+                                  },
+                                ]}
+                              >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 128 512"
@@ -705,14 +768,15 @@ export default function Items({ data, setData, change, setChange }) {
                         SALE PRICE{" "}
                         <span>
                           {" "}
-                          ₹ {selecteditems ? selecteditems.salesPrice : "Null"}
+                          ₹{" "}
+                          {selecteditems
+                            ? selecteditems.salesPrice.value
+                            : "Null"}
                         </span>
                         (excl)
                       </p>
                     </div>
                   )}
-                  <div className="tile"></div>
-                  <div className="tile"></div>
                 </div>
                 {selecteditems && (
                   <div className="content">

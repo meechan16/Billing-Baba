@@ -1,6 +1,18 @@
 import React from "react";
 
 export default function ExportItems({ data, setData }) {
+  const downloadJson = () => {
+    if (!data) {
+      alert("No JSON data to download");
+      return;
+    }
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+
+    saveAs(blob, "data.json");
+  };
   return (
     <div id="sale-Order" className="onlineStore">
       <div className="service">
@@ -9,6 +21,7 @@ export default function ExportItems({ data, setData }) {
         <p>Items will be exported in excel spreadsheet format</p>
         {/* <button onClick={() => Navigate("/add-purchase-order")}> */}
         <button>Export Items</button>
+        <button onClick={downloadJson}>Export Whole Data</button>
       </div>
     </div>
   );

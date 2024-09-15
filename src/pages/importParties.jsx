@@ -22,7 +22,13 @@ export default function ImportParties() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("File uploaded successfully:", response.data);
+      let resp = response.data;
+      console.log(resp);
+      let TestData = data;
+      TestData.parties = [...TestData.parties, ...resp];
+      console.log(TestData);
+      // setData(TestData);
+      // setChange(!change)
     } catch (error) {
       console.error("Error uploading file:", error);
     }

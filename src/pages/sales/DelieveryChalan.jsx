@@ -31,7 +31,7 @@ export default function DelieveryChalan({ data, setData }) {
                 </div>
               </div>
               <div className="cl">
-                <p>date</p>
+                <p>Date</p>
                 <p>Party Name</p>
                 <p>Chalan No</p>
                 <p>Due Date</p>

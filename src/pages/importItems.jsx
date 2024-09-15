@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
+import dev_url from "../url";
 
-export default function ImportItems() {
+export default function ImportItems({ data, setData, change, setChange }) {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -17,16 +18,23 @@ export default function ImportItems() {
     formData.append("file", file);
 
     try {
-      const response = await axios.post("YOUR_API_ENDPOINT_HERE", formData, {
+      const response = await axios.post(dev_url + "/upload_exel", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("File uploaded successfully:", response.data);
+      let resp = response.data;
+      console.log(resp);
+      let TestData = data;
+      TestData.items = [...TestData.items, ...resp];
+      console.log(TestData);
+      // setData(TestData);
+      // setChange(!change)
     } catch (error) {
       console.error("Error uploading file:", error);
     }
   };
+
   return (
     <div id="sale-Order" className="onlineStore">
       <div className="service">
