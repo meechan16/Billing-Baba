@@ -1,4 +1,5 @@
 import React from "react";
+import { saveAs } from "file-saver";
 
 export default function ExportItems({ data, setData }) {
   const downloadJson = () => {
@@ -21,6 +22,7 @@ export default function ExportItems({ data, setData }) {
         <p>Items will be exported in excel spreadsheet format</p>
         {/* <button onClick={() => Navigate("/add-purchase-order")}> */}
         <button>Export Items</button>
+        <p>Items will be exported in excel spreadsheet format</p>
         <button onClick={downloadJson}>Export Whole Data</button>
       </div>
     </div>
