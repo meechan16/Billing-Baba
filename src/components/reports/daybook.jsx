@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Dropdown from "../dropdown";
+import SortableTable from "../Tables";
 
 export default function Daybook({ data, setData }) {
   const [daybook, setDaybook] = useState();
+  const [day, setDay] = useState();
   useEffect(() => {
     const db = [];
     data?.sales?.map((sale, index) =>
@@ -22,7 +24,49 @@ export default function Daybook({ data, setData }) {
     );
     setDaybook(db);
   }, [data]);
-  const [day, setDay] = useState();
+  const columns = [
+    { key: "invoice_date", label: "Invoice Date" },
+    { key: "invoice_number", label: "Invoice Number" },
+    { key: "type", label: "Type" },
+    { key: "moneyIn", label: "Money In" },
+    { key: "moneyOut", label: "Money Out" },
+    { key: "DropDown", label: "-" },
+  ];
+  const sendingArray = data?.Transactions?.filter((element, index) =>
+    day ? new Date(element.invoice_date) === new Date(day) : true
+  ).map((ele) => {
+    return {
+      ...ele,
+      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+      moneyIn:
+        ele.type === "sale" ||
+        ele.type === "Opening Balance" ||
+        ele.type === "Payment-In" ||
+        ele.type === "Sale order" ||
+        ele.transactionType === "Sale Estimation" ||
+        ele.type === "Delivery chalan"
+          ? ele.total
+          : "",
+      moneyOut:
+        ele.type === "purchase" ||
+        ele.type === "expense" ||
+        ele.type === "Credit Note"
+          ? ele.total
+          : "",
+      menuItem: [
+        { label: "print" },
+        { label: "forward" },
+        { label: "generate Invoice" },
+        { label: "recieve payment" },
+        { label: "View/Edit" },
+        { label: "cancel" },
+        { label: "Delete" },
+        { label: "Duplicate" },
+        { label: "Print" },
+      ],
+    };
+  });
+
   return (
     <div id="saleInvoice">
       <div className="title odd">
@@ -48,7 +92,19 @@ export default function Daybook({ data, setData }) {
         </div>
       </div>
       {daybook && (
-        <div className="content">
+        <div className="">
+          <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+            <h1>TRANSACTIONS</h1>
+            <div className="flex gap-2">
+              <div className="flex border border-gray-700 rounded-full px-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                </svg>
+                <input type="" className="bg-transparent" />
+              </div>
+            </div>
+          </div>
+          {/* <div className="content">
           <div className="t">
             <h1>TRANSACTIONS</h1>
             <div className="search">
@@ -75,7 +131,6 @@ export default function Daybook({ data, setData }) {
                   <div className="cl" key={index}>
                     <p className="">{transaction.invoice_date}</p>
                     <p className="grey">{transaction.invoice_number}</p>
-                    {/* <p className="grey">{transaction.name}</p> */}
                     <p className="grey">{transaction.type}</p>
                     <p className="grey">{transaction.moneyIn}</p>
                     <p className="grey">{transaction.moneyOut}</p>
@@ -86,13 +141,14 @@ export default function Daybook({ data, setData }) {
                 <div className="cl" key={index}>
                   <p className="">{transaction.invoice_date}</p>
                   <p className="grey">{transaction.invoice_number}</p>
-                  {/* <p className="grey">{transaction.name}</p> */}
                   <p className="grey">{transaction.type}</p>
                   <p className="grey">{transaction.moneyIn}</p>
                   <p className="grey">{transaction.moneyOut}</p>
                   <p className="grey">-</p>
                 </div>
-              ))}
+              ))} */}
+
+          <SortableTable data={sendingArray} columns={columns} />
         </div>
       )}
     </div>

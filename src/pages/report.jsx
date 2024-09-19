@@ -5,6 +5,7 @@ import PurchaseBill from "./purchase/PurchaseBill";
 import Undone from "../components/undone";
 import Daybook from "../components/reports/daybook";
 import AllTransactions from "../components/reports/allTransactions";
+import PartyStatement from "./partyStatement";
 
 export default function Rep({ data, setData }) {
   const Navigate = useNavigate();
@@ -390,11 +391,19 @@ export default function Rep({ data, setData }) {
             <h1>Select an option</h1>
           </div>
         )}
-        {currentPage > 5 && <Undone data={data} setData={setData} />}
-        {currentPage === 1 && <SaleInvoice data={data} setData={setData} />}
-        {currentPage === 2 && <PurchaseBill data={data} setData={setData} />}
-        {currentPage === 3 && <Daybook data={data} setData={setData} />}
-        {currentPage === 4 && <AllTransactions data={data} setData={setData} />}
+        {currentPage === 1 ? (
+          <SaleInvoice data={data} setData={setData} />
+        ) : currentPage === 2 ? (
+          <PurchaseBill data={data} setData={setData} />
+        ) : currentPage === 3 ? (
+          <Daybook data={data} setData={setData} />
+        ) : currentPage === 4 ? (
+          <AllTransactions data={data} setData={setData} />
+        ) : currentPage === 10 ? (
+          <PartyStatement data={data} setData={setData} />
+        ) : (
+          <Undone data={data} setData={setData} />
+        )}
       </div>
     </div>
   );

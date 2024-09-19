@@ -5,6 +5,7 @@ import dev_url from "../url";
 import TextField from "@mui/material/TextField";
 import Loader from "./Loader";
 import { useLocation } from "react-router-dom";
+import ImageUploader from "../components/ImgUpload";
 
 export default function AddItem({
   data,
@@ -34,6 +35,20 @@ export default function AddItem({
   var [primaryUnit, setprimaryUnit] = useState();
   var [SecondaryUnit, setSecondaryUnit] = useState();
   var [ImageURL, setImageUrl] = useState();
+  var [ImageList, setImageList] = useState();
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleUpload = (url) => {
+    if (ImageList) setImageList([...ImageList, url]);
+    else setImageList([url]);
+  };
+
+  const removeImage = (index) => {
+    const newImages = [...ImageList];
+    newImages.splice(index, 1);
+    setImageList(newImages);
+  };
 
   var [loading, setLoading] = useState(false);
   var [unitToggle, setUnitToggle] = useState(false);
@@ -116,6 +131,7 @@ export default function AddItem({
         minToMaintain: minToMaintain ? minToMaintain : "",
         location: location ? location : "",
         profit: sellPrice - discount - purchaseprice.value - (tax ? tax : 0),
+        barcode: ImageURL ? ImageURL.url : "",
         stock: openingQuantity || 0,
         itemType: "product",
       };
@@ -217,7 +233,7 @@ export default function AddItem({
           </div>
         </div>
         <div className="c1">
-          <div className="p1">
+          <div className="flex gap-3 items-center">
             <CustomInput
               inputValue={itemName}
               setInputValue={setitemName}
@@ -240,14 +256,14 @@ export default function AddItem({
             /> */}
             <button
               onClick={() => setUnitToggle(true)}
-              className="px-4 py-2 bg-blue-200 mt-2 text-blue-600 rounded hover:bg-blue-300"
+              className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
             >
               Set Unit
             </button>
           </div>
           {unitToggle && (
             <div className="flex z-10 justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
-              <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md">
+              <div className="mx-auto p-4 bg-white flex flex-col w-auto rounded-md shadow-md min-w-[400px]">
                 <h3 className="text-lg font-semibold mb-4">
                   Select Items Units
                 </h3>
@@ -273,18 +289,20 @@ export default function AddItem({
                   />{" "}
                   X Primary Unit
                 </p>
-                <button
-                  // onClick={handleAddInactive}
-                  className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
-                >
-                  Add Unit
-                </button>
-                <button
-                  onClick={() => setUnitToggle(false)}
-                  className="px-4 py-2 bg-blue-500 min-w-[200px] mt-2 text-white rounded hover:bg-blue-600"
-                >
-                  Close
-                </button>
+                <div className="flex w-full gap-2 mt-2">
+                  <button
+                    // onClick={handleAddInactive}
+                    className="px-4 py-2 bg-blue-500 flex-1 text-white rounded hover:bg-blue-600"
+                  >
+                    Add Unit
+                  </button>
+                  <button
+                    onClick={() => setUnitToggle(false)}
+                    className="px-4 py-2 border border-blue-500 flex-1 text-blue-600 rounded hover:bg-blue-500 hover:text-white"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -323,16 +341,18 @@ export default function AddItem({
                 setInputValue={setitemCode}
                 placeholder={toggle ? "Item Code" : "Service Code"}
               />
-              <button
-                className="h-full my-[10px] p-3 bg-gray-200 font-semibold"
-                onClick={() => {
-                  let cd = generate13DigitNumberString();
-                  console.log(cd);
-                  setitemCode(cd);
-                }}
-              >
-                Generate random code
-              </button>
+              {!itemCode && (
+                <button
+                  className="h-full my-[10px] p-3 bg-gray-200 font-semibold"
+                  onClick={() => {
+                    let cd = generate13DigitNumberString();
+                    console.log(cd);
+                    setitemCode(cd);
+                  }}
+                >
+                  Generate random code
+                </button>
+              )}
             </div>
             {itemCode && (
               <>
@@ -350,7 +370,10 @@ export default function AddItem({
                 )}
               </>
             )}
-            <button className="text-blue-400 font-semibold mx-2 items-center fill-blue-400 flex gap-1">
+            <button
+              className="text-blue-400 font-semibold mx-2 items-center fill-blue-400 flex gap-1"
+              onClick={() => setShowPopup(true)}
+            >
               <span className="hover:underline">Add Product Images</span>{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -360,7 +383,44 @@ export default function AddItem({
                 <path d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
               </svg>
             </button>
+            {showPopup && (
+              <ImageUploader
+                onClose={() => setShowPopup(false)}
+                onUpload={handleUpload}
+              />
+            )}
           </div>
+          {ImageList?.length > 0 && (
+            <div className="flex flex-wrap gap-4">
+              {ImageList.map((url, index) => (
+                <div
+                  key={index}
+                  className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden relative my-2"
+                >
+                  <img
+                    src={url}
+                    alt="Product Image"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                    onClick={() => removeImage(index)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H160 85.9l11.1-11.6c9.4-10.5 9.4-27.7 0-39.2L
+                    135.2 17.7zM32 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32S14.3 32 32 32z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="flex items-center gap-0">
             <TextField
               id="outlined-search"
@@ -375,8 +435,8 @@ export default function AddItem({
               type="search"
             />
           </div>
-          <div className="p1">
-            <p className="text-gray-500 font-semibold">
+          <div className="p1 mt-2">
+            <p className="text-gray-400 ">
               * scan existing barcode to set custom item code from pre-existing
               barcode
             </p>

@@ -2,32 +2,27 @@ import React, { useEffect, useState } from "react";
 import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
 import { useNavigate } from "react-router-dom";
+import SortableTable from "../../components/Tables";
 
 export default function SaleInvoice({ data, setData }) {
   const Navigate = useNavigate();
-  // const [data, setData] = useState([]);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = () => {
-  //   fetch(dev_url + "/get_user", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "nulll", // Modify this if necessary
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Data fetch:", data.data.sales);
-  //       setData(data.data || []); // Ensure data is always an array
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
+  const columns = [
+    { key: "invoice_date", label: "Invoice Date" },
+    { key: "invoice_number", label: "Invoice Number" },
+    { key: "name", label: "Name" },
+    { key: "transactionType", label: "Transaction Type" },
+    { key: "payment_type", label: "Payment Type" },
+    { key: "total", label: "Total" },
+    { key: "pending", label: "Pending" },
+  ];
+  const sendingArray = data?.sales.map((ele) => {
+    return {
+      ...ele,
+      pending: ele.total - ele.paid,
+      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+    };
+  });
   return (
     <div id="saleInvoice">
       <div className="title">
@@ -72,20 +67,25 @@ export default function SaleInvoice({ data, setData }) {
       </div>
 
       {data && (
-        <div className="content">
-          <div className="t">
+        <div className="">
+          <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
             <h1>TRANSACTIONS</h1>
-            <div className="">
-              <div className="search">
+            <div className="flex gap-2">
+              <div className="flex border border-gray-700 rounded-full px-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
-                <input type="" />
+                <input type="" className="bg-transparent" />
               </div>
-              <button onClick={() => Navigate("/addsales")}>+ Add Sale</button>
+              <button
+                className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"
+                onClick={() => Navigate("/addsales")}
+              >
+                + Add Sale
+              </button>
             </div>
           </div>
-          <div className="cl">
+          {/* <div className="cl">
             <p>date</p>
             <p>invoiceNo</p>
             <p>PartyName</p>
@@ -94,8 +94,8 @@ export default function SaleInvoice({ data, setData }) {
             <p>Ammount</p>
             <p>Balance Due</p>
             <p className="side">-</p>
-          </div>
-          {data?.sales?.map((sale, index) => (
+          </div> */}
+          {/* {data?.sales?.map((sale, index) => (
             <div className="cl" key={index}>
               <p className="">{sale.invoice_date}</p>
               <p className="grey">{sale.invoice_number}</p>
@@ -105,19 +105,6 @@ export default function SaleInvoice({ data, setData }) {
               <p className="grey">{sale.total}</p>
               <p className="">{sale.total - sale.paid}</p>
               <p className="side">
-                {/* <Dropdown
-                  menuItems={[
-                    "print",
-                    "forward",
-                    "generate Invoice",
-                    "recieve payment",
-                    "View/Edit",
-                    "cancel",
-                    "Delete",
-                    "Duplicate",
-                    "Print",
-                  ]}
-                > */}
                 <Dropdown
                   menuItems={[
                     { label: "print" },
@@ -138,7 +125,8 @@ export default function SaleInvoice({ data, setData }) {
                 </Dropdown>
               </p>
             </div>
-          ))}
+          ))} */}
+          <SortableTable data={sendingArray} columns={columns} />
         </div>
       )}
     </div>

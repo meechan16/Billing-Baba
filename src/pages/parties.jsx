@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
 import dev_url from "../url";
 import EditParties from "./editParties";
+import SortableTable from "../components/Tables";
 
 export default function Parties({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -67,6 +68,175 @@ export default function Parties({ data, setData, change, setChange }) {
       />
     );
 
+  var columns;
+  var sendingArray;
+  if (selectedParty) {
+    if (page == "parties") {
+      columns = [
+        { key: "type", label: "Type" },
+        { key: "invoice_date", label: "Invoice Date" },
+        { key: "invoice_number", label: "Invoice Number" },
+        { key: "total", label: "Total" },
+        { key: "pending", label: "Pending" },
+        { key: "DropDown", label: "-" },
+      ];
+      sendingArray = data?.Transactions?.map((item, originalIndex) => ({
+        ...item,
+        originalIndex,
+      }))
+        .filter(
+          (item) =>
+            item.name === selectedParty?.partyName ||
+            item.name?.includes(selectedParty?.partyName?.toLowerCase()) ||
+            (item.partyName
+              ?.toLowerCase()
+              .includes(selectedParty?.partyName.toLowerCase()) &&
+              item.payment_type
+                ?.toLowerCase()
+                .includes(TransactionSearc.toLowerCase()))
+        )
+        .map((ele) => {
+          return {
+            ...ele,
+            pending: ele.total - ele.paid,
+            invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+            menuItem:
+              ele.type === "Opening Balance"
+                ? [
+                    // { label: "View" },
+                    {
+                      label: "Delete",
+                      action: () => {
+                        let newDa = {
+                          ...data,
+                          Transactions: data.Transactions.filter(
+                            (_, i) => i !== ele.originalIndex
+                          ),
+                        };
+                        setData(newDa);
+                        setChange(!change);
+                      },
+                    },
+                    { label: "Recieve payment" },
+                  ]
+                : ele.type == "Sale"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Cancel Invoice" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Preview as delivery chalan" },
+                    { label: "Convert to Return" },
+                    { label: "Recieve Payment" },
+                    { label: "View History" },
+                  ]
+                : ele.type == "Estimate" || ele.type == "Sale Estimation"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Cancel Invoice" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Convert to Sale" },
+                    { label: "Convert to Sale Order" },
+                  ]
+                : ele.type == "Delivery Chalan"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                    { label: "Convert to Sale" },
+                  ]
+                : ele.type == "Sale Order"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                    { label: "Convert to Sale" },
+                  ]
+                : ele.type == "Sale Return" || ele.type == "Credit Note"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                    { label: "Make Payment" },
+                    { label: "View History" },
+                  ]
+                : ele.type == "Purchase"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                    { label: "Convert to Return" },
+                    { label: "Make Payment" },
+                    { label: "View History" },
+                  ]
+                : ele.type == "Purchase Order"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                    { label: "Convert to Purchase" },
+                  ]
+                : ele.type == "Purchase Return" || ele.type == "Debit Note"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                    { label: "Recieve Payments" },
+                  ]
+                : ele.type == "Payments Out"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                  ]
+                : ele.type == "Payments In"
+                ? [
+                    { label: "View/Edit" },
+                    { label: "Delete" },
+                    { label: "Duplicate" },
+                    { label: "Open PDF" },
+                    { label: "Preview" },
+                    { label: "Print" },
+                  ]
+                : [{ label: "View/Edit" }, { label: "Delete" }],
+          };
+        });
+    } else if (page === "groups") {
+      columns = [
+        { key: "partyName", label: "Party Name" },
+        { key: "credit", label: "Credit" },
+      ];
+      sendingArray = data?.parties?.filter(
+        (item) => item.group === selectedParty
+      );
+    }
+  }
   return (
     <div className="">
       <div className="topbar">
@@ -388,26 +558,51 @@ export default function Parties({ data, setData, change, setChange }) {
                 <h1>No Party Selected</h1>
               </div>
             )}
+            {/* // <div className="content">
+              //   <div className="t">
+              //     <h1>TRANSACTIONS</h1>
+              //     <div className="search">
+              //       <svg
+              //         xmlns="http://www.w3.org/2000/svg"
+              //         viewBox="0 0 512 512"
+              //       >
+              //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              //       </svg>
+              //       <input
+              //         type=""
+              //         value={TransactionSearc}
+              //         onChange={(e) => setTransactionSearch(e.target.value)}
+              //       />
+              //     </div>
+              //   </div> */}
             {selectedParty && (
-              <div className="content">
-                <div className="t">
+              <div className="">
+                <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
                   <h1>TRANSACTIONS</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
+                  <div className="flex gap-2">
+                    <div className="flex border border-gray-700 rounded-full px-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                      >
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                      </svg>
+                      <input
+                        type=""
+                        className="bg-transparent"
+                        value={TransactionSearc}
+                        onChange={(e) => setTransactionSearch(e.target.value)}
+                      />
+                    </div>
+                    {/* <button
+                      className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"
+                      onClick={() => Navigate("/addsales")}
                     >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input
-                      type=""
-                      value={TransactionSearc}
-                      onChange={(e) => setTransactionSearch(e.target.value)}
-                    />
+                      + Add Sale
+                    </button> */}
                   </div>
                 </div>
-                <div className="cl text-sm">
-                  {/* <p className="side">-</p> */}
+                {/* <div className="cl text-sm">
                   <p>Type</p>
                   <p>Number</p>
                   <p>Date</p>
@@ -436,9 +631,9 @@ export default function Parties({ data, setData, change, setChange }) {
                     <div className="cl text-sm" key={index}>
                       <p className="grey">{sale.type}</p>
                       <p className="grey">{sale.invoice_number}</p>
-                      {/* <p className="grey">{sale.name}</p> */}
+                      {/* <p className="grey">{sale.name}</p> 
                       <p className="">{sale.invoice_date}</p>
-                      {/* <p className="grey">{sale.items?.length}</p> */}
+                      {/* <p className="grey">{sale.items?.length}</p> 
                       <p className="grey">{sale.total}</p>
                       <p className="">
                         {sale.pending ? sale.pending : sale.total - sale.paid}
@@ -584,7 +779,9 @@ export default function Parties({ data, setData, change, setChange }) {
                         </svg>
                       </Dropdown>
                     </div>
-                  ))}
+                  ))} */}
+
+                <SortableTable data={sendingArray} columns={columns} />
               </div>
             )}
           </div>
@@ -782,37 +979,28 @@ export default function Parties({ data, setData, change, setChange }) {
               </div>
             )}
             {selectedParty && (
-              <div className="content">
-                <div className="t">
+              <div className="">
+                <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
                   <h1>TRANSACTIONS</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input
-                      type=""
-                      value={TransactionSearc}
-                      onChange={(e) => setTransactionSearch(e.target.value)}
-                    />
+                  <div className="flex gap-2">
+                    <div className="flex border border-gray-700 rounded-full px-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                      >
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                      </svg>
+                      <input
+                        type=""
+                        className="bg-transparent"
+                        value={TransactionSearc}
+                        onChange={(e) => setTransactionSearch(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="cl text-sm">
-                  {/* <p className="side">-</p> */}
-                  <p>PARTY NAME</p>
-                  <p>AMOUNT</p>
-                  <p className="side">-</p>
-                </div>
-                {data?.parties
-                  ?.filter((item) => item.group === selectedParty)
-                  .map((sale, index) => (
-                    <div className="cl text-sm" key={index}>
-                      <p className="grey">{sale.partyName}</p>
-                      <p className="">{sale.credit}</p>
-                    </div>
-                  ))}
+
+                <SortableTable data={sendingArray} columns={columns} />
               </div>
             )}
           </div>

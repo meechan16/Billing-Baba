@@ -1,7 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../../components/dropdown";
+import SortableTable from "../../components/Tables";
+import { useNavigate } from "react-router-dom";
 
 export default function PurchaseBill({ data, setData }) {
+  const Navigate = useNavigate();
+  const columns = [
+    { key: "invoice_date", label: "Invoice Date" },
+    { key: "invoice_number", label: "Invoice Number" },
+    { key: "name", label: "Name" },
+    { key: "transactionType", label: "Transaction Type" },
+    { key: "payment_type", label: "Payment Type" },
+    { key: "total", label: "Total" },
+    { key: "DropDown", label: "-" },
+  ];
+  const sendingArray = data?.purchase?.map((ele) => {
+    return {
+      ...ele,
+      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+      menuItem: [
+        { label: "print" },
+        { label: "forward" },
+        { label: "generate Invoice" },
+        { label: "recieve payment" },
+        { label: "View/Edit" },
+        { label: "cancel" },
+        { label: "Delete" },
+        { label: "Duplicate" },
+        { label: "Print" },
+      ],
+    };
+  });
   return (
     <div id="saleInvoice">
       <div className="title">
@@ -45,7 +74,33 @@ export default function PurchaseBill({ data, setData }) {
         </div>
       </div>
       {data && (
-        <div className="content">
+        <div className="">
+          <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+            <h1>TRANSACTIONS</h1>
+            <div className="flex gap-2">
+              <div className="flex border border-gray-700 rounded-full px-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                </svg>
+                <input type="" className="bg-transparent" />
+              </div>
+              <button
+                className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"
+                onClick={() => Navigate("/addPurchase")}
+              >
+                + Add Purchase
+              </button>
+            </div>
+          </div>
+
+          <SortableTable data={sendingArray} columns={columns} />
+        </div>
+      )}
+    </div>
+  );
+}
+{
+  /* <div className="content">
           <div className="t">
             <h1>TRANSACTIONS</h1>
             <div className="search">
@@ -75,19 +130,6 @@ export default function PurchaseBill({ data, setData }) {
               <p className="grey">{sale.total}</p>
               <p className="grey">{sale.balance ? sale.balance : sale.total}</p>
               <p className="side">
-                {/* <Dropdown
-                  menuItems={[
-                    "print",
-                    "forward",
-                    "generate Invoice",
-                    "recieve payment",
-                    "View/Edit",
-                    "cancel",
-                    "Delete",
-                    "Duplicate",
-                    "Print",
-                  ]}
-                > */}
                 <Dropdown
                   menuItems={[
                     { label: "print" },
@@ -108,9 +150,5 @@ export default function PurchaseBill({ data, setData }) {
                 </Dropdown>
               </p>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+          ))} */
 }

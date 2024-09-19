@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BulkUpdateItems = ({ data, setData, change, setChange }) => {
+const EditableGrid = ({ data, setData, change, setChange }) => {
   const [data2, setData2] = useState(data.items);
 
   const handleInputChange = (e, rowIndex, key) => {
@@ -9,16 +9,6 @@ const BulkUpdateItems = ({ data, setData, change, setChange }) => {
     newData[rowIndex][key] = e.target.value;
     setData2(newData);
   };
-
-  const handleAddNewItem = () => {
-    // Create a new item with empty fields based on the existing keys
-    const newItem = Object.keys(data2[0]).reduce((acc, key) => {
-      acc[key] = "";
-      return acc;
-    }, {});
-    setData2([...data2, newItem]); // Add the new item to the data array
-  };
-
   const Navigate = useNavigate();
   const handleSave = () => {
     setData({ ...data, items: data2 });
@@ -27,10 +17,11 @@ const BulkUpdateItems = ({ data, setData, change, setChange }) => {
   };
 
   return (
-    <div className="container mx-auto w-[80vw] overflow-x-scroll py-4">
-      <h3 className="text-lg font-semibold mb-4">Add and Edit all Items</h3>
-
-      <table className="table-auto overflow-x-scroll border-collapse border border-gray-300">
+    <div className="pt-4 p-2">
+      <div className="py-2 pb-4">
+        <h1 className="text-xl font-semibold">Bulk Edit Items</h1>
+      </div>
+      <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
             {/* Header row */}
@@ -62,17 +53,7 @@ const BulkUpdateItems = ({ data, setData, change, setChange }) => {
           ))}
         </tbody>
       </table>
-
       <div className="my-3 flex gap-2">
-        {/* Add Item button */}
-        <button
-          onClick={handleAddNewItem}
-          className="px-4 py-2 bg-green-500 text-white rounded"
-        >
-          Add Item
-        </button>
-
-        {/* Save and Back buttons */}
         <button
           onClick={handleSave}
           className="px-4 py-2 bg-blue-500 text-white rounded"
@@ -86,8 +67,25 @@ const BulkUpdateItems = ({ data, setData, change, setChange }) => {
           Back
         </button>
       </div>
+
+      {/* Display the edited data
+      <pre className="mt-4 p-2 bg-gray-100">
+        {JSON.stringify(data2, null, 2)}
+      </pre> */}
     </div>
   );
 };
 
-export default BulkUpdateItems;
+// Example usage
+const App = () => {
+  const initialData = [
+    { name: "haha", age: 10 },
+    { name: "haha", age: 10 },
+    { name: "haha", age: 10 },
+    { name: "haha", age: 10 },
+  ];
+
+  return <EditableGrid initialData={initialData} />;
+};
+
+export default EditableGrid;

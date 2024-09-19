@@ -41,7 +41,7 @@ function Dropdown({
       </button>
       {isOpen && (
         <ul className="dropdown-menu">
-          {menuItems.map((item, index) => (
+          {menuItems?.map((item, index) => (
             <li
               key={index}
               onClick={() => handleItemClick(item)}

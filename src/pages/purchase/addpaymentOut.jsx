@@ -25,6 +25,7 @@ export default function AddPaymentsOut({
       date: date ? date : "",
       reciptno: reciptno ? reciptno : "",
       ammount: ammount ? ammount : "",
+      total: ammount ? ammount : "",
       type: "Payment-Out",
       transactionType: "Payment-Out",
     };

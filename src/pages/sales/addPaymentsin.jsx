@@ -25,6 +25,7 @@ export default function AddPaymentsin({
       date: date ? date : "",
       invoice_number: reciptno ? reciptno : "",
       amount: ammount ? ammount : "",
+      total: ammount ? ammount : "",
       type: "Payment-In",
       transactionType: "Payment-In",
     };

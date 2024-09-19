@@ -59,6 +59,7 @@ import PurchaseOrderBill from "./pages/purchase/PurchaseOrderBill";
 import AddPaymentsOut from "./pages/purchase/addpaymentOut";
 import AddPurchaseReturn from "./pages/purchase/addPurchaseReturn";
 import PurchaseReturnBill from "./pages/purchase/PurchaseReturnBill";
+import EditableGrid from "./components/EditGrid";
 
 function App() {
   // const Navigate = useNavigate();
@@ -303,6 +304,18 @@ function App() {
               </Home>
             }
           />
+          {/* <Route
+            path="/bulk-edit-items"
+            exact
+            element={
+              <EditableGrid
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
+          /> */}
           <Route
             path="/bills"
             exact

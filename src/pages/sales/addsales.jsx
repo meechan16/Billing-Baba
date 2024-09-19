@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
+import ImageUploader from "../../components/ImgUpload";
 import dev_url from "../../url";
 
 export default function AddSales({ data, setData, change, setChange }) {
@@ -163,6 +164,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       pending: rows.reduce((total, row) => total + (row.amount || 0), 0) - paid,
       paid: paid,
       type: "sale",
+      image: ImageList ? ImageList[0].url : "",
     };
 
     let newDa = data;
@@ -326,6 +328,22 @@ export default function AddSales({ data, setData, change, setChange }) {
     const today = new Date();
     setInvoice_date(formatDate(today));
   }, []);
+
+  var [ImageList, setImageList] = useState();
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleUpload = (url) => {
+    if (ImageList) setImageList([...ImageList, url]);
+    else setImageList([url]);
+  };
+
+  const removeImage = (index) => {
+    const newImages = [...ImageList];
+    newImages.splice(index, 1);
+    setImageList(newImages);
+  };
+
   return (
     <div id="addsales" className="text-xs">
       <div className="top">
@@ -1313,9 +1331,51 @@ export default function AddSales({ data, setData, change, setChange }) {
                 rows="3"
                 className="p-1 bg-white border border-gray-300 rounded-md"
               />
-              <button className="p-1 px-3 bg-white border border-gray-500 rounded-md">
-                Add Image
-              </button>
+
+              {ImageList?.length > 0 ? (
+                <div className="flex flex-wrap gap-4">
+                  {ImageList.map((url, index) => (
+                    <div
+                      key={index}
+                      className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden relative my-2"
+                    >
+                      <img
+                        src={url}
+                        alt="Product Image"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                        onClick={() => removeImage(index)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 448 512"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H160 85.9l11.1-11.6c9.4-10.5 9.4-27.7 0-39.2L
+                    135.2 17.7zM32 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32S14.3 32 32 32z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowPopup(true)}
+                  className="p-1 px-3 bg-white border border-gray-500 rounded-md"
+                >
+                  Add Image
+                </button>
+              )}
+              {showPopup && (
+                <ImageUploader
+                  onClose={() => setShowPopup(false)}
+                  onUpload={handleUpload}
+                />
+              )}
             </div>
             <div className="flex flex-col gap-1 justify-end">
               <div className="flex items-center gap-2 justify-end">
