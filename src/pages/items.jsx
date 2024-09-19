@@ -5,6 +5,7 @@ import Dropdown from "../components/dropdown";
 import StockAdjust from "../components/stock_Adjustment";
 import Loader from "./Loader";
 import EditItem from "./editItem";
+import SortableTable from "../components/Tables";
 
 export default function Items({ data, setData, change, setChange }) {
   const params = new URLSearchParams(window.location.search);
@@ -147,6 +148,46 @@ export default function Items({ data, setData, change, setChange }) {
       setDataArr(arr);
     }
   }, [selecteditems]);
+
+  var columns;
+  var sendingArray;
+  if (page == "product") {
+    columns = [
+      { key: "type", label: "Type" },
+      { key: "invoice_number", label: "Invoice Number" },
+      { key: "name", label: "Name" },
+      { key: "invoice_date", label: "Invoice Date" },
+      { key: "length", label: "Length" },
+      { key: "total", label: "Total" },
+      { key: "paymentType", label: "Pending" },
+      { key: "DropDown", label: "-" },
+    ];
+    if (selecteditems) {
+      sendingArray = data?.sales
+        ?.filter((item) => {
+          return item.items.some((term) => term.item === selecteditems.Name);
+        })
+        .map((ele) => {
+          return {
+            ...ele,
+            invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+            length: ele.items?.length,
+            paymentTope: ele.payment_type === "credit" ? "Unpaid" : "Paid",
+            menuItem: [
+              { label: "print" },
+              { label: "forward" },
+              { label: "generate Invoice" },
+              { label: "recieve payment" },
+              { label: "View/Edit" },
+              { label: "cancel" },
+              { label: "Delete" },
+              { label: "Duplicate" },
+              { label: "Print" },
+            ],
+          };
+        });
+    }
+  }
 
   if (EditIndex != -1)
     return (
@@ -470,73 +511,91 @@ export default function Items({ data, setData, change, setChange }) {
               </div>
             )}
             {selecteditems && (
-              <div className="content">
-                <div className="t">
+              // <div className="content">
+              //   <div className="t">
+              //     <h1>TRANSACTIONS</h1>
+              //     <div className="search">
+              //       <svg
+              //         xmlns="http://www.w3.org/2000/svg"
+              //         viewBox="0 0 512 512"
+              //       >
+              //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              //       </svg>
+              //       <input type="" />
+              //     </div>
+              //   </div>
+              //   <div className="cl top">
+              //     <p>Type</p>
+              //     <p>Invoice/Ref</p>
+              //     <p
+              //       className="hover:underline"
+              //       onClick={() => sortFunction(data.sales, "name", "string")}
+              //     >
+              //       Name
+              //     </p>
+              //     <p>Date</p>
+              //     <p>Quantity</p>
+              //     <p
+              //       className="hover:underline"
+              //       onClick={() => sortFunction(data.sales, "total")}
+              //     >
+              //       Price
+              //     </p>
+              //     <p>Status</p>
+              //   </div>
+              //   {sortedArray?.length >= 1
+              //     ? sortedArray
+              //         .filter((item) => {
+              //           return item.items.some(
+              //             (term) => term.item === selecteditems.Name
+              //           );
+              //         })
+              //         .map((sale, index) => (
+              //           <div className="cl" key={index}>
+              //             <p className="grey">{sale.type}</p>
+              //             {/* <p className="grey">{sale.payment_type}</p> */}
+              //             <p className="grey">{sale.invoice_number}</p>
+              //             <p className="grey">{sale.name}</p>
+              //             <p className="">{sale.invoice_date}</p>
+              //             <p className="grey">{sale.items?.length}</p>
+              //             <p className="grey">{sale.total}</p>
+              //             <p className="">
+              //               {sale.payment_type === "credit" ? "Unpaid" : "Paid"}
+              //             </p>
+              //           </div>
+              //         ))
+              //     : DataArr.map((sale, index) => (
+              //         <div className="cl" key={index}>
+              //           <p className="grey">{sale.type}</p>
+              //           {/* <p className="grey">{sale.payment_type}</p> */}
+              //           <p className="grey">{sale.invoice_number}</p>
+              //           <p className="grey">{sale.name}</p>
+              //           <p className="">{sale.invoice_date}</p>
+              //           <p className="grey">{sale.items?.length}</p>
+              //           <p className="grey">{sale.total}</p>
+              //           <p className="">
+              //             {sale.payment_type === "credit" ? "Unpaid" : "Paid"}
+              //           </p>
+              //         </div>
+              //       ))}
+              // </div>
+              <div className="">
+                <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
                   <h1>TRANSACTIONS</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input type="" />
+                  <div className="flex gap-2">
+                    <div className="flex border border-gray-700 rounded-full px-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                      >
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                      </svg>
+                      <input type="" className="bg-transparent" />
+                    </div>
                   </div>
                 </div>
-                <div className="cl top">
-                  <p>Type</p>
-                  <p>Invoice/Ref</p>
-                  <p
-                    className="hover:underline"
-                    onClick={() => sortFunction(data.sales, "name", "string")}
-                  >
-                    Name
-                  </p>
-                  <p>Date</p>
-                  <p>Quantity</p>
-                  <p
-                    className="hover:underline"
-                    onClick={() => sortFunction(data.sales, "total")}
-                  >
-                    Price
-                  </p>
-                  <p>Status</p>
-                </div>
-                {sortedArray?.length >= 1
-                  ? sortedArray
-                      .filter((item) => {
-                        return item.items.some(
-                          (term) => term.item === selecteditems.Name
-                        );
-                      })
-                      .map((sale, index) => (
-                        <div className="cl" key={index}>
-                          <p className="grey">{sale.type}</p>
-                          {/* <p className="grey">{sale.payment_type}</p> */}
-                          <p className="grey">{sale.invoice_number}</p>
-                          <p className="grey">{sale.name}</p>
-                          <p className="">{sale.invoice_date}</p>
-                          <p className="grey">{sale.items?.length}</p>
-                          <p className="grey">{sale.total}</p>
-                          <p className="">
-                            {sale.payment_type === "credit" ? "Unpaid" : "Paid"}
-                          </p>
-                        </div>
-                      ))
-                  : DataArr.map((sale, index) => (
-                      <div className="cl" key={index}>
-                        <p className="grey">{sale.type}</p>
-                        {/* <p className="grey">{sale.payment_type}</p> */}
-                        <p className="grey">{sale.invoice_number}</p>
-                        <p className="grey">{sale.name}</p>
-                        <p className="">{sale.invoice_date}</p>
-                        <p className="grey">{sale.items?.length}</p>
-                        <p className="grey">{sale.total}</p>
-                        <p className="">
-                          {sale.payment_type === "credit" ? "Unpaid" : "Paid"}
-                        </p>
-                      </div>
-                    ))}
+
+                <SortableTable data={sendingArray} columns={columns} />
               </div>
             )}
           </div>

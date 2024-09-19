@@ -222,6 +222,27 @@ export default function AddSales({ data, setData, change, setChange }) {
   };
 
   let sendData_and_get_pdf = async () => {
+    const totalAmount = rows.reduce(
+      (total, row) => total + (parseInt(row.amount) || 0),
+      0
+    );
+    const profit = rows.reduce(
+      (total, row) => total + (parseInt(row.profit) || 0),
+      0
+    );
+    const totalTax = rows.reduce(
+      (total, row) => total + (parseInt(row.amount) ? tax : 0),
+      0
+    );
+
+    let pending = totalAmount - paid;
+    if (Party) {
+      if (pending < Party.creditLimit) {
+        alert(
+          "Customer's Credit Limit Exceeded, Do you wish to continue transaction?"
+        );
+      }
+    }
     const newData = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
