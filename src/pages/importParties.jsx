@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export default function ImportParties() {
+export default function ImportParties({ data, setData }) {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (event) => {

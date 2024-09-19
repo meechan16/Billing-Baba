@@ -148,18 +148,6 @@ export default function Items({ data, setData, change, setChange }) {
     }
   }, [selecteditems]);
 
-  // const callbackFn = (fn, item, index) => {
-  //   if (fn === "View/Edit") {
-  //     Navigate("/edit-item", { state: { data: item, index: index } });
-  //     console.log("edit hit");
-  //   } else if (fn === "Delete") {
-  //     let newDa = data;
-  //     newDa.items.splice(index, 1);
-  //     setData(newDa);
-  //     setChange(!change);
-  //   }
-  // };
-
   if (EditIndex != -1)
     return (
       <EditItem

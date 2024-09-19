@@ -225,19 +225,23 @@ export default function AddSales({ data, setData, change, setChange }) {
     const newData = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",
+      BillingAdd,
+      ShippingAdd,
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
       state_of_supply: state_of_supply.state ? state_of_supply.state : "",
       payment_type: paymentType ? paymentType : "",
+      transactionType: "Sale",
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
-      total: totalAmount ? totalAmount + totalTax : "",
+      amount: rows.reduce((total, row) => total + (row.amount || 0), 0),
       profit: profit ? profit : "",
-      total_tax: totalTax,
+      tax: totalTax,
       description: Description ? Description : "",
-      payment_status: paymentStatus ? paymentStatus : "",
-      pending: totalAmount - paid ? totalAmount - paid : "",
+      pending: rows.reduce((total, row) => total + (row.amount || 0), 0) - paid,
       paid: paid,
+      type: "sale",
+      image: ImageList ? ImageList[0].url : "",
     };
 
     try {
