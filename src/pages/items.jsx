@@ -163,29 +163,27 @@ export default function Items({ data, setData, change, setChange }) {
       { key: "DropDown", label: "-" },
     ];
     if (selecteditems) {
-      sendingArray = data?.sales
-        ?.filter((item) => {
-          return item.items.some((term) => term.item === selecteditems.Name);
-        })
-        .map((ele) => {
-          return {
-            ...ele,
-            invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
-            length: ele.items?.length,
-            paymentTope: ele.payment_type === "credit" ? "Unpaid" : "Paid",
-            menuItem: [
-              { label: "print" },
-              { label: "forward" },
-              { label: "generate Invoice" },
-              { label: "recieve payment" },
-              { label: "View/Edit" },
-              { label: "cancel" },
-              { label: "Delete" },
-              { label: "Duplicate" },
-              { label: "Print" },
-            ],
-          };
-        });
+      sendingArray = data?.Transactions?.filter((item) =>
+        item.items?.some((term) => term.item === selecteditems.Name)
+      ).map((ele) => {
+        return {
+          ...ele,
+          invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+          length: ele.items?.length,
+          paymentTope: ele.payment_type === "credit" ? "Unpaid" : "Paid",
+          menuItem: [
+            { label: "print" },
+            { label: "forward" },
+            { label: "generate Invoice" },
+            { label: "recieve payment" },
+            { label: "View/Edit" },
+            { label: "cancel" },
+            { label: "Delete" },
+            { label: "Duplicate" },
+            { label: "Print" },
+          ],
+        };
+      });
     }
   }
 

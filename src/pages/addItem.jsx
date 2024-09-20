@@ -117,6 +117,9 @@ export default function AddItem({
         Code: itemCode ? itemCode : "",
         wholeSalePrice: WholeSalePrice ? WholeSalePrice : "",
         description: description ? description : "",
+        primaryUnit: primaryUnit ? primaryUnit : "",
+        secondaryUnit: SecondaryUnit ? SecondaryUnit : "",
+        unit: primaryUnit ? primaryUnit : "",
         salesPrice: sellPrice.withTax
           ? sellPrice.value * (1 - tax)
           : sellPrice.value,
@@ -268,16 +271,98 @@ export default function AddItem({
                   Select Items Units
                 </h3>
                 <div className="flex w-full justify-between my-3">
-                  <CustomInput
-                    inputValue={primaryUnit}
-                    setInputValue={setprimaryUnit}
-                    placeholder={"Primary Unit"}
-                  />
-                  <CustomInput
+                  <div className="relative">
+                    <h1>Primary Unit</h1>
+                    {/* <CustomInput
+                      inputValue={primaryUnit}
+                      setInputValue={setprimaryUnit}
+                      placeholder={"Primary Unit"}
+                    /> */}
+                    <input
+                      type="text"
+                      className="p-2 border border-gray-400"
+                      value={primaryUnit?.name}
+                      onChange={(e) =>
+                        setprimaryUnit({ name: e.target.value, done: false })
+                      }
+                    />
+                    {primaryUnit && !primaryUnit?.done && (
+                      <div className="absolute left-0 top-10 bg-white shadow-md px-2">
+                        {data?.units
+                          ?.filter(
+                            (e) =>
+                              primaryUnit?.name
+                                .toLowerCase()
+                                .split(" ")
+                                .every((word) =>
+                                  e.name.toLowerCase().includes(word)
+                                )
+                            // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                          )
+                          .map((item, index) => (
+                            <div
+                              className={`p-2 w-full`}
+                              key={index}
+                              onClick={() =>
+                                setprimaryUnit({ name: item.name, done: true })
+                              }
+                            >
+                              <h1>{item.name}</h1>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <h1>Secondary Unit</h1>
+                    {/* <CustomInput
+                      inputValue={primaryUnit}
+                      setInputValue={setprimaryUnit}
+                      placeholder={"Primary Unit"}
+                    /> */}
+                    <input
+                      type="text"
+                      className="p-2 border border-gray-400"
+                      value={SecondaryUnit?.name}
+                      onChange={(e) =>
+                        setSecondaryUnit({ name: e.target.value, done: false })
+                      }
+                    />
+                    {SecondaryUnit && !SecondaryUnit?.done && (
+                      <div className="absolute left-0 top-10 bg-white shadow-md px-2">
+                        {data?.units
+                          ?.filter(
+                            (e) =>
+                              SecondaryUnit?.name
+                                .toLowerCase()
+                                .split(" ")
+                                .every((word) =>
+                                  e.name.toLowerCase().includes(word)
+                                )
+                            // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                          )
+                          .map((item, index) => (
+                            <div
+                              className={`p-2 w-full`}
+                              key={index}
+                              onClick={() =>
+                                setSecondaryUnit({
+                                  name: item.name,
+                                  done: true,
+                                })
+                              }
+                            >
+                              <h1>{item.name}</h1>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                  {/* <CustomInput
                     inputValue={SecondaryUnit}
                     setInputValue={setSecondaryUnit}
                     placeholder={"Secondary Unit"}
-                  />
+                  /> */}
                 </div>
                 <p>
                   One Secondary unit ={" "}
