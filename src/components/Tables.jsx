@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "./dropdown";
 
 // Reusable Table Component
 const SortableTable = ({ data, columns }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [searchTerms, setSearchTerms] = useState({}); // To track search input per column
+  const [activeSearchKey, setActiveSearchKey] = useState(null); // To track which column's search is active
 
   // Generic sorting function
   const sortData = (data) => {
@@ -31,6 +33,7 @@ const SortableTable = ({ data, columns }) => {
     });
   };
 
+  // Function to handle sorting
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -39,7 +42,37 @@ const SortableTable = ({ data, columns }) => {
     setSortConfig({ key, direction });
   };
 
-  const sortedData = sortData(data);
+  // Function to handle search input change
+  const handleSearchChange = (key, value) => {
+    setSearchTerms((prevSearchTerms) => ({
+      ...prevSearchTerms,
+      [key]: value,
+    }));
+  };
+
+  // Filter data based on search terms
+  const filterData = (data) => {
+    return data.filter((item) => {
+      return Object.keys(searchTerms).every((key) => {
+        if (!searchTerms[key]) return true; // No filter for this column
+        const columnValue = item[key]?.toString().toLowerCase() || "";
+        return columnValue.includes(searchTerms[key].toLowerCase());
+      });
+    });
+  };
+
+  // Toggle search bar visibility
+  const toggleSearchBar = (key) => {
+    setActiveSearchKey(activeSearchKey === key ? null : key);
+  };
+
+  // Sort the filtered data
+  const sortedData = sortData(filterData(data));
+
+  useEffect(() => {
+    console.log(data);
+    console.log(columns);
+  }, [data]);
 
   // SVG for arrows
   const AscendingArrow = () => (
@@ -75,36 +108,80 @@ const SortableTable = ({ data, columns }) => {
   );
 
   return (
-    <div className="overflow-x-auto text-xs">
-      <table className="min-w-full table-auto border-collapse border border-gray-200">
+    <div className="overflow-x-auto overflow-y-auto min-h-[600px] text-xs">
+      <table className="min-w-full table-auto relative border-collapse border border-gray-200">
         <thead className="bg-gray-100">
           <tr>
             {columns?.map((column) => (
               <th
                 key={column.key}
                 className="px-4 py-2 text-left cursor-pointer hover:bg-gray-200"
-                onClick={() => handleSort(column.key)}
               >
-                <span className="font-medium text-gray-700">
-                  {column.label}
-                  {sortConfig.key === column.key &&
-                    (sortConfig.direction === "asc" ? (
-                      <AscendingArrow />
-                    ) : (
-                      <DescendingArrow />
-                    ))}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span
+                    onClick={() => handleSort(column.key)}
+                    className="font-medium text-gray-700"
+                  >
+                    {column.label}
+                    {sortConfig.key === column.key &&
+                      (sortConfig.direction === "asc" ? (
+                        <AscendingArrow />
+                      ) : (
+                        <DescendingArrow />
+                      ))}
+                  </span>
+                  <button
+                    className="ml-2 text-gray-500"
+                    onClick={() => toggleSearchBar(column.key)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Search bar appears in an absolute positioned div */}
+                {activeSearchKey === column.key && (
+                  <div className="absolute bg-white shadow-lg rounded p-3 mt-1 z-10 w-48">
+                    <input
+                      type="text"
+                      value={searchTerms[column.key] || ""}
+                      onChange={(e) =>
+                        handleSearchChange(column.key, e.target.value)
+                      }
+                      className="w-full border border-gray-300 rounded p-1 text-sm focus:outline-none"
+                      placeholder={`Search ${column.label}...`}
+                    />
+                    <button
+                      onClick={() => setActiveSearchKey(null)} // Close search bar on Apply
+                      className="bg-blue-500 text-white mt-2 p-1 rounded w-full"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                )}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {sortedData?.map((item, index) => (
-            <tr key={index} className="border-t border-gray-200">
+            <tr key={index} className="border-t border-gray-200 relative">
               {columns.map((column) =>
                 column.key === "DropDown" ? (
                   <td key={column.key}>
-                    <Dropdown menuItems={item[column.menuItems]}>
+                    <Dropdown menuItems={item.menuItem}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 128 512"
@@ -114,9 +191,17 @@ const SortableTable = ({ data, columns }) => {
                       </svg>
                     </Dropdown>
                   </td>
+                ) : column.key === "Action" ? (
+                  <td key={column.key}>
+                    <button
+                      onClick={() => item.Action()}
+                      className="px-2 py-1 rounded-sm shadow-md"
+                    >
+                      Convert
+                    </button>
+                  </td>
                 ) : (
                   <td key={column.key} className="px-4 py-2">
-                    {/* Render data only for the columns specified */}
                     {item[column.key] instanceof Date
                       ? item[column.key].toLocaleDateString()
                       : item[column.key]}
@@ -129,34 +214,6 @@ const SortableTable = ({ data, columns }) => {
       </table>
     </div>
   );
-};
-
-// Usage Example
-const App = () => {
-  const data = [
-    {
-      name: "Alice",
-      age: 30,
-      dateJoined: new Date("2020-01-01"),
-      role: "Admin",
-    },
-    { name: "Bob", age: 25, dateJoined: new Date("2019-05-10"), role: "User" },
-    {
-      name: "Charlie",
-      age: 35,
-      dateJoined: new Date("2021-02-15"),
-      role: "Moderator",
-    },
-  ];
-
-  // Only these columns will be rendered
-  const columns = [
-    { key: "name", label: "Name" },
-    { key: "age", label: "Age" },
-    { key: "dateJoined", label: "Date Joined" },
-  ];
-
-  return <SortableTable data={data} columns={columns} />;
 };
 
 export default SortableTable;

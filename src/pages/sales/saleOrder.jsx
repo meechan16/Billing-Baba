@@ -55,47 +55,55 @@ export default function SaleOrder({ data, setData }) {
                     <p>Action</p>
                     <p className="side">-</p>
                   </div>
-                  {data?.Transactions?.filter(
-                    (ele) => ele.type === "Sale order"
-                  ).map((sale, index) => (
-                    <div className="cl" key={index}>
-                      <p className="grey">{sale.invoice_number}</p>
-                      <p className="grey">{sale.name}</p>
-                      <p className="">{sale.invoice_date}</p>
-                      <p className="grey">{sale.due_date}</p>
-                      <p className="grey">{sale.total}</p>
-                      <p className="grey">{sale.pending}</p>
-                      <p className="grey">Open</p>
-                      <p className="grey">
-                        <button className=" py-1 px-3 bg-gray-200 shadow-md text-blue-600">
-                          Convert to sale
-                        </button>
-                      </p>
-                      <p className="side">
-                        <Dropdown
-                          menuItems={[
-                            { label: "print" },
-                            { label: "forward" },
-                            { label: "generate Invoice" },
-                            { label: "recieve payment" },
-                            { label: "View/Edit" },
-                            { label: "cancel" },
-                            { label: "Delete" },
-                            { label: "Duplicate" },
-                            { label: "Print" },
-                          ]}
-                          isLabelOnly={true}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 128 512"
+                  {data?.Transactions?.map((item, originalIndex) => ({
+                    ...item,
+                    originalIndex,
+                  }))
+                    .filter((ele) => ele.type === "Sale order")
+                    .map((sale, index) => (
+                      <div className="cl" key={index}>
+                        <p className="grey">{sale.invoice_number}</p>
+                        <p className="grey">{sale.name}</p>
+                        <p className="">{sale.invoice_date}</p>
+                        <p className="grey">{sale.due_date}</p>
+                        <p className="grey">{sale.total}</p>
+                        <p className="grey">{sale.pending}</p>
+                        <p className="grey">Open</p>
+                        <p className="grey">
+                          <button
+                            className=" py-1 px-3 bg-gray-200 shadow-md text-blue-600"
+                            onClick={() => {
+                              Navigate("/addSales?index=" + sale.originalIndex);
+                            }}
                           >
-                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                          </svg>
-                        </Dropdown>
-                      </p>
-                    </div>
-                  ))}
+                            Convert to sale
+                          </button>
+                        </p>
+                        <p className="side">
+                          <Dropdown
+                            menuItems={[
+                              { label: "print" },
+                              { label: "forward" },
+                              { label: "generate Invoice" },
+                              { label: "recieve payment" },
+                              { label: "View/Edit" },
+                              { label: "cancel" },
+                              { label: "Delete" },
+                              { label: "Duplicate" },
+                              { label: "Print" },
+                            ]}
+                            isLabelOnly={true}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown>
+                        </p>
+                      </div>
+                    ))}
                 </div>
               )}
             </div>

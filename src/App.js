@@ -25,7 +25,6 @@ import PaymentOut from "./pages/purchase/PaymentOut";
 import PurchaseBill from "./pages/purchase/PurchaseBill";
 import PurchaseReturn from "./pages/purchase/PurchaseReturn";
 import dev_url from "./url";
-import QuickBilling from "./pages/QuickBilling";
 import AddEstimations from "./pages/sales/addEstimations";
 import AddPaymentsin from "./pages/sales/addPaymentsin";
 import AddSalesOrder from "./pages/sales/AddSalesOrder";
@@ -60,6 +59,7 @@ import AddPaymentsOut from "./pages/purchase/addpaymentOut";
 import AddPurchaseReturn from "./pages/purchase/addPurchaseReturn";
 import PurchaseReturnBill from "./pages/purchase/PurchaseReturnBill";
 import EditableGrid from "./components/EditGrid";
+import SalesBill from "./pages/sales/SalesBill";
 
 function App() {
   // const Navigate = useNavigate();
@@ -393,6 +393,21 @@ function App() {
               //   <AddItems />
               // </Home>
               <AddSales
+                data={data}
+                setData={setData}
+                change={change}
+                setChange={setChange}
+              />
+            }
+          />
+          <Route
+            path="/sales-bill"
+            exact
+            element={
+              // <Home part="items">
+              //   <AddItems />
+              // </Home>
+              <SalesBill
                 data={data}
                 setData={setData}
                 change={change}

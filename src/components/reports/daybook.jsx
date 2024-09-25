@@ -1,29 +1,8 @@
 import { useEffect, useState } from "react";
-import Dropdown from "../dropdown";
 import SortableTable from "../Tables";
 
 export default function Daybook({ data, setData }) {
-  const [daybook, setDaybook] = useState();
   const [day, setDay] = useState();
-  useEffect(() => {
-    const db = [];
-    data?.sales?.map((sale, index) =>
-      db.push({ ...sale, type: "sale", moneyIn: sale.total })
-    );
-    data?.purchase?.map((purchase, index) =>
-      db.push({ ...purchase, type: "purchase", moneyOut: purchase.total })
-    );
-
-    data?.expense?.map(
-      (expense, index) =>
-        db.push({ ...expense, type: "expense", moneyOut: expense.total })
-      //   setDaybook([
-      //     ...daybook,
-      //     { ...expense, type: "expense", moneyOut: expense.total },
-      //   ])
-    );
-    setDaybook(db);
-  }, [data]);
   const columns = [
     { key: "invoice_date", label: "Invoice Date" },
     { key: "invoice_number", label: "Invoice Number" },
@@ -91,7 +70,7 @@ export default function Daybook({ data, setData }) {
           </div>
         </div>
       </div>
-      {daybook && (
+      {sendingArray && (
         <div className="">
           <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
             <h1>TRANSACTIONS</h1>
@@ -104,50 +83,6 @@ export default function Daybook({ data, setData }) {
               </div>
             </div>
           </div>
-          {/* <div className="content">
-          <div className="t">
-            <h1>TRANSACTIONS</h1>
-            <div className="search">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-              </svg>
-              <input type="" />
-            </div>
-          </div>
-          <div className="cl">
-            <p>Name</p>
-            <p>Ref No.</p>
-            <p>TYPE</p>
-            <p>MONEY IN</p>
-            <p>MONEY OUT</p>
-            <p>PRINT/SHARE</p>
-          </div>
-          {day
-            ? daybook
-                ?.filter((element, index) => {
-                  return element.invoice_date === day;
-                })
-                .map((transaction, index) => (
-                  <div className="cl" key={index}>
-                    <p className="">{transaction.invoice_date}</p>
-                    <p className="grey">{transaction.invoice_number}</p>
-                    <p className="grey">{transaction.type}</p>
-                    <p className="grey">{transaction.moneyIn}</p>
-                    <p className="grey">{transaction.moneyOut}</p>
-                    <p className="grey">-</p>
-                  </div>
-                ))
-            : daybook?.map((transaction, index) => (
-                <div className="cl" key={index}>
-                  <p className="">{transaction.invoice_date}</p>
-                  <p className="grey">{transaction.invoice_number}</p>
-                  <p className="grey">{transaction.type}</p>
-                  <p className="grey">{transaction.moneyIn}</p>
-                  <p className="grey">{transaction.moneyOut}</p>
-                  <p className="grey">-</p>
-                </div>
-              ))} */}
-
           <SortableTable data={sendingArray} columns={columns} />
         </div>
       )}

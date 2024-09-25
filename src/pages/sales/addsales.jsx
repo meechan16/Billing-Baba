@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TextField from "@mui/material/TextField";
 import ImageUploader from "../../components/ImgUpload";
 import dev_url from "../../url";
+import { useParams } from "react-router-dom";
 
 export default function AddSales({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -63,6 +63,7 @@ export default function AddSales({ data, setData, change, setChange }) {
         const qty = parseInt(newRows[index]["qty"]);
         const pricePerUnit = parseInt(newRows[index]["price_per_unit"]);
         let discount = parseInt(newRows[index]["discount"]);
+
         if (newRows[index]["discountPercentage"]) {
           let disPer = parseInt(newRows[index]["discountPercentage"]) / 100;
           discount = pricePerUnit * disPer;
@@ -82,11 +83,12 @@ export default function AddSales({ data, setData, change, setChange }) {
 
         newRows[index]["tax"] = tax;
         newRows[index]["amount"] = amount;
-        newRows[index]["profit"] = newRows[index]["profit_per_item"]
-          ? newRows[index]["profit_per_item"] * qty
-          : 0;
+
+        newRows[index]["profit"] =
+          (pricePerUnit - newRows[index]["PurchasePrice"] - discount) * qty;
       }
       newRows[index][column] = value;
+      console.log(newRows[index]);
       return newRows;
     });
   };
@@ -216,9 +218,9 @@ export default function AddSales({ data, setData, change, setChange }) {
       ? (newDa.total_sales += parseFloat(newData.total))
       : (newDa.total_sales = parseFloat(newData.total));
     console.log(newDa);
-    // setData(newDa);
-    // setChange(!change);
-    // Navigate("/sale-invoice");
+    setData(newDa);
+    setChange(!change);
+    Navigate("/sale-invoice");
   };
 
   let sendData_and_get_pdf = async () => {
@@ -349,9 +351,28 @@ export default function AddSales({ data, setData, change, setChange }) {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+
+  const params = new URLSearchParams(window.location.search);
+  let index = params.get("index");
   useEffect(() => {
-    const today = new Date();
-    setInvoice_date(formatDate(today));
+    console.log(index);
+    if (index) {
+      let PrevData = data.Transactions[index];
+      console.log(PrevData);
+      setDescription(PrevData.description);
+      setInvoice_number(PrevData.invoice_number);
+      setInvoice_date(PrevData.invoice_date);
+      setpaymentType(PrevData.payment_type);
+      setPaid(PrevData.paid);
+      setRows(PrevData.items);
+      setName(PrevData.name);
+      setPhone_no(PrevData.phone_no);
+      setBillingAdd(PrevData.BillingAdd);
+      setShippingAdd(PrevData.ShippingAdd);
+    } else {
+      const today = new Date();
+      setInvoice_date(formatDate(today));
+    }
   }, []);
 
   var [ImageList, setImageList] = useState();
@@ -552,278 +573,6 @@ export default function AddSales({ data, setData, change, setChange }) {
               </div>
             </div>
           </div>
-          {/* <div className="ai2">
-            <div className="rounded-sm flex justify-between gap-1 md-2 items-stretch">
-              <p className="w-full h-full py-2  text-center bg-emerald-100 rounded-sm">
-                item
-              </p>
-              <p className="w-full h-full py-2  text-center bg-emerald-100 rounded-sm">
-                QTY
-              </p>
-              <p className="w-full h-max py-2  text-center bg-emerald-100 rounded-sm">
-                UNIT
-              </p>
-              <p className="w-full h-full py-2  text-center bg-emerald-100 rounded-sm">
-                PRICE/UNIT
-              </p>
-              <p className="w-full h-full py-2  text-center bg-emerald-100 rounded-sm">
-                <div className="">
-                  <span>DESCOUNT</span>
-                  <div className="flex justify-evenly gap-2">
-                    <span className="w-full  flex-1">Percent</span>
-                    <span className="w-full  flex-1">Amount</span>
-                  </div>
-                </div>
-              </p>
-              <p className="w-full py-2 text-center bg-emerald-100 rounded-sm">
-                <div className="">
-                  <span>TAX</span>
-                  <div className="flex justify-evenly gap-2">
-                    <span className="w-full  flex-1">Percent</span>
-                    <span className="w-full  flex-1">Amount</span>
-                  </div>
-                </div>
-              </p>
-              <p className="w-full py-2 h-full text-center bg-emerald-100 rounded-sm">
-                AMOUNT
-              </p>
-              <p className="w-[100px] py-2 px-3 h-full text-center bg-emerald-100 rounded-sm">
-                -
-              </p>
-            </div>
-            {rows.map((row, rowIndex) => (
-              <div
-                className="rounded-sm flex justify-between my-1 gap-1 items-center"
-                key={rowIndex}
-              >
-                <div className="w-full relative">
-                  <input
-                    className="w-full  py-2  text-center bg-gray-100 rounded-sm"
-                    value={
-                      rows[rowIndex].item
-                        ? rows[rowIndex].item
-                        : Search
-                        ? Search[rowIndex]?.item
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setSearch({ rowIndex: { item: e.target.value } })
-                    }
-                  />
-                  {Search?.rowIndex?.item && (
-                    <ul className="absolute bg-white w-full">
-                      {data.items
-                        .filter((item) =>
-                          item.Name.toLowerCase().includes(
-                            rows[rowIndex].item.toLowerCase()
-                          )
-                        )
-                        .map((item) => (
-                          <li
-                            key={item.code}
-                            onClick={() => {
-                              handleInputChange(rowIndex, "item", item.Name);
-                              handleInputChange(rowIndex, "item_details", item);
-                              // handleInputChange(rowIndex, "tax", item.tax);
-                              handleInputChange(
-                                rowIndex,
-                                "discount",
-                                item.discount
-                              );
-                              handleInputChange(
-                                rowIndex,
-                                "price_per_unit",
-                                item.salesPrice
-                              );
-                              handleInputChange(
-                                rowIndex,
-                                "profit",
-                                item.profit
-                              );
-                              handleInputChange(
-                                rowIndex,
-                                "profit_per_item",
-                                item.profit
-                              );
-                              item.unit
-                                ? handleInputChange(rowIndex, "unit", item.unit)
-                                : handleInputChange(
-                                    rowIndex,
-                                    "unit",
-                                    "Not Available"
-                                  );
-                              setSearch({});
-                            }}
-                            className="p-2 border-b border-gray-300 hover:bg-gray-200 cursor-pointer"
-                          >
-                            {item.Name}
-                          </li>
-                        ))}
-                      <li
-                        className="p-2 text-blue-500 font-semibold hover:bg-gray-200 cursor-pointer"
-                        onClick={() => Navigate("/addParties")}
-                      >
-                        Add Party +
-                      </li>
-                    </ul>
-                  )}
-                </div>
-                <input
-                  type="number"
-                  className="w-full  py-2  text-center bg-gray-100 rounded-sm"
-                  value={rows[rowIndex].qty}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "qty", e.target.value)
-                  }
-                />
-                <div className="w-full">
-                  <input
-                    className="w-full  py-2  text-center bg-gray-100 rounded-sm"
-                    value={
-                      rows[rowIndex].unit
-                        ? rows[rowIndex].unit
-                        : Search
-                        ? Search[rowIndex]?.unit
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setSearch({ rowIndex: { unit: e.target.value } })
-                    }
-                  />
-                  {Search?.rowIndex?.unit && (
-                    <ul>
-                      <li
-                        className="add"
-                        onClick={() => Navigate("/items?data=addUnit")}
-                      >
-                        Add Units +
-                      </li>
-                      {data.units
-                        .filter((unit) =>
-                          unit.name
-                            .toLowerCase()
-                            .includes(
-                              rows[rowIndex].unit
-                                ? rows[rowIndex].unit.toLowerCase()
-                                : ""
-                            )
-                        )
-                        .map((unit) => (
-                          <li
-                            key={unit.name}
-                            onClick={() => {
-                              // i should probably add more than a name to improve future search filter
-                              handleInputChange(rowIndex, "unit", unit.name);
-                              setSearch({});
-                            }}
-                          >
-                            {unit.name}
-                          </li>
-                        ))}
-                      <li
-                        className="extra"
-                        onClick={() => {
-                          handleInputChange(rowIndex, "unit", "-");
-                          setSearch({});
-                        }}
-                      >
-                        --- none ---
-                      </li>
-                    </ul>
-                  )}
-                </div>
-                <input
-                  className="w-full  py-2  text-center bg-gray-100 rounded-sm"
-                  type="number"
-                  value={rows[rowIndex].price_per_unit}
-                  onChange={(e) =>
-                    handleInputChange(
-                      rowIndex,
-                      "price_per_unit",
-                      e.target.value
-                    )
-                  }
-                />
-                <div className="w-full flex gap-1">
-                  <input
-                    className="w-full border border-gray-300 py-2 text-center bg-gray-100 rounded-sm"
-                    type="number"
-                    value={rows[rowIndex].discountPercentage}
-                    onChange={(e) =>
-                      handleInputChange(
-                        rowIndex,
-                        "discountPercentage",
-                        e.target.value
-                      )
-                    }
-                  />
-                  <input
-                    className="w-full py-2 border border-gray-300 text-center bg-gray-100 rounded-sm"
-                    type="number"
-                    value={rows[rowIndex].discount}
-                    onChange={(e) =>
-                      handleInputChange(rowIndex, "discount", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="w-full flex gap-1">
-                  {/* <input
-                    className="w-full border border-gray-300 py-2 text-center bg-gray-100 rounded-sm"
-                    type="number"
-                    value={rows[rowIndex].taxPercentage}
-                    onChange={(e) =>
-                      handleInputChange(
-                        rowIndex,
-                        "taxPercentage",
-                        e.target.value
-                        )
-                      }
-                      />//
-                  <select
-                    name=""
-                    id=""
-                    className="w-full border border-gray-300 py-2 text-center bg-gray-100 rounded-sm"
-                    value={rows[rowIndex].taxPercentage}
-                    onChange={(e) =>
-                      handleInputChange(
-                        rowIndex,
-                        "taxPercentage",
-                        e.target.value
-                      )
-                    }
-                  >
-                    {data.tax?.map((unit) => (
-                      <option key={unit.name} value={unit.value}>
-                        {unit.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    className="w-full py-2 border border-gray-300 text-center bg-gray-100 rounded-sm"
-                    type="number"
-                    value={rows[rowIndex].tax}
-                    onChange={(e) =>
-                      handleInputChange(rowIndex, "tax", e.target.value)
-                    }
-                  />
-                </div>
-                <input
-                  className="w-full  py-2  text-center bg-gray-100 rounded-sm"
-                  type="number"
-                  value={rows[rowIndex].amount}
-                  onChange={(e) =>
-                    handleInputChange(rowIndex, "amount", e.target.value)
-                  }
-                />
-                <button
-                  className="w-[100px] py-2 px-3 text-center border border-red-500 hover:bg-red-500 hover:text-white text-red-500 rounded-sm"
-                  onClick={() => setRows(rows.filter((r, i) => i !== rowIndex))}
-                >
-                  X
-                </button>
-              </div>
-            ))}
-          </div> */}
           <div className="overflow-x-auto ">
             <table className="min-w-full table-auto border-collapse border border-gray-300">
               <thead>
@@ -972,13 +721,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                                   );
                                   handleInputChange(
                                     rowIndex,
-                                    "profit",
-                                    item.profit
-                                  );
-                                  handleInputChange(
-                                    rowIndex,
-                                    "profit_per_item",
-                                    item.profit
+                                    "PurchasePrice",
+                                    item.purchasePrice
                                   );
                                   item.unit
                                     ? handleInputChange(
@@ -1187,13 +931,16 @@ export default function AddSales({ data, setData, change, setChange }) {
                         className="w-full px-1 py-1 text-center bg-gray-100 rounded-sm"
                         type="number"
                         value={rows[rowIndex].price_per_unit}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          if (rows[rowIndex].PurchasePrice > e.target.value) {
+                            alert("less than Purchase Price, May cause loss");
+                          }
                           handleInputChange(
                             rowIndex,
                             "price_per_unit",
                             e.target.value
-                          )
-                        }
+                          );
+                        }}
                       />
                     </td>
                     <td className="  border border-gray-300">

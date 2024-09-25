@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from "react";
-import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
-import { useNavigate } from "react-router-dom";
-import SortableTable from "../../components/Tables";
+import SortableTable from "../Tables";
 
-export default function SaleInvoice({ data, setData }) {
-  const Navigate = useNavigate();
-
+export default function ExpenseCategoryReport({ data, setData }) {
   const columns = [
-    { key: "invoice_date", label: "Invoice Date" },
-    { key: "invoice_number", label: "Invoice Number" },
-    { key: "name", label: "Name" },
-    { key: "transactionType", label: "Transaction Type" },
-    { key: "payment_type", label: "Payment Type" },
+    { key: "Category", label: "Category" },
+    { key: "type", label: "Type" },
     { key: "total", label: "Total" },
-    { key: "pending", label: "Pending" },
+    // { key: "DropDown", label: "-" },
   ];
-  const sendingArray = data?.sales.map((ele) => {
+  const sendingArray = data?.Transactions?.filter(
+    (element) => element.type == "Expense"
+  )?.map((ele) => {
     return {
       ...ele,
-      pending: ele.total - ele.paid,
-      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
     };
   });
   return (
@@ -30,7 +23,7 @@ export default function SaleInvoice({ data, setData }) {
           <div className="l">
             <select name="" id="">
               <option selected value="">
-                All Sales Invoice
+                All Transactions
               </option>
               <option value="">This Month</option>
               <option value="">This Quater</option>
@@ -55,21 +48,20 @@ export default function SaleInvoice({ data, setData }) {
         {/* {data ? selectedParty.partyName : "No Party Selected"} */}
         <div className="b">
           <h1>
-            Paid - <span>₹ {data.sale_paid}</span>
+            Paid - <span>₹ {data.purchase_paid}</span>
           </h1>
           <h1>
-            Unpaid - <span>₹ {data.sale_pending}</span>{" "}
+            Unpaid - <span>₹ {data.purchase_pending}</span>{" "}
           </h1>
           <h1>
-            Total - <span>₹ {data.total_sales}</span>
+            Total - <span>₹ {data.total_purchase}</span>
           </h1>
         </div>
       </div>
-
       {data && (
         <div className="">
           <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
-            <h1>TRANSACTIONS</h1>
+            <h1>EXPENSE CATEGORY REPORT</h1>
             <div className="flex gap-2">
               <div className="flex border border-gray-700 rounded-full px-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -77,14 +69,9 @@ export default function SaleInvoice({ data, setData }) {
                 </svg>
                 <input type="" className="bg-transparent" />
               </div>
-              <button
-                className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"
-                onClick={() => Navigate("/addsales")}
-              >
-                + Add Sale
-              </button>
             </div>
           </div>
+
           <SortableTable data={sendingArray} columns={columns} />
         </div>
       )}

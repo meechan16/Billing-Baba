@@ -107,14 +107,15 @@ export default function Parties({ data, setData, change, setChange }) {
                     {
                       label: "Delete",
                       action: () => {
-                        let newDa = {
-                          ...data,
-                          Transactions: data.Transactions.filter(
-                            (_, i) => i !== ele.originalIndex
-                          ),
-                        };
-                        setData(newDa);
-                        setChange(!change);
+                        // let newDa = {
+                        //   ...data,
+                        //   Transactions: data.Transactions.filter(
+                        //     (_, i) => i !== ele.originalIndex
+                        //   ),
+                        // };
+                        // setData(newDa);
+                        // setChange(!change);
+                        console.log("works");
                       },
                     },
                     { label: "Recieve payment" },

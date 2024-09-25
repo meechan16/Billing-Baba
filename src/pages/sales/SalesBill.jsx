@@ -111,7 +111,7 @@ const SalesBill = () => {
               <th className="border border-gray-300 px-4 py-2 text-left">
                 Item Name
               </th>
-              <th className="border border-gray-300 px-4 py-2 text-left">
+              {/* <th className="border border-gray-300 px-4 py-2 text-left">
                 HSN/SAC
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left">
@@ -125,7 +125,7 @@ const SalesBill = () => {
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left">
                 Size
-              </th>
+              </th> */}
               <th className="border border-gray-300 px-4 py-2 text-left">
                 Quantity
               </th>
@@ -152,10 +152,10 @@ const SalesBill = () => {
               <td className="border border-gray-300 px-4 py-2">
                 Paracod Tablet
               </td>
-              <td className="border border-gray-300 px-4 py-2">123</td>
+              {/* <td className="border border-gray-300 px-4 py-2">123</td>
               <td className="border border-gray-300 px-4 py-2">12/2024</td>
               <td className="border border-gray-300 px-4 py-2">07/08/2024</td>
-              <td className="border border-gray-300 px-4 py-2">110</td>
+              <td className="border border-gray-300 px-4 py-2">110</td> */}
               <td className="border border-gray-300 px-4 py-2">STRP</td>
               <td className="border border-gray-300 px-4 py-2">1</td>
               <td className="border border-gray-300 px-4 py-2">₹ 220.03</td>
@@ -171,12 +171,12 @@ const SalesBill = () => {
         </table>
 
         {/* Amount in Words */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <p>
             <strong>Invoice Amount In Words:</strong> Seven Thousand One Hundred
             Ninety Five Rupees only
           </p>
-        </div>
+        </div> */}
 
         {/* Terms and Conditions */}
         <div className="mb-8">

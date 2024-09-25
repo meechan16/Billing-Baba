@@ -182,122 +182,12 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       : (newDa.Transactions = [newData]);
     newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
 
-    // change everywehre this is used to the sum of sales where payment type is credit
-    // if (newData.payment_type == "credit") {
-    //   newDa.sale_pending
-    //     ? (newDa.sale_pending += parseFloat(newData.total))
-    //     : (newDa.sale_pending = parseFloat(newData.total));
-    //   newDa.to_collect
-    //     ? (newDa.to_collect += parseFloat(newData.pending))
-    //     : (newDa.to_collect = parseFloat(newData.pending));
-
-    //   let party = newDa.parties.find(
-    //     (ele, index) => ele.partyName === Name || ele.name === Name
-    //   );
-
-    //   party?.credit
-    //     ? (newDa.parties.find(
-    //         (ele, index) => ele.partyName === Name || ele.name === Name
-    //       ).credit += parseFloat(newData.pending))
-    //     : (newDa.parties.find(
-    //         (ele, index) => ele.partyName === Name || ele.name === Name
-    //       ).credit = parseFloat(newData.pending));
-    // } else {
-    //   console.log("CASH IN HAND INCREASED");
-    //   newDa.cash_in_hands
-    //     ? (newDa.cash_in_hands += parseFloat(newData.total))
-    //     : (newDa.cash_in_hands = parseFloat(newData.total));
-    //   console.log(newDa);
-    // }
-    // newDa.total_sales
-    //   ? (newDa.total_sales += parseFloat(newData.total))
-    //   : (newDa.total_sales = parseFloat(newData.total));
     console.log(newDa);
     setData(newDa);
     setChange(!change);
     let intex = newDa.Transactions?.length - 1;
     Navigate("/sales-order-bill?index=" + intex);
   };
-
-  // let sendData_and_get_pdf = async () => {
-  //   const newData = {
-  //     name: Name ? Name : "",
-  //     phone_no: phone_no ? phone_no : "",
-  //     invoice_number: invoice_number ? invoice_number : "",
-  //     invoice_date: invoice_date ? invoice_date : "",
-  //     state_of_supply: state_of_supply.state ? state_of_supply.state : "",
-  //     payment_type: paymentType ? paymentType : "",
-  //     items: rows ? rows : "",
-  //     round_off: round_off ? round_off : "",
-  //     total: totalAmount ? totalAmount + totalTax : "",
-  //     profit: profit ? profit : "",
-  //     total_tax: totalTax,
-  //     description: Description ? Description : "",
-  //     payment_status: paymentStatus ? paymentStatus : "",
-  //     pending: pending ? pending : "",
-  //     paid: paid,
-  //   };
-
-  //   try {
-  //     let url1 = dev_url + "get-sales-invoice-pdf";
-  //     const response = await fetch(url1, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: uid,
-  //       },
-  //       body: JSON.stringify(newData),
-  //     });
-  //     console.log(response);
-  //     const url = await response.json();
-  //     if (url.link) {
-  //       newData.invoice_link = url.link;
-  //       console.log(url);
-  //       window.open(url.link, "_blank");
-  //       window.location.href = "/";
-  //     } else {
-  //       alert("unable to generate PDF");
-  //       console.error(url);
-  //       return;
-  //     }
-  //     // const blob = await response.blob();
-  //     // const url = URL.createObjectURL(blob);
-  //   } catch (error) {
-  //     alert("unable to generate PDF");
-  //     console.error("Error generating PDF:", error);
-  //     return;
-  //   }
-
-  //   let newDa = data;
-  //   newDa.Transactions
-  //     ? newDa.Transactions.push(newData)
-  //     : (newDa.Transactions = [newData]);
-  //   newDa.sales ? newDa.sales.push(newData) : (newDa.sales = [newData]);
-
-  //   // change everywehre this is used to the sum of sales where payment type is credit
-  //   if (newData.payment_type == "credit") {
-  //     newDa.sale_pending
-  //       ? (newDa.sale_pending += parseFloat(newData.total))
-  //       : (newDa.sale_pending = parseFloat(newData.total));
-  //     newDa.to_collect
-  //       ? (newDa.to_collect += parseFloat(newData.pending))
-  //       : (newDa.to_collect = parseFloat(newData.pending));
-
-  //     newDa.parties.find((index, ele) => ele.name === Name).credit
-  //       ? (newDa.parties.find((index, ele) => ele.name === Name).credit +=
-  //           parseFloat(newData.pending))
-  //       : (newDa.parties.find((index, ele) => ele.name === Name).credit =
-  //           +parseFloat(newData.pending));
-  //   } else {
-  //     newDa.cash_in_hands
-  //       ? (newDa.cash_in_hands += parseFloat(newData.total))
-  //       : (newDa.cash_in_hands = parseFloat(newData.total));
-  //   }
-  //   console.log(newDa);
-  //   setData(newDa);
-  //   setChange(!change);
-  //   Navigate("/sale-invoice");
-  // };
 
   let tax = [
     { value: 0, name: "IGST@0%" },

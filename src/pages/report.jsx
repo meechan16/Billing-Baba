@@ -6,6 +6,16 @@ import Undone from "../components/undone";
 import Daybook from "../components/reports/daybook";
 import AllTransactions from "../components/reports/allTransactions";
 import PartyStatement from "./partyStatement";
+import BillWiseProfit from "../components/reports/BillWiseProfit";
+import CashFlow from "../components/reports/CashFlow";
+import PartyWiseProfit from "../components/reports/partyWiseProfits";
+import AllParties from "../components/reports/AllParties";
+import ItemWiseParties from "../components/reports/ItemWiseParties";
+import SalePurchaseByParties from "../components/reports/salePurchaseByParties";
+import SalePurchaseByGroup from "../components/reports/SalePurchaseByGroup";
+import ExpenseReport from "../components/reports/expenseReport";
+import ExpenseCategoryReport from "../components/reports/ExpenseCategoryReport";
+import SaleOrderReport from "../components/reports/SaleOrderReport";
 
 export default function Rep({ data, setData }) {
   const Navigate = useNavigate();
@@ -134,7 +144,7 @@ export default function Rep({ data, setData }) {
         <li className="head">GST Reports</li>
         <li
           className={currentPage === 16 ? "selected" : ""}
-          // onClick={() => setCurrentPage(16)}
+          onClick={() => setCurrentPage(16)}
         >
           GSTR 1
           <svg
@@ -147,7 +157,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 17 ? "selected" : ""}
-          // onClick={() => setCurrentPage(17)}
+          onClick={() => setCurrentPage(17)}
         >
           GSTR 2
           <svg
@@ -160,7 +170,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 18 ? "selected" : ""}
-          // onClick={() => setCurrentPage(18)}
+          onClick={() => setCurrentPage(18)}
         >
           GSTR 3 B
           <svg
@@ -173,7 +183,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 19 ? "selected" : ""}
-          // onClick={() => setCurrentPage(19)}
+          onClick={() => setCurrentPage(19)}
         >
           GSTR 9
           <svg
@@ -186,7 +196,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 20 ? "selected" : ""}
-          // onClick={() => setCurrentPage(20)}
+          onClick={() => setCurrentPage(20)}
         >
           Sale Summarty By HSN
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -205,13 +215,13 @@ export default function Rep({ data, setData }) {
         <li className="head">Item/Stock report</li>
         <li
           className={currentPage === 22 ? "selected" : ""}
-          onClick={() => setCurrentPage(21)}
+          onClick={() => setCurrentPage(22)}
         >
           Stock Summary
         </li>
         <li
           className={currentPage === 23 ? "selected" : ""}
-          onClick={() => setCurrentPage(22)}
+          onClick={() => setCurrentPage(23)}
         >
           Item Serial Report
           <svg
@@ -224,61 +234,61 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 24 ? "selected" : ""}
-          onClick={() => setCurrentPage(23)}
+          onClick={() => setCurrentPage(24)}
         >
           Item Batch Report
         </li>
         <li
           className={currentPage === 25 ? "selected" : ""}
-          onClick={() => setCurrentPage(24)}
+          onClick={() => setCurrentPage(25)}
         >
           Item Report By Party
         </li>
         <li
           className={currentPage === 26 ? "selected" : ""}
-          onClick={() => setCurrentPage(25)}
+          onClick={() => setCurrentPage(26)}
         >
           Item Wise Profit And Loss
         </li>
         <li
           className={currentPage === 27 ? "selected" : ""}
-          onClick={() => setCurrentPage(26)}
+          onClick={() => setCurrentPage(27)}
         >
           Low Stock Summary
         </li>
         <li
           className={currentPage === 28 ? "selected" : ""}
-          onClick={() => setCurrentPage(27)}
+          onClick={() => setCurrentPage(28)}
         >
           Stock Detail
         </li>
         <li
           className={currentPage === 29 ? "selected" : ""}
-          onClick={() => setCurrentPage(28)}
-        >
-          Item Detail
-        </li>
-        <li
-          className={currentPage === 30 ? "selected" : ""}
           onClick={() => setCurrentPage(29)}
         >
           Item Detail
         </li>
         <li
-          className={currentPage === 31 ? "selected" : ""}
+          className={currentPage === 30 ? "selected" : ""}
           onClick={() => setCurrentPage(30)}
+        >
+          Item Detail
+        </li>
+        <li
+          className={currentPage === 31 ? "selected" : ""}
+          onClick={() => setCurrentPage(31)}
         >
           Sale/Purchase Report By Item Category
         </li>
         <li
           className={currentPage === 32 ? "selected" : ""}
-          onClick={() => setCurrentPage(31)}
+          onClick={() => setCurrentPage(32)}
         >
           Stock Summary Report By Item Category
         </li>
         <li
           className={currentPage === 33 ? "selected" : ""}
-          onClick={() => setCurrentPage(32)}
+          onClick={() => setCurrentPage(33)}
         >
           Item Wise Discount
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -288,7 +298,7 @@ export default function Rep({ data, setData }) {
         <li className="head">Business Status</li>
         <li
           className={currentPage === 34 ? "selected" : ""}
-          onClick={() => setCurrentPage(33)}
+          onClick={() => setCurrentPage(34)}
         >
           Bank Statement
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -297,7 +307,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 35 ? "selected" : ""}
-          onClick={() => setCurrentPage(34)}
+          onClick={() => setCurrentPage(35)}
         >
           Discount Report
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -307,13 +317,13 @@ export default function Rep({ data, setData }) {
         <li className="head">Taxes</li>
         <li
           className={currentPage === 36 ? "selected" : ""}
-          onClick={() => setCurrentPage(35)}
+          onClick={() => setCurrentPage(36)}
         >
           GST Report
         </li>
         <li
           className={currentPage === 37 ? "selected" : ""}
-          onClick={() => setCurrentPage(36)}
+          onClick={() => setCurrentPage(37)}
         >
           GST Rate Report
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -322,7 +332,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 38 ? "selected" : ""}
-          onClick={() => setCurrentPage(37)}
+          onClick={() => setCurrentPage(38)}
         >
           Form No. 27EQ
           <svg
@@ -335,7 +345,7 @@ export default function Rep({ data, setData }) {
         </li>
         <li
           className={currentPage === 39 ? "selected" : ""}
-          onClick={() => setCurrentPage(38)}
+          onClick={() => setCurrentPage(39)}
         >
           TCS Receivable
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -345,39 +355,39 @@ export default function Rep({ data, setData }) {
         <li className="head">Expense Report</li>
         <li
           className={currentPage === 40 ? "selected" : ""}
-          onClick={() => setCurrentPage(39)}
-        >
-          Expense
-        </li>
-        <li
-          className={currentPage === 40 ? "selected" : ""}
           onClick={() => setCurrentPage(40)}
         >
-          Expense Category Report
+          Expense
         </li>
         <li
           className={currentPage === 41 ? "selected" : ""}
           onClick={() => setCurrentPage(41)}
         >
-          Expense Item Report
+          Expense Category Report
         </li>
-        <li className="head">Sale/Purchase Order Report</li>
         <li
           className={currentPage === 42 ? "selected" : ""}
           onClick={() => setCurrentPage(42)}
         >
-          Sale/Purchase Order
+          Expense Item Report
         </li>
+        <li className="head">Sale/Purchase Order Report</li>
         <li
           className={currentPage === 43 ? "selected" : ""}
           onClick={() => setCurrentPage(43)}
         >
-          Sale/Purchase Order Item
+          Sale Order
         </li>
-        <li className="head">Loan Accounts</li>
         <li
           className={currentPage === 44 ? "selected" : ""}
           onClick={() => setCurrentPage(44)}
+        >
+          Sale Order Item
+        </li>
+        <li className="head">Loan Accounts</li>
+        <li
+          className={currentPage === 45 ? "selected" : ""}
+          onClick={() => setCurrentPage(45)}
         >
           Loan Statement
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -399,8 +409,28 @@ export default function Rep({ data, setData }) {
           <Daybook data={data} setData={setData} />
         ) : currentPage === 4 ? (
           <AllTransactions data={data} setData={setData} />
+        ) : currentPage === 6 ? (
+          <BillWiseProfit data={data} setData={setData} />
+        ) : currentPage === 7 ? (
+          <CashFlow data={data} setData={setData} />
         ) : currentPage === 10 ? (
           <PartyStatement data={data} setData={setData} />
+        ) : currentPage === 11 ? (
+          <PartyWiseProfit data={data} setData={setData} />
+        ) : currentPage === 12 ? (
+          <AllParties data={data} setData={setData} />
+        ) : currentPage === 13 ? (
+          <ItemWiseParties data={data} setData={setData} />
+        ) : currentPage === 14 ? (
+          <SalePurchaseByParties data={data} setData={setData} />
+        ) : currentPage === 15 ? (
+          <SalePurchaseByGroup data={data} setData={setData} />
+        ) : currentPage === 40 ? (
+          <ExpenseReport data={data} setData={setData} />
+        ) : currentPage === 41 ? (
+          <ExpenseCategoryReport data={data} setData={setData} />
+        ) : currentPage === 43 ? (
+          <SaleOrderReport data={data} setData={setData} />
         ) : (
           <Undone data={data} setData={setData} />
         )}
