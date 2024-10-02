@@ -1,41 +1,44 @@
-import React, { useEffect, useState } from "react";
-import dev_url from "../../url";
-import Dropdown from "../../components/dropdown";
-import { useNavigate } from "react-router-dom";
-import SortableTable from "../../components/Tables";
+import React, { useState } from "react";
+import SortableTable from "../Tables";
 
-export default function SaleInvoice({ data, setData }) {
-  const Navigate = useNavigate();
-
+export default function ItemStockSummar({ data, setData }) {
+  const [arg, setArg] = useState();
   const columns = [
-    { key: "invoice_date", label: "Invoice Date" },
-    { key: "invoice_number", label: "Invoice Number" },
-    { key: "name", label: "Name" },
-    { key: "transactionType", label: "Transaction Type" },
-    { key: "payment_type", label: "Payment Type" },
-    { key: "amount", label: "Total" },
-    { key: "pending", label: "Pending" },
+    { key: "index", label: "Invoice Date" },
+    { key: "Name", label: "Item Name" },
+    { key: "salesPrice", label: "Sale Price" },
+    { key: "purchasePrice", label: "Purchase Price" },
+    { key: "stock", label: "Total stock" },
+    { key: "stockWorth", label: "Stock Value" },
   ];
-  const sendingArray = data?.sales.map((ele) => {
-    return {
-      ...ele,
-      pending: !Number.isNaN(ele.pending) ? ele.pending : ele.total - ele.paid,
-      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
-    };
-  });
+  const sendingArray = data?.items
+    ?.filter((element, index) => (arg ? element?.Name?.includes(arg) : true))
+    .map((ele, index) => {
+      return {
+        ...ele,
+        index: index + 1,
+        //   invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+        //   invoice_number: ele.invoice_number,
+        //   name: ele.partyName,
+        //   totalSales: ele.total,
+        // totalSales: data.Transactions?.filter(
+        //   (ele) => ele.type == "Sale" && ele.name == ele.partyName
+        // ).reduce((acc, obj) => acc + parseInt(obj.total), 0),
+        //   totalProfit: ele.profit,
+        stock: ele.stock ? ele.stock : "no opening stock",
+        stockWorth: ele.stock ? ele.stock * ele.salePrice : "no opening stock",
+        //   menuItem: [{ label: "view details" }],
+      };
+    });
+
   return (
     <div id="saleInvoice">
-      <div className="title">
+      <div className="title odd">
         <div className="t">
           <div className="l">
-            <select name="" id="">
-              <option selected value="">
-                All Sales Invoice
-              </option>
-              <option value="">This Month</option>
-              <option value="">This Quater</option>
-              <option value="">This Year</option>
-            </select>
+            <h2 className="text-lg mr-3">Filters - </h2>
+            <input onChange={(e) => setArg(e.target.value)} />
+            <button onClick={() => setArg()}>Reset</button>
           </div>
           <div className="r">
             <button>
@@ -52,24 +55,11 @@ export default function SaleInvoice({ data, setData }) {
             </button>
           </div>
         </div>
-        {/* {data ? selectedParty.partyName : "No Party Selected"} */}
-        <div className="b">
-          <h1>
-            Paid - <span>₹ {data.sale_paid}</span>
-          </h1>
-          <h1>
-            Unpaid - <span>₹ {data.sale_pending}</span>{" "}
-          </h1>
-          <h1>
-            Total - <span>₹ {data.total_sales}</span>
-          </h1>
-        </div>
       </div>
-
-      {data && (
+      {sendingArray && (
         <div className="">
           <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
-            <h1>TRANSACTIONS</h1>
+            <h1>Stock Summary</h1>
             <div className="flex gap-2">
               <div className="flex border border-gray-700 rounded-full px-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -77,12 +67,6 @@ export default function SaleInvoice({ data, setData }) {
                 </svg>
                 <input type="" className="bg-transparent" />
               </div>
-              <button
-                className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"
-                onClick={() => Navigate("/addsales")}
-              >
-                + Add Sale
-              </button>
             </div>
           </div>
           <SortableTable data={sendingArray} columns={columns} />

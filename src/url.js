@@ -1,4 +1,5 @@
-const devUrl1 = "https://bilingbaba-backend.onrender.com/";
+// const devUrl1 = "https://bilingbaba-backend.onrender.com/";
+const devUrl1 = "https://api-bilingbaba.onrender.com/";
 const devUrl2 = "http://127.0.0.1:9000/";
 
 async function getDevUrl() {

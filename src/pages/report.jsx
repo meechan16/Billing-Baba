@@ -16,6 +16,10 @@ import SalePurchaseByGroup from "../components/reports/SalePurchaseByGroup";
 import ExpenseReport from "../components/reports/expenseReport";
 import ExpenseCategoryReport from "../components/reports/ExpenseCategoryReport";
 import SaleOrderReport from "../components/reports/SaleOrderReport";
+import ItemStockSummar from "../components/reports/itemStockSummary";
+import ItemSerialNum from "../components/reports/itemSerialNum";
+import ItemReportByParty from "../components/reports/itemRepByParties";
+import ItemBatchRep from "../components/reports/itemBatchRep";
 
 export default function Rep({ data, setData }) {
   const Navigate = useNavigate();
@@ -59,44 +63,24 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(6)}
         >
           Bill Wise Profit
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li
           className={currentPage === 7 ? "selected" : ""}
           onClick={() => setCurrentPage(7)}
         >
           Cash Flow
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 8 ? "selected" : ""}
           onClick={() => setCurrentPage(8)}
         >
           Trial Balance Report
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 9 ? "selected" : ""}
           onClick={() => setCurrentPage(9)}
         >
           Balance Sheet
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li className="head">Party report</li>
         <li
@@ -110,9 +94,6 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(11)}
         >
           Party wise Profit & Loss
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li
           className={currentPage === 12 ? "selected" : ""}
@@ -137,9 +118,6 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(15)}
         >
           Sale Purchase By Party Group
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li className="head">GST Reports</li>
         <li
@@ -147,70 +125,36 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(16)}
         >
           GSTR 1
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 17 ? "selected" : ""}
           onClick={() => setCurrentPage(17)}
         >
           GSTR 2
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 18 ? "selected" : ""}
           onClick={() => setCurrentPage(18)}
         >
           GSTR 3 B
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 19 ? "selected" : ""}
           onClick={() => setCurrentPage(19)}
         >
           GSTR 9
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 20 ? "selected" : ""}
           onClick={() => setCurrentPage(20)}
         >
           Sale Summarty By HSN
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li
           className={currentPage === 21 ? "selected" : ""}
           onClick={() => setCurrentPage(21)}
         >
           SAC Report
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li className="head">Item/Stock report</li>
         <li
@@ -224,13 +168,6 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(23)}
         >
           Item Serial Report
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 24 ? "selected" : ""}
@@ -291,9 +228,6 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(33)}
         >
           Item Wise Discount
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li className="head">Business Status</li>
         <li
@@ -301,18 +235,12 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(34)}
         >
           Bank Statement
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li
           className={currentPage === 35 ? "selected" : ""}
           onClick={() => setCurrentPage(35)}
         >
           Discount Report
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li className="head">Taxes</li>
         <li
@@ -326,31 +254,18 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(37)}
         >
           GST Rate Report
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li
           className={currentPage === 38 ? "selected" : ""}
           onClick={() => setCurrentPage(38)}
         >
           Form No. 27EQ
-          <svg
-            className="disabled"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-          >
-            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-          </svg>
         </li>
         <li
           className={currentPage === 39 ? "selected" : ""}
           onClick={() => setCurrentPage(39)}
         >
           TCS Receivable
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
         <li className="head">Expense Report</li>
         <li
@@ -390,9 +305,6 @@ export default function Rep({ data, setData }) {
           onClick={() => setCurrentPage(45)}
         >
           Loan Statement
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
-          </svg>
         </li>
       </ul>
       <div className="content">
@@ -425,6 +337,14 @@ export default function Rep({ data, setData }) {
           <SalePurchaseByParties data={data} setData={setData} />
         ) : currentPage === 15 ? (
           <SalePurchaseByGroup data={data} setData={setData} />
+        ) : currentPage === 22 ? (
+          <ItemStockSummar data={data} setData={setData} />
+        ) : currentPage === 23 ? (
+          <ItemBatchRep data={data} setData={setData} />
+        ) : currentPage === 24 ? (
+          <ItemSerialNum data={data} setData={setData} />
+        ) : currentPage === 25 ? (
+          <ItemReportByParty data={data} setData={setData} />
         ) : currentPage === 40 ? (
           <ExpenseReport data={data} setData={setData} />
         ) : currentPage === 41 ? (

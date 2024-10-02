@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
-import dev_url from "../url";
 import Loader from "./Loader";
 import TextField from "@mui/material/TextField";
 
@@ -12,13 +11,16 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [partyName, setPartyName] = useState("");
   var [GSTIN, setGSTIN] = useState("");
   var [phoneNo, setPhoneNo] = useState("");
-  var [creditLimit, setcreditLimit] = useState(0);
+  var [creditLimit, setcreditLimit] = useState("");
   var [GstType, setGstType] = useState("");
   var [state, setState] = useState("");
   var [Email, setEmail] = useState("");
   var [Add, setAdd] = useState("");
-  var [OpeningBalance, setOpeningBalance] = useState(0);
+  var [ShippingAdd, setShippingAdd] = useState("");
+  var [OpeningBalance, setOpeningBalance] = useState("");
   var [asDate, setAsDate] = useState("");
+  var [OpeningLoyaltyPoints, setOpeningLoyaltyPoints] = useState("");
+  var [asDateL, setAsDateL] = useState("");
   var [AddF1, setAddF1] = useState("");
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
@@ -34,13 +36,19 @@ export default function AddParties({ data, setData, change, setChange }) {
       state: state ? state : "",
       Email: Email ? Email : "",
       Add: Add ? Add : "",
+      BillingAdd: Add ? Add : "",
+      ShippingAdd: ShippingAdd ? ShippingAdd : "",
       OpeningBalance: OpeningBalance ? parseInt(OpeningBalance) : "",
       asDate: asDate ? asDate : "",
+      OpeningLoyaltyPoints: OpeningLoyaltyPoints
+        ? parseInt(OpeningLoyaltyPoints)
+        : "",
+      asDateLoyaltyPoints: asDateL ? asDateL : "",
       AddF1: AddF1 ? AddF1 : "",
       AddF2: AddF2 ? AddF2 : "",
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
-      creditLimit: creditLimit,
+      creditLimit: parseInt(creditLimit),
       // convert openingbalance into integer below
       credit: parseInt(OpeningBalance ? OpeningBalance : 0),
     };
@@ -230,6 +238,15 @@ export default function AddParties({ data, setData, change, setChange }) {
                   rows={4}
                   defaultValue=""
                 />
+                <TextField
+                  value={ShippingAdd}
+                  onChange={(e) => setShippingAdd(e.target.value)}
+                  id="outlined-multiline-static"
+                  label="Shipping Address"
+                  multiline
+                  rows={4}
+                  defaultValue=""
+                />
               </div>
               {/* <div className="b">
                 <CustomInput placeholder={"Purchase Price"} />
@@ -251,6 +268,23 @@ export default function AddParties({ data, setData, change, setChange }) {
                   id="birthday"
                   name="birthday"
                 ></input>
+                <select name="" id="">
+                  <option value="">To Pay</option>
+                  <option value="">To Recieve</option>
+                </select>
+              </div>
+              <div className="div s">
+                <CustomInput
+                  inputValue={OpeningBalance}
+                  setInputValue={setOpeningBalance}
+                  placeholder={"Opening Loyalty Pts"}
+                />
+                <input
+                  type="date"
+                  onChange={(e) => setAsDateL(e.target.value)}
+                  id="birthday"
+                  name="birthday"
+                ></input>
               </div>
               <div className="div">
                 <div className="flex flex-col">
@@ -266,7 +300,7 @@ export default function AddParties({ data, setData, change, setChange }) {
             </div>
           )}
           {page == "AddF" && (
-            <div className="div s">
+            <div className="flex flex-col gap-2">
               <CustomInput
                 inputValue={AddF1}
                 setInputValue={setAddF1}

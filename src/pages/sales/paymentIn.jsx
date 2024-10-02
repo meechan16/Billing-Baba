@@ -3,34 +3,43 @@ import React, { useState, useEffect } from "react";
 import dev_url from "../../url";
 import Dropdown from "../../components/dropdown";
 import { useNavigate } from "react-router-dom";
+import SortableTable from "../../components/Tables";
 
 export default function PaymentIn({ data, setData }) {
   const Navigate = useNavigate();
-  // filter result by paid payments
-
-  // const [data, setData] = useState([]);
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = () => {
-  //   fetch(dev_url + "/get_user", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "nulll",
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Data fetch:", data.data.sales);
-  //       setData(data.data || []);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
+  const columns = [
+    { key: "index", label: "#" },
+    { key: "invoice_date", label: "Date" },
+    { key: "invoice_number", label: "Ref Number" },
+    { key: "name", label: "Party Name" },
+    { key: "category", label: "Category Name" },
+    { key: "type", label: "Type" },
+    { key: "credit", label: "Total" },
+    { key: "amount", label: "Recieved/Paid" },
+    { key: "balance", label: "Balance" },
+    { key: "DropDown", label: "-" },
+  ];
+  const sendingArray = data?.Transactions?.filter(
+    (transaction, index) => transaction.type === "Payment-In"
+  ).map((ele, index) => {
+    return {
+      ...ele,
+      index: index + 1,
+      name: ele.name ? ele.name : ele.Name,
+      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+      menuItem: [
+        { label: "print" },
+        { label: "forward" },
+        { label: "generate Invoice" },
+        { label: "recieve payment" },
+        { label: "View/Edit" },
+        { label: "cancel" },
+        { label: "Delete" },
+        { label: "Duplicate" },
+        { label: "Print" },
+      ],
+    };
+  });
   return (
     <div id="saleInvoice">
       <div className="title">
@@ -73,78 +82,83 @@ export default function PaymentIn({ data, setData }) {
         </div>
       </div>
       {data && (
-        <div className="content">
-          <div className="t">
-            <div className="search">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-              </svg>
-              <input type="" />
+        // <div className="content">
+        //   <div className="t">
+        //     <div className="search">
+        //       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        //       </svg>
+        //       <input type="" />
+        //     </div>
+        //     <button onClick={() => Navigate("/add-payment-in")}>
+        //       + Add Payments In
+        //     </button>
+        //   </div>
+        //   <div className="cl">
+        //     <p className="side">#</p>
+        //     <p>DATE</p>
+        //     <p>REF NO</p>
+        //     <p>PARTY NAME</p>
+        //     <p>CATEGORY NAME</p>
+        //     <p>TYPE</p>
+        //     <p>TOTAL</p>
+        //     <p>RECIEVED/PAID</p>
+        //     <p>BALANCE</p>
+        //     <p className="side">-</p>
+        //   </div>
+        //   {data?.Transactions?.filter(
+        //     (transaction, index) => transaction.type === "Payment-In"
+        //   ).map((sale, index) => (
+        //     <div className="cl" key={index}>
+        //       <p className="side">{index + 1}</p>
+        //       <p className="">{sale.date}</p>
+        //       <p className="">{sale.invoice_number}</p>
+        //       <p className="">{sale.name ? sale.name : sale.Name}</p>
+        //       <p className="">{}</p>
+        //       <p className="">{sale.type}</p>
+        //       <p className="">{sale.credit}</p>
+        //       <p className="">{sale.ammount}</p>
+        //       <p className="">{sale.balance}</p>
+        //       <p className="side">
+        //         <Dropdown
+        //           menuItems={[
+        //             { label: "print" },
+        //             { label: "forward" },
+        //             { label: "generate Invoice" },
+        //             { label: "recieve payment" },
+        //             { label: "View/Edit" },
+        //             { label: "cancel" },
+        //             { label: "Delete" },
+        //             { label: "Duplicate" },
+        //             { label: "Print" },
+        //           ]}
+        //           isLabelOnly={true}
+        //         >
+        //           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
+        //             <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+        //           </svg>
+        //         </Dropdown>
+        //       </p>
+        //     </div>
+        //   ))}
+        // </div>
+        <div className="">
+          <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+            <h1>TRANSACTIONS</h1>
+            <div className="flex gap-2">
+              <div className="flex border border-gray-700 rounded-full px-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                </svg>
+                <input type="" className="bg-transparent" />
+              </div>
             </div>
             <button onClick={() => Navigate("/add-payment-in")}>
               + Add Payments In
             </button>
           </div>
-          <div className="cl">
-            <p className="side">#</p>
-            <p>DATE</p>
-            <p>REF NO</p>
-            <p>PARTY NAME</p>
-            <p>CATEGORY NAME</p>
-            <p>TYPE</p>
-            <p>TOTAL</p>
-            <p>RECIEVED/PAID</p>
-            <p>BALANCE</p>
-            <p className="side">-</p>
-          </div>
-          {data?.Transactions?.filter(
-            (transaction, index) => transaction.type === "Payment-In"
-          ).map((sale, index) => (
-            <div className="cl" key={index}>
-              <p className="side">{index + 1}</p>
-              <p className="">{sale.date}</p>
-              <p className="">{sale.invoice_number}</p>
-              <p className="">{sale.name ? sale.name : sale.Name}</p>
-              <p className="">{}</p>
-              <p className="">{sale.type}</p>
-              <p className="">{sale.credit}</p>
-              <p className="">{sale.ammount}</p>
-              <p className="">{sale.balance}</p>
-              <p className="side">
-                {/* <Dropdown
-                  menuItems={[
-                    "print",
-                    "forward",
-                    "generate Invoice",
-                    "recieve payment",
-                    "View/Edit",
-                    "cancel",
-                    "Delete",
-                    "Duplicate",
-                    "Print",
-                  ]}
-                > */}
-                <Dropdown
-                  menuItems={[
-                    { label: "print" },
-                    { label: "forward" },
-                    { label: "generate Invoice" },
-                    { label: "recieve payment" },
-                    { label: "View/Edit" },
-                    { label: "cancel" },
-                    { label: "Delete" },
-                    { label: "Duplicate" },
-                    { label: "Print" },
-                  ]}
-                  isLabelOnly={true}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
-                    <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                  </svg>
-                </Dropdown>
-              </p>
-            </div>
-          ))}
+
+          <SortableTable data={sendingArray} columns={columns} />
         </div>
       )}
     </div>

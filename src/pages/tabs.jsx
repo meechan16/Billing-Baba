@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import QuickBilling from "./QuickBilling";
 import { useNavigate } from "react-router-dom";
 
-const Tabs = ({ data, setData }) => {
+const Tabs = ({ data, setData, change, setChange }) => {
   const Navigate = useNavigate();
   const [tabs, setTabs] = useState([{ id: 1, isOpen: true }]);
   const [tabIndex, setTabIndex] = useState(1);
@@ -39,7 +39,7 @@ const Tabs = ({ data, setData }) => {
           >
             <button onClick={() => handleTabClick(tab.id)}>#{tab.id}</button>
             <span className="flex text-xs gap-1 items-center text-gray-500 ml-2">
-              {tab.isOpen && "[alt + w]"}
+              {tab.isOpen && tabs.length > 1 && "[alt + w]"}
               {tabs.length > 1 && (
                 <button onClick={() => closeTab(tab.id)} className="">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -74,7 +74,13 @@ const Tabs = ({ data, setData }) => {
           key={tab.id}
           style={{ display: tab.isOpen ? "block" : "none" }}
         >
-          <QuickBilling key={tab.id} data={data} setData={setData} />
+          <QuickBilling
+            key={tab.id}
+            data={data}
+            setData={setData}
+            change={change}
+            setChange={setChange}
+          />
         </div>
       ))}
       {/* </div> */}

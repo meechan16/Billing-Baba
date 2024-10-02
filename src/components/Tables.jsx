@@ -69,10 +69,10 @@ const SortableTable = ({ data, columns }) => {
   // Sort the filtered data
   const sortedData = sortData(filterData(data));
 
-  useEffect(() => {
-    console.log(data);
-    console.log(columns);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  //   console.log(columns);
+  // }, [data]);
 
   // SVG for arrows
   const AscendingArrow = () => (

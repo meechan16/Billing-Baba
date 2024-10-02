@@ -128,6 +128,7 @@ export default function AddItem({
           ? purchaseprice.value * (1 - tax)
           : purchaseprice.value,
         Tax: tax ? tax : "",
+        taxPercentage: tax ? tax : "",
         openingQuantity: openingQuantity ? openingQuantity : 0,
         atPrice: atPrice ? atPrice : "",
         asDate: asDate ? asDate : "",

@@ -72,9 +72,9 @@ function App() {
     }
   }, []);
   const storedItem = localStorage.getItem("item");
-  console.log("Retrieved from localStorage:", storedItem);
+  // console.log("Retrieved from localStorage:", storedItem);
   const item2 = storedItem ? JSON.parse(storedItem) : null;
-  console.log("Parsed item:", item2);
+  // console.log("Parsed item:", item2);
   const [data, setData] = useState(localStorage.getItem("data"));
   const [item, setItem] = useState(item2);
   const [change, setChange] = useState(false);

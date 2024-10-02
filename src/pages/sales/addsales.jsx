@@ -44,10 +44,6 @@ export default function AddSales({ data, setData, change, setChange }) {
     setIndexCount(indexCount + 1);
   };
 
-  // const [totalAmount, setTotalAmount] = useState(0);
-  // const [profit, setProfit] = useState(0);
-  const [totalTax, setTotalTax] = useState(0);
-
   const handleInputChange = async (index, column, value) => {
     setRows((prevRows) => {
       const newRows = [...prevRows];
@@ -80,10 +76,8 @@ export default function AddSales({ data, setData, change, setChange }) {
         const amount = qty * (pricePerUnit - discount + tax);
 
         // const amount = qty * (pricePerUnit - discount);
-
         newRows[index]["tax"] = tax;
         newRows[index]["amount"] = amount;
-
         newRows[index]["profit"] =
           (pricePerUnit - newRows[index]["PurchasePrice"] - discount) * qty;
       }
@@ -134,7 +128,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       0
     );
     const totalTax = rows.reduce(
-      (total, row) => total + (parseInt(row.amount) ? tax : 0),
+      (total, row) => total + (parseInt(row.tax) || 0),
       0
     );
 
@@ -218,9 +212,9 @@ export default function AddSales({ data, setData, change, setChange }) {
       ? (newDa.total_sales += parseFloat(newData.total))
       : (newDa.total_sales = parseFloat(newData.total));
     console.log(newDa);
-    setData(newDa);
-    setChange(!change);
-    Navigate("/sale-invoice");
+    // setData(newDa);
+    // setChange(!change);
+    // Navigate("/sale-invoice");
   };
 
   let sendData_and_get_pdf = async () => {
@@ -451,6 +445,11 @@ export default function AddSales({ data, setData, change, setChange }) {
                               // i should probably add more than a name to improve future search filter
                               setName(customer.partyName);
                               setPhone_no(customer.phoneNo);
+                              setBillingAdd(customer.Add);
+                              setState_of_supply({
+                                state: customer.state,
+                                isDone: true,
+                              });
                               setSearch();
                             }}
                           >
@@ -664,6 +663,13 @@ export default function AddSales({ data, setData, change, setChange }) {
                         name=""
                         id=""
                         className="w-full px-1 py-1 text-center"
+                        onChange={(e) =>
+                          handleInputChange(
+                            rowIndex,
+                            "category",
+                            e.target.value
+                          )
+                        }
                       >
                         {data.options?.map((item) => (
                           <option key={item} value={item}>
@@ -1195,49 +1201,6 @@ export default function AddSales({ data, setData, change, setChange }) {
                       onChange={(e) => setPaid(e.target.value)}
                     />
                   </div>
-
-                  <div className="">
-                    {/* <input
-                value={
-                  rows[rowIndex]?.tax
-                    ? rows[rowIndex].tax
-                    : Search
-                    ? Search[rowIndex]?.tax
-                    : ""
-                }
-                onChange={(e) =>
-                  setSearch({ rowIndex: { tax: e.target.value } })
-                }
-              /> */}
-                    {/* <select
-                  name=""
-                  id=""
-                  onChange={(e) => {
-                    // alert(e.target.value);
-                    setTotalTax(
-                      (e.target.value / 100).toFixed(2) * totalAmount
-                    );
-                  }}
-                >
-                  {data.tax?.map((unit) => (
-                    <option key={unit.name} value={unit.value}>
-                      {unit.name}
-                    </option>
-                  ))}
-                </select> */}
-                    {/* <p className="r">{totalTax}</p> */}
-                    {/* {Search?.rowIndex?.tax && (
-                <ul> */}
-                    {/* <li className="add" onClick={() => Navigate("/addParties")}>
-                      Add Ta +
-                    </li> */}
-                    {/* </ul>
-              )} */}
-                  </div>
-                  {/* <div className="r">
-                <span>Tax</span>
-                <p className="sub">{totalTax}</p>
-              </div> */}
                   <div className="flex items-center gap-2 justify-end">
                     <span>Balance</span>
                     <p className="p-2 border w-[200px] bg-gray-100 text-end border-gray-300 rounded-md">
@@ -1252,25 +1215,6 @@ export default function AddSales({ data, setData, change, setChange }) {
             </div>
           </div>
           <div className="ai5">
-            {/* <label>
-            Paid
-            <input
-              type="radio"
-              value="paid"
-              checked={paymentStatus === "paid"}
-              onChange={(e) => setPaymentStatus(e.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Pending
-            <input
-              type="radio"
-              value="pending"
-              checked={paymentStatus === "pending"}
-              onChange={(e) => setPaymentStatus(e.target.value)}
-            />
-          </label> */}
             <button className="save1" onClick={() => sendData_and_get_pdf()}>
               Save & Generate Invoice
             </button>

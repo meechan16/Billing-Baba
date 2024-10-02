@@ -19,6 +19,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
   ]);
 
   const [indexCount, setIndexCount] = useState(0);
+  const [Search, setSearch] = useState();
   const addRow = () => {
     setRows([
       ...rows,
@@ -144,7 +145,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
   };
 
   return (
-    <div id="addsales">
+    <div id="addsales" className="text-xs">
       {addExpenseCategory && (
         <div className="addExpenseCategoryDiv">
           <div className="content">
@@ -191,57 +192,65 @@ export default function AddExpense({ data, setData, change, setChange }) {
           </div>
         </div>
       </div>
-      <div className="body">
+      <div className="body text-sm">
         <div className="ai1">
-          <div className="search">
-            <div className="le">
+          <div className="flex flex-col gap-2 items-center justify-center">
+            {/* <div className="le">
               <div className="l">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
                 </svg>
-                <input
-                  type="text"
-                  name="name"
-                  onFocus={() => setInputFocus(true)}
-                  onBlur={() => setInputFocus(false)}
-                  placeholder="Expense Catogroy"
-                  id=""
-                  value={Name ? Name : searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
               </div>
+            </div> */}
+            <div className="flex gap-1 items-center relative pr-3  border border-gray-300 rounded-md h-fit">
+              <input
+                type="text"
+                name="name"
+                onFocus={() => setInputFocus(true)}
+                onBlur={() => setInputFocus(false)}
+                placeholder="Expense Catogroy"
+                id=""
+                className="p-1 bg-white w-[300px] h-[30px]"
+                value={Name ? Name : searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <ul className="absolute top-8 left-0 w-[400px] z-10 rounded-md shadow-md ">
+                  {data.expenseCategory
+                    ?.filter((item) =>
+                      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((item) => (
+                      <li
+                        key={item.itemCode}
+                        className="p-1 hover:bg-gray-200  bg-white flex justify-between w-full"
+                        onClick={() => {
+                          Navigate(item.to);
+                          setName(item.name);
+                          setSearchTerm("");
+                        }}
+                      >
+                        {item.name}
+                      </li>
+                    ))}
+                  <li
+                    className="p-1 hover:bg-gray-200 bg-white flex justify-between w-full text-blue-500"
+                    onClick={() => {
+                      setAddExpenseCategory(true);
+                    }}
+                  >
+                    Add Expense Category +
+                  </li>
+                </ul>
+              )}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              </svg>
             </div>
-            {searchTerm && (
-              <ul>
-                {data.expenseCategory
-                  ?.filter((item) =>
-                    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
-                  .map((item) => (
-                    <li
-                      key={item.itemCode}
-                      onClick={() => {
-                        Navigate(item.to);
-                        setName(item.name);
-                        setSearchTerm("");
-                      }}
-                    >
-                      {item.name}
-                    </li>
-                  ))}
-                <li
-                  className="add"
-                  onClick={() => {
-                    setAddExpenseCategory(true);
-                  }}
-                >
-                  Add Expense Category +
-                </li>
-              </ul>
-            )}
           </div>
 
           <div className="r">
@@ -268,7 +277,408 @@ export default function AddExpense({ data, setData, change, setChange }) {
             </div>
           </div>
         </div>
-        <div className="ai2">
+        <div className="overflow-x-auto ">
+          <table className="min-w-full table-auto border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-green-100">
+                <th className="px-1 py-1 border border-gray-300 border-b-0">
+                  ITEM
+                </th>
+                <th className="px-1 py-1 border border-gray-300 border-b-0">
+                  QTY
+                </th>
+                <th className="px-1 py-1 border border-gray-300 border-b-0">
+                  PRICE
+                </th>
+                <th className="px-1 py-1   border border-gray-300 border-b-0">
+                  AMOUNT
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, rowIndex) => (
+                <tr key={rowIndex} className="text-center">
+                  <td className=" w-1/6 border border-gray-300">
+                    <input
+                      className="w-full px-1 py-1 text-center"
+                      value={
+                        rows[rowIndex].item
+                          ? rows[rowIndex].item
+                          : Search
+                          ? Search[rowIndex]?.item
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setSearch({ rowIndex: { item: e.target.value } })
+                      }
+                    />
+                    {Search?.rowIndex?.item && (
+                      <ul className="absolute w-[500px] bg-white">
+                        {data.expenseItems
+                          .filter((item) =>
+                            item.Name.toLowerCase().includes(
+                              rows[rowIndex].item.toLowerCase()
+                            )
+                          )
+                          .map((item) => (
+                            <li
+                              key={item.code}
+                              onClick={() => {
+                                handleInputChange(rowIndex, "item", item.Name);
+                                handleInputChange(
+                                  rowIndex,
+                                  "TaxPercentage",
+                                  item.taxPercentage
+                                );
+                                handleInputChange(
+                                  rowIndex,
+                                  "price_per_unit",
+                                  item.salesPrice
+                                );
+                                setSearch({});
+                              }}
+                              className="p-2 border-b border-gray-300 hover:bg-gray-200 cursor-pointer flex justify-between"
+                            >
+                              <h1>{item.Name}</h1>
+                              <h1
+                                className={
+                                  item.stock < item.minToMaintain
+                                    ? "text-red-500"
+                                    : "text-green-500"
+                                }
+                              >
+                                {item.stock}
+                              </h1>
+                            </li>
+                          ))}
+                        <li
+                          className="p-2 text-blue-500 font-semibold hover:bg-gray-200 cursor-pointer"
+                          onClick={() => Navigate("/addParties")}
+                        >
+                          Add Item +
+                        </li>
+                      </ul>
+                    )}
+                  </td>
+                  {/* <td className="px-1 py-1   border border-gray-300">
+                      //row.description} 
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        // value={
+                        //   rows[rowIndex].item
+                        //     ? rows[rowIndex].item
+                        //     : Search
+                        //     ? Search[rowIndex]?.item
+                        //     : ""
+                        // }
+                        // onChange={(e) =>
+                        //   setSearch({ rowIndex: { item: e.target.value } })
+                        // }
+                      />
+                    </td>
+                    <td className="px-1 py-1   border border-gray-300">
+                      // {row.batchNo} 
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        // value={
+                        //   rows[rowIndex].item
+                        //     ? rows[rowIndex].item
+                        //     : Search
+                        //     ? Search[rowIndex]?.item
+                        //     : ""
+                        // }
+                        // onChange={(e) =>
+                        //   setSearch({ rowIndex: { item: e.target.value } })
+                        // }
+                      />
+                    </td>
+                    <td className="px-1 py-1   border border-gray-300">
+                      {/* {row.modelNo} 
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        // value={
+                        //   rows[rowIndex].item
+                        //     ? rows[rowIndex].item
+                        //     : Search
+                        //     ? Search[rowIndex]?.item
+                        //     : ""
+                        // }
+                        // onChange={(e) =>
+                        //   setSearch({ rowIndex: { item: e.target.value } })
+                        // }
+                      />
+                    </td>
+                    <td className="px-1 py-1   border border-gray-300">
+                      {/* {row.expDate} 
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        // value={
+                        //   rows[rowIndex].item
+                        //     ? rows[rowIndex].item
+                        //     : Search
+                        //     ? Search[rowIndex]?.item
+                        //     : ""
+                        // }
+                        // onChange={(e) =>
+                        //   setSearch({ rowIndex: { item: e.target.value } })
+                        // }
+                      />
+                    </td>
+                    <td className="px-1 py-1   border border-gray-300">
+                      {/* {row.mfgDate} 
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        // value={
+                        //   rows[rowIndex].item
+                        //     ? rows[rowIndex].item
+                        //     : Search
+                        //     ? Search[rowIndex]?.item
+                        //     : ""
+                        // }
+                        // onChange={(e) =>
+                        //   setSearch({ rowIndex: { item: e.target.value } })
+                        // }
+                      />
+                    </td>
+                    <td className="px-1 py-1   border border-gray-300">
+                      {/* {row.size} 
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        // value={
+                        //   rows[rowIndex].item
+                        //     ? rows[rowIndex].item
+                        //     : Search
+                        //     ? Search[rowIndex]?.item
+                        //     : ""
+                        // }
+                        // onChange={(e) =>
+                        //   setSearch({ rowIndex: { item: e.target.value } })
+                        // }
+                      />
+                    </td> */}
+                  <td className="  border border-gray-300">
+                    <input
+                      type="number"
+                      className="w-full px-1 py-1 text-center"
+                      value={rows[rowIndex].qty}
+                      onChange={(e) =>
+                        handleInputChange(rowIndex, "qty", e.target.value)
+                      }
+                    />
+                  </td>
+                  {/* <td className="  border border-gray-300 relative">
+                      <input
+                        className="w-full  px-1 py-1 text-center bg-gray-100 rounded-sm"
+                        value={
+                          rows[rowIndex].unit
+                            ? rows[rowIndex].unit
+                            : Search
+                            ? Search[rowIndex]?.unit
+                            : ""
+                        }
+                        onChange={(e) =>
+                          setSearch({ rowIndex: { unit: e.target.value } })
+                        }
+                      />
+                      {Search?.rowIndex?.unit && (
+                        <ul className="absolute top-6 left-0">
+                          <li
+                            className="add"
+                            onClick={() => Navigate("/items?data=addUnit")}
+                          >
+                            Add Units +
+                          </li>
+                          {data.units
+                            .filter((unit) =>
+                              unit.name
+                                .toLowerCase()
+                                .includes(
+                                  rows[rowIndex].unit
+                                    ? rows[rowIndex].unit.toLowerCase()
+                                    : ""
+                                )
+                            )
+                            .map((unit) => (
+                              <li
+                                key={unit.name}
+                                onClick={() => {
+                                  // i should probably add more than a name to improve future search filter
+                                  handleInputChange(
+                                    rowIndex,
+                                    "unit",
+                                    unit.name
+                                  );
+                                  setSearch({});
+                                }}
+                              >
+                                {unit.name}
+                              </li>
+                            ))}
+                          <li
+                            className="extra"
+                            onClick={() => {
+                              handleInputChange(rowIndex, "unit", "-");
+                              setSearch({});
+                            }}
+                          >
+                            --- none ---
+                          </li>
+                        </ul>
+                      )}
+                    </td> */}
+                  <td className="  border border-gray-300">
+                    <input
+                      className="w-full px-1 py-1 text-center bg-gray-100 rounded-sm"
+                      type="number"
+                      value={rows[rowIndex].price_per_unit}
+                      onChange={(e) => {
+                        if (rows[rowIndex].PurchasePrice > e.target.value) {
+                          alert("less than Purchase Price, May cause loss");
+                        }
+                        handleInputChange(rowIndex, "price", e.target.value);
+                      }}
+                    />
+                  </td>
+                  {/* <td className="  border border-gray-300">
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        type="number"
+                        value={rows[rowIndex].discountPercentage}
+                        onChange={(e) =>
+                          handleInputChange(
+                            rowIndex,
+                            "discountPercentage",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </td>
+                    <td className="  border border-gray-300">
+                      <input
+                        className="w-full  px-1 py-1 text-center "
+                        type="number"
+                        value={rows[rowIndex].discount}
+                        onChange={(e) =>
+                          handleInputChange(
+                            rowIndex,
+                            "discount",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </td> */}
+                  {/* <td className="   border border-gray-300">
+                      <select
+                        name=""
+                        id=""
+                        className="w-full px-1 py-1 text-center"
+                        value={rows[rowIndex].taxPercentage}
+                        onChange={(e) =>
+                          handleInputChange(
+                            rowIndex,
+                            "taxPercentage",
+                            e.target.value
+                          )
+                        }
+                      >
+                        {data.tax?.map((unit) => (
+                          <option key={unit.name} value={unit.value}>
+                            {unit.name}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="   border border-gray-300">
+                      <input
+                        className="w-full px-1 py-1 text-center"
+                        type="number"
+                        value={rows[rowIndex].tax}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "tax", e.target.value)
+                        }
+                      />
+                    </td> */}
+                  <td className="   border border-gray-300">
+                    <input
+                      className="w-full px-1 py-1"
+                      type="number"
+                      value={rows[rowIndex].amount}
+                      onChange={(e) =>
+                        handleInputChange(rowIndex, "amount", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td className=" border border-gray-300">
+                    <button
+                      className="py-1 px-1 h-full w-full text-center fill-black hover:fill-red-500 rounded-sm"
+                      onClick={() =>
+                        setRows(rows.filter((r, i) => i !== rowIndex))
+                      }
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512"
+                      >
+                        <path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                {/* <td className="px-1 py-1  text-end border-x-0 border border-gray-300"></td>
+                <td className="px-1 py-1  text-end border-x-0 border border-gray-300"></td> */}
+                <td className="px-1 py-1  border-x-0 flex justify-between items-center font-semibold border border-gray-300">
+                  <button
+                    onClick={addRow}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  >
+                    ADD ROW
+                  </button>
+                  <span>Total</span>
+                </td>
+                {/* <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td> */}
+                <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
+                  {rows.reduce(
+                    (total, row) => total + (parseInt(row.qty) || 0),
+                    0
+                  )}
+                </td>
+                {/* <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td> */}
+                <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                {/* <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
+                  {rows.reduce(
+                    (total, row) => total + (parseInt(row.discount) || 0),
+                    0
+                  )}
+                </td> */}
+                {/* <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
+                  {rows.reduce(
+                    (total, row) => total + (parseInt(row.tax) || 0),
+                    0
+                  )}
+                </td> */}
+                <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
+                  {rows.reduce(
+                    (total, row) => total + (parseInt(row.amount) || 0),
+                    0
+                  )}
+                </td>
+                <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {/* <div className="ai2">
           <div className="cl top">
             <p>ITEM</p>
             <p>QTY</p>
@@ -306,7 +716,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
               />
             </div>
           ))}
-        </div>
+        </div> */}
         <div className="ai3">
           <div className="l">
             <input
@@ -315,7 +725,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add Description..."
             />
-            <button onClick={addRow}>ADD ROW</button>
+            {/* <button onClick={addRow}>ADD ROW</button> */}
           </div>
           <div className="">
             <div className="r">

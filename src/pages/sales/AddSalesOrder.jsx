@@ -156,6 +156,7 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
       items: rows ? rows : "",
       round_off: round_off ? round_off : "",
       total: totalAmount ? totalAmount + totalTax : "",
+      amount: totalAmount ? totalAmount + totalTax : "",
       profit: profit ? profit : "",
       total_tax: totalTax,
       description: Description ? Description : "",
