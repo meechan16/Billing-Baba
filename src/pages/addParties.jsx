@@ -257,26 +257,40 @@ export default function AddParties({ data, setData, change, setChange }) {
           {page == "Credit" && (
             <div className="flex flex-col">
               <div className="div s">
-                <CustomInput
-                  inputValue={OpeningBalance}
-                  setInputValue={setOpeningBalance}
-                  placeholder={"Opening balance"}
-                />
+                <div className="flex flex-col">
+                  <CustomInput
+                    inputValue={OpeningBalance}
+                    setInputValue={setOpeningBalance}
+                    placeholder={"Opening balance"}
+                  />
+                  {OpeningBalance && (
+                    // <select name="" id="">
+                    //   <option value="">To Pay</option>
+                    //   <option value="">To Recieve</option>
+                    // </select>
+                    <div className="flex gap-2">
+                      <div className="flex items-center gap-2">
+                        <input type="checkbox" name="" id="" />
+                        <span>To Pay</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input type="checkbox" name="" id="" />
+                        <span>To Recieve</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <input
                   type="date"
                   onChange={(e) => setAsDate(e.target.value)}
                   id="birthday"
                   name="birthday"
                 ></input>
-                <select name="" id="">
-                  <option value="">To Pay</option>
-                  <option value="">To Recieve</option>
-                </select>
               </div>
               <div className="div s">
                 <CustomInput
-                  inputValue={OpeningBalance}
-                  setInputValue={setOpeningBalance}
+                  inputValue={OpeningLoyaltyPoints}
+                  setInputValue={setOpeningLoyaltyPoints}
                   placeholder={"Opening Loyalty Pts"}
                 />
                 <input

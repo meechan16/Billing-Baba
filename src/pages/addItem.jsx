@@ -27,7 +27,7 @@ export default function AddItem({
   var [discount, setDescount] = useState();
   var [purchaseprice, setPurchasePrice] = useState();
   var [tax, setTax] = useState(0);
-  var [openingQuantity, setOpeningQuantity] = useState(0);
+  var [openingQuantity, setOpeningQuantity] = useState();
   var [atPrice, setAtPrice] = useState();
   var [asDate, setAsDate] = useState();
   var [minToMaintain, setMinToMaintain] = useState(10);
@@ -544,6 +544,22 @@ export default function AddItem({
                 Stock
               </button>
             )}
+            {toggle && (
+              <button
+                className={page === "Os" && "active"}
+                onClick={() => setPage("Os")}
+              >
+                Online Store
+              </button>
+            )}
+            {toggle && (
+              <button
+                className={page === "Man" && "active"}
+                onClick={() => setPage("Man")}
+              >
+                Manifacturing
+              </button>
+            )}
           </div>
           {page === "pricing" ? (
             <div className="">
@@ -763,6 +779,18 @@ export default function AddItem({
                 setInputValue={setOpeningQuantity}
                 placeholder={"Opening Quantity"}
               />
+              {openingQuantity && (
+                <>
+                  <div className="">
+                    <input type="checkbox" name="" id="" />
+                    <span>To Pay</span>
+                  </div>
+                  <div className="">
+                    <input type="checkbox" name="" id="" />
+                    <span>To Recieve</span>
+                  </div>
+                </>
+              )}
               <CustomInput
                 inputValue={atPrice}
                 setInputValue={setAtPrice}
