@@ -227,15 +227,21 @@ export default function QuickBilling({
         : (newDa.to_collect = parseFloat(newData.pending));
 
       let party = newDa.parties.find(
-        (ele, index) => ele.partyName === Name || ele.name === Name
+        (ele, index) =>
+          ele.partyName === selectedCustomer.name ||
+          ele?.name === selectedCustomer.name
       );
 
       party?.credit
         ? (newDa.parties.find(
-            (ele, index) => ele.partyName === Name || ele.name === Name
+            (ele, index) =>
+              ele.partyName === selectedCustomer.name ||
+              ele.name === selectedCustomer.name
           ).credit += parseFloat(newData.pending))
         : (newDa.parties.find(
-            (ele, index) => ele.partyName === Name || ele.name === Name
+            (ele, index) =>
+              ele.partyName === selectedCustomer.name ||
+              ele.name === selectedCustomer.name
           ).credit = parseFloat(newData.pending));
     } else {
       console.log("CASH IN HAND INCREASED");
