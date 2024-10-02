@@ -152,12 +152,14 @@ export default function PaymentIn({ data, setData }) {
                 </svg>
                 <input type="" className="bg-transparent" />
               </div>
+              <button
+                className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"
+                onClick={() => Navigate("/add-payment-in")}
+              >
+                + Add Payments In
+              </button>
             </div>
-            <button onClick={() => Navigate("/add-payment-in")}>
-              + Add Payments In
-            </button>
           </div>
-
           <SortableTable data={sendingArray} columns={columns} />
         </div>
       )}

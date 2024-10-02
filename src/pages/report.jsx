@@ -20,6 +20,17 @@ import ItemStockSummar from "../components/reports/itemStockSummary";
 import ItemSerialNum from "../components/reports/itemSerialNum";
 import ItemReportByParty from "../components/reports/itemRepByParties";
 import ItemBatchRep from "../components/reports/itemBatchRep";
+import LowStockSummaryReport from "../components/reports/lowStockSummaryReport";
+import ItemWiseProfit from "../components/reports/itemWiseProfitLoss";
+import StockDetails from "../components/reports/StockDetails";
+import ItemDetailsReport from "../components/reports/itemDetails";
+import SalePurchaseReportByItemCategory from "../components/reports/SalePurchaseReportByItemCategory";
+import StockSummarReportByItemQuantity from "../components/reports/StockSummaryByItemQuantitiy";
+import ItemWiseDiscount from "../components/reports/ItemWiseDiscount";
+import ManifacturingReports from "../components/reports/ManifacturingReports";
+import ConsumptionReports from "../components/reports/ConsumptionReport";
+import ExpenseItemReports from "../components/reports/ExpenseItemReport";
+import SaleOrderItemReports from "../components/reports/SalesOrderItemReport";
 
 export default function Rep({ data, setData }) {
   const Navigate = useNavigate();
@@ -209,25 +220,31 @@ export default function Rep({ data, setData }) {
           className={currentPage === 30 ? "selected" : ""}
           onClick={() => setCurrentPage(30)}
         >
-          Item Detail
+          Sale/Purchase Report By Item Category
         </li>
         <li
           className={currentPage === 31 ? "selected" : ""}
           onClick={() => setCurrentPage(31)}
         >
-          Sale/Purchase Report By Item Category
+          Stock Summary Report By Item Category
         </li>
         <li
           className={currentPage === 32 ? "selected" : ""}
           onClick={() => setCurrentPage(32)}
         >
-          Stock Summary Report By Item Category
+          Item Wise Discount
         </li>
         <li
           className={currentPage === 33 ? "selected" : ""}
           onClick={() => setCurrentPage(33)}
         >
-          Item Wise Discount
+          Manifacturing Report
+        </li>
+        <li
+          className={currentPage === 335 ? "selected" : ""}
+          onClick={() => setCurrentPage(335)}
+        >
+          Consumption Report
         </li>
         <li className="head">Business Status</li>
         <li
@@ -345,14 +362,36 @@ export default function Rep({ data, setData }) {
           <ItemSerialNum data={data} setData={setData} />
         ) : currentPage === 25 ? (
           <ItemReportByParty data={data} setData={setData} />
+        ) : currentPage === 26 ? (
+          <ItemWiseProfit data={data} setData={setData} />
+        ) : currentPage === 27 ? (
+          <LowStockSummaryReport data={data} setData={setData} />
+        ) : currentPage === 28 ? (
+          <StockDetails data={data} setData={setData} />
+        ) : currentPage === 29 ? (
+          <ItemDetailsReport data={data} setData={setData} />
+        ) : currentPage === 30 ? (
+          <SalePurchaseReportByItemCategory data={data} setData={setData} />
+        ) : currentPage === 31 ? (
+          <StockSummarReportByItemQuantity data={data} setData={setData} />
+        ) : currentPage === 32 ? (
+          <ItemWiseDiscount data={data} setData={setData} />
+        ) : currentPage === 33 ? (
+          <ManifacturingReports data={data} setData={setData} />
+        ) : currentPage === 335 ? (
+          <ConsumptionReports data={data} setData={setData} />
         ) : currentPage === 40 ? (
           <ExpenseReport data={data} setData={setData} />
         ) : currentPage === 41 ? (
           <ExpenseCategoryReport data={data} setData={setData} />
+        ) : currentPage === 42 ? (
+          <ExpenseItemReports data={data} setData={setData} />
         ) : currentPage === 43 ? (
           <SaleOrderReport data={data} setData={setData} />
+        ) : currentPage === 44 ? (
+          <SaleOrderItemReports data={data} setData={setData} />
         ) : (
-          <Undone data={data} setData={setData} />
+          currentPage && <Undone data={data} setData={setData} />
         )}
       </div>
     </div>
