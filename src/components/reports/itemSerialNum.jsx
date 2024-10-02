@@ -60,7 +60,7 @@ export default function ItemSerialNum({ data, setData }) {
       {sendingArray && (
         <div className="">
           <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
-            <h1>Stock Summary</h1>
+            <h1>Item Serial Report</h1>
             <div className="flex gap-2">
               <div className="flex border border-gray-700 rounded-full px-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

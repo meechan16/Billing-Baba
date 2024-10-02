@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import CustomInput from "../components/customInput";
+import SortableTable from "../components/Tables";
 import Dropdown from "../components/dropdown";
-// import StockAdjust from "../components/stock_Adjustment";
 import dev_url from "../url";
 export default function Expense({ data, setData }) {
   var [page, setPage] = useState("category");
@@ -53,14 +52,12 @@ export default function Expense({ data, setData }) {
   const columns = [
     { key: "invoice_date", label: "Invoice Date" },
     { key: "invoice_number", label: "Invoice Number" },
-    { key: "name", label: "Name" },
-    { key: "type", label: "Type" },
-    { key: "type", label: "Type" },
-    { key: "payment_type", label: "Payent Type" },
-    { key: "total", label: "Total" },
-    { key: "DropDown", label: "-" },
+    { key: "name", label: "Total" },
+    { key: "type", label: "Transaction Type" },
   ];
-  const sendingArray = data?.Transactions?.map((ele) => {
+  const sendingArray = data?.Transactions?.filter(
+    (ele) => ele.type == "Expense"
+  ).map((ele) => {
     return {
       ...ele,
       invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
@@ -192,56 +189,59 @@ export default function Expense({ data, setData }) {
               <div className="tile"></div>
             </div>
             {selecteditems && (
-              //   <div className="">
-              //   <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+              <div className="">
+                <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+                  <h1>TRANSACTIONS</h1>
+                  <div className="flex gap-2">
+                    <div className="flex border border-gray-700 rounded-full px-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                      >
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                      </svg>
+                      <input type="" className="bg-transparent" />
+                    </div>
+                  </div>
+                </div>
+
+                <SortableTable data={sendingArray} columns={columns} />
+              </div>
+              // <div className="content">
+              //   <div className="t">
               //     <h1>TRANSACTIONS</h1>
-              //     <div className="flex gap-2">
-              //       <div className="flex border border-gray-700 rounded-full px-1">
-              //         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              //           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-              //         </svg>
-              //         <input type="" className="bg-transparent" />
-              //       </div>
+              //     <div className="search">
+              //       <svg
+              //         xmlns="http://www.w3.org/2000/svg"
+              //         viewBox="0 0 512 512"
+              //       >
+              //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              //       </svg>
+              //       <input type="" />
               //     </div>
               //   </div>
+              //   <div className="cl top">
+              //     <p>Type</p>
+              //     <p>Invoice/Ref</p>
+              //     <p>Name</p>
+              //     <p>Date</p>
+              //     <p>Quantity</p>
+              //     <p>Price</p>
+              //     <p>Status</p>
+              //   </div>
 
-              //   <SortableTable data={sendingArray} columns={columns} />
+              //   {selecteditems.transactions?.map((transaction, index) => (
+              //     <div className="cl">
+              //       <p>Tech</p>
+              //       <p className="grey">231</p>
+              //       <p className="grey">Boat</p>
+              //       <p className="grey">03/02/2024</p>
+              //       <p className="grey">10</p>
+              //       <p className="grey">3000</p>
+              //       <p className="grey">Unpaid</p>
+              //     </div>
+              //   ))}
               // </div>
-              <div className="content">
-                <div className="t">
-                  <h1>TRANSACTIONS</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input type="" />
-                  </div>
-                </div>
-                <div className="cl top">
-                  <p>Type</p>
-                  <p>Invoice/Ref</p>
-                  <p>Name</p>
-                  <p>Date</p>
-                  <p>Quantity</p>
-                  <p>Price</p>
-                  <p>Status</p>
-                </div>
-
-                {selecteditems.transactions?.map((transaction, index) => (
-                  <div className="cl">
-                    <p>Tech</p>
-                    <p className="grey">231</p>
-                    <p className="grey">Boat</p>
-                    <p className="grey">03/02/2024</p>
-                    <p className="grey">10</p>
-                    <p className="grey">3000</p>
-                    <p className="grey">Unpaid</p>
-                  </div>
-                ))}
-              </div>
             )}
           </div>
         </div>

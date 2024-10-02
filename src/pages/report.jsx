@@ -357,9 +357,9 @@ export default function Rep({ data, setData }) {
         ) : currentPage === 22 ? (
           <ItemStockSummar data={data} setData={setData} />
         ) : currentPage === 23 ? (
-          <ItemBatchRep data={data} setData={setData} />
-        ) : currentPage === 24 ? (
           <ItemSerialNum data={data} setData={setData} />
+        ) : currentPage === 24 ? (
+          <ItemBatchRep data={data} setData={setData} />
         ) : currentPage === 25 ? (
           <ItemReportByParty data={data} setData={setData} />
         ) : currentPage === 26 ? (
