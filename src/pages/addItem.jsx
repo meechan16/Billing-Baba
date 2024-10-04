@@ -31,6 +31,7 @@ export default function AddItem({
   var [atPrice, setAtPrice] = useState();
   var [asDate, setAsDate] = useState();
   var [minToMaintain, setMinToMaintain] = useState(10);
+  var [Storagecapacity, setStoragecapacity] = useState();
   var [location, setLocation] = useState();
   var [primaryUnit, setprimaryUnit] = useState();
   var [SecondaryUnit, setSecondaryUnit] = useState();
@@ -650,6 +651,18 @@ export default function AddItem({
                       }}
                       type="search"
                     />
+                    <select
+                      name=""
+                      id=""
+                      className="px-2 h-fit bg-transparent m-0"
+                    >
+                      <option value="" className="p-2">
+                        Amount
+                      </option>
+                      <option value="" className="p-2">
+                        Percentage
+                      </option>
+                    </select>
                   </div>
                 </div>
 
@@ -659,6 +672,29 @@ export default function AddItem({
                     value={WholeSalePrice}
                     onChange={(e) => setWholeSalePrice(e.target.value)}
                     label="Wholesale Price"
+                    itemType="number"
+                    sx={{
+                      background: "white",
+                    }}
+                    type="search"
+                  />
+                  <select
+                    name=""
+                    id=""
+                    className="px-2 h-fit bg-transparent m-0"
+                  >
+                    <option value="" className="p-2">
+                      with tax
+                    </option>
+                    <option value="" className="p-2">
+                      without tax
+                    </option>
+                  </select>
+                  <TextField
+                    id="outlined-search"
+                    // value={WholeSalePrice}
+                    // onChange={(e) => setWholeSalePrice(e.target.value)}
+                    label="Wholesale Minumum qty to maintain"
                     itemType="number"
                     sx={{
                       background: "white",
@@ -779,7 +815,7 @@ export default function AddItem({
                 setInputValue={setOpeningQuantity}
                 placeholder={"Opening Quantity"}
               />
-              {openingQuantity && (
+              {/* {openingQuantity && (
                 <>
                   <div className="">
                     <input type="checkbox" name="" id="" />
@@ -790,7 +826,7 @@ export default function AddItem({
                     <span>To Recieve</span>
                   </div>
                 </>
-              )}
+              )} */}
               <CustomInput
                 inputValue={atPrice}
                 setInputValue={setAtPrice}
@@ -806,6 +842,11 @@ export default function AddItem({
                 inputValue={minToMaintain}
                 setInputValue={setMinToMaintain}
                 placeholder={"Min Stock to maintain"}
+              />
+              <CustomInput
+                inputValue={Storagecapacity}
+                setInputValue={setStoragecapacity}
+                placeholder={"Storage Capacity"}
               />
               <CustomInput
                 inputValue={location}
