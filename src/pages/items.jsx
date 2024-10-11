@@ -13,6 +13,7 @@ export default function Items({ data, setData, change, setChange }) {
 
   var [Category, setCategory] = useState();
   var [Units, setUnits] = useState();
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   useEffect(() => {
     if (urlPram == "addUnit") {
       setPage("unit");
@@ -151,7 +152,7 @@ export default function Items({ data, setData, change, setChange }) {
 
   var columns;
   var sendingArray;
-  if (page == "product") {
+  if (page === "product") {
     columns = [
       { key: "type", label: "Type" },
       { key: "invoice_number", label: "Invoice Number" },
@@ -186,8 +187,69 @@ export default function Items({ data, setData, change, setChange }) {
       });
     }
   }
+  else if (page === "service") {
+    columns = [
+      { key: "type", label: "Type" },
+      { key: "invoice_number", label: "Invoice/Ref" },
+      { key: "name", label: "Name" },
+      { key: "invoice_date", label: "Date" },
+      { key: "length", label: "Length" },
+      { key: "total", label: "Price" },
+      { key: "totalProfit", label: "Profit" },
+      // { key: "DropDown", label: "-" },
+    ];
+    if (selecteditems) {
+      sendingArray = data?.Transactions?.filter((item) =>
+        item.items?.some((term) => term.item === selecteditems.Name)
+      ).map((ele) => {
+        return {
+          ...ele,
+          invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+          length: ele.items?.length,
+          paymentTope: ele.payment_type === "credit" ? "Unpaid" : "Paid",
+          // menuItem: [
+          //   { label: "print" },
+          //   { label: "forward" },
+          //   { label: "generate Invoice" },
+          //   { label: "recieve payment" },
+          //   { label: "View/Edit" },
+          //   { label: "cancel" },
+          //   { label: "Delete" },
+          //   { label: "Duplicate" },
+          //   { label: "Print" },
+          // ],
+        };
+      });
+    }
+  }
+  else if (page === "category") {
+    columns = [
+      { key: "name", label: "Name" },
+      { key: "stock", label: "Quantity" },
+      { key: "value", label: "Stock Value" },
+    ];
+    if (selecteditems) {
+      sendingArray = data?.items
+      ?.filter((item) =>
+        item.Category.toLowerCase()
+          .split(" ")
+          .every((word) =>
+            selectedCategory.name.toLowerCase().includes(word)
+          )
+      )
+      .map((item, index) => {
+        return {
+          ...item,
+          stock: item.stock? item.stock : "not set",
+          value:item.stock
+          ? item.stock * parseInt(item.purchasePrice)
+          : "not set",
+        };
+      });
+    }
+  }
 
-  if (EditIndex != -1)
+  if (EditIndex !== -1){
     return (
       <EditItem
         data={data}
@@ -198,6 +260,46 @@ export default function Items({ data, setData, change, setChange }) {
         setClose={setEditIndex}
       />
     );
+  }
+    
+  // Sorting in left sidebar - items
+
+  const sortItems = (items) => {
+    if (sortConfig.key) {
+      return [...items].sort((a, b) => {
+        if (sortConfig.key === "Name") {
+          if (a.Name?.toLowerCase() < b.Name?.toLowerCase())
+            return sortConfig.direction === "ascending" ? -1 : 1;
+          if (a.Name?.toLowerCase() > b.Name?.toLowerCase())
+            return sortConfig.direction === "ascending" ? 1 : -1;
+          return 0;
+        } else if (sortConfig.key === "stock") {
+          return sortConfig.direction === "ascending"
+            ? (a.stock || 0) - (b.stock || 0)
+            : (b.stock || 0) - (a.stock || 0);
+        }
+        return 0;
+      });
+    }
+    return items;
+  };
+
+  const toggleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    } else if (
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = null; // Reset sorting
+    }
+    setSortConfig({ key: direction ? key : null, direction });
+  };
+
+  const sortedItems = sortItems(
+    data?.items.map((item, originalIndex) => ({ ...item, originalIndex }))
+  );
 
   return (
     <div id="items">
@@ -321,20 +423,33 @@ export default function Items({ data, setData, change, setChange }) {
             )}
             <div className="content">
               <div className="head">
-                <h2>Items</h2>
-                <h2>Qty</h2>
+                <h2 onClick={() => toggleSort("Name")}>
+                  Items{" "}
+                  {sortConfig.key === "Name" &&
+                    (sortConfig.direction === "ascending"
+                      ? "↑"
+                      : sortConfig.direction === "descending"
+                      ? "↓"
+                      : "")}
+                </h2>
+                <h2 onClick={() => toggleSort("stock")}>
+                  Qty{" "}
+                  {sortConfig.key === "stock" &&
+                    (sortConfig.direction === "ascending"
+                      ? "↑"
+                      : sortConfig.direction === "descending"
+                      ? "↓"
+                      : "")}
+                </h2>
               </div>
 
               {SearchQuerry && search
-                ? data?.items
-                    .map((item, originalIndex) => ({ ...item, originalIndex }))
+                ? sortedItems
                     ?.filter((item) => item.itemType !== "service")
-                    ?.filter(
-                      (e) =>
-                        SearchQuerry.toLowerCase()
-                          .split(" ")
-                          .every((word) => e.Name.toLowerCase().includes(word))
-                      // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                    ?.filter((e) =>
+                      SearchQuerry.toLowerCase()
+                        .split(" ")
+                        .every((word) => e.Name.toLowerCase().includes(word))
                     )
                     .map((item, index) => (
                       <div
@@ -369,9 +484,6 @@ export default function Items({ data, setData, change, setChange }) {
                                 },
                               },
                             ]}
-                            // callback={(e) => callbackFn(e)}
-                            // pIndex={item}
-                            // pItem={index}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -383,8 +495,7 @@ export default function Items({ data, setData, change, setChange }) {
                         </div>
                       </div>
                     ))
-                : data?.items
-                    .map((item, originalIndex) => ({ ...item, originalIndex }))
+                : sortedItems
                     ?.filter((item) => item.itemType !== "service")
                     .map((item, index) => (
                       <div
@@ -824,47 +935,24 @@ export default function Items({ data, setData, change, setChange }) {
                   )}
                 </div>
                 {selecteditems && (
-                  <div className="content">
-                    <div className="t">
-                      <h1>TRANSACTIONS</h1>
-                      <div className="search">
+                  <div className="">
+                  <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+                    <h1>TRANSACTIONS</h1>
+                    <div className="flex gap-2">
+                      <div className="flex border border-gray-700 rounded-full px-1">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 512 512"
                         >
                           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                         </svg>
-                        <input type="" />
+                        <input type="" className="bg-transparent" />
                       </div>
                     </div>
-                    <div className="cl top">
-                      <p>Type</p>
-                      <p>Invoice/Ref</p>
-                      <p>Name</p>
-                      <p>Date</p>
-                      <p>Quantity</p>
-                      <p>Price</p>
-                      <p>profit</p>
-                    </div>
-
-                    {data?.sales
-                      ?.filter((item) => {
-                        return item.items.some(
-                          (term) => term.item === selecteditems.Name
-                        );
-                      })
-                      .map((sale, index) => (
-                        <div className="cl" key={index}>
-                          <p className="grey">{sale.payment_type}</p>
-                          <p className="grey">{sale.invoice_number}</p>
-                          <p className="grey">{sale.name}</p>
-                          <p className="">{sale.invoice_date}</p>
-                          <p className="grey">{sale.items?.length}</p>
-                          <p className="grey">{sale.total}</p>
-                          <p className="">{sale.profit || 0}</p>
-                        </div>
-                      ))}
                   </div>
+  
+                  <SortableTable data={sendingArray} columns={columns} />
+                </div>
                 )}
               </div>
             </div>
@@ -1027,7 +1115,7 @@ export default function Items({ data, setData, change, setChange }) {
             />
           )}
           <div className="right">
-            <div className="bg-green-100 rounded-md p-3 w-full">
+            <div className="bg-green-100 rounded-md p-3 w-full mb-2">
               <div className="flex justify-between w-full items-center">
                 <h1 className="text-xl font-semibold ">
                   {selectedCategory?.name || "no name selected"}
@@ -1043,50 +1131,68 @@ export default function Items({ data, setData, change, setChange }) {
               </div>
             </div>
             {selectedCategory && (
-              <div className="content">
-                <div className="t">
-                  <h1>Transactions</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input type="" />
+              // <div className="content">
+              //   <div className="t">
+              //     <h1>Transactions</h1>
+              //     <div className="search">
+              //       <svg
+              //         xmlns="http://www.w3.org/2000/svg"
+              //         viewBox="0 0 512 512"
+              //       >
+              //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              //       </svg>
+              //       <input type="" />
+              //     </div>
+              //   </div>
+              //   <div className="cl top">
+              //     <p>Name</p>
+              //     <p>Quantity</p>
+              //     <p>Stock Value</p>
+              //   </div>
+              //   {data?.items
+              //     ?.filter((item) =>
+              //       item.Category.toLowerCase()
+              //         .split(" ")
+              //         .every((word) =>
+              //           selectedCategory.name.toLowerCase().includes(word)
+              //         )
+              //     )
+              //     .map((item, index) => (
+              //       <div className="cl" key={index}>
+              //         <p className="grey">{item.Name}</p>
+              //         <p className="grey">
+              //           {item.stock ? item.stock : "not set"}
+              //         </p>
+              //         <p className="grey">
+              //           {item.stock
+              //             ? item.stock * parseInt(item.purchasePrice)
+              //             : "not set"}
+              //         </p>
+              //       </div>
+              //     ))}
+              //   {/* <div className="cl">
+              //     <p className="grey">Gucci Watch</p>
+              //     <p className="grey">2</p>
+              //     <p className="grey">0.0</p>
+              //   </div> */}
+              // </div>
+            <div className="">
+                <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+                  <h1>TRANSACTIONS</h1>
+                  <div className="flex gap-2">
+                    <div className="flex border border-gray-700 rounded-full px-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                      >
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                      </svg>
+                      <input type="" className="bg-transparent" />
+                    </div>
                   </div>
                 </div>
-                <div className="cl top">
-                  <p>Name</p>
-                  <p>Quantity</p>
-                  <p>Stock Value</p>
-                </div>
-                {data?.items
-                  ?.filter((item) =>
-                    item.Category.toLowerCase()
-                      .split(" ")
-                      .every((word) =>
-                        selectedCategory.name.toLowerCase().includes(word)
-                      )
-                  )
-                  .map((item, index) => (
-                    <div className="cl" key={index}>
-                      <p className="grey">{item.Name}</p>
-                      <p className="grey">
-                        {item.stock ? item.stock : "not set"}
-                      </p>
-                      <p className="grey">
-                        {item.stock
-                          ? item.stock * parseInt(item.purchasePrice)
-                          : "not set"}
-                      </p>
-                    </div>
-                  ))}
-                {/* <div className="cl">
-                  <p className="grey">Gucci Watch</p>
-                  <p className="grey">2</p>
-                  <p className="grey">0.0</p>
-                </div> */}
+
+                <SortableTable data={sendingArray} columns={columns} />
               </div>
             )}
           </div>

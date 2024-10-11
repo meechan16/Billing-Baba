@@ -52,7 +52,7 @@ const SortableTable = ({ data, columns }) => {
 
   // Filter data based on search terms
   const filterData = (data) => {
-    return data.filter((item) => {
+    return data?.filter((item) => {
       return Object.keys(searchTerms).every((key) => {
         if (!searchTerms[key]) return true; // No filter for this column
         const columnValue = item[key]?.toString().toLowerCase() || "";

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import Loader from "./Loader";
 import CustomInput from "../components/customInput";
+import TextField from "@mui/material/TextField";
 
 export default function AddExpense({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
   };
 
   const [searchTerm, setSearchTerm] = useState(""); // Initial index count
-  const [Name, setName] = useState(); // Initial index count
+  const [Name, setName] = useState({ done: true }); // Initial index count
   function generateUniqueInvoiceNumber(data) {
     const existing = new Set(data.map((item) => item.invoice_number));
     let invoice;
@@ -88,6 +89,13 @@ export default function AddExpense({ data, setData, change, setChange }) {
   // const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
   const [addExpenseCategory, setAddExpenseCategory] = useState(false); // Initial index count
+  const [addExpenseitem, setAddExpenseitem] = useState(false); // Initial index count
+  const [ExpenseItem, setExpenseitem] = useState({
+    name: "",
+    hsn: "",
+    price: "",
+    taxrate: 0,
+  }); // Initial index count
   const [inputFocus, setInputFocus] = useState(false); // Initial index count
 
   // let uid = data.uid;
@@ -95,7 +103,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
     // return;
 
     const newData = {
-      Category: Name ? Name : "",
+      Category: Name.value ? Name.value : "",
       invoice_number: invoice_number ? invoice_number : "",
       invoice_date: invoice_date ? invoice_date : "",
       // payment_type: paymentType ? paymentType : "",
@@ -143,6 +151,21 @@ export default function AddExpense({ data, setData, change, setChange }) {
     setCategoryType("");
     setAddExpenseCategory(!addExpenseCategory);
   };
+  let addExpItem = () => {
+    if (ExpenseItem.name && ExpenseItem.price) {
+      let newDa = data;
+      newDa.expenseItem
+        ? newDa.expenseItem.push(ExpenseItem)
+        : (newDa.expenseItem = [ExpenseItem]);
+      setData(newDa);
+      setChange(!change);
+      setCategoryName("");
+      setCategoryType("");
+      setAddExpenseCategory(!addExpenseCategory);
+    } else {
+      alert("Please enter name and price");
+    }
+  };
 
   return (
     <div id="addsales" className="text-xs">
@@ -167,6 +190,73 @@ export default function AddExpense({ data, setData, change, setChange }) {
               <option value="">Indirrect Expense</option>
             </select>
             <button onClick={() => addExpCategory()}>Save</button>
+          </div>
+        </div>
+      )}
+      {addExpenseitem && (
+        <div className="addExpenseCategoryDiv">
+          <div className="content">
+            <div className="t">
+              <h1>Expense name</h1>
+              <button onClick={() => setAddExpenseitem(false)}>x</button>
+            </div>
+            <div className="flex justify-between w-full">
+              <TextField
+                id="outlined-search"
+                value={ExpenseItem.name}
+                onChange={(e) =>
+                  setExpenseitem({ ...ExpenseItem, name: e.target.value })
+                }
+                label="item Name"
+                sx={{
+                  background: "white",
+                  width: "100%",
+                }}
+                type="search"
+              />
+              <TextField
+                id="outlined-search"
+                value={ExpenseItem.hsn}
+                onChange={(e) =>
+                  setExpenseitem({ ...ExpenseItem, hsn: e.target.value })
+                }
+                label="item HSN/ SAC"
+                sx={{
+                  background: "white",
+                  width: "100%",
+                }}
+                type="search"
+              />
+            </div>
+            <div className="flex justify-between w-full">
+              <TextField
+                id="outlined-search"
+                value={ExpenseItem.price}
+                onChange={(e) =>
+                  setExpenseitem({ ...ExpenseItem, price: e.target.value })
+                }
+                label="price (excl. tax)"
+                sx={{
+                  background: "white",
+                  width: "100%",
+                }}
+                type="search"
+              />
+              <TextField
+                id="outlined-search"
+                value={ExpenseItem.tax}
+                onChange={(e) =>
+                  setExpenseitem({ ...ExpenseItem, tax: e.target.value })
+                }
+                label="tax rate (%)"
+                sx={{
+                  background: "white",
+                  width: "100%",
+                }}
+                type="search"
+              />
+            </div>
+            <button onClick={() => addExpItem()}>Save</button>
           </div>
         </div>
       )}
@@ -215,10 +305,12 @@ export default function AddExpense({ data, setData, change, setChange }) {
                 placeholder="Expense Catogroy"
                 id=""
                 className="p-1 bg-white w-[300px] h-[30px]"
-                value={Name ? Name : searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={Name?.value ? Name.value : ""}
+                onChange={(e) =>
+                  setName({ value: e.target.value, done: false })
+                }
               />
-              {searchTerm && (
+              {!Name?.done && Name.value && (
                 <ul className="absolute top-8 left-0 w-[400px] z-10 rounded-md shadow-md ">
                   {data.expenseCategory
                     ?.filter((item) =>
@@ -230,8 +322,7 @@ export default function AddExpense({ data, setData, change, setChange }) {
                         className="p-1 hover:bg-gray-200  bg-white flex justify-between w-full"
                         onClick={() => {
                           Navigate(item.to);
-                          setName(item.name);
-                          setSearchTerm("");
+                          setName({ value: item.name, done: true });
                         }}
                       >
                         {item.name}

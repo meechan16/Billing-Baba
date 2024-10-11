@@ -117,7 +117,7 @@ export default function PaymentIn({ data, setData }) {
         //       <p className="">{}</p>
         //       <p className="">{sale.type}</p>
         //       <p className="">{sale.credit}</p>
-        //       <p className="">{sale.ammount}</p>
+        //       <p className="">{sale.amount}</p>
         //       <p className="">{sale.balance}</p>
         //       <p className="side">
         //         <Dropdown

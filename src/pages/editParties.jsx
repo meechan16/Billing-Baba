@@ -27,6 +27,7 @@ export default function EditParties({
   var [state, setState] = useState(party.state);
   var [Email, setEmail] = useState(party.Email);
   var [Add, setAdd] = useState(party.Add);
+  var [groups, setGropus] = useState({ name: party?.group, done: true });
   var [OpeningBalance, setOpeningBalance] = useState(party.OpeningBalance);
   var [asDate, setAsDate] = useState(party.asDate);
   var [AddF1, setAddF1] = useState(party.AddF1);
@@ -52,6 +53,7 @@ export default function EditParties({
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
       creditLimit: parseInt(creditLimit),
+      groups: groups?.name,
       // convert openingbalance into integer below
       credit: parseInt(credit),
     };
@@ -155,6 +157,43 @@ export default function EditParties({
             />
             {/* <button>Select Unit</button> */}
           </div>
+          <div className="relative">
+            <TextField
+              id="outlined-search"
+              value={groups.name ? groups.name : ""}
+              onChange={(e) => setGropus({ name: e.target.value, done: false })}
+              label="Party Group"
+              sx={{
+                background: "white",
+              }}
+              type="search"
+              itemType="number"
+            />
+            {groups?.name && !groups.done && (
+              <ul className="absolute top-[50px] flex flex-col">
+                {data?.groups
+                  ?.filter(
+                    (e) =>
+                      groups?.name
+                        ?.toLowerCase()
+                        .split(" ")
+                        .every((word) => e.toLowerCase().includes(word))
+                    // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                  )
+                  .map((e, index) => (
+                    <li
+                      className={`tile w-full p-2 z-10 bg-white hover:bg-gray-100 ${
+                        groups.name === e ? "bg-gray-200" : ""
+                      }`}
+                      key={index}
+                      onClick={() => setGropus({ name: e, done: true })}
+                    >
+                      <h1 className="">{e}</h1>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
           {/* <div className="p1">
             <select className="box">
               <option selected disabled value="">
@@ -168,25 +207,25 @@ export default function EditParties({
         <div className="c2">
           <div className="top t">
             <button
-              className={page == "GST" && "active"}
+              className={page === "GST" && "active"}
               onClick={() => setPage("GST")}
             >
               GST & Address
             </button>
             <button
-              className={page == "Credit" && "active"}
+              className={page === "Credit" && "active"}
               onClick={() => setPage("Credit")}
             >
               Credit & balance
             </button>
             <button
-              className={page == "AddF" && "active"}
+              className={page === "AddF" && "active"}
               onClick={() => setPage("AddF")}
             >
               Additional Fields
             </button>
           </div>
-          {page == "GST" && (
+          {page === "GST" && (
             <div className="p-4">
               <div className="flex gap-4">
                 <div className="flex flex-col gap-2">
@@ -254,7 +293,7 @@ export default function EditParties({
               </div> */}
             </div>
           )}
-          {page == "Credit" && (
+          {page === "Credit" && (
             <div className="flex flex-col">
               <div className="div s">
                 <CustomInput
@@ -262,17 +301,16 @@ export default function EditParties({
                   setInputValue={setOpeningBalance}
                   placeholder={"Opening balance"}
                 />
-                <input
-                  type="date"
-                  onChange={(e) => setAsDate(e.target.value)}
-                  id="birthday"
-                  name="birthday"
-                ></input>
+<input
+  type="date"
+  value={asDate}
+  onChange={(e) => setAsDate(e.target.value)}
+  id="birthday"
+  name="birthday"
+></input>
               </div>
               <div className="div">
                 <div className="flex flex-col">
-                  <h1 className="text-lg font-semibold">Set Credit Limit</h1>
-
                   <CustomInput
                     inputValue={creditLimit}
                     setInputValue={setcreditLimit}
@@ -282,7 +320,7 @@ export default function EditParties({
               </div>
             </div>
           )}
-          {page == "AddF" && (
+          {page === "AddF" && (
             <div className="div s">
               <CustomInput
                 inputValue={AddF1}

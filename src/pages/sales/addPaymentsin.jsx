@@ -16,7 +16,7 @@ export default function AddPaymentsin({
   var [Desc, setDesc] = useState();
   var [date, setdate] = useState();
   var [reciptno, setReciptNo] = useState();
-  var [ammount, setAmmount] = useState();
+  var [amount, setAmount] = useState();
   const addItemReq = async () => {
     let newData = {
       name: Name ? Name : "",
@@ -24,8 +24,8 @@ export default function AddPaymentsin({
       description: Desc ? Desc : "",
       date: date ? date : "",
       invoice_number: reciptno ? reciptno : "",
-      amount: ammount ? ammount : "",
-      total: ammount ? ammount : "",
+      amount: amount ? amount : "",
+      total: amount ? amount : "",
       type: "Payment-In",
       transactionType: "Payment-In",
     };
@@ -37,19 +37,19 @@ export default function AddPaymentsin({
 
     // change everywehre this is used to the sum of sales where payment type is credit
     newDa.to_collect
-      ? (newDa.to_collect -= parseFloat(newData.ammount))
-      : (newDa.to_collect = -parseFloat(newData.ammount));
+      ? (newDa.to_collect -= parseFloat(newData.amount))
+      : (newDa.to_collect = -parseFloat(newData.amount));
 
     newData.credit = newDa.parties.find((ele) => ele.partyName === Name).credit;
 
     newDa.parties.find((ele) => ele.partyName === Name).credit
       ? (newDa.parties.find((ele) => ele.partyName === Name).credit -=
-          parseFloat(newData.ammount))
+          parseFloat(newData.amount))
       : (newDa.parties.find((ele) => ele.partyName === Name).credit =
-          -parseFloat(newData.ammount));
+          -parseFloat(newData.amount));
     newDa.cash_in_hands
-      ? (newDa.cash_in_hands += parseFloat(newData.ammount))
-      : (newDa.cash_in_hands = parseFloat(newData.ammount));
+      ? (newDa.cash_in_hands += parseFloat(newData.amount))
+      : (newDa.cash_in_hands = parseFloat(newData.amount));
 
     newData.balance = newDa.parties.find(
       (ele) => ele.partyName === Name
@@ -157,8 +157,8 @@ export default function AddPaymentsin({
             <br />
             <br />
             <CustomInput
-              inputValue={ammount}
-              setInputValue={setAmmount}
+              inputValue={amount}
+              setInputValue={setAmount}
               placeholder={"Recieved Ammount"}
             />
           </div>

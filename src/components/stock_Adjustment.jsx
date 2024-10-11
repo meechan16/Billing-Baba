@@ -24,7 +24,7 @@ export default function StockAdjust({ setClose }) {
 
   //   <div id="addItem">
   return (
-    <div class="fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20 flex justify-center items-center">
+    <div class="fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20 flex justify-center items-center z-50">
       <div className="rounded-md flex flex-col bg-white gap-3 sm:w-[700px] h-auto">
         <div className="top">
           <div className="flex justify-between w-full font-semibold">

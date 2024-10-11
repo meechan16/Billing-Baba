@@ -98,7 +98,10 @@ export default function Parties({ data, setData, change, setChange }) {
         .map((ele) => {
           return {
             ...ele,
-            pending: ele.total - ele.paid,
+            pending: !Number.isNaN(ele.pending)
+              ? ele.pending
+              : ele.total - ele.paid,
+            total: ele.amount ? ele.amount : ele.total,
             invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
             menuItem:
               ele.type === "Opening Balance"

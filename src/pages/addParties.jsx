@@ -12,10 +12,12 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [GSTIN, setGSTIN] = useState("");
   var [phoneNo, setPhoneNo] = useState("");
   var [creditLimit, setcreditLimit] = useState("");
+  var [creditLimitToggle, setcreditLimitToggle] = useState(false);
   var [GstType, setGstType] = useState("");
   var [state, setState] = useState("");
   var [Email, setEmail] = useState("");
   var [Add, setAdd] = useState("");
+  var [groups, setGropus] = useState({ done: true });
   var [ShippingAdd, setShippingAdd] = useState("");
   var [OpeningBalance, setOpeningBalance] = useState("");
   var [asDate, setAsDate] = useState("");
@@ -49,6 +51,7 @@ export default function AddParties({ data, setData, change, setChange }) {
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
       creditLimit: parseInt(creditLimit),
+      groups: groups?.name,
       // convert openingbalance into integer below
       credit: parseInt(OpeningBalance ? OpeningBalance : 0),
     };
@@ -146,15 +149,43 @@ export default function AddParties({ data, setData, change, setChange }) {
             />
             {/* <button>Select Unit</button> */}
           </div>
-          {/* <div className="p1">
-            <select className="box">
-              <option selected disabled value="">
-                category
-              </option>
-              <option value="">+ add category</option>
-            </select>
-            <CustomInput placeholder={"Item Code"} />
-          </div> */}
+          <div className="relative">
+            <TextField
+              id="outlined-search"
+              value={groups.name ? groups.name : ""}
+              onChange={(e) => setGropus({ name: e.target.value, done: false })}
+              label="Party Group"
+              sx={{
+                background: "white",
+              }}
+              type="search"
+              itemType="number"
+            />
+            {groups?.name && !groups.done && (
+              <ul className="absolute top-[50px] flex flex-col">
+                {data?.groups
+                  ?.filter(
+                    (e) =>
+                      groups?.name
+                        ?.toLowerCase()
+                        .split(" ")
+                        .every((word) => e.toLowerCase().includes(word))
+                    // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                  )
+                  .map((e, index) => (
+                    <li
+                      className={`tile w-full p-2 z-10 bg-white hover:bg-gray-100 ${
+                        groups.name === e ? "bg-gray-200" : ""
+                      }`}
+                      key={index}
+                      onClick={() => setGropus({ name: e, done: true })}
+                    >
+                      <h1 className="">{e}</h1>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
         </div>
         <div className="c2">
           <div className="top t">
@@ -300,9 +331,13 @@ export default function AddParties({ data, setData, change, setChange }) {
                   name="birthday"
                 ></input>
               </div>
+              <div className="flex items-center px-4 gap-2" onClick={() => setcreditLimitToggle(!creditLimitToggle)}><input type="checkbox" name="" id="" checked={creditLimitToggle} /> <h1>Credit limit</h1></div>
+              {
+                creditLimitToggle &&
+                (
               <div className="div">
-                <div className="flex flex-col">
-                  <h1 className="text-lg font-semibold">Set Credit Limit</h1>
+                <div className="flex items-center">
+                  <h1 className="text-lg font-semibold">Set Credit Limit:</h1>
 
                   <CustomInput
                     inputValue={creditLimit}
@@ -311,9 +346,11 @@ export default function AddParties({ data, setData, change, setChange }) {
                   />
                 </div>
               </div>
+                )
+              }
             </div>
           )}
-          {page == "AddF" && (
+          {page === "AddF" && (
             <div className="flex flex-col gap-2">
               <CustomInput
                 inputValue={AddF1}

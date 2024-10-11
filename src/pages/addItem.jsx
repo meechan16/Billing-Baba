@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CustomInput from "../components/customInput";
+import Undone from "../components/undone";
 import { useNavigate } from "react-router-dom";
 import dev_url from "../url";
 import TextField from "@mui/material/TextField";
@@ -23,6 +24,9 @@ export default function AddItem({
   var [itemCode, setitemCode] = useState();
   var [sellPrice, setSellPrice] = useState();
   var [WholeSalePrice, setWholeSalePrice] = useState();
+  var [MRP, setMRP] = useState();
+  var [MRP_salePrice, setMRP_salePrice] = useState();
+  var [MRP_wholeSalePrice, setMRP_wholeSalePrice] = useState();
   var [description, setdescription] = useState();
   var [discount, setDescount] = useState();
   var [purchaseprice, setPurchasePrice] = useState();
@@ -35,6 +39,7 @@ export default function AddItem({
   var [location, setLocation] = useState();
   var [primaryUnit, setprimaryUnit] = useState();
   var [SecondaryUnit, setSecondaryUnit] = useState();
+  var [Conversion, setConversion] = useState();
   var [ImageURL, setImageUrl] = useState();
   var [ImageList, setImageList] = useState();
 
@@ -117,9 +122,11 @@ export default function AddItem({
         Category: itemCategory ? itemCategory : "",
         Code: itemCode ? itemCode : "",
         wholeSalePrice: WholeSalePrice ? WholeSalePrice : "",
+
         description: description ? description : "",
         primaryUnit: primaryUnit ? primaryUnit : "",
         secondaryUnit: SecondaryUnit ? SecondaryUnit : "",
+        convertion: "",
         unit: primaryUnit ? primaryUnit : "",
         salesPrice: sellPrice.withTax
           ? sellPrice.value * (1 - tax)
@@ -259,12 +266,28 @@ export default function AddItem({
               setInputValue={setSecondaryUnit}
               placeholder={"Secondary Unit"}
             /> */}
-            <button
-              onClick={() => setUnitToggle(true)}
-              className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
-            >
-              Set Unit
-            </button>
+            {primaryUnit?.name && primaryUnit?.done ? (
+              <>
+                <h1>
+                  Units:{" "}
+                  <span className="font-semibold">{primaryUnit.name}</span>,{" "}
+                  {primaryUnit.name} x {Conversion} = {SecondaryUnit?.name}
+                </h1>
+                <button
+                  onClick={() => setUnitToggle(true)}
+                  className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
+                >
+                  Edit Units
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setUnitToggle(true)}
+                className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
+              >
+                Set Unit
+              </button>
+            )}
           </div>
           {unitToggle && (
             <div className="flex z-10 justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
@@ -288,8 +311,8 @@ export default function AddItem({
                         setprimaryUnit({ name: e.target.value, done: false })
                       }
                     />
-                    {primaryUnit && !primaryUnit?.done && (
-                      <div className="absolute left-0 top-10 bg-white shadow-md px-2">
+                    {primaryUnit?.name && !primaryUnit?.done && (
+                      <div className="absolute left-0 top-30 bg-white shadow-lg max-h-[300px] overflow-y-auto px-2">
                         {data?.units
                           ?.filter(
                             (e) =>
@@ -303,7 +326,7 @@ export default function AddItem({
                           )
                           .map((item, index) => (
                             <div
-                              className={`p-2 w-full`}
+                              className={`p-2 w-full hover:bg-gray-200 cursor-pointer`}
                               key={index}
                               onClick={() =>
                                 setprimaryUnit({ name: item.name, done: true })
@@ -330,8 +353,8 @@ export default function AddItem({
                         setSecondaryUnit({ name: e.target.value, done: false })
                       }
                     />
-                    {SecondaryUnit && !SecondaryUnit?.done && (
-                      <div className="absolute left-0 top-10 bg-white shadow-md px-2">
+                    {SecondaryUnit?.name && !SecondaryUnit?.done && (
+                      <div className="absolute left-0 top-30 bg-white shadow-lg max-h-[300px] overflow-y-auto px-2">
                         {data?.units
                           ?.filter(
                             (e) =>
@@ -345,7 +368,7 @@ export default function AddItem({
                           )
                           .map((item, index) => (
                             <div
-                              className={`p-2 w-full`}
+                              className={`p-2 w-full hover:bg-gray-200 cursor-pointer`}
                               key={index}
                               onClick={() =>
                                 setSecondaryUnit({
@@ -373,12 +396,14 @@ export default function AddItem({
                     className="p-2 border-b-2 border-gray-400"
                     name=""
                     id=""
+                    value={Conversion}
+                    onChange={(e) => setConversion(e.target.value)}
                   />{" "}
                   X Primary Unit
                 </p>
                 <div className="flex w-full gap-2 mt-2">
                   <button
-                    // onClick={handleAddInactive}
+                    onClick={() => setUnitToggle(false)}
                     className="px-4 py-2 bg-blue-500 flex-1 text-white rounded hover:bg-blue-600"
                   >
                     Add Unit
@@ -565,7 +590,50 @@ export default function AddItem({
           {page === "pricing" ? (
             <div className="">
               <div className="rounded-lg bg-gray-200 m-3 p-3">
-                <h1 className="text-xl my-[10px] font-semibold">Sale Price</h1>
+                <h1 className="text-lg mb-[10px] font-semibold">MRP</h1>
+                <div className="flex">
+                  <div className="flex items-center gap-3">
+                    <TextField
+                      id="outlined-search"
+                      value={MRP}
+                      onChange={(e) => setMRP(e.target.value)}
+                      label="MRP"
+                      sx={{
+                        background: "white",
+                        width: "100%",
+                      }}
+                      type="search"
+                      itemType="number"
+                    />
+                    <TextField
+                      id="outlined-search"
+                      value={MRP_salePrice}
+                      onChange={(e) => setMRP_salePrice(e.target.value)}
+                      label="Desc. on MRP for Sale (%)"
+                      sx={{
+                        background: "white",
+                        width: "100%",
+                      }}
+                      type="search"
+                      itemType="number"
+                    />
+                    <TextField
+                      id="outlined-search"
+                      value={MRP_wholeSalePrice}
+                      onChange={(e) => setMRP_wholeSalePrice(e.target.value)}
+                      label="Desc. on MRP for Wholesale (%)"
+                      sx={{
+                        background: "white",
+                        width: "100%",
+                      }}
+                      type="search"
+                      itemType="number"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-lg bg-gray-200 m-3 p-3">
+                <h1 className="text-lg mb-[10px] font-semibold">SALE PRICE</h1>
                 <div className="flex">
                   <div className="flex items-center gap-0">
                     {/* <CustomInput
@@ -622,23 +690,6 @@ export default function AddItem({
                     </select>
                   </div>
                   <div className="flex items-center ml-10 gap-0">
-                    {/* <CustomInput
-                      inputValue={discount}
-                      setInputValue={setDescount}
-                      placeholder={"Descount"}
-                    />
-                    <select
-                      name=""
-                      id=""
-                      className="px-2 h-fit bg-transparent m-0"
-                    >
-                      <option value="" className="p-2">
-                        With Taxes
-                      </option>
-                      <option value="" className="p-2">
-                        Without Taxes
-                      </option>
-                    </select> */}
                     <TextField
                       id="outlined-search"
                       value={discount}
@@ -654,7 +705,7 @@ export default function AddItem({
                     <select
                       name=""
                       id=""
-                      className="px-2 h-fit bg-transparent m-0"
+                      className="p-4 m-2 border-gray-300 border rounded-md"
                     >
                       <option value="" className="p-2">
                         Amount
@@ -681,13 +732,13 @@ export default function AddItem({
                   <select
                     name=""
                     id=""
-                    className="px-2 h-fit bg-transparent m-0"
+                    className="p-4 m-2 border-gray-300 border rounded-md"
                   >
                     <option value="" className="p-2">
-                      with tax
+                      With Tax
                     </option>
                     <option value="" className="p-2">
-                      without tax
+                      Without Tax
                     </option>
                   </select>
                   <TextField
@@ -698,16 +749,22 @@ export default function AddItem({
                     itemType="number"
                     sx={{
                       background: "white",
+                      marginLeft: "20px",
                     }}
                     type="search"
                   />
+                  {SecondaryUnit?.name && (
+                    <p className="text-sm">
+                      wholesale unit - {SecondaryUnit.name}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className=" flex gap-2 w-full">
                 {toggle && (
                   <div className="rounded-lg flex-1 bg-gray-200 m-3 p-3">
-                    <h1 className="text-xl my-[10px] font-semibold">
-                      Purchase Price
+                    <h1 className="text-lg mb-[10px] font-semibold">
+                      PURCHASE PRICE
                     </h1>
                     <div className="flex gap-3 items-center">
                       {/* <CustomInput
@@ -754,7 +811,7 @@ export default function AddItem({
                   </div>
                 )}
                 <div className="rounded-lg flex-1 bg-gray-200 m-3 p-3">
-                  <h1 className="text-xl my-[10px] font-semibold">Taxes</h1>
+                  <h1 className="text-lg mb-[10px] font-semibold">TAXES</h1>
                   <div className="flex gap-3 items-center">
                     {/* <Select
                       labelId="demo-simple-select-label"
@@ -808,7 +865,7 @@ export default function AddItem({
                 </div>
               </div>
             </div>
-          ) : (
+          ) : page === "stock" ? (
             <div className="div s">
               <CustomInput
                 inputValue={openingQuantity}
@@ -854,6 +911,8 @@ export default function AddItem({
                 placeholder={"Location"}
               />
             </div>
+          ) : (
+            <Undone />
           )}
         </div>
         <div className="c3">

@@ -48,32 +48,65 @@ export default function Expense({ data, setData }) {
         console.error("Error:", error);
       });
   };
+  var columns ;
+  var sendingArray;
+  if(page === "item"){
+    columns = [
+      { key: "invoice_date", label: "Invoice Date" },
+      { key: "invoice_number", label: "Invoice Number" },
+      { key: "total", label: "Total" },
+      { key: "type", label: "Transaction Type" },
+    ]
+    sendingArray = data?.Transactions?.filter(
+      (ele) => ele.type == "Expense"
+    ).map((ele) => {
+      return {
+        ...ele,
+        invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+        menuItem: [
+          { label: "print" },
+          { label: "forward" },
+          { label: "generate Invoice" },
+          { label: "recieve payment" },
+          { label: "View/Edit" },
+          { label: "cancel" },
+          { label: "Delete" },
+          { label: "Duplicate" },
+          { label: "Print" },
+        ],
+      };
+    })
+  }
+  if(page === "category"){
+    columns = [
+      { key: "invoice_date", label: "Invoice Date" },
+      { key: "invoice_number", label: "Invoice Number" },
+      { key: "total", label: "Total" },
+      { key: "type", label: "Transaction Type" },
+    ]
+    // sendingArray = data?.Transactions?.filter(
+    //   (ele) => ele.type == "Expense" && ele.Category === selectedCategory.name
+    sendingArray = data?.expense?.filter(
+      (ele) =>  ele.Category === selectedCategory?.name
+    ).map((ele) => {
+      return {
+        ...ele,
+        invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+        menuItem: [
+          { label: "print" },
+          { label: "forward" },
+          { label: "generate Invoice" },
+          { label: "recieve payment" },
+          { label: "View/Edit" },
+          { label: "cancel" },
+          { label: "Delete" },
+          { label: "Duplicate" },
+          { label: "Print" },
+        ],
+      };
+    })
+  }
 
-  const columns = [
-    { key: "invoice_date", label: "Invoice Date" },
-    { key: "invoice_number", label: "Invoice Number" },
-    { key: "name", label: "Total" },
-    { key: "type", label: "Transaction Type" },
-  ];
-  const sendingArray = data?.Transactions?.filter(
-    (ele) => ele.type == "Expense"
-  ).map((ele) => {
-    return {
-      ...ele,
-      invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
-      menuItem: [
-        { label: "print" },
-        { label: "forward" },
-        { label: "generate Invoice" },
-        { label: "recieve payment" },
-        { label: "View/Edit" },
-        { label: "cancel" },
-        { label: "Delete" },
-        { label: "Duplicate" },
-        { label: "Print" },
-      ],
-    };
-  });
 
   return (
     <div id="items">
@@ -302,39 +335,57 @@ export default function Expense({ data, setData }) {
               <div className="tile"></div>
             </div>
             {selectedCategory && (
-              <div className="content">
-                <div className="t">
-                  <h1>Transactions</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input type="" />
+              // <div className="content">
+              //   <div className="t">
+              //     <h1>Transactions</h1>
+              //     <div className="search">
+              //       <svg
+              //         xmlns="http://www.w3.org/2000/svg"
+              //         viewBox="0 0 512 512"
+              //       >
+              //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              //       </svg>
+              //       <input type="" />
+              //     </div>
+              //   </div>
+              //   <div className="cl top">
+              //     <p>invoice date</p>
+              //     <p>invoice number</p>
+              //     <p>Total</p>
+              //     <p>transaction type</p>
+              //   </div>
+              //   {data.expense
+              //     ?.filter((ele) => ele.Category === selectedCategory.name)
+              //     .map((transaction, index) => (
+              //       <div className="cl">
+              //         <p>{transaction.invoice_date}</p>
+              //         <p>{transaction.invoice_number}</p>
+              //         <p>{transaction.total}</p>
+              //         <p>{transaction.transactionType}</p>
+              //         {/* <p>{transaction.Category}</p>
+              //         <p className="grey">Boat Headphones</p>
+              //         <p className="grey">10</p>
+              //         <p className="grey">0.0</p> */}
+              //       </div>
+              //     ))}
+              // </div>
+              <div className="">
+                <div className="flex justify-between p-4 rounded-md bg-gray-100 items-center">
+                  <h1>TRANSACTIONS</h1>
+                  <div className="flex gap-2">
+                    <div className="flex border border-gray-700 rounded-full px-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                      >
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                      </svg>
+                      <input type="" className="bg-transparent" />
+                    </div>
                   </div>
                 </div>
-                <div className="cl top">
-                  <p>invoice date</p>
-                  <p>invoice number</p>
-                  <p>Total</p>
-                  <p>transaction type</p>
-                </div>
-                {data.expense
-                  ?.filter((ele) => ele.Category === selectedCategory.name)
-                  .map((transaction, index) => (
-                    <div className="cl">
-                      <p>{transaction.invoice_date}</p>
-                      <p>{transaction.invoice_number}</p>
-                      <p>{transaction.total}</p>
-                      <p>{transaction.transactionType}</p>
-                      {/* <p>{transaction.Category}</p>
-                      <p className="grey">Boat Headphones</p>
-                      <p className="grey">10</p>
-                      <p className="grey">0.0</p> */}
-                    </div>
-                  ))}
+
+                <SortableTable data={sendingArray} columns={columns} />
               </div>
             )}
           </div>
