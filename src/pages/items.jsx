@@ -154,17 +154,17 @@ export default function Items({ data, setData, change, setChange }) {
   var sendingArray;
   if (page === "product") {
     columns = [
-      { key: "type", label: "Type" },
-      { key: "invoice_number", label: "Invoice Number" },
-      { key: "name", label: "Name" },
-      { key: "invoice_date", label: "Invoice Date" },
-      { key: "length", label: "Length" },
-      { key: "total", label: "Total" },
-      { key: "paymentType", label: "Pending" },
+      { key: "type", label: "Type",type:"transaction type" },
+      { key: "invoice_number", label: "Invoice Number",type:"number" },
+      { key: "name", label: "Name",type:"string" },
+      { key: "invoice_date", label: "Invoice Date",type:"string" },
+      { key: "length", label: "Length",type:"number" },
+      { key: "total", label: "Total",type:"number" },
+      { key: "paymentType", label: "Pending",type:"number" },
       { key: "DropDown", label: "-" },
     ];
     if (selecteditems) {
-      sendingArray = data?.Transactions?.filter((item) =>
+      sendingArray = data?.Transactions?.map((item, originalIndex) => ({ ...item, originalIndex })).filter((item) =>
         item.items?.some((term) => term.item === selecteditems.Name)
       ).map((ele) => {
         return {
@@ -173,13 +173,11 @@ export default function Items({ data, setData, change, setChange }) {
           length: ele.items?.length,
           paymentTope: ele.payment_type === "credit" ? "Unpaid" : "Paid",
           menuItem: [
-            { label: "print" },
-            { label: "forward" },
-            { label: "generate Invoice" },
+            { label: "View Invoice" },
             { label: "recieve payment" },
-            { label: "View/Edit" },
+            { label: "View/Edit", action: () => Navigate(`/add-sale/${ele.originalIndex}`) },
             { label: "cancel" },
-            { label: "Delete" },
+            { label: "Delete", action: () => setData({...data, Transactions: data.Transactions.filter((item) => item.originalIndex !== ele.originalIndex)}) },
             { label: "Duplicate" },
             { label: "Print" },
           ],
