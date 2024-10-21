@@ -99,12 +99,39 @@ input[type="number"] {
     overflow-y: auto;
     box-shadow: -5px 5px 10px #212934b7;
     .content {
-      -ms-overflow-style: none; /* for Internet Explorer, Edge */
-      scrollbar-width: none; /* for Firefox */
-      overflow-y: scroll;
-      &::-webkit-scrollbar {
-        display: none; /* for Chrome, Safari, and Opera */
-      }
+      -ms-overflow-style: none; /* For IE and Edge */
+  scrollbar-width: none;    /* For Firefox */
+  overflow-y: scroll;       /* Enable vertical scrolling */
+  position: relative;       /* Positioning for the container */
+
+  /* Hide scrollbar by default */
+  &::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+
+  /* On hover, only show the scrollbar thumb */
+  &:hover {
+    scrollbar-width: thin; /* For Firefox (shows thin scrollbar with thumb only) */
+  }
+
+  &:hover::-webkit-scrollbar {
+    width: 8px; /* Set width for the scrollbar thumb */
+    display: block; /* Ensure the scrollbar is displayed */
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4); /* Darker scroll thumb */
+    border-radius: 10px; /* Rounded corners for the thumb */
+  }
+
+  &:hover::-webkit-scrollbar-track {
+    background: transparent; /* Hide the track */
+  }
+
+  /* Hide the scrollbar buttons */
+  &::-webkit-scrollbar-button {
+    display: none; /* Hide the up/down arrow buttons */
+  }
       height: 100%;
       & > ul {
         margin: 10px 0;
@@ -1002,7 +1029,7 @@ input[type="number"] {
     .left {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      width: 70%;
+      width: 100%;
       padding: 0 10px;
       gap: 20px;
       padding-top: 10px;
@@ -1083,7 +1110,7 @@ input[type="number"] {
           h1 {
             font-size: 1.4rem;
             font-weight: 500;
-            margin: 10px 0;
+            margin:2px 0;
           }
           h2 {
             font-size: 1rem;
@@ -2001,6 +2028,8 @@ input[type="number"] {
     }
   }
 }
+
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -2021,6 +2050,7 @@ input[type="number"] {
     display: block;
     padding: 0;
     margin: 0;
+    white-space: nowrap;
     list-style-type: none;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -2043,6 +2073,39 @@ input[type="number"] {
     100% {
       opacity: 1;
     }
+  }
+}
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1;
+  display: block;
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+  list-style-type: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  animation: fadeIn 200ms ease;
+
+  transform: translateX(-100%);
+  li {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    text-wrap: nowrap;
+    cursor: pointer;
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 

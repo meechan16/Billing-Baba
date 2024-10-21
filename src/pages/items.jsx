@@ -166,7 +166,7 @@ export default function Items({ data, setData, change, setChange }) {
     if (selecteditems) {
       sendingArray = data?.Transactions?.map((item, originalIndex) => ({ ...item, originalIndex })).filter((item) =>
         item.items?.some((term) => term.item === selecteditems.Name)
-      ).map((ele) => {
+      ).map((ele, index) => {
         return {
           ...ele,
           invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
@@ -177,7 +177,13 @@ export default function Items({ data, setData, change, setChange }) {
             { label: "recieve payment" },
             { label: "View/Edit", action: () => Navigate(`/add-sale/${ele.originalIndex}`) },
             { label: "cancel" },
-            { label: "Delete", action: () => setData({...data, Transactions: data.Transactions.filter((item) => item.originalIndex !== ele.originalIndex)}) },
+            { label: "Delete", action: () =>{
+              console.log(data.Transactions)
+              let da = {...data, Transactions: data.Transactions.filter((item, index) => index !== ele.originalIndex)}
+              console.log(da.Transactions)
+              setData(da) 
+            } 
+          },
             { label: "Duplicate" },
             { label: "Print" },
           ],

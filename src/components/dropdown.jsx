@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
+import ReactDOM from 'react-dom';
+
 function Dropdown({
   children,
   menuItems,
@@ -33,14 +35,30 @@ function Dropdown({
       document.removeEventListener("click", handleDocumentClick);
     };
   }, []);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const dropdownButtonRef = useRef(null);
+
+
+  useEffect(() => {
+    if (isOpen && dropdownButtonRef.current) {
+      const rect = dropdownButtonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY,  // Account for scrolling
+        left: rect.left + window.scrollX,   // Account for scrolling
+      });
+    }
+  }, [isOpen]);
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <button className="dropdown-button" onClick={handleToggle}>
+      <button className="dropdown-button" onClick={handleToggle} ref={dropdownButtonRef}>
         {children}
       </button>
       {isOpen && (
-        <ul className="dropdown-menu">
+        ReactDOM.createPortal(
+        <ul className="dropdownMenu"
+        style={{ top: `${dropdownPosition.top}px`, left: `${dropdownPosition.left}px`, position: 'absolute', zIndex: 9999 }}
+        >
           {menuItems?.map((item, index) => (
             <li
               key={index}
@@ -51,7 +69,9 @@ function Dropdown({
               {/* Display the label of the item */}
             </li>
           ))}
-        </ul>
+        </ul>,
+          document.body // Attach the dropdown menu to the body
+        )
       )}
     </div>
   );

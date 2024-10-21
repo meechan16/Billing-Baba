@@ -273,7 +273,7 @@ const SortableTable = ({ data, columns }) => {
             ))}
           </tr>
         </thead>
-        <tbody className=" min-h-[200px]">
+        <tbody className=" min-h-52 overflow-visible">
           {sortedData?.map((item, index) => (
             <tr key={index} className="border-t border-gray-200 relative">
               {columns.map((column) =>

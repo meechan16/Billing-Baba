@@ -15,12 +15,24 @@ export default function SaleInvoice({ data, setData }) {
     { key: "payment_type", label: "Payment Type" },
     { key: "amount", label: "Total" },
     { key: "pending", label: "Pending" },
+    { key: "DropDown", label: "-" },
   ];
-  const sendingArray = data?.sales.map((ele) => {
+  const sendingArray = data?.Transactions?.map((item, originalIndex) => ({ ...item, originalIndex })).filter((item) =>
+    item.type === "sale"
+  ).map((ele) => {
     return {
       ...ele,
       pending: !Number.isNaN(ele.pending) ? ele.pending : ele.total - ele.paid,
       invoice_date: new Date(ele.invoice_date).toLocaleDateString(),
+      menuItem: [
+        { label: "View Invoice" },
+        { label: "recieve payment" },
+        { label: "View/Edit", action: () => Navigate(`/add-sale/${ele.originalIndex}`) },
+        { label: "cancel" },
+        { label: "Delete", action: () => setData({...data, Transactions: data.Transactions.filter((item) => item.originalIndex !== ele.originalIndex)}) },
+        { label: "Duplicate" },
+        { label: "Print" },
+      ],
     };
   });
   return (

@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import Undone from "../components/undone";
 import TodoList from "../components/todoList";
 import dev_url from "../url";
-import LogIn from "./login";
-import AddInfo from "./addInfo";
 import { useNavigate } from "react-router-dom";
 import OnlineStore from "./OnlineStore";
 import CommingSoon from "./commingSoon";
@@ -13,6 +11,8 @@ export default function Dashboard({ data, setData }) {
   const Navigate = useNavigate();
 
   var [page, setPage] = useState("dashboard");
+
+  var [hidden, sethidden] = useState(false);
 
   const [taskStatus, setTaskStatus] = useState({});
   useEffect(() => {
@@ -92,11 +92,25 @@ export default function Dashboard({ data, setData }) {
         </button>
       </div>
       {page === "dashboard" && (
-        <div className="content">
+        <div className="content relative">
+            {hidden && (
+
+          <div className="absolute w-[100%] h-full bg-white/30 backdrop-blur-md z-20 flex flex-col justify-center items-center">
+            <span>Privacy mode Enabled, Disable to view dashboard</span>
+            <button className="border rounded-md px-3 py-1 border-blue-500 hover:bg-blue-500 hover:text-white" onClick={()=> sethidden(!hidden) }>Disable</button>
+          </div>
+            )}
+          <div className="left-p w-[70%] py-2">
+          <div className="flex w-full px-3 justify-between items-center"> <span className="text-xl font-semibold"> Business Analytics</span> 
+                <select name="date" id="">
+                  <option value="">Financial Year (2023-2024)</option>
+                  <option value="">Today</option>
+                  <option value="">This Week</option>
+                  <option value="">This Month</option>
+                </select></div>
           <div className="left">
             <div
               className="tile sale"
-              onClick={() => Navigate("/sale-invoice")}
             >
               <div className="top">
                 <div className="title">
@@ -105,24 +119,18 @@ export default function Dashboard({ data, setData }) {
                   </svg>
                   <h1>Sales</h1>
                 </div>
-                <select name="date" id="">
-                  <option value="">Today</option>
-                  <option value="">This Week</option>
-                  <option value="">This Month</option>
-                </select>
               </div>
               <div className="mid">
                 <h1>
-                  ₹ {data?.sales?.reduce((acc, obj) => acc + obj.total, 0)}
+                  ₹ {data?.Transactions?.filter((item) =>
+    item.type === "sale"
+  ).reduce((acc, obj) => acc + obj.amount, 0)}
                 </h1>
-                <h2>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                    <path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z" />
-                  </svg>{" "}
-                  11.1%
-                </h2>
               </div>
-              <div className="profile">
+              <div 
+                className="profile hover:fill-gray-500" 
+                onClick={() => Navigate("/sale-invoice")}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
@@ -144,13 +152,8 @@ export default function Dashboard({ data, setData }) {
                     />
                   </svg>
 
-                  <h1>Profit</h1>
+                  <h1>Net Profit</h1>
                 </div>
-                <select name="date" id="">
-                  <option value="">Today</option>
-                  <option value="">This Week</option>
-                  <option value="">This Month</option>
-                </select>
               </div>
               <div className="mid">
                 <h1>
@@ -160,14 +163,8 @@ export default function Dashboard({ data, setData }) {
                     0
                   ) || 0}{" "}
                 </h1>
-                <h2>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                    <path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z" />
-                  </svg>{" "}
-                  19.01%
-                </h2>
               </div>
-              <div className="profile">
+              <div className="profile hover:fill-gray-500">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
@@ -175,7 +172,6 @@ export default function Dashboard({ data, setData }) {
             </div>
             <div
               className="tile collect"
-              onClick={() => Navigate("/sale-invoice")}
             >
               <div className="top">
                 <div className="title">
@@ -184,7 +180,14 @@ export default function Dashboard({ data, setData }) {
                   </svg>
                   <div className="">
                     <h1>To Collect</h1>
-                    <h2>
+                  </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
+                  <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                </svg>
+              </div>
+                  <div className="mid">
+                    <h1>
                       {data.to_collect
                         ? data.to_collect
                         : data?.sales?.reduce(
@@ -193,14 +196,8 @@ export default function Dashboard({ data, setData }) {
                           )
                         ? data.sales.reduce((acc, obj) => acc + obj.pending, 0)
                         : "0"}
-                    </h2>
-                  </div>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
-                  <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                </svg>
-              </div>
-              <div className="mid">
+                    </h1>
+
                 <div className="tile">
                   <p>Rohit Bhatt</p>
                   <p>₹ 200.8</p>
@@ -209,8 +206,11 @@ export default function Dashboard({ data, setData }) {
                   <p>Natik Shah Bhatt</p>
                   <p>₹ 100.8</p>
                 </div>
-              </div>
-              <div className="profile">
+                  </div>
+              {/* <div className="mid">
+              </div> */}
+              <div className="profile hover:fill-gray-500" onClick={() => Navigate("/parties")}>
+              
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
@@ -218,7 +218,6 @@ export default function Dashboard({ data, setData }) {
             </div>
             <div
               className="tile pay"
-              onClick={() => Navigate("/purchase-bill")}
             >
               <div className="top">
                 <div className="title">
@@ -227,15 +226,6 @@ export default function Dashboard({ data, setData }) {
                   </svg>
                   <div className="">
                     <h1>To pay</h1>
-                    <h2>
-                      {data?.purchase
-                        ?.filter((obj) => obj.payment_type === "credit")
-                        .reduce((acc, obj) => acc + obj.total, 0)
-                        ? data.purchase
-                            .filter((obj) => obj.payment_type === "credit")
-                            .reduce((acc, obj) => acc + obj.total, 0)
-                        : "0"}
-                    </h2>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
@@ -243,6 +233,15 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
               <div className="mid">
+                    <h1>
+                      {data?.purchase
+                        ?.filter((obj) => obj.payment_type === "credit")
+                        .reduce((acc, obj) => acc + obj.total, 0)
+                        ? data.purchase
+                            .filter((obj) => obj.payment_type === "credit")
+                            .reduce((acc, obj) => acc + obj.total, 0)
+                        : "0"}
+                    </h1>
                 <div className="tile">
                   <p>Rohit Bhatt</p>
                   <p>₹ 200.8</p>
@@ -252,7 +251,8 @@ export default function Dashboard({ data, setData }) {
                   <p>₹ 100.8</p>
                 </div>
               </div>
-              <div className="profile">
+              <div className="profile hover:fill-gray-500"
+              onClick={() => Navigate("/parties")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
@@ -260,7 +260,6 @@ export default function Dashboard({ data, setData }) {
             </div>
             <div
               className="tile purchase"
-              onClick={() => Navigate("/purchase-bill")}
             >
               <div className="top">
                 <div className="title">
@@ -283,11 +282,6 @@ export default function Dashboard({ data, setData }) {
 
                   <h1>Purchase</h1>
                 </div>
-                <select name="date" id="">
-                  <option value="">Today</option>
-                  <option value="">This Week</option>
-                  <option value="">This Month</option>
-                </select>
               </div>
               <div className="mid">
                 <h1>₹ {data?.total_purchase}</h1>
@@ -296,13 +290,14 @@ export default function Dashboard({ data, setData }) {
                     "You have no purchases for today"}
                 </p>
               </div>
-              <div className="profile">
+              <div className="profile hover:fill-gray-500" 
+              onClick={() => Navigate("/purchase-bill")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
               </div>
             </div>
-            <div className="tile expense" onClick={() => Navigate("/expenses")}>
+            <div className="tile expense">
               <div className="top">
                 <div className="title">
                   <svg
@@ -322,16 +317,11 @@ export default function Dashboard({ data, setData }) {
 
                   <h1>Expense</h1>
                 </div>
-                <select name="date" id="">
-                  <option value="">Today</option>
-                  <option value="">This Week</option>
-                  <option value="">This Month</option>
-                </select>
               </div>
               <div className="mid">
                 <h1>₹ {data?.total_expense}</h1>
               </div>
-              <div className="profile">
+              <div className="profile hover:fill-gray-500"  onClick={() => Navigate("/expenses")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                 </svg>
@@ -370,7 +360,6 @@ export default function Dashboard({ data, setData }) {
 
                   <div className="">
                     <h1>Cash In hand</h1>
-                    <p>₹ {data.cash_in_hands ? data.cash_in_hands : 0}</p>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
@@ -378,6 +367,7 @@ export default function Dashboard({ data, setData }) {
                 </svg>
               </div>
               <div className="mid">
+                    <h1>₹ {data.cash_in_hands ? data.cash_in_hands : 0}</h1>
                 <div className="tile">
                   <p>Rohit Bhatt</p>
                   <p>₹ 200.8</p>
@@ -386,14 +376,14 @@ export default function Dashboard({ data, setData }) {
                   <p>Natik Shah Bhatt</p>
                   <p>₹ 100.8</p>
                 </div>
-                <div className="profile">
+                <div className="profile hover:fill-gray-500"  onClick={() => Navigate("/items")}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                   </svg>
                 </div>
               </div>
             </div>
-            <div className="tile score">
+            {/* <div className="tile score">
               <div className="top">
                 <div className="title">
                   <svg
@@ -468,16 +458,24 @@ export default function Dashboard({ data, setData }) {
                   <p>{"Vikas"}</p>
                   <p>({"5"})</p>
                 </div>
-                <div className="profile">
+                <div className="profile hover:fill-gray-500"  onClick={() => Navigate("/items")}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" />
                   </svg>
                 </div>
               </div>
-            </div>
+            </div> */}
+          </div>
           </div>
           <div className="right">
             <div className="list">
+              <div className="title">
+                <h1>Privacy Mode</h1>
+                <button className="border rounded-md px-3 py-1 border-blue-500 hover:bg-blue-500 hover:text-white" onClick={()=> sethidden(!hidden)} id="" >Turn On</button>
+              </div>
+            </div>
+            <div className="list">
+              
               <div className="title">
                 <h1>To Do List</h1>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -535,6 +533,18 @@ export default function Dashboard({ data, setData }) {
                 </div> */}
               </div>
             </div>
+            <div className="list">
+              <div className="title">
+                <h1>Follow Us</h1>
+                <div className="flex gap-2">
+                  <a href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-4 w-4"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
+                  <a href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="h-4 w-4"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg></a>
+                  <a href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="h-4 w-4"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z"/></svg></a>
+                  <a href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-4 w-4"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a>
+                  <a href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="h-4 w-4"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/></svg></a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -542,6 +552,7 @@ export default function Dashboard({ data, setData }) {
       {page === "history" && <Undone />}
       {page === "search" && <CommingSoon />}
       {page === "store" && <OnlineStore pr={false} />}
+      <button className="absolute bottom-10 right-10"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="h-6 w-6 hover:fill-gray-500 hover:shadow-lg"><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c0 0 0 0 0 0s0 0 0 0s0 0 0 0c0 0 0 0 0 0l.3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg></button>
     </div>
   );
 }

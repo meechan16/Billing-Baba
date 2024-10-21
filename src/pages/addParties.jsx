@@ -19,6 +19,7 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [Add, setAdd] = useState("");
   var [groups, setGropus] = useState({ done: true });
   var [ShippingAdd, setShippingAdd] = useState("");
+  var [DisableShippingAdd, setDisabeShippingAdd] = useState(false);
   var [OpeningBalance, setOpeningBalance] = useState("");
   var [asDate, setAsDate] = useState("");
   var [OpeningLoyaltyPoints, setOpeningLoyaltyPoints] = useState("");
@@ -149,6 +150,7 @@ export default function AddParties({ data, setData, change, setChange }) {
             />
             {/* <button>Select Unit</button> */}
           </div>
+          <div>
           <div className="relative">
             <TextField
               id="outlined-search"
@@ -186,6 +188,57 @@ export default function AddParties({ data, setData, change, setChange }) {
               </ul>
             )}
           </div>
+          <select
+                    // onChange={(e) => setGstType}
+                    name=""
+                    id=""
+                    className="w-full p-2 border-1 border-gray-800"
+                  >
+                    <option disabled selected value="">
+                      Under Group
+                    </option>
+                    <option value="Unregistere/Counsumer">
+                      Current Asset
+                    </option>
+                    <option value="Registered Business - Regular">
+                      Bank Account
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      Cash In Hand
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      Deposit
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      Loan And Advance
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      Stock In Hand
+                    </option>
+                  </select>
+          <select
+                    // onChange={(e) => setGstType}
+                    name=""
+                    id=""
+                    className="w-full p-2 border-1 border-gray-800"
+                  >
+                    <option disabled selected value="">
+                      Party Category
+                    </option>
+                    <option value="Unregistere/Counsumer">
+                      VIP
+                    </option>
+                    <option value="Registered Business - Regular">
+                      Regular
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      RISK
+                    </option>
+                    <option value="Registered Business - Consumer">
+                      Lost
+                    </option>
+                  </select>
+          </div>
         </div>
         <div className="c2">
           <div className="top t">
@@ -220,19 +273,22 @@ export default function AddParties({ data, setData, change, setChange }) {
                   >
                     <option disabled selected value="">
                       {" "}
-                      GST Type
+                      GST Registration Type
                     </option>
                     <option value="Unregistere/Counsumer">
-                      {" "}
-                      Unregistere/Counsumer
+  Regular (With GST)
                     </option>
                     <option value="Registered Business - Regular">
-                      {" "}
-                      Registered Business - Regular
+  Composition (With GST)
                     </option>
                     <option value="Registered Business - Consumer">
-                      {" "}
-                      Registered Business - Consumer
+  Tax Deductor/Tax Collector (With GST)
+                    </option>
+                    <option value="Registered Business - Consumer">
+  Unregistered (Without GST)
+                    </option>
+                    <option value="Registered Business - Consumer">
+  Unknown (Without GST)
                     </option>
                   </select>
                   {/* <CustomInput
@@ -269,6 +325,10 @@ export default function AddParties({ data, setData, change, setChange }) {
                   rows={4}
                   defaultValue=""
                 />
+                <div className="flex flex-col gap-2">
+
+                  {!DisableShippingAdd&& (
+
                 <TextField
                   value={ShippingAdd}
                   onChange={(e) => setShippingAdd(e.target.value)}
@@ -278,6 +338,9 @@ export default function AddParties({ data, setData, change, setChange }) {
                   rows={4}
                   defaultValue=""
                 />
+                  )}
+                <button onClick={()=>setDisabeShippingAdd(!DisableShippingAdd)} className={`font-semibold ${DisableShippingAdd&& "text-blue-500"}`}>{DisableShippingAdd?"+ Enable": "- Disable"} Shipping Address</button>
+                </div>
               </div>
               {/* <div className="b">
                 <CustomInput placeholder={"Purchase Price"} />
@@ -288,7 +351,7 @@ export default function AddParties({ data, setData, change, setChange }) {
           {page == "Credit" && (
             <div className="flex flex-col">
               <div className="div s">
-                <div className="flex flex-col">
+                <div className="flex">
                   <CustomInput
                     inputValue={OpeningBalance}
                     setInputValue={setOpeningBalance}
@@ -300,13 +363,27 @@ export default function AddParties({ data, setData, change, setChange }) {
                     //   <option value="">To Recieve</option>
                     // </select>
                     <div className="flex gap-2">
-                      <div className="flex items-center gap-2">
-                        <input type="checkbox" name="" id="" />
-                        <span>To Pay</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <input type="checkbox" name="" id="" />
-                        <span>To Recieve</span>
+                      <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            name="balanceType" 
+                            id="toPay" 
+                            value="To Pay" 
+                            checked={OpeningBalance && OpeningBalance > 0}
+                          />
+                          <span>To Pay</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            name="balanceType" 
+                            id="toRecieve" 
+                            value="To Recieve" 
+                            checked={OpeningBalance && OpeningBalance < 0}
+                          />
+                          <span>To Recieve</span>
+                        </div>
                       </div>
                     </div>
                   )}

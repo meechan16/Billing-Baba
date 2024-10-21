@@ -443,8 +443,7 @@ export default function Setting({ data, setData }) {
           <div className="tile">
             <h1>Print & Invoice</h1>
             <p>
-              Note: Billing baba currentlly support 1 design for invoice, please
-              contact developers for more designs.
+              Note: Multi Design feature will be Available in upcoming updates.
             </p>
           </div>
         </div>
@@ -493,19 +492,35 @@ export default function Setting({ data, setData }) {
               </div>
             </div>
           )}
-          <div className="tile">
-            <h1>
-              Add New Tax Rate{" "}
-              <button onClick={() => setpopup("addTax")}>+</button>
+          {/* <div className="m-3">
+
+          </div> */}
+
+          <div className="m-3">
+            <h1 className="font-semibold flex justify-between gap-2 mb-3 items-center w-1/4 pb-1 border-b border-gray-500">
+            <span className="text-xl">
+              Tax Rates
+            </span>
+              <button onClick={() => setpopup("addTax")} className="px-2 py-1 border shadow-md rounded-md hover:bg-blue-500 hover:text-white">Add New</button>
             </h1>
-            {data.customTax?.map((element, index) => (
-              <div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between gap-2 w-1/4 font-semibold">
                 <span>
-                  {element.taxName} {"-"}
+                  Name
                 </span>
-                <span>{element.tax} %</span>
+                <span>value (%)</span>
+                <span>Action</span>
+              </div>
+            {data.tax?.map((element, index) => (
+              <div className="flex justify-between gap-2 w-1/4">
+                <span>
+                  {element.name}
+                </span>
+                <span>{element.value} %</span>
+                <button onClick={()=> setData({...data, tax: data.tax.filter((e, i) => i !== index)})} > <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 hover:fill-gray-400" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></button>
               </div>
             ))}
+            </div>
           </div>
 
           {/* <div className="tile">
@@ -550,7 +565,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.PartyShippingAdd,
+                      PartyShippingAdd: !data.settings.PartyShippingAdd,
                     },
                   })
                 }
@@ -568,7 +583,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.partyReminder,
+                      partyReminder: !data.settings.partyReminder,
                     },
                   })
                 }
@@ -590,7 +605,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.PartyLoyaltyPoints,
+                      PartyLoyaltyPoints: !data.settings.PartyLoyaltyPoints,
                     },
                   })
                 }
@@ -613,7 +628,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.enableitem,
+                      enableitem: !data.settings.enableitem,
                     },
                   })
                 }
@@ -631,7 +646,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.itembarcodeScanner,
+                      itembarcodeScanner: !data.settings.itembarcodeScanner,
                     },
                   })
                 }
@@ -649,7 +664,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.itemStockMaintainance,
+                      itemStockMaintainance: !data.settings.itemStockMaintainance,
                     },
                   })
                 }
@@ -667,7 +682,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.Manifacturing,
+                      Manifacturing: !data.settings.Manifacturing,
                     },
                   })
                 }

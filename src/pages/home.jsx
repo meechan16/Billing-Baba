@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home({ children, part, subpart, data, setData }) {
   const [toggle, setToggle] = useState(false);
+  const [help, sethelp] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [inputFocus, setInputFocus] = useState(false);
   const Navigate = useNavigate();
@@ -83,6 +84,19 @@ export default function Home({ children, part, subpart, data, setData }) {
               </ul>
             )}
           </div>
+          <div className="relative">
+
+          <button onClick={()=>sethelp(!help)} className="text-nowrap font-semibold px-2 text-blue-600 hover:underline">Need Help?</button>
+          {help && (
+            <div className="absolute bg-white top-10 flex flex-col shadow-md -translate-x-[10%]">
+              <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Schedule meeting</span>
+              <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Send Email</span>
+              <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Whatsapp</span>
+              <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Live chat</span>
+            </div>
+          )}
+          </div>
+
           <button className="addSale" onClick={() => Navigate("/addsales")}>
             Add Sale <span>{"+"}</span>
           </button>

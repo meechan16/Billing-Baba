@@ -104,6 +104,7 @@ export default function AddSales({ data, setData, change, setChange }) {
   const [phone_no, setPhone_no] = useState(); // Initial index count
   const [ShippingAdd, setShippingAdd] = useState(""); // Initial index count
   const [BillingAdd, setBillingAdd] = useState(""); // Initial index count
+  const [isSameAddress, setIsSameAddress] = useState(false); // Initial index count
   const [invoice_date, setInvoice_date] = useState(""); // Initial index count
   const [state_of_supply, setState_of_supply] = useState({
     state: "",
@@ -446,6 +447,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                               setName(customer.partyName);
                               setPhone_no(customer.phoneNo);
                               setBillingAdd(customer.Add);
+                              if(isSameAddress){
+                                setShippingAdd(customer.Add)
+                              }
                               setState_of_supply({
                                 state: customer.state,
                                 isDone: true,
@@ -495,7 +499,13 @@ export default function AddSales({ data, setData, change, setChange }) {
                   id=""
                   placeholder="Billing Address"
                   value={BillingAdd}
-                  onChange={(e) => setBillingAdd(e.target.value)}
+                  onChange={(e) => {
+                    setBillingAdd(e.target.value)
+                    if (isSameAddress){
+                      setShippingAdd(e.target.value)
+                    }
+                  }
+                  }
                   cols="35"
                   rows="3"
                   className="p-1 bg-white border border-gray-300 rounded-md"
@@ -510,6 +520,10 @@ export default function AddSales({ data, setData, change, setChange }) {
                   rows="3"
                   className="p-1 bg-white border border-gray-300 rounded-md"
                 />
+              </div>
+              <div className="flex gap-2">
+                <input type="checkbox" name="" onChange={()=> setIsSameAddress(!isSameAddress)} id="" />
+                <label htmlFor=""> Same as Billing</label>
               </div>
             </div>
 
@@ -575,7 +589,7 @@ export default function AddSales({ data, setData, change, setChange }) {
           <div className="overflow-x-auto ">
             <table className="min-w-full table-auto border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-green-100">
+                <tr className="bg-blue-100">
                   <th className="px-1 py-1 border border-gray-300 border-b-0"></th>
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     CATEGORY
@@ -629,7 +643,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   </th>
                   <th className="px-1 py-1   border border-gray-300 border-b-0"></th>
                 </tr>
-                <tr className="bg-green-100">
+                <tr className="bg-blue-100">
                   {/* Empty headers for the first part */}
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
@@ -1167,6 +1181,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                   {rows.reduce((total, row) => total + (row.amount || 0), 0)}
                 </p>
               </div>
+              {data.settings?.loyaltyPoints && (
+                
               <div className="flex gap-2 items-center justify-end">
                 <div className=" flex flex-col">
                   <h1>Loyalty points Used</h1>
@@ -1183,6 +1199,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   {200}
                 </p>
               </div>
+              )}
               <div className="flex items-center gap-2 justify-end">
                 <span>Remaining</span>
                 <p className="p-2 border  w-[200px] bg-gray-100 text-end border-gray-300 rounded-md">

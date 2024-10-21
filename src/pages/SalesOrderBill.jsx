@@ -13,8 +13,8 @@ const SaleOrderBill = ({ data, setData, change, setChange }) => {
   let index = params.get("index");
   useEffect(() => {
     try {
-      setPData(data.Transactions[index - 1]);
-      console.log(data.Transactions[index - 1]);
+      setPData(data.Transactions[index]);
+      console.log(data.Transactions[index]);
     } catch (err) {
       console.log(err);
       alert("data not found");
@@ -150,7 +150,8 @@ const SaleOrderBill = ({ data, setData, change, setChange }) => {
             </tr>
           </thead>
           <tbody>
-            {pData.items.map((item, index) => (
+            {console.log(pData)}
+            {pData.items?.map((item, index) => (
               <tr>
                 <td className="border border-gray-300 px-4 py-2">
                   {index + 1}

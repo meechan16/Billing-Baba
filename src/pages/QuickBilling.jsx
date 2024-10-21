@@ -264,44 +264,48 @@ export default function QuickBilling({
   let barcode = "";
   let lastKeyTime = Date.now();
   let [barcodes, setbarcodes] = useState([]);
-  document.addEventListener("keydown", async (event) => {
-    const currentTime = Date.now();
 
-    // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
-    if (currentTime - lastKeyTime > 50) {
-      barcode = ""; // Reset barcode if too much time has passed
-    }
-    lastKeyTime = currentTime;
 
-    // Filter out non-character keys
-    if (event.key.length === 1) {
-      barcode += event.key;
-    }
-
-    if (event.key === "Enter") {
-      if (barcode) {
-        // setbarcodes([...barcodes, barcode]);
-        let item = data.items.find((item, i) => item.Code === barcode);
-        if (item) {
-          await handleItemSelect({
-            item: item.name,
-            item_details: item,
-            ...item,
-            price_per_unit: item.salesPrice,
-            unit: item.unit?.primary,
-            quantity: 1,
-            total: item.salesPrice,
-          });
-        } else {
-          alert("Item not found");
+  useEffect(() => {
+    const handleEvent = async (event) => {
+      const currentTime = Date.now();
+      // Check if the time between keypresses is less than 50ms to determine if it's part of a barcode scan
+      if (currentTime - lastKeyTime > 50) {
+        barcode = ""; // Reset barcode if too much time has passed
+      }
+      lastKeyTime = currentTime;
+  
+      // Filter out non-character keys
+      if (event.key.length === 1) {
+        barcode += event.key;
+      }
+  
+      if (event.key === "Enter") {
+        if (barcode) {
+          // setbarcodes([...barcodes, barcode]);
+          let item = data.items.find((item, i) => item.Code === barcode);
+          if (item) {
+            await handleItemSelect({
+              item: item.name,
+              item_details: item,
+              ...item,
+              price_per_unit: item.salesPrice,
+              unit: item.unit?.primary,
+              quantity: 1,
+              total: item.salesPrice,
+            });
+          } else {
+            alert("Item not found");
+          }
+          barcode = ""; // Clear the barcode after processing
         }
-        barcode = ""; // Clear the barcode after processing
       }
     }
-  });
-  useEffect(() => {
-    console.log(barcodes);
-  }, [barcodes]);
+    document.addEventListener("keydown", handleEvent);
+    return () => {
+      document.removeEventListener("keydown", handleEvent)
+    }
+  }, []);
 
   return (
     <div id="QuickBilling">
