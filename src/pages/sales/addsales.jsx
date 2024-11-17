@@ -522,7 +522,12 @@ export default function AddSales({ data, setData, change, setChange }) {
                 />
               </div>
               <div className="flex gap-2">
-                <input type="checkbox" name="" onChange={()=> setIsSameAddress(!isSameAddress)} id="" />
+                <input type="checkbox" name="" onChange={()=> {
+                  if (!isSameAddress){
+                    setShippingAdd(BillingAdd)
+                  }
+                  setIsSameAddress(!isSameAddress)
+                }} id="" />
                 <label htmlFor=""> Same as Billing</label>
               </div>
             </div>

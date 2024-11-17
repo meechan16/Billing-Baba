@@ -144,6 +144,20 @@ export default function AddSalesOrder({ data, setData, change, setChange }) {
 
   let uid = data.uid;
   let sendData = () => {
+    const totalAmount = rows.reduce(
+      (total, row) => total + (parseInt(row.amount) || 0),
+      0
+    );
+    const profit = rows.reduce(
+      (total, row) => total + (parseInt(row.profit) || 0),
+      0
+    );
+    const totalTax = rows.reduce(
+      (total, row) => total + (parseInt(row.tax) || 0),
+      0
+    );
+
+    let pending = totalAmount - paid;
     const newData = {
       name: Name ? Name : "",
       phone_no: phone_no ? phone_no : "",

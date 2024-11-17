@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/sidebar";
 import Dashboard from "./dashboard";
 import { getUidFromLocalStorage } from "../firebase";
@@ -49,6 +49,28 @@ export default function Home({ children, part, subpart, data, setData }) {
     { name: "Settings", to: "/" },
     { name: "utils", to: "/" },
   ];
+  const dropdownRef = useRef(null);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        sethelp(false);
+      }
+    };
+
+    if (help) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup the event listener on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [help]);
+
   return (
     <div id="Home">
       <Sidebar data={data} part={part} subpart={subpart} />
@@ -84,7 +106,7 @@ export default function Home({ children, part, subpart, data, setData }) {
               </ul>
             )}
           </div>
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
 
           <button onClick={()=>sethelp(!help)} className="text-nowrap font-semibold px-2 text-blue-600 hover:underline">Need Help?</button>
           {help && (
@@ -93,17 +115,49 @@ export default function Home({ children, part, subpart, data, setData }) {
               <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Send Email</span>
               <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Whatsapp</span>
               <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Live chat</span>
+              <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Report Missing feature</span>
             </div>
           )}
           </div>
 
-          <button className="addSale" onClick={() => Navigate("/addsales")}>
+          {/* <button className="addSale" onClick={() => Navigate("/addsales")}>
             Add Sale <span>{"+"}</span>
           </button>
           <button className="purchase" onClick={() => Navigate("/addPurchase")}>
             Add Purchase <span>{"+"}</span>
-          </button>
-          <button className="addMore" onClick={() => setToggle(!toggle)}>
+          </button> */}
+          <div className="flex items-center justify-center">
+      {/* Sale Button */}
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="m-3 h-6 w-6 hover:fill-gray-500 hover:shadow-lg"><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c0 0 0 0 0 0s0 0 0 0s0 0 0 0c0 0 0 0 0 0l.3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>
+
+      <button className="px-4 py-2 bg-white bg- pr-8 font-semibold rounded-l-full hover:bg-blue-100 border border-blue-500" onClick={() => Navigate("/addsales")}>
+        SALE
+      </button>
+
+      {/* Middle Blank Button */}
+      <button className="p-3 fill-white -translate-x-1//2  rounded-full bg-blue-200 absolute" aria-label="Middle button" onClick={() => setToggle(!toggle)}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288l111.5 0L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7l-111.5 0L349.4 44.6z"/></svg>
+      <div className="relative">
+
+      <div className={`${!toggle && "hidden"} absolute p-3 rounded-lg grid grid-cols-2 top-2 shadow-lg bg-white`}>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/addsales")}>Add Sales</button>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/addpurchase")}>Add Purchase</button>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/AddParties")}>Add Parties</button>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/add-items")}>Add Items</button>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/add-sales-order")}>Add Sales Orders</button>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/add-purchase-order")}>Add Purchase Orders</button>
+              <button className="text-nowrap p-3 hover:border-b border-blue-500" onClick={() => Navigate("/quick-billing")}>Quick Billing</button>
+            </div>
+      </div>
+      </button>
+
+
+      {/* Purchase Button */}
+      <button className="px-4 py-2 bg-white pl-8 text-blue-500 border border-blue-500 font-semibold rounded-r-full hover:bg-blue-100" onClick={() => Navigate("/addPurchase")}>
+        PURCHASE
+      </button>
+    </div>
+          {/* <button className="addMore" onClick={() => setToggle(!toggle)}>
             Add More <span>{"+"}</span>
             <div className={toggle ? "drop active" : "drop"}>
               <button onClick={() => Navigate("/addsales")}>Add Sales</button>
@@ -129,9 +183,9 @@ export default function Home({ children, part, subpart, data, setData }) {
               <div className="r">
                 <button>-</button>
                 <button>-</button>
-              </div> */}
+              </div>
             </div>
-          </button>
+          </button> */}
         </div>
         {children}
         {/* <Dashboard /> */}

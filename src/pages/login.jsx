@@ -37,37 +37,40 @@ export default function LogIn({ sw = false }) {
     setSwitch("signup");
   };
   return (
-    <div id="login">
-      <div className="content">
-        <div className="left">
-          <h1>Welcome back</h1>
-          <p>
-            Sign-In to your account to access full range of features and
-            capabilities of our software
-          </p>
-          <img src="./assets/login/login_img.png" alt="" />
-        </div>
+    <div className="w-screen h-screen py-3 flex justify-center bg-gray-100 items-center">
+        <div className="w-1/3 bg-white rounded-lg shadow-lg flex flex-col justify-between items-center p-3">
+          <img src="./assets/BillingBabaLogo.png" className="w-16 h-16" alt="logo" />
+          <span className="font-semibold">
 
-        <div className="right" action="">
-          <div className="top"></div>
+          Ab Business Karo Tenstion Free.
+          </span>
+          
           {Switch === "login" && (
-            <div className="form login" action="">
-              <h1>Log-In Form</h1>
+            <>
+            <div className="flex w-full">
+
+              <h1 className="font-semibold mt-4 text-xl p-4 flex-1 hover:border-b-2 text-center border-b-2 border-gray-300">Email</h1>
+              <h1 className="font-semibold mt-4 text-xl p-4 flex-1 hover:border-b-2 text-center border-gray-200">Mobile No.</h1>
+            </div>
               <input
                 type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 name="email"
+                className="p-2 rounded-md shadow-sm hover:shadow-md w-full text-lg mt-2"
                 placeholder="Enter your email"
-              />
+                />
               <input
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
+                className="p-2 rounded-md shadow-sm hover:shadow-md w-full text-lg mt-2"
                 name="password"
                 placeholder="Enter your password"
               />
-              <button onClick={(e) => login()}>Log In</button>
+              <button onClick={(e) => login()}
+                className="flex bg-blue-100 w-full my-4 font-semibold  py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg"
+                >Log In</button>
               <button
                 onClick={async (e) => {
                   let res = await signInWithGoogle();
@@ -76,18 +79,18 @@ export default function LogIn({ sw = false }) {
                   window.location.href = "/";
                   history("/");
                 }}
-                className="google"
+                className="flex bg-blue-600 w-full my-4 text-white  py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg"
               >
-                <img src="./assets/google_icon.png" alt="" />
+                <img src="./assets/google_icon.png" alt="google logo" className=" w-4 h-" />
                 Log In with Google
               </button>
               <div className="line"></div>
               <p>If you dont have an account, please Sign Up</p>
               <button onClick={() => setSwitch("signup")}>Sign Up</button>
-            </div>
+            </>
           )}
           {Switch === "signup" && (
-            <div className="form signup" action="">
+            <>
               <h1>Sign-Up Form</h1>
               <input
                 type="text"
@@ -127,44 +130,9 @@ export default function LogIn({ sw = false }) {
               <div className="line"></div>
               <p>If you aready have an account, please login</p>
               <button onClick={() => setSwitch("login")}>Log-In</button>
-            </div>
+            </>
           )}
         </div>
-        {/* <div className="right">
-          <h1>Get started</h1>
-          <p>
-            Already have an account?<a href=""> Log In</a>
-          </p>
-          <p>Enter 10 digit mobile number</p>
-
-          <div className="inp">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.95 18C14.8667 18 12.8083 17.5458 10.775 16.6375C8.74167 15.7292 6.89167 14.4417 5.225 12.775C3.55833 11.1083 2.27083 9.25833 1.3625 7.225C0.454167 5.19167 0 3.13333 0 1.05C0 0.75 0.1 0.5 0.3 0.3C0.5 0.1 0.75 0 1.05 0H5.1C5.33333 0 5.54167 0.0791667 5.725 0.2375C5.90833 0.395833 6.01667 0.583333 6.05 0.8L6.7 4.3C6.73333 4.56667 6.725 4.79167 6.675 4.975C6.625 5.15833 6.53333 5.31667 6.4 5.45L3.975 7.9C4.30833 8.51667 4.70417 9.1125 5.1625 9.6875C5.62083 10.2625 6.125 10.8167 6.675 11.35C7.19167 11.8667 7.73333 12.3458 8.3 12.7875C8.86667 13.2292 9.46667 13.6333 10.1 14L12.45 11.65C12.6 11.5 12.7958 11.3875 13.0375 11.3125C13.2792 11.2375 13.5167 11.2167 13.75 11.25L17.2 11.95C17.4333 12.0167 17.625 12.1375 17.775 12.3125C17.925 12.4875 18 12.6833 18 12.9V16.95C18 17.25 17.9 17.5 17.7 17.7C17.5 17.9 17.25 18 16.95 18Z"
-                fill="#00AEFF"
-              />
-            </svg>
-            <span>+91</span>
-            <input type="text" name="" id="" />
-          </div>
-          <div className="check">
-            <input type="checkbox" name="" id="" />
-            <span>I have read and agreed to Terms and Conditions.</span>
-          </div>
-          <button>Create My Account</button>
-          <a href="">Help and Support</a>
-
-          <span>
-            @ 2022 NextSpeed Technologies Private Limited. All rights reserved
-          </span>
-        </div> */}
-      </div>
     </div>
   );
 }
