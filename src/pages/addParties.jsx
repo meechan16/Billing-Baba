@@ -31,6 +31,10 @@ export default function AddParties({ data, setData, change, setChange }) {
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addPartiesReq = async () => {
+    if (!partyName ||  !phoneNo || !Email) {
+      alert("Please fill all the fields");
+      return;
+    }
     let newData = {
       partyName: partyName ? partyName : "",
       GSTIN: GSTIN ? GSTIN : "",
@@ -41,7 +45,7 @@ export default function AddParties({ data, setData, change, setChange }) {
       Add: Add ? Add : "",
       BillingAdd: Add ? Add : "",
       ShippingAdd: ShippingAdd ? ShippingAdd : "",
-      OpeningBalance: OpeningBalance ? parseInt(OpeningBalance) : "",
+      OpeningBalance: OpeningBalance ? parseInt(OpeningBalance) : 0,
       asDate: asDate ? asDate : "",
       OpeningLoyaltyPoints: OpeningLoyaltyPoints
         ? parseInt(OpeningLoyaltyPoints)
@@ -51,10 +55,9 @@ export default function AddParties({ data, setData, change, setChange }) {
       AddF2: AddF2 ? AddF2 : "",
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
-      creditLimit: parseInt(creditLimit),
+      creditLimit: creditLimit? parseInt(creditLimit): 0,
       groups: groups?.name,
-      // convert openingbalance into integer below
-      credit: parseInt(OpeningBalance ? OpeningBalance : 0),
+      credit: parseInt(OpeningBalance) ? parseInt(OpeningBalance) : 0,
     };
 
     let newDa = data;
@@ -365,7 +368,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                     <div className="flex gap-2">
                       <div className="flex gap-2">
                         <div className="flex items-center gap-2">
-                          <input 
+                          <input autoComplete="off" 
                             type="radio" 
                             name="balanceType" 
                             id="toPay" 
@@ -375,7 +378,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                           <span>To Pay</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <input 
+                          <input autoComplete="off" 
                             type="radio" 
                             name="balanceType" 
                             id="toRecieve" 
@@ -408,7 +411,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                   name="birthday"
                 ></input>
               </div>
-              <div className="flex items-center px-4 gap-2" onClick={() => setcreditLimitToggle(!creditLimitToggle)}><input type="checkbox" name="" id="" checked={creditLimitToggle} /> <h1>Credit limit</h1></div>
+              <div className="flex items-center px-4 gap-2" onClick={() => setcreditLimitToggle(!creditLimitToggle)}><input autoComplete="off" type="checkbox" name="" id="" checked={creditLimitToggle} /> <h1>Credit limit</h1></div>
               {
                 creditLimitToggle &&
                 (

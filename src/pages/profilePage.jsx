@@ -165,22 +165,22 @@ export default function Profile({ data, setData }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-semibold">Company Name<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="NEW TUBE TRADERS" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="NEW TUBE TRADERS" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Alias Name</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Jack" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Jack" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Address Line 1<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="shop no 30, Anjuman Shopping Complex" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="shop no 30, Anjuman Shopping Complex" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Address Line 2</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="marhatal, Jabalpur" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="marhatal, Jabalpur" />
             </div>
 
             <div>
@@ -192,7 +192,7 @@ export default function Profile({ data, setData }) {
 
             <div>
               <label className="block text-gray-700 font-semibold">Pincode<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="482002" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="482002" />
             </div>
 
             <div>
@@ -204,27 +204,27 @@ export default function Profile({ data, setData }) {
 
             <div>
               <label className="block text-gray-700 font-semibold">City<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="JABALPUR" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="JABALPUR" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Mobile No.<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="7987016325" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="7987016325" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Email</label>
-              <input type="email" className="w-full p-2 border border-gray-300 rounded-md" placeholder="example@domain.com" />
+              <input autoComplete="off" type="email" className="w-full p-2 border border-gray-300 rounded-md" placeholder="example@domain.com" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Company Established From</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Year" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Year" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Registration Type</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Type" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Type" />
             </div>
           </div>
         </div>
@@ -235,27 +235,27 @@ export default function Profile({ data, setData }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-semibold">Company Name<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Barry Tone PVT. LTD." />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Barry Tone PVT. LTD." />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Alias Name</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Jack" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Jack" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Legal Name</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Barry Tone" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Barry Tone" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Address Line 1<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Floor No., Building Name" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Floor No., Building Name" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Address Line 2</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Near by Location, Landmark, Sub-district" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Near by Location, Landmark, Sub-district" />
             </div>
 
             <div>
@@ -267,7 +267,7 @@ export default function Profile({ data, setData }) {
 
             <div>
               <label className="block text-gray-700 font-semibold">Pincode<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="39XX01" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="39XX01" />
             </div>
 
             <div>
@@ -286,22 +286,22 @@ export default function Profile({ data, setData }) {
 
             <div>
               <label className="block text-gray-700 font-semibold">Mobile No.<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="7987016325" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="7987016325" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Email</label>
-              <input type="email" className="w-full p-2 border border-gray-300 rounded-md" placeholder="example@domain.com" />
+              <input autoComplete="off" type="email" className="w-full p-2 border border-gray-300 rounded-md" placeholder="example@domain.com" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Company Established From<span className="text-red-500">*</span></label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="21-10-2024" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="21-10-2024" />
             </div>
 
             <div>
               <label className="block text-gray-700 font-semibold">Registration Type</label>
-              <input type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Unregistered (Without GST)" />
+              <input autoComplete="off" type="text" className="w-full p-2 border border-gray-300 rounded-md" placeholder="Unregistered (Without GST)" />
             </div>
           </div>
 

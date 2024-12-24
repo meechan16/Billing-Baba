@@ -193,13 +193,13 @@ export default function Items({ data, setData, change, setChange }) {
   }
   else if (page === "service") {
     columns = [
-      { key: "type", label: "Type" },
-      { key: "invoice_number", label: "Invoice/Ref" },
-      { key: "name", label: "Name" },
-      { key: "invoice_date", label: "Date" },
-      { key: "length", label: "Length" },
-      { key: "total", label: "Price" },
-      { key: "totalProfit", label: "Profit" },
+      { key: "type", label: "Type",type:"transaction type"  },
+      { key: "invoice_number", label: "Invoice/Ref",type:"string" },
+      { key: "name", label: "Name" ,type:"string"},
+      { key: "invoice_date", label: "Date",type:"string" },
+      { key: "length", label: "Length",type:"number"},
+      { key: "total", label: "Price" ,type:"number"},
+      { key: "totalProfit", label: "Profit" ,type:"number"},
       // { key: "DropDown", label: "-" },
     ];
     if (selecteditems) {
@@ -228,9 +228,9 @@ export default function Items({ data, setData, change, setChange }) {
   }
   else if (page === "category") {
     columns = [
-      { key: "name", label: "Name" },
-      { key: "stock", label: "Quantity" },
-      { key: "value", label: "Stock Value" },
+      { key: "name", label: "Name",type:"string" },
+      { key: "stock", label: "Quantity" ,type:"number"},
+      { key: "value", label: "Stock Value" ,type:"number"},
     ];
     if (selecteditems) {
       sendingArray = data?.items
@@ -312,6 +312,7 @@ export default function Items({ data, setData, change, setChange }) {
           className={page === "product" ? "selected" : ""}
           onClick={() => {
             setPage("product");
+            setSearch(!search);
             setSelectedItems();
           }}
         >
@@ -321,6 +322,7 @@ export default function Items({ data, setData, change, setChange }) {
           className={page === "service" ? "selected" : ""}
           onClick={() => {
             setPage("service");
+            setSearch(!search)
             setSelectedItems();
           }}
         >
@@ -339,6 +341,7 @@ export default function Items({ data, setData, change, setChange }) {
           className={page === "unit" ? "selected" : ""}
           onClick={() => {
             setPage("unit");
+            setSearch(!search)
             setSelectedItems();
           }}
         >
@@ -437,7 +440,7 @@ export default function Items({ data, setData, change, setChange }) {
                       : "")}
                 </h2>
                 <h2 onClick={() => toggleSort("stock")}>
-                  Qty{" "}
+                  Quantity{" "}
                   {sortConfig.key === "stock" &&
                     (sortConfig.direction === "ascending"
                       ? "↑"
@@ -464,6 +467,7 @@ export default function Items({ data, setData, change, setChange }) {
                         onClick={() => setSelectedItems(item)}
                       >
                         <h1>{item.Name}</h1>
+                        <h2 className="hovEle">{item.Name} - {item.stock}</h2>
                         <div className="">
                           <p>
                             {item.stock ? item.stock : item.openingQty || 0}
@@ -503,13 +507,14 @@ export default function Items({ data, setData, change, setChange }) {
                     ?.filter((item) => item.itemType !== "service")
                     .map((item, index) => (
                       <div
-                        className={`tile ${
+                        className={`tile relative ${
                           selecteditems === item ? "selected" : ""
                         }`}
                         key={index}
                         onClick={() => setSelectedItems(item)}
                       >
                         <h1>{item.Name}</h1>
+                        <h2 className="hovEle">{item.Name} - {item.stock}</h2>
                         <div className="">
                           <p>
                             {item.stock ? item.stock : item.openingQty || 0}
@@ -576,8 +581,8 @@ export default function Items({ data, setData, change, setChange }) {
           )}
           <div className="right">
             {selecteditems ? (
-              <div className="rounded-md bg-green-100 mb-2 p-3">
-                <div className="w-full flex justify-between">
+              <div className="rounded-md bg-gray-100 mb-2 p-3">
+                <div className="w-full flex justify-between mb-2">
                   <h1 className="text-xl font-semibold flex justify-between items-center w-full">
                     {selecteditems.Name}
                   </h1>
@@ -590,7 +595,7 @@ export default function Items({ data, setData, change, setChange }) {
                   {StockPage && <StockAdjust setClose={setStockPage} />}
                 </div>
 
-                <div className="w-full flex justify-between">
+                <div className="w-full flex justify-between my-2">
                   <p className="">
                     SALE PRICE{" "}
                     <span className="font-semibold">
@@ -606,13 +611,17 @@ export default function Items({ data, setData, change, setChange }) {
                     </span>
                   </p>
                 </div>
-                <div className="w-full flex justify-between">
+                <div className="w-full flex justify-between mt-2">
                   <p>
                     PURCHASE PRICE{" "}
                     <span className="font-semibold">
                       {" "}
                       ₹ {selecteditems ? selecteditems.purchasePrice : "-"}
                     </span>
+                  </p>
+                  <p className="hover:text-blue-400 flex items-center gap-2">
+                  <span>Share </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-4 h-4"><path d="M307 34.8c-11.5 5.1-19 16.6-19 29.2l0 64-112 0C78.8 128 0 206.8 0 304C0 417.3 81.5 467.9 100.2 478.1c2.5 1.4 5.3 1.9 8.1 1.9c10.9 0 19.7-8.9 19.7-19.7c0-7.5-4.3-14.4-9.8-19.5C108.8 431.9 96 414.4 96 384c0-53 43-96 96-96l96 0 0 64c0 12.6 7.4 24.1 19 29.2s25 3 34.4-5.4l160-144c6.7-6.1 10.6-14.7 10.6-23.8s-3.8-17.7-10.6-23.8l-160-144c-9.4-8.5-22.9-10.6-34.4-5.4z"/></svg>
                   </p>
                 </div>
               </div>
@@ -634,7 +643,7 @@ export default function Items({ data, setData, change, setChange }) {
               //       >
               //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               //       </svg>
-              //       <input type="" />
+              //       <input autoComplete="off" type="" />
               //     </div>
               //   </div>
               //   <div className="cl top">
@@ -703,7 +712,7 @@ export default function Items({ data, setData, change, setChange }) {
                       >
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                       </svg>
-                      <input type="" className="bg-transparent" />
+                      <input autoComplete="off" type="" className="bg-transparent" />
                     </div>
                   </div>
                 </div>
@@ -950,7 +959,7 @@ export default function Items({ data, setData, change, setChange }) {
                         >
                           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                         </svg>
-                        <input type="" className="bg-transparent" />
+                        <input autoComplete="off" type="" className="bg-transparent" />
                       </div>
                     </div>
                   </div>
@@ -1119,7 +1128,7 @@ export default function Items({ data, setData, change, setChange }) {
             />
           )}
           <div className="right">
-            <div className="bg-green-100 rounded-md p-3 w-full mb-2">
+            <div className="bg-gray-100 rounded-md p-3 w-full mb-2">
               <div className="flex justify-between w-full items-center">
                 <h1 className="text-xl font-semibold ">
                   {selectedCategory?.name || "no name selected"}
@@ -1145,7 +1154,7 @@ export default function Items({ data, setData, change, setChange }) {
               //       >
               //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               //       </svg>
-              //       <input type="" />
+              //       <input autoComplete="off" type="" />
               //     </div>
               //   </div>
               //   <div className="cl top">
@@ -1191,7 +1200,7 @@ export default function Items({ data, setData, change, setChange }) {
                       >
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                       </svg>
-                      <input type="" className="bg-transparent" />
+                      <input autoComplete="off" type="" className="bg-transparent" />
                     </div>
                   </div>
                 </div>
@@ -1421,7 +1430,7 @@ export default function Items({ data, setData, change, setChange }) {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                   </svg>
-                  <input type="" />
+                  <input autoComplete="off" type="" />
                 </div>
               </div>
               <div className="cl top">

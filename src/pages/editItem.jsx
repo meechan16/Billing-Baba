@@ -379,7 +379,7 @@ export default function EditItem({
                 <option className="grey">{c.name || "-"}</option>
               ))}
             </select>
-            {/* <input type="text" className="box" /> */}
+            {/* <input autoComplete="off" type="text" className="box" /> */}
             <div className="flex">
               <CustomInput
                 inputValue={itemCode}

@@ -5,14 +5,14 @@ import SortableTable from "../../components/Tables";
 export default function PurchaseOrder({ data, setData, change, setChange }) {
   var [page, setPage] = useState("saleOrder");
   let columns = [
-    { key: "invoice_date", label: "Date" },
-    { key: "name", label: "Party Name" },
-    { key: "invoice_number", label: "Chalan Number" },
-    { key: "due_date", label: "Due Date" },
-    { key: "total", label: "Total" },
-    { key: "pending", label: "Pending" },
-    { key: "status", label: "status" },
-    { key: "action", label: "Action" },
+    { key: "invoice_date", label: "Date",type:"string" },
+    { key: "name", label: "Party Name" ,type:"string"},
+    { key: "invoice_number", label: "Chalan Number",type:"number" },
+    { key: "due_date", label: "Due Date",type:"string" },
+    { key: "total", label: "Total" ,type:"number"},
+    { key: "pending", label: "Pending" ,type:"number"},
+    { key: "status", label: "status",type:"string" },
+    { key: "action", label: "Action" ,type:"string"},
     { key: "DropDown", label: "-" },
   ];
   var sendingArray = data?.Transactions?.filter(
@@ -61,7 +61,7 @@ export default function PurchaseOrder({ data, setData, change, setChange }) {
             //         >
             //           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
             //         </svg>
-            //         <input type="" />
+            //         <input autoComplete="off" type="" />
             //       </div>
             //       <button onClick={() => Navigate("/add-purchase-order")}>
             //         + Add Purchase Order
@@ -132,7 +132,7 @@ export default function PurchaseOrder({ data, setData, change, setChange }) {
                       >
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                       </svg>
-                      <input type="" className="bg-transparent" />
+                      <input autoComplete="off" type="" className="bg-transparent" />
                     </div>
                   <button className="px-2 py-1 rounded-full font-semibold text-white bg-blue-500 ml-2" onClick={() => Navigate("/add-purchase-order")}>
                      + Add Purchase Order

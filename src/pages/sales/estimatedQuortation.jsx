@@ -15,13 +15,13 @@ export default function EstimatedQuortation({ data, setData }) {
     if (list) setDataList(list);
   }, [data]);
   const columns = [
-    { key: "invoice_date", label: "Date" },
-    { key: "invoice_number", label: "Refrence Number" },
-    { key: "name", label: "Name" },
-    { key: "total", label: "Total" },
+    { key: "invoice_date", label: "Date",type:"string" },
+    { key: "invoice_number", label: "Refrence Number" ,type:"number"},
+    { key: "name", label: "Name",type:"string" },
+    { key: "total", label: "Total",type:"number" },
     { key: "pending", label: "Balance" },
-    { key: "status", label: "Status" },
-    { key: "Action", label: "Action" },
+    { key: "status", label: "Status",type:"string" },
+    { key: "Action", label: "Action",type:"string" },
   ];
   const sendingArray = data.Transactions?.map((item, originalIndex) => ({
     ...item,
@@ -64,7 +64,7 @@ export default function EstimatedQuortation({ data, setData }) {
         //           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         //             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
         //           </svg>
-        //           <input type="" />
+        //           <input autoComplete="off" type="" />
         //         </div>
         //         <button onClick={() => Navigate("/add-estimation")}>
         //           + Add estimation
@@ -155,7 +155,7 @@ export default function EstimatedQuortation({ data, setData }) {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                 </svg>
-                <input type="" className="bg-transparent" />
+                <input autoComplete="off" type="" className="bg-transparent" />
               </div>
               <button
                 className="px-3 rounded-full bg-blue-500 hover:to-blue-400 text-white"

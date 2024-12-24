@@ -604,7 +604,7 @@ export default function AddSales({ data, setData, change, setChange }) {
         </div>
         <div className="ai3">
           <div className="l">
-            {/* <input type="checkbox" name="" id="" />
+            {/* <input autoComplete="off" type="checkbox" name="" id="" />
             <span>Round Off</span>
             <input
               className="in"

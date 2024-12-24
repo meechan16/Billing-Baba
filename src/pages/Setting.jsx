@@ -131,7 +131,7 @@ export default function Setting({ data, setData }) {
               </select>
             </div>
             <div>
-              <span>Max decimal place</span> <input type="number" />
+              <span>Max decimal place</span> <input autoComplete="off" type="number" />
             </div>
             <div>
               <input
@@ -155,7 +155,7 @@ export default function Setting({ data, setData }) {
 
           <div className="tile">
             <h1>
-              <input type="checkbox" name="" id="" />
+              <input autoComplete="off" type="checkbox" name="" id="" />
               Multi Firm
             </h1>
             <p>Currenly Unavilable</p>
@@ -164,7 +164,7 @@ export default function Setting({ data, setData }) {
             <h1>Backup & History</h1>
             <p>Auto backup permanent in web version</p>
             <div>
-              <input type="checkbox" name="" checked disabled id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" checked disabled id="" />{" "}
               <span>Auto Backup</span>
             </div>
             <div>
@@ -316,23 +316,23 @@ export default function Setting({ data, setData }) {
           <div className="tile">
             <h1>Transaction header</h1>
             <div>
-              <input type="checkbox" name="" checked id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" checked id="" />{" "}
               <span>Invoice/Bill No</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Add Time on transation</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Cash Sale By Default</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Billing Name of Parties</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Customer P.O. Details on Transactions</span>
             </div>
           </div>
@@ -341,57 +341,57 @@ export default function Setting({ data, setData }) {
             <h1>Items Table</h1>
             {/* <p>Currenly Unavilable</p> */}
             <div>
-              <input type="checkbox" name="" checked id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" checked id="" />{" "}
               <span>Inclusive/Exclusive Tax on Rate(Price/Unit)</span>
             </div>
             <div>
-              <input type="checkbox" name="" checked id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" checked id="" />{" "}
               <span>Display Purchase Price of Items</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Show last 5 Sale Price of Items</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Free Item Quantity</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" /> <span>Count</span>
+              <input autoComplete="off" type="checkbox" name="" id="" /> <span>Count</span>
             </div>
           </div>
 
           <div className="tile">
             <h1>More Transactions Features</h1>
             <div>
-              <input type="checkbox" name="" id="" /> <span>Quick Entry</span>
+              <input autoComplete="off" type="checkbox" name="" id="" /> <span>Quick Entry</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Do not Show Invoice Preview</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Enable Passcode for transaction edit/delete</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Discount During Payments</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Delivery Challan</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Link Payments to Invoices</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Due Dates and Payment Terms</span>
             </div>
             <div>
-              <input type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
               <span>Show Profit while making Sale Invoice</span>
             </div>
           </div>
@@ -399,11 +399,11 @@ export default function Setting({ data, setData }) {
             <h1>Taxes, Discount & Totals</h1>
             {/* <p>Auto backup permanent in web version</p> */}
             <div>
-              <input type="checkbox" name="" checked disabled id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" checked disabled id="" />{" "}
               <span>Transaction wise Tax</span>
             </div>
             <div>
-              <input type="checkbox" checked name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" checked name="" id="" />{" "}
               <span>Transaction wise Discount</span>
             </div>
           </div>
@@ -528,7 +528,7 @@ export default function Setting({ data, setData }) {
               Add New Tax Group <button>+</button>
             </h1>
             <div>
-              <input type="checkbox" name="" checked id="" />{" "}
+              <input autoComplete="off" type="checkbox" name="" checked id="" />{" "}
               <span>Inclusive/Exclusive Tax on Rate(Price/Unit)</span>
             </div>
           </div> */}

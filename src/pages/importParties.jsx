@@ -43,7 +43,7 @@ export default function ImportParties({ data, setData }) {
         </p>
         {/* <button onClick={() => Navigate("/add-purchase-order")}> */}
 
-        <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+        <input autoComplete="off" type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
         <button onClick={handleFileUpload}>Upload Excel</button>
       </div>
     </div>

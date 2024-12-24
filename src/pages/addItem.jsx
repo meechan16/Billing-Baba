@@ -113,6 +113,26 @@ export default function AddItem({
   };
 
   const addItemReq = async () => {
+
+    if (sellPrice < discount) {
+      alert("discount can't be more than sales price");
+    } else if (purchaseprice >= sellPrice - discount) {
+      alert("purchase price more than sale price, please fix");
+    } else if (MRP < purchaseprice) {
+      alert("MRP more than purchase price, please fix");
+    }
+    if (
+      !itemName ||
+      !itemCode ||
+      !sellPrice ||
+      !discount ||
+      !purchaseprice ||
+      !tax ||
+      !primaryUnit
+      ) {
+        alert("Please fill all the fields");
+    }
+
     setLoading(true);
     let newData;
     if (toggle) {
@@ -288,6 +308,22 @@ export default function AddItem({
                 Set Unit
               </button>
             )}
+            {itemCode && (
+              <>
+                {ImageURL ? (
+                  <a href={ImageURL.url} target="_blank">
+                    Click to see Barcode
+                  </a>
+                ) : (
+                  <button
+                    className="text-blue-500 font-semibold mx-2 items-center hover:underline fill-blue-500 flex gap-1"
+                    onClick={() => generateurl(itemCode)}
+                  >
+                    Generate Barcode Image
+                  </button>
+                )}
+              </>
+            )}
           </div>
           {unitToggle && (
             <div className="flex z-10 justify-center items-center fixed top-0 left-0 w-screen h-screen bg-gray-600 bg-opacity-20">
@@ -295,7 +331,7 @@ export default function AddItem({
                 <h3 className="text-lg font-semibold mb-4">
                   Select Items Units
                 </h3>
-                <div className="flex w-full justify-between my-3">
+                <div className="flex w-full gap-2 justify-between my-3">
                   <div className="relative">
                     <h1>Primary Unit</h1>
                     {/* <CustomInput
@@ -389,11 +425,12 @@ export default function AddItem({
                     placeholder={"Secondary Unit"}
                   /> */}
                 </div>
+                {SecondaryUnit?.name && (
                 <p>
                   One Secondary unit ={" "}
                   <input
                     type="text"
-                    className="p-2 border-b-2 border-gray-400"
+                    className="p-1 border border-gray-400"
                     name=""
                     id=""
                     value={Conversion}
@@ -401,18 +438,19 @@ export default function AddItem({
                   />{" "}
                   X Primary Unit
                 </p>
+                )}
                 <div className="flex w-full gap-2 mt-2">
                   <button
                     onClick={() => setUnitToggle(false)}
                     className="px-4 py-2 bg-blue-500 flex-1 text-white rounded hover:bg-blue-600"
                   >
-                    Add Unit
+                    Save
                   </button>
                   <button
                     onClick={() => setUnitToggle(false)}
                     className="px-4 py-2 border border-blue-500 flex-1 text-blue-600 rounded hover:bg-blue-500 hover:text-white"
                   >
-                    Close
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -446,8 +484,8 @@ export default function AddItem({
               </option>
             </select>
 
-            {/* <input type="text" className="box" /> */}
-            <div className="flex">
+            {/* <input autoComplete="off" type="text" className="box" /> */}
+            <div className="flex items-center">
               <CustomInput
                 inputValue={itemCode}
                 setInputValue={setitemCode}
@@ -455,7 +493,7 @@ export default function AddItem({
               />
               {!itemCode && (
                 <button
-                  className="h-full my-[10px] p-3 bg-gray-200 font-semibold"
+                  className="h-full p-1 bg-blue-200 hover:bg-blue-300 rounded-r-md"
                   onClick={() => {
                     let cd = generate13DigitNumberString();
                     console.log(cd);
@@ -466,22 +504,7 @@ export default function AddItem({
                 </button>
               )}
             </div>
-            {itemCode && (
-              <>
-                {ImageURL ? (
-                  <a href={ImageURL.url} target="_blank">
-                    Click to see Barcode
-                  </a>
-                ) : (
-                  <button
-                    className="font-semibold hover:underline"
-                    onClick={() => generateurl(itemCode)}
-                  >
-                    Generate Barcode Image
-                  </button>
-                )}
-              </>
-            )}
+            
             <button
               className="text-blue-400 font-semibold mx-2 items-center fill-blue-400 flex gap-1"
               onClick={() => setShowPopup(true)}
@@ -570,14 +593,14 @@ export default function AddItem({
                 Stock
               </button>
             )}
-            {toggle && (
+            {/* {toggle && ( */}
               <button
                 className={page === "Os" && "active"}
                 onClick={() => setPage("Os")}
               >
                 Online Store
               </button>
-            )}
+            {/* )} */}
             {toggle && (
               <button
                 className={page === "Man" && "active"}
@@ -836,8 +859,9 @@ export default function AddItem({
                       value={tax}
                       onChange={(e) => setTax(e.target.value)}
                     >
+                      <option value={0}>None</option>
                       {data.tax?.map((item) => (
-                        <option value={item.value} selected={item.value == 0}>
+                        <option value={item.value}>
                           {item.name}
                         </option>
                       ))}
@@ -875,11 +899,11 @@ export default function AddItem({
               {/* {openingQuantity && (
                 <>
                   <div className="">
-                    <input type="checkbox" name="" id="" />
+                    <input autoComplete="off" type="checkbox" name="" id="" />
                     <span>To Pay</span>
                   </div>
                   <div className="">
-                    <input type="checkbox" name="" id="" />
+                    <input autoComplete="off" type="checkbox" name="" id="" />
                     <span>To Recieve</span>
                   </div>
                 </>
@@ -891,6 +915,7 @@ export default function AddItem({
               />
               <input
                 type="date"
+                value={Date(asDate)}
                 onChange={(e) => setAsDate(e.target.value)}
                 id="birthday"
                 name="birthday"

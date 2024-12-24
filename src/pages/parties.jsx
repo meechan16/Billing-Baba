@@ -73,11 +73,11 @@ export default function Parties({ data, setData, change, setChange }) {
   if (selectedParty) {
     if (page == "parties") {
       columns = [
-        { key: "type", label: "Type" },
-        { key: "invoice_date", label: "Invoice Date" },
-        { key: "invoice_number", label: "Invoice Number" },
-        { key: "total", label: "Total" },
-        { key: "pending", label: "Pending" },
+        { key: "type", label: "Type",type:"transaction type"  },
+        { key: "invoice_date", label: "Invoice Date",type:"string" },
+        { key: "invoice_number", label: "Invoice Number",type:"number" },
+        { key: "total", label: "Total",type:"number" },
+        { key: "pending", label: "Pending",type:"number" },
         { key: "DropDown", label: "-" },
       ];
       sendingArray = data?.Transactions?.map((item, originalIndex) => ({
@@ -233,8 +233,8 @@ export default function Parties({ data, setData, change, setChange }) {
         });
     } else if (page === "groups") {
       columns = [
-        { key: "partyName", label: "Party Name" },
-        { key: "credit", label: "Credit" },
+        { key: "partyName", label: "Party Name",type:"string" },
+        { key: "credit", label: "Credit",type:"number" },
       ];
       sendingArray = data?.parties?.filter(
         (item) => item.group === selectedParty
@@ -249,6 +249,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("parties");
             setSelectedParty();
+            setSearch(!search)
           }}
         >
           Parties
@@ -258,6 +259,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("groups");
             setSelectedParty();
+            setSearch(!search)
           }}
         >
           Groups
@@ -267,6 +269,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("loyalty");
             setSelectedParty();
+            setSearch(!search)
           }}
         >
           Loyalty points
@@ -392,7 +395,7 @@ export default function Parties({ data, setData, change, setChange }) {
                           </p>
                           {/* <Dropdown menuItems={["View/Edit", "Delete"]}> */}
 
-                          <h2 className="hovEle">{party.partyName}</h2>
+                          <h2 className="hovEle">{party.partyName} - {party.credit}</h2>
                           <Dropdown
                             menuItems={[
                               {
@@ -481,8 +484,8 @@ export default function Parties({ data, setData, change, setChange }) {
           )}
           <div className="right">
             {selectedParty ? (
-              <div className="rounded-md bg-green-100 mb-2 p-3">
-                <h1 className="text-xl font-semibold flex justify-between items-center w-full">
+              <div className="rounded-md bg-gray-100 mb-2 p-3">
+                <h1 className="text-xl font-semibold flex justify-between items-center w-full mb-2">
                   {selectedParty.partyName}
                   <div className="flex gap-3">
                     <svg
@@ -509,7 +512,7 @@ export default function Parties({ data, setData, change, setChange }) {
                   </div>
                 </h1>
                 <div className="flex justify-between w-full text-sm">
-                  <div className="flex flex-col justify-between items-start">
+                  <div className="flex flex-col justify-between items-start gap-2">
                     <p>
                       Phone Number:{" "}
                       <span className="font-semibold">
@@ -517,7 +520,7 @@ export default function Parties({ data, setData, change, setChange }) {
                       </span>
                     </p>
                     <p>
-                      email:{" "}
+                      Email:{" "}
                       <span className="font-semibold">
                         {selectedParty.Email}
                       </span>
@@ -529,7 +532,7 @@ export default function Parties({ data, setData, change, setChange }) {
                       </span>
                     </p>
                   </div>
-                  <div className="flex flex-col justify-start items-end">
+                  <div className="flex flex-col justify-start items-end gap-2">
                     <p>
                       Address:{" "}
                       <span className="font-semibold">{selectedParty.Add}</span>
@@ -540,6 +543,13 @@ export default function Parties({ data, setData, change, setChange }) {
                         {selectedParty.GSTIN}
                       </span>
                     </p>
+                    <p className="flex items-center gap-2">
+                      <span>
+                      Active: 
+                      </span>
+                      <input type="checkbox" name="" id="" />
+                    </p>
+
                   </div>
                 </div>
                 {/* <div className="flex gap-3">
@@ -558,7 +568,7 @@ export default function Parties({ data, setData, change, setChange }) {
                 </div> */}
               </div>
             ) : (
-              <div className="flex rounded-md bg-green-100 mb-2 p-3 justify-between">
+              <div className="flex rounded-md bg-gray-100 mb-2 p-3 justify-between">
                 <h1>No Party Selected</h1>
               </div>
             )}

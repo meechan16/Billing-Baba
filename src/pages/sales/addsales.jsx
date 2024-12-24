@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ImageUploader from "../../components/ImgUpload";
 import dev_url from "../../url";
 import { useParams } from "react-router-dom";
@@ -82,7 +82,7 @@ export default function AddSales({ data, setData, change, setChange }) {
           (pricePerUnit - newRows[index]["PurchasePrice"] - discount) * qty;
       }
       newRows[index][column] = value;
-      console.log(newRows[index]);
+      // console.log(newRows[index]);
       return newRows;
     });
   };
@@ -100,7 +100,7 @@ export default function AddSales({ data, setData, change, setChange }) {
   );
 
   const [Party, setParty] = useState(); // Initial index count
-  const [Name, setName] = useState(); // Initial index count
+  const [Name, setName] = useState({value: "", isDone: false}); // Initial index count
   const [phone_no, setPhone_no] = useState(); // Initial index count
   const [ShippingAdd, setShippingAdd] = useState(""); // Initial index count
   const [BillingAdd, setBillingAdd] = useState(""); // Initial index count
@@ -113,7 +113,8 @@ export default function AddSales({ data, setData, change, setChange }) {
   const [round_off, setRound_off] = useState(); // Initial index count
   const [paymentType, setpaymentType] = useState("credit"); // Initial index count
   const [Description, setDescription] = useState(); // Initial index count
-  const [paymentStatus, setPaymentStatus] = useState("pending");
+  const [hover, setHover] = useState(false);
+  const [ShareToggle, setShareToggle] = useState(false);
   const [paid, setPaid] = useState(0);
 
   const [Search, setSearch] = useState(); // Initial index count
@@ -195,13 +196,13 @@ export default function AddSales({ data, setData, change, setChange }) {
         (ele, index) => ele.partyName === Name || ele.name === Name
       );
 
-      party?.credit
-        ? (newDa.parties.find(
-            (ele, index) => ele.partyName === Name || ele.name === Name
-          ).credit += parseFloat(newData.pending))
-        : (newDa.parties.find(
-            (ele, index) => ele.partyName === Name || ele.name === Name
-          ).credit = parseFloat(newData.pending));
+      // party?.credit? (newDa.parties.find(
+      //       (ele, index) => ele.partyName === Name || ele.name === Name
+      //     ).credit += parseFloat(newData.pending))
+      //   : (newDa.parties.find(
+      //       (ele, index) => ele.partyName === Name || ele.name === Name
+      //     ).credit = parseFloat(newData.pending));
+      party?.credit? party.credit += parseFloat(newData.pending): party = {...party, credit: parseFloat(newData.pending)};
     } else {
       console.log("CASH IN HAND INCREASED");
       newDa.cash_in_hands
@@ -213,9 +214,9 @@ export default function AddSales({ data, setData, change, setChange }) {
       ? (newDa.total_sales += parseFloat(newData.total))
       : (newDa.total_sales = parseFloat(newData.total));
     console.log(newDa);
-    // setData(newDa);
-    // setChange(!change);
-    // Navigate("/sale-invoice");
+    setData(newDa);
+    setChange(!change);
+    Navigate("/sale-invoice");
   };
 
   let sendData_and_get_pdf = async () => {
@@ -397,6 +398,8 @@ export default function AddSales({ data, setData, change, setChange }) {
           <h1>Sale</h1>
         </div>
         <div className="">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-4 fill-black" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm32 160a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM96 352a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM64 416c0-17.7 14.3-32 32-32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32zM192 256a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm32 64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zm64-64a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm32 64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM288 448a32 32 0 1 1 0-64 32 32 0 1 1 0 64z"/></svg>
+        <Link className="" to="/settings"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-4 fill-black" viewBox="0 0 512 512"><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg></Link>
           <p>Credit</p>
           <div
             className={toggle ? "toggle" : "toggle opp"}
@@ -424,19 +427,19 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <input
                     type="text"
                     name="name"
-                    value={Name ? Name : Search?.party ? Search?.party : ""}
-                    onChange={(e) => setSearch({ party: e.target.value })}
+                    value={Name.value}
+                    onChange={(e) => setName({ value: e.target.value, done:false })}
                     placeholder="Search by Name/Phone"
                     className="p-1 bg-white w-[300px] h-[30px] "
                     id=""
                   />
-                  {Search?.party && (
+                  {Name.value && !Name.done && (
                     <ul className="absolute top-6 left-0 w-[400px] z-10 rounded-md shadow-md ">
                       {data.parties
                         .filter((customer) =>
                           customer.partyName
                             .toLowerCase()
-                            .includes(Search.party.toLowerCase())
+                            .includes(Name.value.toLowerCase())
                         )
                         .map((customer) => (
                           <li
@@ -444,7 +447,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                             key={customer.phone_no}
                             onClick={() => {
                               // i should probably add more than a name to improve future search filter
-                              setName(customer.partyName);
+                              setName({ value: customer.partyName, done: true });
                               setPhone_no(customer.phoneNo);
                               setBillingAdd(customer.Add);
                               if(isSameAddress){
@@ -498,6 +501,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                   name=""
                   id=""
                   placeholder="Billing Address"
+                  style={{
+                    resize: "none", // Disables expanding
+                  }}
                   value={BillingAdd}
                   onChange={(e) => {
                     setBillingAdd(e.target.value)
@@ -513,6 +519,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                 <textarea
                   name=""
                   value={ShippingAdd}
+                  style={{
+                    resize: "none", // Disables expanding
+                  }}
                   onChange={(e) => setShippingAdd(e.target.value)}
                   id=""
                   placeholder="Shipping Address"
@@ -522,7 +531,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 />
               </div>
               <div className="flex gap-2">
-                <input type="checkbox" name="" onChange={()=> {
+                <input autoComplete="off" type="checkbox" name="" onChange={()=> {
                   if (!isSameAddress){
                     setShippingAdd(BillingAdd)
                   }
@@ -541,8 +550,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                   onChange={(e) => setInvoice_number(e.target.value)}
                   name="InvNo"
                   placeholder="input..."
-                  className="px-1"
-                />
+                  className="px-1 cursor-pointer border-b border-gray-600 focus:outline-none"
+                  />
               </div>
               <div className="">
                 <span>Invoice Date</span>
@@ -551,25 +560,27 @@ export default function AddSales({ data, setData, change, setChange }) {
                   value={invoice_date}
                   onChange={(e) => setInvoice_date(e.target.value)}
                   id="birthday"
+                  className="px-1 cursor-pointer border-b border-gray-600 focus:outline-none"
                   name="birthday"
                 ></input>
               </div>
               <div className="">
                 <span>State of supply</span>
+                <div className="relative">
+
                 <input
                   type="text"
                   value={state_of_supply.state}
                   onChange={(e) =>
                     setState_of_supply({ state: e.target.value, isDone: false })
                   }
+                  className="px-1 cursor-pointer border-b border-gray-600 focus:outline-none"
                   name="State"
                   placeholder="input..."
                   id=""
                 />
-              </div>
-              <div className="ne">
                 {state_of_supply.state && !state_of_supply.isDone && (
-                  <div className="dropdown">
+                  <div className="absolute top-5 w-full bg-white rounded-md shadow-md gap-2 flex flex-col">
                     {statesAndUnionTerritoriesOfIndia
                       .filter((e) =>
                         e
@@ -577,17 +588,19 @@ export default function AddSales({ data, setData, change, setChange }) {
                           .includes(state_of_supply.state.toLocaleLowerCase())
                       )
                       .map((e, index) => (
-                        <p
+                        <div
                           key={index}
                           onClick={() =>
                             setState_of_supply({ state: e, isDone: true })
                           }
+                          className="cursor-pointer focus:outline-none hover:bg-gray-100 text-nowrap overflow-hidden"
                         >
                           {e}
-                        </p>
+                        </div>
                       ))}
                   </div>
                 )}
+                </div>
               </div>
             </div>
           </div>
@@ -595,7 +608,7 @@ export default function AddSales({ data, setData, change, setChange }) {
             <table className="min-w-full table-auto border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-blue-100">
-                  <th className="px-1 py-1 border border-gray-300 border-b-0"></th>
+                  <th className="px-1 py-1 border border-gray-300 border-b-0"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 512 512"><path d="M24 32C10.7 32 0 42.7 0 56L0 456c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24L64 56c0-13.3-10.7-24-24-24L24 32zm88 0c-8.8 0-16 7.2-16 16l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16zm72 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zm96 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zM448 56l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0c-13.3 0-24 10.7-24 24zm-64-8l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16s-16 7.2-16 16z"/></svg></th>
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     CATEGORY
                   </th>
@@ -627,6 +640,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                     UNIT
                   </th>
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
+                    MRP
+                  </th>
+                  <th className="px-1 py-1 border border-gray-300 border-b-0">
                     PRICE / UNIT
                   </th>
                   {/* Combined Discount Header */}
@@ -646,7 +662,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1   border border-gray-300 border-b-0">
                     AMOUNT
                   </th>
-                  <th className="px-1 py-1   border border-gray-300 border-b-0"></th>
+                  {/* <th className="px-1 py-1   border border-gray-300 border-b-0"></th> */}
                 </tr>
                 <tr className="bg-blue-100">
                   {/* Empty headers for the first part */}
@@ -662,19 +678,34 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300">%</th>
                   <th className="px-1 py-1  border border-gray-300">AMOUNT</th>
                   <th className="px-1 py-1  border border-gray-300">%</th>
                   <th className="px-1 py-1  border border-gray-300">AMOUNT</th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
-                  <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  {/* <th className="px-1 py-1  border border-gray-300 border-t-0"></th> */}
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row, rowIndex) => (
                   <tr key={rowIndex} className="text-center">
-                    <td className="px-1 py-1   border border-gray-300">
-                      {rowIndex}
+                    <td className="px-1 py-1 w-[35px] border border-gray-300" onMouseEnter={()=> setHover(true)} onMouseLeave={()=> setHover(false)}>
+                      {hover?(
+                      <button
+                        className="py-1 px-1 h-full w-full text-center fill-black hover:fill-red-500 rounded-sm"
+                        onClick={() =>
+                          setRows(rows.filter((r, i) => i !== rowIndex))
+                        }
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 448 512"
+                        >
+                          <path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                        </svg>
+                      </button>
+                      ):rowIndex}
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.category} */}
@@ -955,6 +986,23 @@ export default function AddSales({ data, setData, change, setChange }) {
                       <input
                         className="w-full px-1 py-1 text-center bg-gray-100 rounded-sm"
                         type="number"
+                        value={rows[rowIndex].mrp}
+                        onChange={(e) => {
+                          if (rows[rowIndex].PurchasePrice > e.target.value) {
+                            alert("Purchase Price should be more than MRP");
+                          }
+                          handleInputChange(
+                            rowIndex,
+                            "mrp",
+                            e.target.value
+                          );
+                        }}
+                      />
+                    </td>
+                    <td className="  border border-gray-300">
+                      <input
+                        className="w-full px-1 py-1 text-center bg-gray-100 rounded-sm"
+                        type="number"
                         value={rows[rowIndex].price_per_unit}
                         onChange={(e) => {
                           if (rows[rowIndex].PurchasePrice > e.target.value) {
@@ -1037,21 +1085,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
-                    <td className=" border border-gray-300">
-                      <button
-                        className="py-1 px-1 h-full w-full text-center fill-black hover:fill-red-500 rounded-sm"
-                        onClick={() =>
-                          setRows(rows.filter((r, i) => i !== rowIndex))
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 448 512"
-                        >
-                          <path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                        </svg>
-                      </button>
-                    </td>
+                    {/* <td className=" border border-gray-300">
+                      
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -1083,6 +1119,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                  <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                   <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
                     {rows.reduce(
                       (total, row) => total + (parseInt(row.discount) || 0),
@@ -1102,7 +1139,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       0
                     )}
                   </td>
-                  <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0"></td>
+                  {/* <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0"></td> */}
                 </tr>
               </tfoot>
             </table>
@@ -1236,18 +1273,34 @@ export default function AddSales({ data, setData, change, setChange }) {
               )}
             </div>
           </div>
-          <div className="ai5">
+          <div className="flex w-full justify-end items-center gap-2 px-4">
             <button className="save1" onClick={() => sendData_and_get_pdf()}>
               Save & Generate Invoice
             </button>
-            <button className="save" onClick={() => sendData()}>
-              Save
-            </button>
-            <button className="share">
+            <div className="border-2 border-blue-500 rounded-md flex">
+              <button className="p-1 px-3 hover:bg-blue-500 text-lg items-center hover:text-white text-blue-500 fill-blue-500 hover:fill-white flex gap-2">
               Share{" "}
+              
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z" />
               </svg>
+              </button>
+              <button className="p-1 px-3 hover:bg-blue-500 text-lg relative  hover:text-white text-blue-500 fill-blue-500 hover:fill-white" onClick={()=> setShareToggle(!ShareToggle)}>
+              {ShareToggle && (
+                
+                <div className="absolute bg-white w-[150px] rounded-md flex flex-col bottom-10 shadow-lg right-0">
+                <button className="p-1 text-sm bg-white text-black hover:bg-gray-200 hover:text-black">Generate E-invoice</button>
+                <button className="p-1 text-sm bg-white text-black hover:bg-gray-200 hover:text-black">Generate E-waysbill</button>
+                <button className="p-1 text-sm bg-white text-black hover:bg-gray-200 hover:text-black">Share</button>
+                <button className="p-1 text-sm bg-white text-black hover:bg-gray-200 hover:text-black">Print</button>
+                <button className="p-1 text-sm bg-white text-black hover:bg-gray-200 hover:text-black">Save & New</button>
+              </div>
+              )}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/></svg>
+              </button>
+            </div>
+            <button className="border-2 px-3 border-red-500 rounded-md text-lg p-1 hover:bg-red-500 hover:text-white text-red-500 fill-red-500 hover:fill-white flex gap-2" onClick={() => sendData()}>
+              Save
             </button>
           </div>
         </div>

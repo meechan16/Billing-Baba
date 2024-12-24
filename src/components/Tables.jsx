@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "./dropdown";
 
 // Reusable Table Component
@@ -73,7 +73,7 @@ const SortableTable = ({ data, columns }) => {
 
   // Filter data based on search terms and selected options
   const filterData = (data) => {
-    return data.filter((item) => {
+    return data?.filter((item) => {
       return Object.keys(searchTerms).every((key) => {
         if (!searchTerms[key]) return true; // No filter for this column
         const columnValue = item[key]?.toString().toLowerCase() || "";
@@ -152,6 +152,27 @@ const SortableTable = ({ data, columns }) => {
       <path d="M6 9l6 6 6-6" />
     </svg>
   );
+  const dropdownRef = useRef(null);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveSearchKey(false);
+      }
+    };
+
+    if (activeSearchKey) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup the event listener on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [activeSearchKey]);
 
   return (
     <div className="overflow-x-auto text-xs">
@@ -191,7 +212,7 @@ const SortableTable = ({ data, columns }) => {
 
                 {/* Search bar with option dropdown or radio buttons */}
                 {activeSearchKey === column.key && (
-                  <div className="absolute bg-white shadow-lg rounded p-3 mt-1 z-10 w-48">
+                  <div className="absolute bg-white shadow-lg rounded p-3 mt-1 z-10 w-48" ref={dropdownRef}>
                     {/* For transaction type column */}
                     {column.type === "transaction type" && (
                       <div className="flex flex-col">
@@ -267,6 +288,7 @@ const SortableTable = ({ data, columns }) => {
                         />
                       </>
                     )}
+                    {console.log(column)}
                   </div>
                 )}
               </th>

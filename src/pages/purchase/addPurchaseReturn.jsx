@@ -651,7 +651,7 @@ export default function AddPurchaseReturn({
         </div>
         <div className="ai3">
           <div className="l">
-            {/* <input type="checkbox" name="" id="" />
+            {/* <input autoComplete="off" type="checkbox" name="" id="" />
             <span>Round Off</span>
             <input
               className="in"

@@ -1278,7 +1278,9 @@ input[type="number"] {
         justify-content: space-between;
         padding: 10px;
         h2 {
-          text-decoration: underline;
+          &:hover{
+            text-decoration: underline;
+          }
           font-weight: 600;
         }
       }
@@ -1563,8 +1565,10 @@ input[type="number"] {
           justify-content: space-between;
           padding: 10px;
           h2 {
-            text-decoration: underline;
             font-weight: 600;
+            &:hover{
+              text-decoration: underline;
+            }
           }
         }
         .tile {
@@ -1574,6 +1578,17 @@ input[type="number"] {
           padding: 10px;
           &.selected {
             background-color: #d4f7ea;
+          }
+          .hovEle {
+            display: none;
+            transition: 300ms ease;
+            position: absolute;
+            border: 1px solid gray;
+            background: white;
+            z-index: 2;
+            border-radius: 2px;
+            padding: 2px 5px;
+            top: 40px;
           }
           h1 {
             width: 60%;
@@ -1594,6 +1609,9 @@ input[type="number"] {
           &:hover {
             background: rgba(164, 164, 164, 0.218);
             transition: 100ms ease;
+            .hovEle {
+              display: block;
+            }
           }
         }
       }
@@ -1792,7 +1810,7 @@ input[type="number"] {
         }
         min-height: 10vw;
         padding: 10px;
-        background-color: #d4f7ea;
+        background-color: #f6f6f6;
         border-radius: 10px;
         margin-bottom: 10px;
       }
@@ -2158,6 +2176,8 @@ input[type="number"] {
   & > .top {
     svg {
       height: 40px;
+      width: 40px;
+      fill: rgb(83, 82, 82);
       border-radius: 50px;
       transition: 100ms ease;
       padding: 10px;
@@ -2261,19 +2281,19 @@ input[type="number"] {
             height: fit-content;
             font-weight: 600;
           }
-          &.dropdown {
-            position: absolute;
-            background: white;
-            flex-direction: column;
-            right: 20px;
-            width: 10vw;
-            overflow-x: hidden;
-            overflow-y: auto;
-            max-height: 30vh;
-            padding: 10px;
-            box-shadow: 0 0 10px rgb(170, 170, 170);
-            border-radius: 10px;
-          }
+          // &.dropdown {
+          //   position: absolute;
+          //   background: white;
+          //   flex-direction: column;
+          //   right: 20px;
+          //   width: 10vw;
+          //   // overflow-x: hidden;
+          //   overflow-y: auto;
+          //   max-height: 30vh;
+          //   // padding: 10px;
+          //   box-shadow: 0 0 10px rgb(170, 170, 170);
+          //   border-radius: 10px;
+          // }
         }
         span {
           font-weight: 500;
@@ -2733,8 +2753,6 @@ input[type="number"] {
       svg {
         height: 20px;
       }
-      div {
-      }
     }
   }
   .title {
@@ -2743,7 +2761,7 @@ input[type="number"] {
     background-color: #f4f4f4;
     // background-color: #d4f7ea;
     border-radius: 10px;
-    margin: 10px 10px;
+    margin: 10px 0;
     // box-shadow: -5px 5px 5px rgba(92, 92, 92, 0.482);
     // border: 1px solid gray;
     &.odd {

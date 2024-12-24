@@ -7,14 +7,14 @@ export default function DelieveryChalan({ data, setData }) {
   const Navigate = useNavigate();
   let columns = [
     // { key: "index", label: "#" },
-    { key: "invoice_date", label: "Date" },
-    { key: "name", label: "Party Name" },
-    { key: "invoice_number", label: "Chalan Number" },
-    { key: "due_date", label: "Due Date" },
-    { key: "total", label: "Total Amount" },
+    { key: "invoice_date", label: "Date" ,type:"string"},
+    { key: "name", label: "Party Name",type:"string" },
+    { key: "invoice_number", label: "Chalan Number",type:"number" },
+    { key: "due_date", label: "Due Date",type:"string" },
+    { key: "total", label: "Total Amount",type:"number" },
     // { key: "balance", label: "Balance" },
-    { key: "status", label: "Status" },
-    { key: "action", label: "Action" },
+    { key: "status", label: "Status",type:"string" },
+    { key: "action", label: "Action",type:"string" },
     { key: "DropDown", label: "-" },
   ];
   var sendingArray = data?.Transactions?.map((item, originalIndex) => ({
@@ -64,7 +64,7 @@ export default function DelieveryChalan({ data, setData }) {
             //         >
             //           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
             //         </svg>
-            //         <input type="" />
+            //         <input autoComplete="off" type="" />
             //       </div>
             //       <button onClick={() => Navigate("/add-delivery-chalan")}>
             //         + Add Delivery Chalan
@@ -132,7 +132,7 @@ export default function DelieveryChalan({ data, setData }) {
                       >
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                       </svg>
-                      <input type="" className="bg-transparent" />
+                      <input autoComplete="off" type="" className="bg-transparent" />
                     </div>
                   </div>
                   <button className="px-2 py-1 rounded-full font-semibold text-white bg-blue-500 ml-2" onClick={() => Navigate("/add-delivery-chalan")}>

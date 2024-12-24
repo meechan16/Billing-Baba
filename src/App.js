@@ -78,10 +78,10 @@ function App() {
   const [data, setData] = useState(localStorage.getItem("data"));
   const [item, setItem] = useState(item2);
   const [change, setChange] = useState(false);
-  const [loading, setloading] = useState(true);
   const [loading2, setloading2] = useState(false);
   const [Error, setError] = useState(true);
-
+  
+  const [loading, setloading] = useState(true);
   useEffect(() => {
     // console.log(data);
     // console.log("data before fetch");

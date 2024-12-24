@@ -138,7 +138,7 @@ export default function AddPaymentsin({
             {/* <button>Select Unit</button> */}
           </div>
           <div className="flex flex-col gap-3 p-3">
-            {/* <input type="text" className="box" /> */}
+            {/* <input autoComplete="off" type="text" className="box" /> */}
             <input
               type="date"
               value={date}

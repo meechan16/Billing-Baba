@@ -52,10 +52,10 @@ export default function Expense({ data, setData }) {
   var sendingArray;
   if(page === "item"){
     columns = [
-      { key: "invoice_date", label: "Invoice Date" },
-      { key: "invoice_number", label: "Invoice Number" },
-      { key: "total", label: "Total" },
-      { key: "type", label: "Transaction Type" },
+      { key: "invoice_date", label: "Invoice Date",type:"string" },
+      { key: "invoice_number", label: "Invoice Number",type:"number"  },
+      { key: "total", label: "Total",type:"number"  },
+      { key: "type", label: "Transaction Type",type:"transaction type"  },
     ]
     sendingArray = data?.Transactions?.filter(
       (ele) => ele.type == "Expense"
@@ -79,10 +79,10 @@ export default function Expense({ data, setData }) {
   }
   if(page === "category"){
     columns = [
-      { key: "invoice_date", label: "Invoice Date" },
-      { key: "invoice_number", label: "Invoice Number" },
-      { key: "total", label: "Total" },
-      { key: "type", label: "Transaction Type" },
+      { key: "invoice_date", label: "Invoice Date",type:"string" },
+      { key: "invoice_number", label: "Invoice Number",type:"number" },
+      { key: "total", label: "Total",type:"number" },
+      { key: "type", label: "Transaction Type" ,type:"transaction type" },
     ]
     // sendingArray = data?.Transactions?.filter(
     //   (ele) => ele.type == "Expense" && ele.Category === selectedCategory.name
@@ -233,7 +233,7 @@ export default function Expense({ data, setData }) {
                       >
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                       </svg>
-                      <input type="" className="bg-transparent" />
+                      <input autoComplete="off" type="" className="bg-transparent" />
                     </div>
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export default function Expense({ data, setData }) {
               //       >
               //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               //       </svg>
-              //       <input type="" />
+              //       <input autoComplete="off" type="" />
               //     </div>
               //   </div>
               //   <div className="cl top">
@@ -345,7 +345,7 @@ export default function Expense({ data, setData }) {
               //       >
               //         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
               //       </svg>
-              //       <input type="" />
+              //       <input autoComplete="off" type="" />
               //     </div>
               //   </div>
               //   <div className="cl top">
@@ -380,7 +380,7 @@ export default function Expense({ data, setData }) {
                       >
                         <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                       </svg>
-                      <input type="" className="bg-transparent" />
+                      <input autoComplete="off" type="" className="bg-transparent" />
                     </div>
                   </div>
                 </div>
