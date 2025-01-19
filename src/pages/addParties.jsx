@@ -27,11 +27,13 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [AddF1, setAddF1] = useState("");
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
+
+  var [OpBalState, setOpBalState] = useState(0);
   var [loading, setLoading] = useState(false);
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addPartiesReq = async () => {
-    if (!partyName ||  !phoneNo || !Email) {
+    if (!partyName || !phoneNo || !Email) {
       alert("Please fill all the fields");
       return;
     }
@@ -45,7 +47,11 @@ export default function AddParties({ data, setData, change, setChange }) {
       Add: Add ? Add : "",
       BillingAdd: Add ? Add : "",
       ShippingAdd: ShippingAdd ? ShippingAdd : "",
-      OpeningBalance: OpeningBalance ? parseInt(OpeningBalance) : 0,
+      OpeningBalance: OpeningBalance
+        ? OpBalState == 0
+          ? parseInt(OpeningBalance)
+          : -parseInt(OpeningBalance)
+        : 0,
       asDate: asDate ? asDate : "",
       OpeningLoyaltyPoints: OpeningLoyaltyPoints
         ? parseInt(OpeningLoyaltyPoints)
@@ -55,7 +61,7 @@ export default function AddParties({ data, setData, change, setChange }) {
       AddF2: AddF2 ? AddF2 : "",
       AddF3: AddF3 ? AddF3 : "",
       transactions: [],
-      creditLimit: creditLimit? parseInt(creditLimit): 0,
+      creditLimit: creditLimit ? parseInt(creditLimit) : 0,
       groups: groups?.name,
       credit: parseInt(OpeningBalance) ? parseInt(OpeningBalance) : 0,
     };
@@ -154,93 +160,83 @@ export default function AddParties({ data, setData, change, setChange }) {
             {/* <button>Select Unit</button> */}
           </div>
           <div>
-          <div className="relative">
-            <TextField
-              id="outlined-search"
-              value={groups.name ? groups.name : ""}
-              onChange={(e) => setGropus({ name: e.target.value, done: false })}
-              label="Party Group"
-              sx={{
-                background: "white",
-              }}
-              type="search"
-              itemType="number"
-            />
-            {groups?.name && !groups.done && (
-              <ul className="absolute top-[50px] flex flex-col">
-                {data?.groups
-                  ?.filter(
-                    (e) =>
-                      groups?.name
-                        ?.toLowerCase()
-                        .split(" ")
-                        .every((word) => e.toLowerCase().includes(word))
-                    // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
-                  )
-                  .map((e, index) => (
-                    <li
-                      className={`tile w-full p-2 z-10 bg-white hover:bg-gray-100 ${
-                        groups.name === e ? "bg-gray-200" : ""
-                      }`}
-                      key={index}
-                      onClick={() => setGropus({ name: e, done: true })}
-                    >
-                      <h1 className="">{e}</h1>
-                    </li>
-                  ))}
-              </ul>
-            )}
-          </div>
-          <select
-                    // onChange={(e) => setGstType}
-                    name=""
-                    id=""
-                    className="w-full p-2 border-1 border-gray-800"
-                  >
-                    <option disabled selected value="">
-                      Under Group
-                    </option>
-                    <option value="Unregistere/Counsumer">
-                      Current Asset
-                    </option>
-                    <option value="Registered Business - Regular">
-                      Bank Account
-                    </option>
-                    <option value="Registered Business - Consumer">
-                      Cash In Hand
-                    </option>
-                    <option value="Registered Business - Consumer">
-                      Deposit
-                    </option>
-                    <option value="Registered Business - Consumer">
-                      Loan And Advance
-                    </option>
-                    <option value="Registered Business - Consumer">
-                      Stock In Hand
-                    </option>
-                  </select>
-          <select
-                    // onChange={(e) => setGstType}
-                    name=""
-                    id=""
-                    className="w-full p-2 border-1 border-gray-800"
-                  >
-                    <option disabled selected value="">
-                      Party Category
-                    </option>
-                    <option value="Unregistere/Counsumer">
-                      VIP
-                    </option>
-                    <option value="Registered Business - Regular">
-                      Regular
-                    </option>
-                    <option value="Registered Business - Consumer">
-                      RISK
-                    </option>
-                    <option value="Registered Business - Consumer">
-                      Lost
-                    </option>
-                  </select>
+            <div className="relative">
+              <TextField
+                id="outlined-search"
+                value={groups.name ? groups.name : ""}
+                onChange={(e) =>
+                  setGropus({ name: e.target.value, done: false })
+                }
+                label="Party Group"
+                sx={{
+                  background: "white",
+                }}
+                type="search"
+                itemType="number"
+              />
+              {groups?.name && !groups.done && (
+                <ul className="absolute top-[50px] flex flex-col">
+                  {data?.groups
+                    ?.filter(
+                      (e) =>
+                        groups?.name
+                          ?.toLowerCase()
+                          .split(" ")
+                          .every((word) => e.toLowerCase().includes(word)),
+                      // e.partyName.toLowerCase().includes(SearchQuerry.toLowerCase())
+                    )
+                    .map((e, index) => (
+                      <li
+                        className={`tile w-full p-2 z-10 bg-white hover:bg-gray-100 ${
+                          groups.name === e ? "bg-gray-200" : ""
+                        }`}
+                        key={index}
+                        onClick={() => setGropus({ name: e, done: true })}
+                      >
+                        <h1 className="">{e}</h1>
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+            <select
+              // onChange={(e) => setGstType}
+              name=""
+              id=""
+              className="w-full p-2 border-1 border-gray-800"
+            >
+              <option disabled selected value="">
+                Under Group
+              </option>
+              <option value="Unregistere/Counsumer">Current Asset</option>
+              <option value="Registered Business - Regular">
+                Bank Account
+              </option>
+              <option value="Registered Business - Consumer">
+                Cash In Hand
+              </option>
+              <option value="Registered Business - Consumer">Deposit</option>
+              <option value="Registered Business - Consumer">
+                Loan And Advance
+              </option>
+              <option value="Registered Business - Consumer">
+                Stock In Hand
+              </option>
+            </select>
+            <select
+              // onChange={(e) => setGstType}
+              name=""
+              id=""
+              className="w-full p-2 border-1 border-gray-800"
+            >
+              <option disabled selected value="">
+                Party Category
+              </option>
+              <option value="Unregistere/Counsumer">VIP</option>
+              <option value="Registered Business - Regular">Regular</option>
+              <option value="Registered Business - Consumer">RISK</option>
+              <option value="Registered Business - Consumer">Lost</option>
+            </select>
           </div>
         </div>
         <div className="c2">
@@ -279,19 +275,19 @@ export default function AddParties({ data, setData, change, setChange }) {
                       GST Registration Type
                     </option>
                     <option value="Unregistere/Counsumer">
-  Regular (With GST)
+                      Regular (With GST)
                     </option>
                     <option value="Registered Business - Regular">
-  Composition (With GST)
+                      Composition (With GST)
                     </option>
                     <option value="Registered Business - Consumer">
-  Tax Deductor/Tax Collector (With GST)
+                      Tax Deductor/Tax Collector (With GST)
                     </option>
                     <option value="Registered Business - Consumer">
-  Unregistered (Without GST)
+                      Unregistered (Without GST)
                     </option>
                     <option value="Registered Business - Consumer">
-  Unknown (Without GST)
+                      Unknown (Without GST)
                     </option>
                   </select>
                   {/* <CustomInput
@@ -329,20 +325,24 @@ export default function AddParties({ data, setData, change, setChange }) {
                   defaultValue=""
                 />
                 <div className="flex flex-col gap-2">
-
-                  {!DisableShippingAdd&& (
-
-                <TextField
-                  value={ShippingAdd}
-                  onChange={(e) => setShippingAdd(e.target.value)}
-                  id="outlined-multiline-static"
-                  label="Shipping Address"
-                  multiline
-                  rows={4}
-                  defaultValue=""
-                />
+                  {!DisableShippingAdd && (
+                    <TextField
+                      value={ShippingAdd}
+                      onChange={(e) => setShippingAdd(e.target.value)}
+                      id="outlined-multiline-static"
+                      label="Shipping Address"
+                      multiline
+                      rows={4}
+                      defaultValue=""
+                    />
                   )}
-                <button onClick={()=>setDisabeShippingAdd(!DisableShippingAdd)} className={`font-semibold ${DisableShippingAdd&& "text-blue-500"}`}>{DisableShippingAdd?"+ Enable": "- Disable"} Shipping Address</button>
+                  <button
+                    onClick={() => setDisabeShippingAdd(!DisableShippingAdd)}
+                    className={`font-semibold ${DisableShippingAdd && "text-blue-500"}`}
+                  >
+                    {DisableShippingAdd ? "+ Enable" : "- Disable"} Shipping
+                    Address
+                  </button>
                 </div>
               </div>
               {/* <div className="b">
@@ -368,22 +368,22 @@ export default function AddParties({ data, setData, change, setChange }) {
                     <div className="flex gap-2">
                       <div className="flex gap-2">
                         <div className="flex items-center gap-2">
-                          <input autoComplete="off" 
-                            type="radio" 
-                            name="balanceType" 
-                            id="toPay" 
-                            value="To Pay" 
-                            checked={OpeningBalance && OpeningBalance > 0}
+                          <input
+                            autoComplete="off"
+                            type="radio"
+                            name="balanceType"
+                            id="toPay"
+                            onClick={()=>setOpBalState(0)}
                           />
                           <span>To Pay</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <input autoComplete="off" 
-                            type="radio" 
-                            name="balanceType" 
-                            id="toRecieve" 
-                            value="To Recieve" 
-                            checked={OpeningBalance && OpeningBalance < 0}
+                          <input
+                            autoComplete="off"
+                            type="radio"
+                            name="balanceType"
+                            id="toRecieve"
+                            onClick={()=>setOpBalState(1)}
                           />
                           <span>To Recieve</span>
                         </div>
@@ -411,23 +411,39 @@ export default function AddParties({ data, setData, change, setChange }) {
                   name="birthday"
                 ></input>
               </div>
-              <div className="flex items-center px-4 gap-2" onClick={() => setcreditLimitToggle(!creditLimitToggle)}><input autoComplete="off" type="checkbox" name="" id="" checked={creditLimitToggle} /> <h1>Credit limit</h1></div>
-              {
-                creditLimitToggle &&
-                (
-              <div className="div">
-                <div className="flex items-center">
-                  <h1 className="text-lg font-semibold">Set Credit Limit:</h1>
-
-                  <CustomInput
-                    inputValue={creditLimit}
-                    setInputValue={setcreditLimit}
-                    placeholder={"Set Credit Limit"}
-                  />
+              <div
+                className="flex items-center px-4 gap-2"
+                onClick={() => setcreditLimitToggle(!creditLimitToggle)}
+              >
+                {/*<input
+                  autoComplete="off"
+                  type="checkbox"
+                  name=""
+                  id=""
+                  checked={creditLimitToggle}
+                /> */}
+                <h1>No limit</h1>
+                <div
+                  className={!creditLimitToggle ? "toggle" : "toggle opp"}
+                  onClick={() => {
+                    setcreditLimitToggle(!creditLimitToggle)
+                  }}
+                >
+                  <div className="button"></div>
                 </div>
+                <h1>Custom Credit limit</h1>
               </div>
-                )
-              }
+              {creditLimitToggle && (
+                <div className="div">
+                  <div className="flex items-center">
+                    <CustomInput
+                      inputValue={creditLimit}
+                      setInputValue={setcreditLimit}
+                      placeholder={"Set Credit Limit"}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
           {page === "AddF" && (

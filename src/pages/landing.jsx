@@ -95,8 +95,8 @@ export default function Landing() {
   return (
     <div id="Landing">
       <nav>
-        <div className="icon">
-          <svg
+        <div className="flex-1">
+          {/*<svg
             width="89"
             height="65"
             viewBox="0 0 89 65"
@@ -115,18 +115,24 @@ export default function Landing() {
               d="M21.758 32.434C23.5353 32.8353 24.94 33.724 25.972 35.1C27.0327 36.4473 27.563 37.9953 27.563 39.744C27.563 42.324 26.6743 44.345 24.897 45.807C23.1197 47.269 20.6257 48 17.415 48H2.408V17.685H16.942C20.038 17.685 22.4603 18.373 24.209 19.749C25.9863 21.125 26.875 23.06 26.875 25.554C26.875 27.3313 26.402 28.822 25.456 30.026C24.5387 31.2013 23.306 32.004 21.758 32.434ZM10.836 29.725H15.093C17.2143 29.725 18.275 28.8507 18.275 27.102C18.275 25.296 17.2143 24.393 15.093 24.393H10.836V29.725ZM15.738 41.206C17.8593 41.206 18.92 40.3173 18.92 38.54C18.92 37.6227 18.6333 36.9203 18.06 36.433C17.5153 35.9457 16.727 35.702 15.695 35.702H10.836V41.206H15.738Z"
               fill="#25594C"
             />
-          </svg>
+          </svg>*/}
+          <img src="/assets/BillingBabaLogo.png" alt="logo" className="w-auto h-16 object-cover" />
         </div>
 
-        <div className="mid">
-          <Link to="/">Features</Link>
-          <Link to="/">Templates</Link>
-          <Link to="/">Tutorials</Link>
-          <Link to="/">FAQs</Link>
-          <Link to="/">PRICE</Link>
+        <div className="flex flex-1 justify-center item-center gap-4 font-semibold">
+          <Link to="/" className="hover:underline">
+            Features</Link>
+          <Link to="/" className="hover:underline">
+            Templates</Link>
+          <Link to="/" className="hover:underline">
+            Tutorials</Link>
+          <Link to="/" className="hover:underline">
+            FAQs</Link>
+          <Link to="/" className="hover:underline">
+            PRICE</Link>
         </div>
 
-        <div className="controls">
+        <div className="controls flex-1 flex justify-end">
           <Link to="/login">Sign In</Link>
           <Link className="signup" to="/login">
             Sign Up
@@ -724,7 +730,7 @@ export default function Landing() {
       <section className="footer">
         <div className="left">
           <div className="icon">
-            <svg
+            {/* <svg
               width="89"
               height="65"
               viewBox="0 0 89 65"
@@ -742,12 +748,13 @@ export default function Landing() {
                 d="M21.758 32.434C23.5353 32.8353 24.94 33.724 25.972 35.1C27.0327 36.4473 27.563 37.9953 27.563 39.744C27.563 42.324 26.6743 44.345 24.897 45.807C23.1197 47.269 20.6257 48 17.415 48H2.408V17.685H16.942C20.038 17.685 22.4603 18.373 24.209 19.749C25.9863 21.125 26.875 23.06 26.875 25.554C26.875 27.3313 26.402 28.822 25.456 30.026C24.5387 31.2013 23.306 32.004 21.758 32.434ZM10.836 29.725H15.093C17.2143 29.725 18.275 28.8507 18.275 27.102C18.275 25.296 17.2143 24.393 15.093 24.393H10.836V29.725ZM15.738 41.206C17.8593 41.206 18.92 40.3173 18.92 38.54C18.92 37.6227 18.6333 36.9203 18.06 36.433C17.5153 35.9457 16.727 35.702 15.695 35.702H10.836V41.206H15.738Z"
                 fill="#fff"
               />
-            </svg>
+            </svg>*/}
+            <img src="/assets/BillingBabaLogo.png" alt="" className="h-14 w-auto object-cover" />
           </div>
 
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci,
-            assumenda!
+            Create Invoices, Purchases & Quotations in less than 10 seconds.
+              Share on WhatsApp with payment links and get paid
           </p>
 
           <div className="socials">
@@ -806,12 +813,12 @@ export default function Landing() {
           </div>
         </div>
         <div className="mid">
-          <h1>Quick links</h1>
-          <a href="">Services</a>
-          <a href="">Portfolio</a>
-          <a href="">About Us</a>
-          <a href="">Contact Us</a>
-          <a href=""></a>
+          <h1 className="font-semibold mb-4">Quick links</h1>
+          <a href="" className="hover:underline" >Services</a>
+          <a href="" className="hover:underline">Portfolio</a>
+          <a href="" className="hover:underline">About Us</a>
+          <a href="" className="hover:underline">Contact Us</a>
+          <a href="" className="hover:underline"></a>
         </div>
         <div className="right">
           <h1>Address</h1>

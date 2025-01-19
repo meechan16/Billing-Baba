@@ -312,7 +312,7 @@ export default function Items({ data, setData, change, setChange }) {
           className={page === "product" ? "selected" : ""}
           onClick={() => {
             setPage("product");
-            setSearch(!search);
+            setSearch(false);
             setSelectedItems();
           }}
         >
@@ -322,7 +322,7 @@ export default function Items({ data, setData, change, setChange }) {
           className={page === "service" ? "selected" : ""}
           onClick={() => {
             setPage("service");
-            setSearch(!search)
+            setSearch(false)
             setSelectedItems();
           }}
         >
@@ -341,7 +341,7 @@ export default function Items({ data, setData, change, setChange }) {
           className={page === "unit" ? "selected" : ""}
           onClick={() => {
             setPage("unit");
-            setSearch(!search)
+            setSearch(false)
             setSelectedItems();
           }}
         >

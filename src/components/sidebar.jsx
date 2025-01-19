@@ -17,8 +17,8 @@ export default function Sidebar({ part, subpart, data = null }) {
       <div className="top" onClick={() => Navigate("/profile")}>
         <img src="./assets/home/user_img.png" alt="" />
         <div className="content">
-          {data ? <h1>{data.BusinessName}</h1> : <h1>BKC Traders</h1>}
-          {data ? <h2>{data.name}</h2> : <h1>Aman Mishra</h1>}
+          {data ? <h1>{data.BusinessName}</h1> : <h1>_Business_Name</h1>}
+          {data ? <h2>{data.name}</h2> : <h1>_User_Name</h1>}
           {/* <h1>BKC Traders</h1>
           <h2>Aman Mishra</h2> */}
         </div>
@@ -148,7 +148,7 @@ export default function Sidebar({ part, subpart, data = null }) {
               className={part === "purchase" ? "selected" : ""}
               onClick={() =>
                 setIsDropdownOpen(
-                  isDropdownOpen === "purchase" ? "" : "purchase"
+                  isDropdownOpen === "purchase" ? "" : "purchase",
                 )
               }
             >
@@ -377,10 +377,18 @@ export default function Sidebar({ part, subpart, data = null }) {
             </Link>
           </ul>
         </div>
-        <div className="bottom">
-          <h1>Billing Baba</h1>
-          <h2>Your trial period ends in {"5"} days</h2>
-          <button onClick={() => Navigate("/check-plan")}>Check Plans</button>
+        <div className="p-4 border-gray-200 bg-[#1e252f] flex gap-2 flex-col">
+          <h1 className="text-xl flex gap-2 items-center">
+            <img src="/assets/Logo1.png" className="w-auto h-10" />
+            <span className="font-bold font-sans ">Billing Baba</span>
+          </h1>
+          <h2 className="text-md font-bold font-sans mb-2">Your trial ends in 5 days</h2>
+          <button
+            onClick={() => Navigate("/check-plan")}
+            className="w-full border border-gray-100 p-2 hover:bg-gray-200 hover:text-black text-white rounded-md"
+          >
+            Check Plans
+          </button>
         </div>
       </div>
     </div>

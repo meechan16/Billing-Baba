@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
-import dev_url from "../url";
 import EditParties from "./editParties";
 import SortableTable from "../components/Tables";
 
@@ -249,7 +248,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("parties");
             setSelectedParty();
-            setSearch(!search)
+            setSearch(false)
           }}
         >
           Parties
@@ -259,7 +258,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("groups");
             setSelectedParty();
-            setSearch(!search)
+            setSearch(false)
           }}
         >
           Groups
@@ -269,7 +268,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("loyalty");
             setSelectedParty();
-            setSearch(!search)
+            setSearch(false)
           }}
         >
           Loyalty points

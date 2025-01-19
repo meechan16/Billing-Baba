@@ -31,7 +31,7 @@ import {
 //   appId: "1:309170576748:web:906a3f68efd541c0356749",
 //   measurementId: "G-DBV3L9VYMT",
 // };
-const firebaseConfig = {
+const firebaseConfigOld = {
   apiKey: "AIzaSyDXvyC4SXHqB7WehW-2ApAMdjesXnNWirc",
   authDomain: "fir-auth-20b27.firebaseapp.com",
   projectId: "fir-auth-20b27",
@@ -40,6 +40,15 @@ const firebaseConfig = {
   appId: "1:796452404504:web:0317ee0856c3f3be35726d"
 };
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCgUkIrYWU4MbAp89BkmeZm4C6dDT96T_M",
+  authDomain: "billing-baba.firebaseapp.com",
+  projectId: "billing-baba",
+  storageBucket: "billing-baba.appspot.com",
+  messagingSenderId: "893186141142",
+  appId: "1:893186141142:web:e1a74ab8f26d22f48ad277",
+  measurementId: "G-WP7KYER515"
+};
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
