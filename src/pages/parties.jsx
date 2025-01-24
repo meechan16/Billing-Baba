@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
-import dev_url from "../url";
 import EditParties from "./editParties";
 import SortableTable from "../components/Tables";
 
@@ -324,7 +323,7 @@ export default function Parties({ data, setData, change, setChange }) {
               </div>
             ) : (
               <div className="top">
-                <div className="btn text-sm">
+                <div className="bg-orange-400 rounded-md px-2 py-1 rounded-md text-white fill-white text-sm">
                   <button onClick={() => Navigate("/AddParties")}>
                     Add Party +
                   </button>
@@ -848,7 +847,7 @@ export default function Parties({ data, setData, change, setChange }) {
               </div>
             ) : (
               <div className="top">
-                <div className="btn">
+                <div className="bg-orange-400 rounded-md px-2 py-1 rounded-md text-white fill-white text-sm">
                   <button onClick={() => setGrpPg(1)}>Add Groups +</button>
                 </div>
 
@@ -965,7 +964,7 @@ export default function Parties({ data, setData, change, setChange }) {
                     )
                     .map((party, index) => (
                       <div
-                        className={`tile ${
+                        className={`tile p-2 rounded-sm shadow-md border border-gray-600 ${
                           GrpPgInps.val === party.partyName ? "selected" : ""
                         }`}
                         key={index}

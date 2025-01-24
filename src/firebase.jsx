@@ -11,6 +11,8 @@ import {
   signOut,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
 } from "firebase/auth";
 
 import {
@@ -31,7 +33,7 @@ import {
 //   appId: "1:309170576748:web:906a3f68efd541c0356749",
 //   measurementId: "G-DBV3L9VYMT",
 // };
-const firebaseConfig = {
+const firebaseConfigOld = {
   apiKey: "AIzaSyDXvyC4SXHqB7WehW-2ApAMdjesXnNWirc",
   authDomain: "fir-auth-20b27.firebaseapp.com",
   projectId: "fir-auth-20b27",
@@ -40,6 +42,15 @@ const firebaseConfig = {
   appId: "1:796452404504:web:0317ee0856c3f3be35726d"
 };
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCgUkIrYWU4MbAp89BkmeZm4C6dDT96T_M",
+  authDomain: "billing-baba.firebaseapp.com",
+  projectId: "billing-baba",
+  storageBucket: "billing-baba.appspot.com",
+  messagingSenderId: "893186141142",
+  appId: "1:893186141142:web:e1a74ab8f26d22f48ad277",
+  measurementId: "G-WP7KYER515"
+};
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
@@ -154,6 +165,70 @@ function getUidFromLocalStorage() {
     return null;
   }
 }
+const setUpRecaptcha = (containerId) => {
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+    size: "invisible",
+    callback: (response) => {
+      // reCAPTCHA solved, allow signInWithPhoneNumber.
+      // onSignInSubmit();
+    },
+  });
+};
+
+const signInWithPhoneNum = async (phoneNumber, containerId) => {
+  setUpRecaptcha(containerId);
+  const appVerifier = window.recaptchaVerifier;
+  try {
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      appVerifier
+    );
+    window.confirmationResult = confirmationResult;
+    // alert("OTP sent");
+    return true;
+  } catch (error) {
+    console.error(error);
+    console.log(error.message);
+    alert("Error in sending OTP");
+    return false;
+  }
+};
+
+const verifyOTP = async (otp) => {
+  try {
+    const result = await window.confirmationResult.confirm(otp);
+    const user = result.user;
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docs = await getDocs(q);
+    if (docs.docs.length === 0) {
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        phoneNumber: user.phoneNumber,
+        authProvider: "phone",
+      });
+      const profileData = {
+        uid: user.uid,
+        phoneNumber: user.phoneNumber,
+        authProvider: "phone",
+      };
+      // Uncomment and call the createProfile function to create the profile in Firestore.
+      // await createProfile(profileData);
+      return { data: profileData, newUser: true };
+    } else {
+      // Existing user, return the existing user data.
+      const existingUserData = user;
+      return {
+        data: existingUserData,
+        newUser: false,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    console.log(error.message);
+    alert("Error in verifying OTP");
+  }
+};
 
 export {
   auth,
@@ -167,4 +242,6 @@ export {
   logout,
   saveUidToLocalStorage,
   getUidFromLocalStorage,
+  signInWithPhoneNum,
+  verifyOTP
 };

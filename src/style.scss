@@ -24,7 +24,7 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  min-width: 11vw;
+  min-width: 13vw;
   width: max-content;
   margin: 0 5px;
   color: white;
@@ -36,24 +36,24 @@ input[type="number"] {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    gap:10px;
     border-radius: 10px;
     background-color: #212934;
     border: 1px solid #212934;
     margin: 5px 0;
-    padding: 5px 10px;
+    padding: 4px 8px;
     box-shadow: -5px 5px 5px #212934b7;
     img {
-      height: 2.2rem;
-      height: 5vh;
+      height: 4vh;
+      width: auto;
     }
     .content {
       width: 8vw;
       overflow: hidden;
       margin-left: 5px;
       h1 {
-        font-size: 1.1rem;
-        font-weight: 500;
-        font-size: 2.1vh;
+        font-weight: 800;
+        font-size: 1.8vh;
         text-wrap: nowrap;
         transition: 100ms ease;
       }
@@ -100,38 +100,42 @@ input[type="number"] {
     box-shadow: -5px 5px 10px #212934b7;
     .content {
       -ms-overflow-style: none; /* For IE and Edge */
-  scrollbar-width: none;    /* For Firefox */
-  overflow-y: scroll;       /* Enable vertical scrolling */
-  position: relative;       /* Positioning for the container */
+      scrollbar-width: none;    /* For Firefox */
+      overflow-y: scroll;       /* Enable vertical scrolling */
+      position: relative;       /* Positioning for the container */
 
-  /* Hide scrollbar by default */
-  &::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
-  }
+      /* Hide scrollbar by default */
+      &::-webkit-scrollbar {
+        display: none; /* For Chrome, Safari, and Opera */
+      }
 
-  /* On hover, only show the scrollbar thumb */
-  &:hover {
-    scrollbar-width: thin; /* For Firefox (shows thin scrollbar with thumb only) */
-  }
+      /* On hover, only show the scrollbar thumb */
+      &:hover {
+        scrollbar-width: thin; /* For Firefox (shows thin scrollbar with thumb only) */
+        scrollbar-base-color: transparent;
+        scrollbar-color: green;
+        scrollbar-track-color: transparent;
+      }
 
-  &:hover::-webkit-scrollbar {
-    width: 8px; /* Set width for the scrollbar thumb */
-    display: block; /* Ensure the scrollbar is displayed */
-  }
+      &:hover::-webkit-scrollbar {
+        display: block; /* Ensure the scrollbar is displayed */
+        width: 0.25rem;
+      }
 
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4); /* Darker scroll thumb */
-    border-radius: 10px; /* Rounded corners for the thumb */
-  }
+      // &:hover::-webkit-scrollbar-thumb {
+      &::-webkit-scrollbar-thumb {
+        background-color: rgb(255, 0, 0); /* Darker scroll thumb */
+        border-radius: 10px; /* Rounded corners for the thumb */
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: rgba(7, 7, 7, 0); /* Hide the track */
+      }
 
-  &:hover::-webkit-scrollbar-track {
-    background: transparent; /* Hide the track */
-  }
-
-  /* Hide the scrollbar buttons */
-  &::-webkit-scrollbar-button {
-    display: none; /* Hide the up/down arrow buttons */
-  }
+      // /* Hide the scrollbar buttons */
+      // &::-webkit-scrollbar-button {
+      //   display: none; /* Hide the up/down arrow buttons */
+      // }
       height: 100%;
       & > ul {
         margin: 10px 0;
@@ -258,7 +262,7 @@ input[type="number"] {
     height: 100%;
 
     padding: 5px 0;
-    margin: 10px;
+    margin: 20px;
     input {
       height: 100%;
       width: 100%;
@@ -618,7 +622,7 @@ input[type="number"] {
     align-items: center;
     position: fixed;
     width: 100%;
-    z-index: 10;
+    z-index: 5;
     background-color: rgb(255, 255, 255);
     .icon svg {
       // height: 50px;
@@ -973,7 +977,7 @@ input[type="number"] {
     color: white;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     padding: 10vh;
     .left {
       width: 25vw;
