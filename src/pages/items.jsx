@@ -66,6 +66,9 @@ export default function Items({ data, setData, change, setChange }) {
 
   const Navigate = useNavigate();
 
+
+  const [impPtDrp, setimpPtDrp] = useState(false);
+
   const [selecteditems, setSelectedItems] = useState(null);
   const [selectedunits, setSelectedUnits] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -380,9 +383,31 @@ export default function Items({ data, setData, change, setChange }) {
               </div>
             ) : (
               <div className="top">
+                <div className="bg-orange-400 rounded-md px-2 py-1 rounded-md text-white fill-white text-sm">
                 <button onClick={() => Navigate("/add-items")}>
                   Add Item +
                 </button>
+                  <button
+                    className="relative"
+                    onClick={() => setimpPtDrp(!impPtDrp)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                    </svg>
+                    {impPtDrp && (
+                      <button
+                        className="absolute top-[20px] font-semibold left-0 p-2 bg-slate-200 text-black w-[180px] rounded-md shadow-md text-white no-wrap"
+                        onClick={() => Navigate("/import-items")}
+                      >
+                        Import items
+                      </button>
+                    )}
+                  </button>
+                </div>
+                
                 <div className="">
                   <div className="" onClick={() => setSearch(!search)}>
                     <svg
@@ -757,11 +782,14 @@ export default function Items({ data, setData, change, setChange }) {
                   </div>
                 ) : (
                   <div className="top">
+                    <div  className="bg-orange-400 rounded-md px-2 py-1 rounded-md text-white fill-white text-sm">
+
                     <button
                       onClick={() => Navigate("/add-items?data=services")}
                     >
                       Add Service +
                     </button>
+</div>
                     <div className="">
                       <div className="" onClick={() => setSearch(!search)}>
                         <svg
@@ -1015,9 +1043,11 @@ export default function Items({ data, setData, change, setChange }) {
               </div>
             ) : (
               <div className="top">
+                <div  className="bg-orange-400 rounded-md px-2 py-1 rounded-md text-white fill-white text-sm">
                 <button onClick={() => setCategory(!Category)}>
                   Add Category +
                 </button>
+                </div>
                 <div className="">
                   <div className="" onClick={() => setSearch(!search)}>
                     <svg
@@ -1243,7 +1273,9 @@ export default function Items({ data, setData, change, setChange }) {
               </div>
             ) : (
               <div className="top">
+                <div  className="bg-orange-400 rounded-md px-2 py-1 rounded-md text-white fill-white text-sm">
                 <button onClick={() => setUnits(!Units)}>Add Units +</button>
+                </div>
                 <div className="" onClick={() => setSearch(!search)}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />

@@ -51,7 +51,7 @@ export default function Profile({ data, setData }) {
           data.Companies[data.Companies.length - 1].currentCompanyIndex;
         let newCompany = {
           ...Company,
-          ...etc,
+          // ...etc,
           currentCompanyIndex: lastIndex + 1,
         };
         setData({ ...data, Companies: [...data.Companies, newCompany] });
