@@ -17,7 +17,7 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [state, setState] = useState("");
   var [Email, setEmail] = useState("");
   var [Add, setAdd] = useState("");
-  var [groups, setGropus] = useState({ done: true });
+  var [groups, setGropus] = useState({ name:"", done: true });
   var [ShippingAdd, setShippingAdd] = useState("");
   var [DisableShippingAdd, setDisabeShippingAdd] = useState(false);
   var [OpeningBalance, setOpeningBalance] = useState("");
@@ -27,6 +27,7 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [AddF1, setAddF1] = useState("");
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   var [OpBalState, setOpBalState] = useState(0);
   var [loading, setLoading] = useState(false);
@@ -180,7 +181,7 @@ export default function AddParties({ data, setData, change, setChange }) {
           </div>
           <div>
           <div className="relative">
-            <TextField
+            {/* <TextField
               id="outlined-search"
               value={groups.name ? groups.name : ""}
               onChange={(e) => setGropus({ name: e.target.value, done: false })}
@@ -190,7 +191,21 @@ export default function AddParties({ data, setData, change, setChange }) {
               }}
               type="search"
               itemType="number"
-            />
+            /> */}
+            <div
+              className={`input-container ${
+                isFocused || groups.name ? "input-focused" : ""
+              }`}
+            >
+              <input
+                type="text"
+                value={groups.name ? groups.name : ""}
+                onChange={(e) => setGropus({ name: e.target.value, done: false })}
+                onFocus={() => {setIsFocused(true); setGropus({ ...groups, done: false })}}
+                onBlur={() => {if(!groups.name){setIsFocused(false)};setGropus({ ...groups, done: true })}}
+              />
+              <label>Party Group</label>
+            </div>
             {groups?.name && !groups.done && (
               <ul className="absolute top-[60px] bg-white flex w-full flex-col" ref={divRef}>
                 <li
@@ -226,7 +241,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                     // onChange={(e) => setGstType}
                     name=""
                     id=""
-                    className="w-full p-2 border-1 border-gray-800"
+                    className="w-full py-3 px-4 rounded-md border-1 border-gray-800"
                   >
                     <option disabled selected value="">
                       Under Group
@@ -254,7 +269,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                     // onChange={(e) => setGstType}
                     name=""
                     id=""
-                    className="w-full p-2 border-1 border-gray-800"
+                    className="w-full py-3 px-4 rounded-md border-1 border-gray-800"
                   >
                     <option disabled selected value="">
                       Party Category
@@ -373,7 +388,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                   )}
                   <button
                     onClick={() => setDisabeShippingAdd(!DisableShippingAdd)}
-                    className={`font-semibold ${DisableShippingAdd && "text-blue-500"}`}
+                    className={`font-semibold ${DisableShippingAdd ? "text-blue-500 border-blue-500": "text-red-500 border-red-500"} p-2 hover:shadow-md rounded-md border `}
                   >
                     {DisableShippingAdd ? "+ Enable" : "- Disable"} Shipping
                     Address
