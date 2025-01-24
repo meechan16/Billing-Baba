@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
@@ -28,6 +28,25 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
   var [loading, setLoading] = useState(false);
+
+
+  const divRef = useRef(null);
+  
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (divRef.current && !divRef.current.contains(event.target)) {
+          setGropus({...groups, done:true}) 
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+
+
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addPartiesReq = async () => {
@@ -118,7 +137,7 @@ export default function AddParties({ data, setData, change, setChange }) {
             <p>service</p> */}
           </div>
           <div className="r">
-            <button onClick={() => Navigate("/settings")}>
+            <button onClick={() => Navigate("/settings?page=party")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#000"
@@ -167,7 +186,13 @@ export default function AddParties({ data, setData, change, setChange }) {
               itemType="number"
             />
             {groups?.name && !groups.done && (
-              <ul className="absolute top-[50px] flex flex-col">
+              <ul className="absolute top-[60px] bg-white flex w-full flex-col" ref={divRef}>
+                <li
+                      className={`tile w-full p-2 z-10 hover:bg-gray-100`}
+                      onClick={() => Navigate('/parties')}
+                    >
+                      <h1 className="text-blue-500 font-semibold">+ add group</h1>
+                    </li>
                 {data?.groups
                   ?.filter(
                     (e) =>
@@ -179,7 +204,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                   )
                   .map((e, index) => (
                     <li
-                      className={`tile w-full p-2 z-10 bg-white hover:bg-gray-100 ${
+                      className={`tile w-full p-2 z-10 hover:bg-gray-100 ${
                         groups.name === e ? "bg-gray-200" : ""
                       }`}
                       key={index}

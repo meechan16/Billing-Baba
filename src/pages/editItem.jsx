@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
+import Undone from "../components/undone";
 
 export default function EditItem({
   data,
@@ -438,16 +439,16 @@ export default function EditItem({
             )}
             {toggle && (
               <button
-                className={page === "store" && "active"}
-                onClick={() => setPage("store")}
+              className={page === "Os" && "active"}
+              onClick={() => setPage("Os")}
               >
                 Online Store
               </button>
             )}
             {toggle && (
               <button
-                className={page === "Manifacturing" && "active"}
-                onClick={() => setPage("stocManifacturing")}
+              className={page === "Man" && "active"}
+              onClick={() => setPage("Man")}
               >
                 Manifacturing
               </button>
@@ -556,7 +557,7 @@ export default function EditItem({
                 </div>
               </div>
             </div>
-          ) : (
+          ) : page === "stock" ? (
             <div className="div s">
               <CustomInput
                 inputValue={openingQuantity}
@@ -585,6 +586,8 @@ export default function EditItem({
                 placeholder={"Location"}
               />
             </div>
+          ): (
+            <Undone />
           )}
         </div>
         <div className="c3">

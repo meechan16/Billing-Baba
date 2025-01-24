@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
 import dev_url from "../url";
@@ -18,6 +18,22 @@ export default function Parties({ data, setData, change, setChange }) {
   const [GrpPg, setGrpPg] = useState(0);
   const [GrpPgInps, setGrpPgInps] = useState("");
   var [inactivePg, setinactivePg] = useState(false);
+
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setSearch(false)
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Grp Page
   const AddGrp = (grp) => {
@@ -249,7 +265,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("parties");
             setSelectedParty();
-            setSearch(!search)
+            setSearch(false)
           }}
         >
           Parties
@@ -259,7 +275,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("groups");
             setSelectedParty();
-            setSearch(!search)
+            setSearch(false)
           }}
         >
           Groups
@@ -269,7 +285,7 @@ export default function Parties({ data, setData, change, setChange }) {
           onClick={() => {
             setPage("loyalty");
             setSelectedParty();
-            setSearch(!search)
+            setSearch(false)
           }}
         >
           Loyalty points
@@ -280,7 +296,7 @@ export default function Parties({ data, setData, change, setChange }) {
         <div id="parties">
           <div className="left">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative"  ref={divRef} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -804,7 +820,7 @@ export default function Parties({ data, setData, change, setChange }) {
         <div id="parties">
           <div className="left text-sm">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative"  ref={divRef} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
