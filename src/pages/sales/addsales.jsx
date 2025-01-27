@@ -320,6 +320,20 @@ export default function AddSales({ data, setData, change, setChange }) {
         ? (newDa.cash_in_hands += parseFloat(newData.total))
         : (newDa.cash_in_hands = parseFloat(newData.total));
     }
+
+    // add loyalty points
+    if (data?.settings?.PartyLoyaltyPoints){
+      if (data.settings.loyaltyPointdivitent){
+        newDa.parties?.find((index, ele) => ele.name === Name)?.loyaltyPoints? 
+            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints += (parseFloat(newData.amount)) * data.settings.loyaltyPointdivitent): 
+            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =  (parseFloat(newData.amount)) * data.settings.loyaltyPointdivitent)
+      }else{
+        newDa.parties.find((index, ele) => ele.name === Name)?.loyaltyPoints? (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints +=
+            (parseFloat(newData.amount)) * 0.001): (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =
+            (parseFloat(newData.amount)) * 0.001)
+      }
+    }
+
     console.log(newDa);
     setData(newDa);
     setChange(!change);
@@ -1032,7 +1046,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         name=""
                         id=""
                         className="w-full px-1 py-1 text-center"
-                        value={rows[rowIndex].taxPercentage}
+                        // value={rows[rowIndex].taxPercentage}
                         onChange={(e) =>
                           handleInputChange(
                             rowIndex,
@@ -1206,7 +1220,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   {rows.reduce((total, row) => total + (row.amount || 0), 0)}
                 </p>
               </div>
-              {data.settings?.loyaltyPoints && (
+              {data.settings?.PartyLoyaltyPoints && (
                 
               <div className="flex gap-2 items-center justify-end">
                 <div className=" flex flex-col">

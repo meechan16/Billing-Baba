@@ -856,7 +856,7 @@ export default function AddItem({
                       name=""
                       className="p-4 my-2 border-gray-300 border rounded-md"
                       id=""
-                      value={tax}
+                      // value={tax}
                       onChange={(e) => setTax(e.target.value)}
                     >
                       <option value={0}>None</option>
