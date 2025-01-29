@@ -350,7 +350,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                   defaultValue=""
                 />
                 <div className="flex flex-col gap-2">
-                  {!DisableShippingAdd && (
+                  {(!DisableShippingAdd && data.settings.PartyShippingAdd) && (
                     <TextField
                       value={ShippingAdd}
                       onChange={(e) => setShippingAdd(e.target.value)}
@@ -361,6 +361,8 @@ export default function AddParties({ data, setData, change, setChange }) {
                       defaultValue=""
                     />
                   )}
+                  {data.settings.PartyShippingAdd && (
+
                   <button
                     onClick={() => setDisabeShippingAdd(!DisableShippingAdd)}
                     className={`font-semibold ${DisableShippingAdd ? "text-blue-500 border-blue-500": "text-red-500 border-red-500"} p-2 hover:shadow-md rounded-md border `}
@@ -368,6 +370,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                     {DisableShippingAdd ? "+ Enable" : "- Disable"} Shipping
                     Address
                   </button>
+                  )}
                 </div>
               </div>
               {/* <div className="b">

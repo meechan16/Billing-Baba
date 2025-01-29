@@ -221,10 +221,10 @@ export default function AddSales({ data, setData, change, setChange }) {
         (ele, index) => ele.partyName === Name || ele.name === Name
       ).PartyLoyaltyPoints? newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints += parseFloat(amount):
+      ).PartyLoyaltyPoints += parseFloat(newData.amount):
       newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints = parseFloat(amount)
+      ).PartyLoyaltyPoints = parseFloat(newData.amount)
     )}
 
 
@@ -560,11 +560,13 @@ export default function AddSales({ data, setData, change, setChange }) {
                       setShippingAdd(e.target.value)
                     }
                   }
-                  }
-                  cols="35"
-                  rows="3"
-                  className="p-1 bg-white border border-gray-300 rounded-md"
+                }
+                cols="35"
+                rows="3"
+                className="p-1 bg-white border border-gray-300 rounded-md"
                 ></textarea>
+                {data.settings.PartyShippingAdd && (
+
                 <textarea
                   name=""
                   value={ShippingAdd}
@@ -578,7 +580,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                   rows="3"
                   className="p-1 bg-white border border-gray-300 rounded-md"
                 />
+                )}
               </div>
+              {data.settings.PartyShippingAdd && (
               <div className="flex gap-2">
                 <input autoComplete="off" type="checkbox" name="" onChange={()=> {
                   if (!isSameAddress){
@@ -588,6 +592,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 }} id="" />
                 <label htmlFor=""> Same as Billing</label>
               </div>
+              )}
             </div>
 
             <div className="r">
@@ -657,40 +662,62 @@ export default function AddSales({ data, setData, change, setChange }) {
             <table className="min-w-full table-auto border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-blue-100">
-                  <th className="px-1 py-1 border border-gray-300 border-b-0"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 512 512"><path d="M24 32C10.7 32 0 42.7 0 56L0 456c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24L64 56c0-13.3-10.7-24-24-24L24 32zm88 0c-8.8 0-16 7.2-16 16l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16zm72 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zm96 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zM448 56l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0c-13.3 0-24 10.7-24 24zm-64-8l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16s-16 7.2-16 16z"/></svg></th>
+                  <th className="px-1 py-1 border border-gray-300 border-b-0">
+                    {data.settings.itembarcodeScanner &&(
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 512 512"><path d="M24 32C10.7 32 0 42.7 0 56L0 456c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24L64 56c0-13.3-10.7-24-24-24L24 32zm88 0c-8.8 0-16 7.2-16 16l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16zm72 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zm96 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zM448 56l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0c-13.3 0-24 10.7-24 24zm-64-8l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16s-16 7.2-16 16z"/></svg>
+                  )}
+                  </th>
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     CATEGORY
                   </th>
                   <th className="px-1 py-1 border border-gray-300 border-b-0 w-1/6">
                     ITEM
                   </th>
+                  {data.settings.description && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     DESCRIPTION
                   </th>
+                  )}
+                  {data.settings.BatchNum && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     BATCH NO.
                   </th>
+                  )}
+                  {data.settings.ModelNum && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     MODEL NO.
                   </th>
+                    )}
+                  {data.settings.ExpiringDate && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     EXP. DATE
                   </th>
+                    )}
+                  {data.settings.MfgDate && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     MFG. DATE
                   </th>
+                    )}
+                  {data.settings.size&&(
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     SIZE
                   </th>
+                  )}
+
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     QTY
                   </th>
+                  {data.settings.ItemUnits && (
+
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     UNIT
                   </th>
+                  )}
+                  {data.settings.MRP && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     MRP
                   </th>
+                  )}
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     PRICE / UNIT
                   </th>
@@ -718,15 +745,31 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  {data.settings.description && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  )}
+                  {data.settings.BatchNum && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  )}
+                  {data.settings.ModelNum && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                    )}
+                  {data.settings.ExpiringDate && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                    )}
+                  {data.settings.MfgDate && ( 
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                    )}
+                  {data.settings.size && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  )}
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  {data.settings.ItemUnits && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  )}
+                  {data.settings.MRP && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
+                  )}
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300">%</th>
                   <th className="px-1 py-1  border border-gray-300">AMOUNT</th>
@@ -865,6 +908,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         </ul>
                       )}
                     </td>
+                    {data.settings.description && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.description} */}
                       <input
@@ -875,6 +919,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                  )}
+                    {data.settings.BatchNum && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.batchNo} */}
                       <input
@@ -885,6 +931,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                  )}
+                    {data.settings.ModelNum && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.modelNo} */}
                       <input
@@ -895,6 +943,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                    )}
+                    {data.settings.ExpiringDate && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.expDate} */}
                       <input
@@ -905,6 +955,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                    )}
+                    {data.settings.MfgDate && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.mfgDate} */}
                       <input
@@ -915,6 +967,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                    )}
+                    {data.settings.size && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.size} */}
                       <input
@@ -925,6 +979,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                    )}
                     <td className="  border border-gray-300">
                       <input
                         type="number"
@@ -935,6 +990,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
+                    {data.settings.ItemUnits && (
                     <td className="  border border-gray-300 relative">
                       <input
                         className="w-full  px-1 py-1 text-center"
@@ -995,6 +1051,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                         </ul>
                       )}
                     </td>
+                    )}
+                    {data.settings.MRP && (
                     <td className="border border-gray-300">
                       <input
                         className="w-full px-1 py-1 text-center"
@@ -1012,6 +1070,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }}
                       />
                     </td>
+                  )}
                     <td className="  border border-gray-300">
                       <input
                         className="w-full px-1 py-1 text-center"
@@ -1117,20 +1176,36 @@ export default function AddSales({ data, setData, change, setChange }) {
                     </button>
                     <span>Total</span>
                   </td>
+                  {data.settings.description && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
+                  {data.settings.BatchNum && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
+                  {data.settings.ModelNum && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
+                  {data.settings.ExpiringDate && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
+                  {data.settings.MfgDate && ( 
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
+                  {data.settings.size && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
                   <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
                     {rows.reduce(
                       (total, row) => total + (parseInt(row.qty) || 0),
                       0
                     )}
                   </td>
+                  {data.settings.ItemUnits && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
+                  {data.settings.MRP && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                )}
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                   <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
@@ -1237,11 +1312,10 @@ export default function AddSales({ data, setData, change, setChange }) {
                 </p>
               </div>
               {data.settings.PartyLoyaltyPoints && (
-                
               <div className="flex gap-2 items-center justify-end">
                 <div className=" flex flex-col">
                   <h1>Loyalty points Used</h1>
-                  <h1 className="text-xs">Redeemable points: {data.parties.Name.PartyLoyaltyPoints? data.parties.Name.PartyLoyaltyPoints: 0}</h1>
+                  <h1 className="text-xs">Redeemable points: {data.parties.Name?.PartyLoyaltyPoints? data.parties.Name.PartyLoyaltyPoints: 0}</h1>
                 </div>
                 <input
                   type="number"

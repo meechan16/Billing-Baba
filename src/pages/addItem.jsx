@@ -300,7 +300,7 @@ export default function AddItem({
                   Edit Units
                 </button>
               </>
-            ) : (
+            ) : data.settings.ItemUnits && (
               <button
                 onClick={() => setUnitToggle(true)}
                 className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
@@ -570,12 +570,14 @@ export default function AddItem({
               type="search"
             />
           </div>
+          {data.settings.itembarcodeScanner && (
           <div className="p1 mt-2">
             <p className="text-gray-400 ">
               * scan existing barcode to set custom item code from pre-existing
               barcode
             </p>
           </div>
+          )}
         </div>
         <div className="c2">
           <div className="top t">
@@ -601,7 +603,7 @@ export default function AddItem({
                 Online Store
               </button>
             {/* )} */}
-            {toggle && (
+            {(toggle && data.settings.itemStockMaintainance) && (
               <button
                 className={page === "Man" && "active"}
                 onClick={() => setPage("Man")}

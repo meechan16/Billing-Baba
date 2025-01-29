@@ -132,8 +132,8 @@ export default function Setting({ data, setData }) {
             <div>
               <span>Business Currency</span>{" "}
               <select name="" id="">
-                <option value="$">$</option>
                 <option value="₹">₹ (Rs)</option>
+                <option value="$">$</option>
               </select>
             </div>
             <div>
@@ -155,16 +155,27 @@ export default function Setting({ data, setData }) {
                 name=""
                 id=""
               />{" "}
-              <span>TNT Number</span>
+              <span>TNT Number (Unavilable)</span>
             </div>
           </div>
 
           <div className="tile">
             <h1>
-              <input autoComplete="off" type="checkbox" name="" id="" />
+              <input autoComplete="off" type="checkbox"
+                checked={data.settings.multifirm}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      multifirm: !data.settings.multifirm,
+                    },
+                  })
+                } 
+                name="" id="" />
               Multi Firm
             </h1>
-            <p>Currenly Unavilable</p>
+            <p>Enable or disable creation & useage multiple companies</p>
           </div>
           <div className="tile">
             <h1>Backup & History</h1>
@@ -186,11 +197,11 @@ export default function Setting({ data, setData }) {
                     },
                   })
                 }
-                checked
+                disabled
                 name=""
                 id=""
               />{" "}
-              <span>Transaction History</span>
+              <span>Transaction History (unavailable in beta)</span>
             </div>
           </div>
           <div className="tile">
@@ -247,7 +258,7 @@ export default function Setting({ data, setData }) {
                 name=""
                 id=""
               />{" "}
-              <span>Other Income</span>
+              <span>Other Income (unavailable)</span>
             </div>
             <div>
               <input
@@ -265,7 +276,7 @@ export default function Setting({ data, setData }) {
                 name=""
                 id=""
               />{" "}
-              <span>Fixed Assets (FA)</span>
+              <span>Fixed Assets (FA) (unavailable)</span>
             </div>
             <div>
               <input
@@ -300,7 +311,7 @@ export default function Setting({ data, setData }) {
             <h1>Customize Your View</h1>
             <p>
               Specific for application, for web you can zoom in and out with
-              `ctrl` + `+`
+              `ctrl` + `+` (disabled in web)
             </p>
             <div className="">
               <input
@@ -327,19 +338,19 @@ export default function Setting({ data, setData }) {
             </div>
             <div>
               <input autoComplete="off" type="checkbox" name="" id="" />{" "}
-              <span>Add Time on transation</span>
+              <span>Add Time on transation (unavailable)</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" checked name="" id="" />{" "}
               <span>Cash Sale By Default</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" checked name="" id="" />{" "}
               <span>Billing Name of Parties</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
-              <span>Customer P.O. Details on Transactions</span>
+              <input autoComplete="off" type="checkbox" disabled name="" id="" />{" "}
+              <span>Customer P.O. Details on Transactions (unavailable)</span>
             </div>
           </div>
 
@@ -355,29 +366,29 @@ export default function Setting({ data, setData }) {
               <span>Display Purchase Price of Items</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
-              <span>Show last 5 Sale Price of Items</span>
+              <input autoComplete="off" type="checkbox" disabled name="" id="" />{" "}
+              <span>Show last 5 Sale Price of Items (unavailable)</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" checked name="" id="" />{" "}
               <span>Free Item Quantity</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" /> <span>Count</span>
+              <input autoComplete="off" type="checkbox" checked name="" id="" /> <span>Count</span>
             </div>
           </div>
 
           <div className="tile">
             <h1>More Transactions Features</h1>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" /> <span>Quick Entry</span>
+              <input autoComplete="off" type="checkbox" checked name="" id="" /> <span>Quick Entry</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" disabled name="" id="" />{" "}
               <span>Do not Show Invoice Preview</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" disabled name="" id="" />{" "}
               <span>Enable Passcode for transaction edit/delete</span>
             </div>
             <div>
@@ -385,19 +396,19 @@ export default function Setting({ data, setData }) {
               <span>Discount During Payments</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox"  name="" id="" />{" "}
               <span>Delivery Challan</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" checked name="" id="" />{" "}
               <span>Link Payments to Invoices</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" checked name="" id="" />{" "}
               <span>Due Dates and Payment Terms</span>
             </div>
             <div>
-              <input autoComplete="off" type="checkbox" name="" id="" />{" "}
+              <input autoComplete="off" type="checkbox" disabled name="" id="" />{" "}
               <span>Show Profit while making Sale Invoice</span>
             </div>
           </div>
@@ -502,28 +513,26 @@ export default function Setting({ data, setData }) {
 
           </div> */}
 
-          <div className="m-3">
-            <h1 className="font-semibold flex justify-between gap-2 mb-3 items-center w-1/4 pb-1 border-b border-gray-500">
+          <div className="m-3 p-3 w-full pt-6">
+            <h1 className="font-semibold flex justify-between gap-2 mb-3 items-center w-1/2 pb-1 border-b border-gray-500">
             <span className="text-xl">
               Tax Rates
             </span>
-              <button onClick={() => setpopup("addTax")} className="px-2 py-1 border shadow-md rounded-md hover:bg-blue-500 hover:text-white">Add New</button>
+              <button onClick={() => setpopup("addTax")} className=" py-1 hover:underline">Add New</button>
             </h1>
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between gap-2 w-1/4 font-semibold">
-                <span>
-                  Name
-                </span>
-                <span>value (%)</span>
-                <span>Action</span>
+              <div className="flex justify-between gap-2 w-1/2 font-semibold">
+                <span className="flex-1 flex justify-center">Name</span>
+                <span className="flex-1 flex justify-center">value (%)</span>
+                <span className="flex-1 flex justify-center">Action</span>
               </div>
             {data.tax?.map((element, index) => (
-              <div className="flex justify-between gap-2 w-1/4">
-                <span>
+              <div className="flex justify-between gap-2 w-1/2">
+                <span className="flex-1 flex justify-center">
                   {element.name}
                 </span>
-                <span>{element.value} %</span>
-                <button onClick={()=> setData({...data, tax: data.tax.filter((e, i) => i !== index)})} > <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 hover:fill-gray-400" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></button>
+                <span className="flex-1 flex justify-center">{element.value} %</span>
+                <button className="flex-1 flex justify-center" onClick={()=> setData({...data, tax: data.tax.filter((e, i) => i !== index)})} > <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 hover:fill-gray-400" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></button>
               </div>
             ))}
             </div>
@@ -593,10 +602,11 @@ export default function Setting({ data, setData }) {
                     },
                   })
                 }
+                disabled
                 name=""
                 id=""
               />{" "}
-              <span>Enable Payment Reminder</span>
+              <span>Enable Payment Reminder (unavailable)</span>
             </div>
           </div>
 
@@ -628,7 +638,8 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                checked={data.settings.enableitem}
+                checked={data.settings.enableitem || true}
+                disabled
                 onChange={() =>
                   setData({
                     ...data,
@@ -664,7 +675,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                checked={data.settings.itemStockMaintainance}
+                checked={data.settings.itemStockMaintainance || true}
                 onChange={() =>
                   setData({
                     ...data,
@@ -689,24 +700,6 @@ export default function Setting({ data, setData }) {
                     settings: {
                       ...data.settings,
                       Manifacturing: !data.settings.Manifacturing,
-                    },
-                  })
-                }
-                name=""
-                id=""
-              />{" "}
-              <span>Manifacturig</span>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                checked={data.settings.Manifacturing}
-                onChange={() =>
-                  setData({
-                    ...data,
-                    settings: {
-                      ...data.settings,
-                      enablePasscode: !data.settings.Manifacturing,
                     },
                   })
                 }
@@ -786,6 +779,132 @@ export default function Setting({ data, setData }) {
                 id=""
               />{" "}
               <span>item wise Discount</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.size}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      size: !data.settings.size,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Size</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.MfgDate}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      MfgDate: !data.settings.MfgDate,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Manifacturing date</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.ExpiringDate}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      ExpiringDate: !data.settings.ExpiringDate,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Expiring date</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.ModelNum}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      ModelNum: !data.settings.ModelNum,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Model number</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.BatchNum}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      BatchNum: !data.settings.BatchNum,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Batch number</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.description}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      description: !data.settings.description,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Description</span>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.MRP}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      MRP: !data.settings.MRP,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>MRP</span>
             </div>
           </div>
         </div>

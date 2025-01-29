@@ -116,26 +116,32 @@ export default function Sidebar({ part, subpart, data = null }) {
                   Sale Invoice
                 </li>
               </Link>
+              {data.settings.estmateQ && (
               <Link to="/estimation">
                 <li className={subpart === "estimation" ? "selected" : ""}>
                   Estimation
                 </li>
               </Link>
+              )}
               <Link to="/payment-in">
                 <li className={subpart === "payment-in" ? "selected" : ""}>
                   Payment In
                 </li>
               </Link>
+              {data.settings.saleOrder && (
               <Link to="/sales-order">
                 <li className={subpart === "sales-order" ? "selected" : ""}>
                   Sales Order
                 </li>
               </Link>
+              )}
+              {data.settings.chalan && (
               <Link to="/delivery-chalan">
                 <li className={subpart === "delivery-chalan" ? "selected" : ""}>
                   Delievery Chalan
                 </li>
               </Link>
+              )}
               <Link to="/sales-return">
                 <li className={subpart === "sales-return" ? "selected" : ""}>
                   Sales Return
