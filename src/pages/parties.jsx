@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
 import EditParties from "./editParties";
@@ -15,8 +15,24 @@ export default function Parties({ data, setData, change, setChange }) {
   const [SearchQuerry, setSearchQuerry] = useState("");
 
   const [GrpPg, setGrpPg] = useState(0);
-  const [GrpPgInps, setGrpPgInps] = useState("");
+  const [GrpPgInps, setGrpPgInps] = useState({ st: false, val: "" });
   var [inactivePg, setinactivePg] = useState(false);
+
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setSearch(false)
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Grp Page
   const AddGrp = (grp) => {
@@ -283,7 +299,7 @@ export default function Parties({ data, setData, change, setChange }) {
         <div id="parties">
           <div className="left">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative"  ref={divRef} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -807,7 +823,7 @@ export default function Parties({ data, setData, change, setChange }) {
         <div id="parties">
           <div className="left text-sm">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative"  ref={divRef} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -892,29 +908,29 @@ export default function Parties({ data, setData, change, setChange }) {
           </div>
           {GrpPg === 1 && (
             <div className="fixed top-0 left-0 h-screen w-screen bg-gray-500 bg-opacity-50 flex justify-center items-center">
-              <div className="w-[300px] h-[300px] flex justify-between flex-col items-center bg-white rounded-sm">
-                <div className="flex justify-between p-3 bg-blue-200 w-full">
-                  <p>Party group</p>
+              <div className="w-[300px] h-[300px] flex justify-between flex-col items-center bg-white rounded-md shadow-md overflow-hidden">
+                <div className="flex justify-between p-3 bg-orange-200 w-full ">
+                  <p className="font-semibold">Party group</p>
                   <p
                     onClick={() => setGrpPg(0)}
-                    className="cursor-pointer font-semibold"
+                    className="cursor-pointer font-bold"
                   >
-                    X
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                   </p>
                 </div>
                 <div className="p-3">
-                  <p>Enter Party Group</p>
+                  <p>Enter name of new party group</p>
                   <input
                     type="text"
                     className="p-1 border-b-2 border-gray-400"
-                    value={GrpPgInps}
-                    onChange={(e) => setGrpPgInps(e.target.value)}
+                    value={GrpPgInps.val}
+                    onChange={(e) => setGrpPgInps({val:e.target.value})}
                   />
                 </div>
-                <div className="w-full flex justify-end p-3">
+                <div className="w-full p-3">
                   <button
-                    className="bg-blue-400 font-semibold text-lg px-3 py-1 rounded-md shadow-md text-white"
-                    onClick={() => GrpPgInps?.length > 0 && AddGrp(GrpPgInps)}
+                    className="bg-blue-400 font-semibold w-full text-lg px-3 py-1 rounded-md shadow-md text-white"
+                    onClick={() => GrpPgInps?.val?.length > 0 && AddGrp(GrpPgInps.val)}
                   >
                     Add
                   </button>
@@ -924,21 +940,23 @@ export default function Parties({ data, setData, change, setChange }) {
           )}
           {GrpPg === 2 && (
             <div className="fixed top-0 left-0 h-screen w-screen bg-gray-500 bg-opacity-50 flex justify-center items-center">
-              <div className="w-[300px] h-[300px] flex justify-between flex-col items-center bg-white rounded-sm">
-                <div className="flex justify-between p-3 bg-blue-200 w-full">
+              <div className="w-[300px] max-h-[400px] flex justify-between flex-col items-center bg-white rounded-md shadow-md overflow-hidden">
+                <div className="flex justify-between p-3 bg-orange-200 w-full font-semibold">
                   <p>Parties</p>
-                  <p onClick={() => setGrpPg(0)}>X</p>
+                  <p onClick={() => setGrpPg(0)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                  </p>
                 </div>
                 <div className="p-3">
-                  <p>Add Party to Group</p>
+                  <p className="p-1 font-semibold">Add Party to Group</p>
                   <input
                     type="text"
-                    className="p-1 border-b-2 border-gray-400"
+                    className="p-1 border border-gray-400 bg-gray-200"
                     value={GrpPgInps.val}
                     onChange={(e) =>
                       setGrpPgInps({ st: false, val: e.target.value })
                     }
                   />
+                  <div className="max-h-[150px] overflow-auto">
                   {data?.parties
                     ?.filter(
                       (e) =>
@@ -952,7 +970,7 @@ export default function Parties({ data, setData, change, setChange }) {
                     )
                     .map((party, index) => (
                       <div
-                        className={`tile p-2 rounded-sm shadow-md border border-gray-600 ${
+                        className={`tile p-2 border rounded-md border-gray-400 hover:bg-gray-100 my-1 ${
                           GrpPgInps.val === party.partyName ? "selected" : ""
                         }`}
                         key={index}
@@ -963,11 +981,12 @@ export default function Parties({ data, setData, change, setChange }) {
                         <h1>{party.partyName}</h1>
                       </div>
                     ))}
+                  </div>
                 </div>
 
-                <div className="w-full flex justify-end p-3">
+                <div className="w-full p-3">
                   <button
-                    className="bg-blue-400 font-semibold text-lg px-3 py-1 rounded-md shadow-md text-white"
+                    className="bg-blue-400 w-full font-semibold text-lg px-3 py-1 rounded-md shadow-md text-white"
                     onClick={() => GrpPgInps.st && MoveToGrp(GrpPgInps.val)}
                   >
                     Add
@@ -979,7 +998,7 @@ export default function Parties({ data, setData, change, setChange }) {
 
           <div className="right">
             {selectedParty ? (
-              <div className="rounded-md bg-green-100 mb-2 p-3">
+              <div className="rounded-md bg-gray-100 mb-2 p-3">
                 <div className="flex justify-between w-full items-center">
                   <h1 className="text-lg font-semibold">{selectedParty}</h1>
                   <button
@@ -991,7 +1010,7 @@ export default function Parties({ data, setData, change, setChange }) {
                 </div>
               </div>
             ) : (
-              <div className="flex rounded-md bg-green-100 mb-2 p-3 justify-between">
+              <div className="flex rounded-md bg-gray-100 mb-2 p-3 justify-between">
                 <h1>No Party Selected</h1>
               </div>
             )}

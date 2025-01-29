@@ -1,10 +1,16 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CommingSoon from "./commingSoon";
 
 export default function Setting({ data, setData }) {
   const Navigate = useNavigate();
   const [page, setPage] = useState("general");
+
+  // to get url prams
+  const [searchParams] = useSearchParams();
+  useEffect(()=>{
+    setPage(searchParams.get("page")?searchParams.get("page"):"general")
+  },[])
   const [popup, setpopup] = useState();
 
   const [newtax, setNewTax] = useState({ tax: "", taxName: "" });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImageUploader from "../../components/ImgUpload";
 import dev_url from "../../url";
@@ -22,6 +22,8 @@ export default function AddSales({ data, setData, change, setChange }) {
       taxPercentage: 0,
     },
   ]);
+
+  
 
   const [indexCount, setIndexCount] = useState();
   const addRow = () => {
@@ -334,11 +336,42 @@ export default function AddSales({ data, setData, change, setChange }) {
         ? (newDa.cash_in_hands += parseFloat(newData.total))
         : (newDa.cash_in_hands = parseFloat(newData.total));
     }
+
+    // add loyalty points
+    if (data?.settings?.PartyLoyaltyPoints){
+      if (data.settings.loyaltyPointdivitent){
+        newDa.parties?.find((index, ele) => ele.name === Name)?.loyaltyPoints? 
+            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints += (parseFloat(newData.amount)) * data.settings.loyaltyPointdivitent): 
+            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =  (parseFloat(newData.amount)) * data.settings.loyaltyPointdivitent)
+      }else{
+        newDa.parties.find((index, ele) => ele.name === Name)?.loyaltyPoints? (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints +=
+            (parseFloat(newData.amount)) * 0.001): (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =
+            (parseFloat(newData.amount)) * 0.001)
+      }
+    }
+
     console.log(newDa);
     setData(newDa);
     setChange(!change);
     Navigate("/sale-invoice");
   };
+
+  const divRef = useRef(null);
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setName({ value: Name.value, done:true })
+        setState_of_supply({...state_of_supply, isDone:true})
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   let tax = [
     { value: 0, name: "IGST@0%" },
@@ -450,7 +483,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                     id=""
                   />
                   {Name.value && !Name.done && (
-                    <ul className="absolute top-6 left-0 w-[400px] z-10 rounded-md shadow-md ">
+                    <ul className="absolute top-6 left-0 w-[400px] z-10 rounded-md shadow-md " ref={divRef} >
                       {data.parties
                         .filter((customer) =>
                           customer.partyName
@@ -596,7 +629,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   id=""
                 />
                 {state_of_supply.state && !state_of_supply.isDone && (
-                  <div className="absolute top-5 w-full bg-white rounded-md shadow-md gap-2 flex flex-col">
+                  <div className="absolute top-5 w-full bg-white rounded-md shadow-md gap-2 flex flex-col" ref={divRef} > 
                     {statesAndUnionTerritoriesOfIndia
                       .filter((e) =>
                         e
@@ -836,96 +869,60 @@ export default function AddSales({ data, setData, change, setChange }) {
                       {/* {row.description} */}
                       <input
                         className="w-full px-1 py-1 text-center"
-                        // value={
-                        //   rows[rowIndex].item
-                        //     ? rows[rowIndex].item
-                        //     : Search
-                        //     ? Search[rowIndex]?.item
-                        //     : ""
-                        // }
-                        // onChange={(e) =>
-                        //   setSearch({ rowIndex: { item: e.target.value } })
-                        // }
+                        value={rows[rowIndex].description}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "description", e.target.value)
+                        }
                       />
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.batchNo} */}
                       <input
                         className="w-full px-1 py-1 text-center"
-                        // value={
-                        //   rows[rowIndex].item
-                        //     ? rows[rowIndex].item
-                        //     : Search
-                        //     ? Search[rowIndex]?.item
-                        //     : ""
-                        // }
-                        // onChange={(e) =>
-                        //   setSearch({ rowIndex: { item: e.target.value } })
-                        // }
+                        value={rows[rowIndex].batchNo}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "batchNo", e.target.value)
+                        }
                       />
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.modelNo} */}
                       <input
                         className="w-full px-1 py-1 text-center"
-                        // value={
-                        //   rows[rowIndex].item
-                        //     ? rows[rowIndex].item
-                        //     : Search
-                        //     ? Search[rowIndex]?.item
-                        //     : ""
-                        // }
-                        // onChange={(e) =>
-                        //   setSearch({ rowIndex: { item: e.target.value } })
-                        // }
+                        value={rows[rowIndex].modelNo}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "modelNo", e.target.value)
+                        }
                       />
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.expDate} */}
                       <input
                         className="w-full px-1 py-1 text-center"
-                        // value={
-                        //   rows[rowIndex].item
-                        //     ? rows[rowIndex].item
-                        //     : Search
-                        //     ? Search[rowIndex]?.item
-                        //     : ""
-                        // }
-                        // onChange={(e) =>
-                        //   setSearch({ rowIndex: { item: e.target.value } })
-                        // }
+                        value={rows[rowIndex].expDate}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "descriptioexpDate", e.target.value)
+                        }
                       />
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.mfgDate} */}
                       <input
                         className="w-full px-1 py-1 text-center"
-                        // value={
-                        //   rows[rowIndex].item
-                        //     ? rows[rowIndex].item
-                        //     : Search
-                        //     ? Search[rowIndex]?.item
-                        //     : ""
-                        // }
-                        // onChange={(e) =>
-                        //   setSearch({ rowIndex: { item: e.target.value } })
-                        // }
+                        value={rows[rowIndex].mfgDate}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "mfgDate", e.target.value)
+                        }
                       />
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.size} */}
                       <input
                         className="w-full px-1 py-1 text-center"
-                        // value={
-                        //   rows[rowIndex].item
-                        //     ? rows[rowIndex].item
-                        //     : Search
-                        //     ? Search[rowIndex]?.item
-                        //     : ""
-                        // }
-                        // onChange={(e) =>
-                        //   setSearch({ rowIndex: { item: e.target.value } })
-                        // }
+                        value={rows[rowIndex].size}
+                        onChange={(e) =>
+                          handleInputChange(rowIndex, "size", e.target.value)
+                        }
                       />
                     </td>
                     <td className="  border border-gray-300">
@@ -940,7 +937,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                     </td>
                     <td className="  border border-gray-300 relative">
                       <input
-                        className="w-full  px-1 py-1 text-center bg-gray-100 rounded-sm"
+                        className="w-full  px-1 py-1 text-center"
                         value={
                           rows[rowIndex].unit
                             ? rows[rowIndex].unit
@@ -998,9 +995,9 @@ export default function AddSales({ data, setData, change, setChange }) {
                         </ul>
                       )}
                     </td>
-                    <td className="  border border-gray-300">
+                    <td className="border border-gray-300">
                       <input
-                        className="w-full px-1 py-1 text-center bg-gray-100 rounded-sm"
+                        className="w-full px-1 py-1 text-center"
                         type="number"
                         value={rows[rowIndex].mrp}
                         onChange={(e) => {
@@ -1017,7 +1014,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                     </td>
                     <td className="  border border-gray-300">
                       <input
-                        className="w-full px-1 py-1 text-center bg-gray-100 rounded-sm"
+                        className="w-full px-1 py-1 text-center"
                         type="number"
                         value={rows[rowIndex].price_per_unit}
                         onChange={(e) => {
@@ -1065,7 +1062,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         name=""
                         id=""
                         className="w-full px-1 py-1 text-center"
-                        value={rows[rowIndex].taxPercentage}
+                        // value={rows[rowIndex].taxPercentage}
                         onChange={(e) =>
                           handleInputChange(
                             rowIndex,

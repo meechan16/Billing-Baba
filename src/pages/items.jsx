@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "../components/customInput";
 import Dropdown from "../components/dropdown";
@@ -10,6 +10,23 @@ import SortableTable from "../components/Tables";
 export default function Items({ data, setData, change, setChange }) {
   const params = new URLSearchParams(window.location.search);
   let urlPram = params.get("data");
+
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setSearch(false)
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   var [Category, setCategory] = useState();
   var [Units, setUnits] = useState();
@@ -355,7 +372,7 @@ export default function Items({ data, setData, change, setChange }) {
         <div className="items">
           <div className="left">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative" ref={divRef} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -754,7 +771,7 @@ export default function Items({ data, setData, change, setChange }) {
             <div className="items">
               <div className="left">
                 {search ? (
-                  <div className="flex p-2 relative">
+                  <div className="flex p-2 relative" ref={divRef} >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
@@ -1015,7 +1032,7 @@ export default function Items({ data, setData, change, setChange }) {
         <div className="items category">
           <div className="left">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative" ref={divRef} >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -1245,7 +1262,7 @@ export default function Items({ data, setData, change, setChange }) {
         <div className="items unit">
           <div className="left">
             {search ? (
-              <div className="flex p-2 relative">
+              <div className="flex p-2 relative" ref={divRef} > 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"

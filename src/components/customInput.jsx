@@ -31,10 +31,12 @@ function CustomInput({
       <input
         type="text"
         value={inputValue}
-        onChange={handleChange}
+        onChange={(event) => {
+          setInputValue(event.target.value);
+        }}
         disabled={disab}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => !inputValue && setIsFocused(false)}
       />
       <label>{placeholder}</label>
     </div>

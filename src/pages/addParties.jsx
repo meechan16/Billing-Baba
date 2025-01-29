@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomInput from "../components/customInput";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
@@ -17,7 +17,7 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [state, setState] = useState("");
   var [Email, setEmail] = useState("");
   var [Add, setAdd] = useState("");
-  var [groups, setGropus] = useState({ done: true });
+  var [groups, setGropus] = useState({ name:"", done: true });
   var [ShippingAdd, setShippingAdd] = useState("");
   var [DisableShippingAdd, setDisabeShippingAdd] = useState(false);
   var [OpeningBalance, setOpeningBalance] = useState("");
@@ -27,9 +27,29 @@ export default function AddParties({ data, setData, change, setChange }) {
   var [AddF1, setAddF1] = useState("");
   var [AddF2, setAddF2] = useState("");
   var [AddF3, setAddF3] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   var [OpBalState, setOpBalState] = useState(0);
   var [loading, setLoading] = useState(false);
+
+
+  const divRef = useRef(null);
+  
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (divRef.current && !divRef.current.contains(event.target)) {
+          setGropus({...groups, done:true}) 
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+
+
   // var [toggle, set] = useState();
   let uid = data.uid;
   const addPartiesReq = async () => {
@@ -124,7 +144,7 @@ export default function AddParties({ data, setData, change, setChange }) {
             <p>service</p> */}
           </div>
           <div className="r">
-            <button onClick={() => Navigate("/settings")}>
+            <button onClick={() => Navigate("/settings?page=party")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#000"
@@ -343,7 +363,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                   )}
                   <button
                     onClick={() => setDisabeShippingAdd(!DisableShippingAdd)}
-                    className={`font-semibold ${DisableShippingAdd && "text-blue-500"}`}
+                    className={`font-semibold ${DisableShippingAdd ? "text-blue-500 border-blue-500": "text-red-500 border-red-500"} p-2 hover:shadow-md rounded-md border `}
                   >
                     {DisableShippingAdd ? "+ Enable" : "- Disable"} Shipping
                     Address
