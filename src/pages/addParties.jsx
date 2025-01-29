@@ -160,6 +160,9 @@ export default function AddParties({ data, setData, change, setChange }) {
             {/* <button>Select Unit</button> */}
           </div>
           <div>
+            {
+              data.settings.partyGrouping && (
+
             <div className="relative">
               <TextField
                 id="outlined-search"
@@ -199,6 +202,8 @@ export default function AddParties({ data, setData, change, setChange }) {
                 </ul>
               )}
             </div>
+              )
+            }
             <select
               // onChange={(e) => setGstType}
               name=""

@@ -105,7 +105,7 @@ function App() {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log("updated");
+          console.log("updated");
           setloading2(false);
           localStorage.setItem("edited", false);
         })

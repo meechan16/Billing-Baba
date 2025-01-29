@@ -253,6 +253,7 @@ export default function Parties({ data, setData, change, setChange }) {
         >
           Parties
         </button>
+        {data.settings.partyGrouping && (
         <button
           className={page === "groups" ? "selected" : ""}
           onClick={() => {
@@ -263,6 +264,8 @@ export default function Parties({ data, setData, change, setChange }) {
         >
           Groups
         </button>
+        )}
+        {data.settings.PartyLoyaltyPoints && (
         <button
           className={page === "loyalty" ? "selected" : ""}
           onClick={() => {
@@ -273,6 +276,7 @@ export default function Parties({ data, setData, change, setChange }) {
         >
           Loyalty points
         </button>
+        )}
       </div>
 
       {page == "parties" ? (
@@ -1018,101 +1022,44 @@ export default function Parties({ data, setData, change, setChange }) {
             )}
           </div>
         </div>
-      ) : page == "loyalty" ? (
+      ) : (page == "loyalty") ? (
         <div id="parties">
           <div className="right">
-            <div className="p-4 rounded-lg m-2 bg-green-100 flex gap-3">
-              <p className="flex-1 p-3 rounded-md text-white font-semibold bg-blue-500  text-md">
-                {0} <span>total reward points awarded</span>
+            <div className="rounded-lg my-2 flex gap-1 mb-4">
+              <p className="px-3 py-1 text-white rounded-lg text-center bg-blue-400  text-md">
+              <span className="font-bold">{data.parties.filter(
+          (ele1) => ele1.PartyLoyaltyPoints
+        ).reduce((acc, obj) => acc + parseInt(obj.PartyLoyaltyPoints), 0)}</span> - total reward points awarded
               </p>
-              <p className="flex-1 p-3 rounded-md text-white font-semibold bg-red-500  text-md">
-                {0} <span>Ammount Given as discount</span>
+              <p className="px-3 py-1 text-white rounded-lg text-center bg-red-400  text-md">
+              <span className="font-bold">{data.parties.filter(
+          (ele1) => ele1.PartyLoyaltyPoints
+        ).reduce((acc, obj) => acc + parseInt(obj.PartyLoyaltyPoints), 0)}</span> - Ammount Given as discount
               </p>
-              <p className="flex-1 p-3 rounded-md text-white font-semibold bg-green-500  text-md">
-                {0} <span>Parties with active Points</span>
+              <p className="px-3 py-1 text-white rounded-lg text-center bg-green-400  text-md">
+              <span className="font-bold">{data.parties.filter(
+          (ele1) => ele1.PartyLoyaltyPoints
+        ).length}</span> - Parties with active Points
               </p>
             </div>
-            {/* {selectedParty ? (
-              <div className="rounded-md bg-green-100 mb-2 p-3">
-                <h1 className="text-xl font-semibold">
-                  {selectedParty.partyName}
-                </h1>
-                <div className="flex justify-between w-full">
-                  <div className="flex flex-col justify-between items-start">
-                    <p>Phone Number: {selectedParty.phoneNo}</p>
-                    <p>email: {selectedParty.email}</p>
-                    <p>Credit Limit:{selectedParty.creditLimit}</p>
-                  </div>
-                  <div className="flex flex-col justify-start items-end">
-                    <p>Address: {selectedParty.Add}</p>
-                    <p>GSTIN: {selectedParty.GSTIN}</p>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <button
-                    className="text-blue-500 font-semibold hover:text-blue-700 text-lg mt-2"
-                    onClick={() => setToggle(true)}
-                  >
-                    Edit Party Details
-                  </button>
-                  <button
-                    className="text-red-500 font-semibold hover:text-red-600 text-lg mt-2"
-                    onClick={() => handlePartyRemove(selectedParty)}
-                  >
-                    Remove Party
-                  </button>
+            <div className="flex items-center bg-gray-100 py-1 rounded-sm">
+              <span className="flex-1 text-center font-semibold">Party</span>
+              <span className="flex-1 text-center font-semibold">Available loyalty points</span>
+              <span className="flex-1 text-center font-semibold">Action</span>
+            </div>
+            {data.parties.map((party, index) => (
+              <div
+                className={`flex items-center`}
+                key={index}
+              >
+                <h1 className="flex-1 text-center">{party.partyName}</h1>
+                <h1 className="text-red-500 flex-1 text-center">{party.PartyLoyaltyPoints? party.PartyLoyaltyPoints: 0}</h1>
+                <div className="flex justify-center gap-2 flex-1 my-1">
+                  <button className="p-1 px-3 hover:bg-blue-500 rounded-md bg-blue-400 text-white">Add Points</button>
+                  <button className="p-1 px-3 hover:bg-blue-500 rounded-md bg-blue-400 text-white">Remove Points</button>
                 </div>
               </div>
-            ) : (
-              <div className="flex rounded-md bg-green-100 mb-2 p-3 justify-between">
-                <h1>No Party Selected</h1>
-              </div>
-            )}
-            {selectedParty && (
-              <div className="content">
-                <div className="t">
-                  <h1>TRANSACTIONS</h1>
-                  <div className="search">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                    >
-                      <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                    </svg>
-                    <input
-                      type=""
-                      value={TransactionSearc}
-                      onChange={(e) => setTransactionSearch(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="cl">
-                  <p>Payment Type</p>
-                  <p>Number</p>
-                  <p>Date</p>
-                  <p>Total</p>
-                  <p>Balance</p>
-                  <p className="side">-</p>
-                </div>
-                {data?.sales
-                  ?.filter(
-                    (item) =>
-                      item.name === selectedParty.partyName &&
-                      item.payment_type
-                        .toLowerCase()
-                        .includes(TransactionSearc.toLowerCase())
-                  )
-                  .map((sale, index) => (
-                    <div className="cl" key={index}>
-                      <p className="grey">{sale.payment_type}</p>
-                      <p className="grey">{sale.invoice_number}</p>
-                      <p className="">{sale.invoice_date}</p>
-                      <p className="grey">{sale.total}</p>
-                      <p className="">{sale.total - sale.paid}</p>
-                    </div>
-                  ))}
-              </div>
-            )} */}
+            ))}
           </div>
         </div>
       ) : (

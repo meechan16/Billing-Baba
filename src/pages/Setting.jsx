@@ -108,7 +108,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.enablePasscode}
+                checked={data.settings.enablePasscode}
                 onChange={() =>
                   setData({
                     ...data,
@@ -136,7 +136,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.TntNum}
+                checked={data.settings.TntNum}
                 onChange={() =>
                   setData({
                     ...data,
@@ -170,7 +170,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.transactionhistory}
+                checked={data.settings.transactionhistory}
                 onChange={() =>
                   setData({
                     ...data,
@@ -192,7 +192,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.estmateQ}
+                checked={data.settings.estmateQ}
                 onChange={() =>
                   setData({
                     ...data,
@@ -210,7 +210,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.saleOrder}
+                checked={data.settings.saleOrder}
                 onChange={() =>
                   setData({
                     ...data,
@@ -228,7 +228,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.otherIncome}
+                checked={data.settings.otherIncome}
                 onChange={() =>
                   setData({
                     ...data,
@@ -246,7 +246,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.fixedAssets}
+                checked={data.settings.fixedAssets}
                 onChange={() =>
                   setData({
                     ...data,
@@ -264,7 +264,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.chalan}
+                checked={data.settings.chalan}
                 onChange={() =>
                   setData({
                     ...data,
@@ -541,13 +541,13 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.enablePasscode}
+                checked={data.settings.partyGrouping}
                 onChange={() =>
                   setData({
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.enablePasscode,
+                      partyGrouping: !data.settings.partyGrouping,
                     },
                   })
                 }
@@ -559,7 +559,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.PartyShippingAdd}
+                checked={data.settings.PartyShippingAdd}
                 onChange={() =>
                   setData({
                     ...data,
@@ -577,7 +577,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.partyReminder}
+                checked={data.settings.partyReminder}
                 onChange={() =>
                   setData({
                     ...data,
@@ -599,7 +599,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.PartyLoyaltyPoints}
+                checked={data.settings.PartyLoyaltyPoints}
                 onChange={() =>
                   setData({
                     ...data,
@@ -622,7 +622,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.enableitem}
+                checked={data.settings.enableitem}
                 onChange={() =>
                   setData({
                     ...data,
@@ -640,7 +640,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.itembarcodeScanner}
+                checked={data.settings.itembarcodeScanner}
                 onChange={() =>
                   setData({
                     ...data,
@@ -658,7 +658,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.itemStockMaintainance}
+                checked={data.settings.itemStockMaintainance}
                 onChange={() =>
                   setData({
                     ...data,
@@ -676,7 +676,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.Manifacturing}
+                checked={data.settings.Manifacturing}
                 onChange={() =>
                   setData({
                     ...data,
@@ -694,7 +694,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.Manifacturing}
+                checked={data.settings.Manifacturing}
                 onChange={() =>
                   setData({
                     ...data,
@@ -712,7 +712,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.lowStockDialogue}
+                checked={data.settings.lowStockDialogue}
                 onChange={() =>
                   setData({
                     ...data,
@@ -730,7 +730,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.ItemUnits}
+                checked={data.settings.ItemUnits}
                 onChange={() =>
                   setData({
                     ...data,
@@ -748,7 +748,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.itemCategory}
+                checked={data.settings.itemCategory}
                 onChange={() =>
                   setData({
                     ...data,
@@ -766,7 +766,7 @@ export default function Setting({ data, setData }) {
             <div>
               <input
                 type="checkbox"
-                value={data.settings.itemwiseDiscount}
+                checked={data.settings.itemwiseDiscount}
                 onChange={() =>
                   setData({
                     ...data,

@@ -203,6 +203,7 @@ export default function AddSales({ data, setData, change, setChange }) {
       //       (ele, index) => ele.partyName === Name || ele.name === Name
       //     ).credit = parseFloat(newData.pending));
       party?.credit? party.credit += parseFloat(newData.pending): party = {...party, credit: parseFloat(newData.pending)};
+      
     } else {
       console.log("CASH IN HAND INCREASED");
       newDa.cash_in_hands
@@ -210,6 +211,21 @@ export default function AddSales({ data, setData, change, setChange }) {
         : (newDa.cash_in_hands = parseFloat(newData.total));
       console.log(newDa);
     }
+
+
+    {data.settings.PartyLoyaltyPoints && (
+
+      newDa.parties.find(
+        (ele, index) => ele.partyName === Name || ele.name === Name
+      ).PartyLoyaltyPoints? newDa.parties.find(
+        (ele, index) => ele.partyName === Name || ele.name === Name
+      ).PartyLoyaltyPoints += parseFloat(amount):
+      newDa.parties.find(
+        (ele, index) => ele.partyName === Name || ele.name === Name
+      ).PartyLoyaltyPoints = parseFloat(amount)
+    )}
+
+
     newDa.total_sales
       ? (newDa.total_sales += parseFloat(newData.total))
       : (newDa.total_sales = parseFloat(newData.total));
@@ -1223,12 +1239,12 @@ export default function AddSales({ data, setData, change, setChange }) {
                   {rows.reduce((total, row) => total + (row.amount || 0), 0)}
                 </p>
               </div>
-              {data.settings?.loyaltyPoints && (
+              {data.settings.PartyLoyaltyPoints && (
                 
               <div className="flex gap-2 items-center justify-end">
                 <div className=" flex flex-col">
                   <h1>Loyalty points Used</h1>
-                  <h1 className="text-xs">Redeemable points: 2000</h1>
+                  <h1 className="text-xs">Redeemable points: {data.parties.Name.PartyLoyaltyPoints? data.parties.Name.PartyLoyaltyPoints: 0}</h1>
                 </div>
                 <input
                   type="number"
