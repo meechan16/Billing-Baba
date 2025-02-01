@@ -14,6 +14,7 @@ export default function Setting({ data, setData }) {
   const [popup, setpopup] = useState();
 
   const [newtax, setNewTax] = useState({ tax: "", taxName: "" });
+  const [Lp, setLp] = useState({ lp1: "", Lp2: "" });
 
   const setTax = () => {
     if (newtax === undefined) return;
@@ -480,12 +481,13 @@ export default function Setting({ data, setData }) {
         <div className="content">
           {popup === "addTax" && (
             <div className="popup">
-              <div className="popupC">
-                <h1>Add Custom Tax Rate</h1>
+              <div className="flex flex-col bg-white justify-center items-center gap-1 rounded-md p-2">
+                <h1 className="font-semibold text-center">Add Custom Tax Rate</h1>
                 <input
                   type="text"
                   placeholder="tax name"
                   value={newtax.taxName ? newtax.taxName : ""}
+                  className="p-1 px-2 border-b"
                   onChange={(e) =>
                     setNewTax({ ...newtax, taxName: e.target.value })
                   }
@@ -496,16 +498,17 @@ export default function Setting({ data, setData }) {
                   type="number"
                   placeholder="Rate %"
                   value={newtax.tax ? newtax.tax : ""}
+                  className="p-1 px-2 border-b"
                   onChange={(e) =>
                     setNewTax({ ...newtax, tax: e.target.value })
                   }
                   name=""
                   id=""
                 />
-                <button onClick={() => setTax()} className="add">
+                <button onClick={() => setTax()} className="p-1 px-3 w-full rounded-md bg-orange-500 text-white">
                   Add Tax
                 </button>
-                <button onClick={() => setpopup()}>Cancel</button>
+                <button onClick={() => setpopup()}  className="p-1 px-3 w-full rounded-md bg-gray-500 text-white">Cancel</button>
               </div>
             </div>
           )}
@@ -612,11 +615,16 @@ export default function Setting({ data, setData }) {
 
           <div className="tile">
             <h1>Enable Loyalty Points</h1>
-            <div>
+            <div className="flex">
               <input
                 type="checkbox"
                 checked={data.settings.PartyLoyaltyPoints}
-                onChange={() =>
+                onChange={() =>{
+                  if (data.settings.amountToLoyaltyPt && data.settings.loyaltyPtToAmount){
+                    console.log(".")
+                  }else{
+                    setpopup("addLoyaltyPts")
+                  }
                   setData({
                     ...data,
                     settings: {
@@ -625,10 +633,69 @@ export default function Setting({ data, setData }) {
                     },
                   })
                 }
+                }
               />
               <span>Enable Loyalty Points</span>
             </div>
+              {data.settings.PartyLoyaltyPoints && (
+                <button className="px-3 py-1 rounded-md bg-gray-100" onClick={()=> {
+                  setLp({lp1: data.settings.amountToLoyaltyPt, Lp2:data.settings.loyaltyPtToAmount})
+                  setpopup("addLoyaltyPts")
+                }}>
+                  Change Loyalty points converstions
+                </button>
+               ) 
+              }
           </div>
+          {popup === "addLoyaltyPts" && (
+            <div className="popup">
+              <div className="flex flex-col bg-white justify-center items-center gap-1 rounded-md p-2">
+                <h1 className="font-semibold text-center">Loyalty points Converstions</h1>
+
+                <p>When rewarding points for transation</p>
+                <div className="flex gap-2 items-center">
+                <span>1 loyalty point = </span>
+                  <input
+                    type="text"
+                    placeholder="Amount"
+                    value={Lp.Lp2 ? Lp.Lp2 : ""}
+                    className="p-1 px-2 border-b"
+                    onChange={(e) =>
+                      setLp({ ...Lp, Lp2: e.target.value })
+                    }
+                    name=""
+                    id=""
+                  />
+                </div>
+                <p>When redeeming/using points</p>
+                <div className="flex gap-2 items-center">
+                <span>1 loyalty point = </span>
+                <input
+                  type="text"
+                  placeholder="Amount"
+                  value={Lp.lp1 ? Lp.lp1 : ""}
+                  className="p-1 px-2 border-b"
+                  onChange={(e) =>
+                    setLp({ ...Lp, lp1: e.target.value })
+                  }
+                  name=""
+                  id=""
+                />
+                </div>
+                <button onClick={() => setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      amountToLoyaltyPt: Lp.lp1, 
+                      loyaltyPtToAmount: Lp.Lp2,
+                    },
+                  })} className="p-1 px-3 w-full rounded-md bg-orange-500 text-white">
+                  Save Changes
+                </button>
+                <button onClick={() => setpopup()}  className="p-1 px-3 w-full rounded-md bg-gray-500 text-white">Cancel</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
       {page === "item" && (
