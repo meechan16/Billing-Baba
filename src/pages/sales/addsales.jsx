@@ -118,15 +118,22 @@ export default function AddSales({ data, setData, change, setChange }) {
   const [hover, setHover] = useState(false);
   const [ShareToggle, setShareToggle] = useState(false);
   const [paid, setPaid] = useState(0);
+  const [lp, setLp] = useState(0);
+
+  useEffect(()=>{
+    if (lp > (data.parties.Name?.PartyLoyaltyPoints? data.parties.Name.PartyLoyaltyPoints: 0)){
+      alert("using loyalty points Exceed limits")
+    }
+  },[lp])
 
   const [Search, setSearch] = useState(); // Initial index count
 
   let uid = data.uid;
   let sendData = () => {
     const totalAmount = rows.reduce(
-      (total, row) => total + (parseInt(row.amount) || 0),
+      (total, row) => total + (row.amount || 0),
       0
-    );
+    ) - (parseInt(data.settings.loyaltyPtToAmount? data.settings.loyaltyPtToAmount:0) * lp) - paid;
     const profit = rows.reduce(
       (total, row) => total + (parseInt(row.profit) || 0),
       0
@@ -143,6 +150,11 @@ export default function AddSales({ data, setData, change, setChange }) {
           "Customer's Credit Limit Exceeded, Do you wish to continue transaction?"
         );
       }
+    }
+
+    if (lp > (data.parties.Name?.PartyLoyaltyPoints? data.parties.Name.PartyLoyaltyPoints: 0)){
+      alert("using loyalty points Exceed limits")
+      return
     }
 
     const newData = {
@@ -213,20 +225,17 @@ export default function AddSales({ data, setData, change, setChange }) {
         : (newDa.cash_in_hands = parseFloat(newData.total));
       console.log(newDa);
     }
-
-
-    {data.settings.PartyLoyaltyPoints && (
-
+    
+    if(data.settings.PartyLoyaltyPoints){
       newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
       ).PartyLoyaltyPoints? newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints += parseFloat(newData.amount):
+      ).PartyLoyaltyPoints += parseFloat(newData.amount / data.settings.amountToLoyaltyPt ):
       newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints = parseFloat(newData.amount)
-    )}
-
+      ).PartyLoyaltyPoints = parseFloat(newData.amount / data.settings.amountToLoyaltyPt )
+    }
 
     newDa.total_sales
       ? (newDa.total_sales += parseFloat(newData.total))
@@ -1320,12 +1329,12 @@ export default function AddSales({ data, setData, change, setChange }) {
                 <input
                   type="number"
                   className="p-2 w-[200px] bg-white text-end border border-gray-300 rounded-md"
-                  // value={paid}
-                  // onChange={(e) => setPaid(e.target.value)}
-                />{" "}
+                  value={lp}
+                  onChange={(e) => setLp(e.target.value)}
+                />{" "}x {data.settings.loyaltyPtToAmount}
                 ={" "}
                 <p className="p-2 w-[200px] text-end bg-gray-100 border border-gray-300 rounded-md">
-                  {200}
+                  {data.settings.loyaltyPtToAmount * lp}
                 </p>
               </div>
               )}
@@ -1333,7 +1342,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 <span>Remaining</span>
                 <p className="p-2 border  w-[200px] bg-gray-100 text-end border-gray-300 rounded-md">
                   {rows.reduce((total, row) => total + (row.amount || 0), 0) -
-                    0}
+                    (parseInt(data.settings.loyaltyPtToAmount? data.settings.loyaltyPtToAmount:0) * lp)}
                 </p>
               </div>
               {toggle && (
@@ -1343,8 +1352,8 @@ export default function AddSales({ data, setData, change, setChange }) {
                     <input
                       type="number"
                       className="p-2 border w-[200px]  text-end border-gray-300 rounded-md"
-                      value={paid}
-                      onChange={(e) => setPaid(e.target.value)}
+                      // value={paid}
+                      onChange={(e) => setPaid(parseInt(e.target.value))}
                     />
                   </div>
                   <div className="flex items-center gap-2 justify-end">
@@ -1353,7 +1362,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       {rows.reduce(
                         (total, row) => total + (row.amount || 0),
                         0
-                      ) - paid}
+                      ) - (parseInt(data.settings.loyaltyPtToAmount? data.settings.loyaltyPtToAmount:0) * lp) - paid}
                     </p>
                   </div>
                 </>
@@ -1361,9 +1370,9 @@ export default function AddSales({ data, setData, change, setChange }) {
             </div>
           </div>
           <div className="flex w-full justify-end items-center gap-2 px-4">
-            <button className="save1" onClick={() => sendData_and_get_pdf()}>
+            {/* <button className="save1" onClick={() => sendData_and_get_pdf()}>
               Save & Generate Invoice
-            </button>
+            </button> */}
             <div className="border-2 border-blue-500 rounded-md flex">
               <button className="p-1 px-3 hover:bg-blue-500 text-lg items-center hover:text-white text-blue-500 fill-blue-500 hover:fill-white flex gap-2">
               Share{" "}
@@ -1386,7 +1395,7 @@ export default function AddSales({ data, setData, change, setChange }) {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/></svg>
               </button>
             </div>
-            <button className="border-2 px-3 border-red-500 rounded-md text-lg p-1 hover:bg-red-500 hover:text-white text-red-500 fill-red-500 hover:fill-white flex gap-2" onClick={() => sendData()}>
+            <button className="border-2 px-8 border-red-500 rounded-md text-lg p-1 hover:bg-red-500 hover:text-white text-red-500 fill-red-500 hover:fill-white flex gap-2" onClick={() => sendData()}>
               Save
             </button>
           </div>
