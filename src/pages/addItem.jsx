@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import Loader from "./Loader";
 import { useLocation } from "react-router-dom";
 import ImageUploader from "../components/ImgUpload";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function AddItem({
   data,
@@ -69,9 +70,31 @@ export default function AddItem({
 
   useEffect(() => {
     if (sellPrice < discount) {
-      alert("discount can't be more than sales price");
-    } else if (purchaseprice >= sellPrice - discount) {
-      alert("purchase price more than sale price, please fix");
+      // alert();
+      toast("discount can't be more than sales price", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: "Bounce",
+        })
+    } else if (purchaseprice >= (sellPrice - discount)) {
+      // alert();
+      toast("purchase price more than sale price, please fix", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: "Bounce",
+        })
     }
   }, [purchaseprice, sellPrice]);
 
@@ -115,11 +138,44 @@ export default function AddItem({
   const addItemReq = async () => {
 
     if (sellPrice < discount) {
-      alert("discount can't be more than sales price");
+      // alert("discount can't be more than sales price");
+      toast("discount can't be more than sales price", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: "Bounce",
+        })
     } else if (purchaseprice >= sellPrice - discount) {
-      alert("purchase price more than sale price, please fix");
+      // alert("purchase price more than sale price, please fix");
+      toast("purchase price more than sale price, please fix", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: "Bounce",
+        })
     } else if (MRP < purchaseprice) {
       alert("MRP more than purchase price, please fix");
+      toast("purchase price more than sale price, please fix", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: "Bounce",
+        })
     }
     if (
       !itemName ||
@@ -130,7 +186,18 @@ export default function AddItem({
       !tax ||
       !primaryUnit
       ) {
-        alert("Please fill all the fields");
+        // alert();
+        toast("Please fill all the fields", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          // transition: "Bounce",
+          })
     }
 
     setLoading(true);
@@ -234,6 +301,7 @@ export default function AddItem({
 
   return (
     <div id="addItem">
+      <ToastContainer />
       <div className="container">
         <div className="top">
           <div className="l">
@@ -286,28 +354,35 @@ export default function AddItem({
               setInputValue={setSecondaryUnit}
               placeholder={"Secondary Unit"}
             /> */}
-            {primaryUnit?.name && primaryUnit?.done ? (
+            {data.settings.ItemUnits? (
               <>
-                <h1>
-                  Units:{" "}
-                  <span className="font-semibold">{primaryUnit.name}</span>,{" "}
-                  {primaryUnit.name} x {Conversion} = {SecondaryUnit?.name}
-                </h1>
+              {primaryUnit?.name && primaryUnit?.done ? (
+                <>
+                  <h1>
+                    Units:{" "}
+                    <span className="font-semibold">{primaryUnit.name}</span>
+                    {SecondaryUnit?.name && (<span>
+                      ,{" "}{primaryUnit.name} x {Conversion} = {SecondaryUnit?.name}
+                    </span>
+                    )}
+                  </h1>
+                  <button
+                    onClick={() => setUnitToggle(true)}
+                    className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
+                  >
+                    Edit Units
+                  </button>
+                </>
+              ) : (
                 <button
                   onClick={() => setUnitToggle(true)}
                   className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
                 >
-                  Edit Units
+                  Set Unit
                 </button>
+              )}
               </>
-            ) : data.settings.ItemUnits && (
-              <button
-                onClick={() => setUnitToggle(true)}
-                className="px-4 py-2 bg-blue-200 text-blue-600 rounded hover:bg-blue-300"
-              >
-                Set Unit
-              </button>
-            )}
+            ):<h1 className="text-gray-500">(units are disabled in setting)</h1>}
             {itemCode && (
               <>
                 {ImageURL ? (
@@ -387,6 +462,7 @@ export default function AddItem({
                       value={SecondaryUnit?.name}
                       onChange={(e) =>
                         setSecondaryUnit({ name: e.target.value, done: false })
+                      
                       }
                     />
                     {SecondaryUnit?.name && !SecondaryUnit?.done && (
@@ -441,7 +517,9 @@ export default function AddItem({
                 )}
                 <div className="flex w-full gap-2 mt-2">
                   <button
-                    onClick={() => setUnitToggle(false)}
+                    onClick={() => {
+                      setprimaryUnit({ ...primaryUnit, done: true })
+                      setUnitToggle(false)}}
                     className="px-4 py-2 bg-blue-500 flex-1 text-white rounded hover:bg-blue-600"
                   >
                     Save
@@ -614,7 +692,8 @@ export default function AddItem({
           </div>
           {page === "pricing" ? (
             <div className="">
-              <div className="rounded-lg bg-gray-200 m-3 p-3">
+              {data.settings.MRP && (
+              <div className="rounded-lg bg-gray-100 m-3 p-3">
                 <h1 className="text-lg mb-[10px] font-semibold">MRP</h1>
                 <div className="flex">
                   <div className="flex items-center gap-3">
@@ -657,27 +736,11 @@ export default function AddItem({
                   </div>
                 </div>
               </div>
-              <div className="rounded-lg bg-gray-200 m-3 p-3">
+              )}
+              <div className="rounded-lg bg-gray-100 m-3 p-3">
                 <h1 className="text-lg mb-[10px] font-semibold">SALE PRICE</h1>
                 <div className="flex">
                   <div className="flex items-center gap-0">
-                    {/* <CustomInput
-                      inputValue={sellPrice}
-                      setInputValue={setSellPrice}
-                      placeholder={"Sale Price"}
-                    />
-                    <select
-                      name=""
-                      id=""
-                      className="px-2 h-fit bg-transparent m-0"
-                    >
-                      <option value="" className="p-2">
-                        With Taxes
-                      </option>
-                      <option value="" className="p-2">
-                        Without Taxes
-                      </option>
-                    </select> */}
                     <TextField
                       id="outlined-search"
                       value={sellPrice?.value}
@@ -714,6 +777,7 @@ export default function AddItem({
                       </option>
                     </select>
                   </div>
+                  {data.settings.itemwiseDiscount && (
                   <div className="flex items-center ml-10 gap-0">
                     <TextField
                       id="outlined-search"
@@ -740,7 +804,9 @@ export default function AddItem({
                       </option>
                     </select>
                   </div>
-                </div>
+                  )}
+                  </div>
+                {data.settings.WholeSale && (
 
                 <div className="flex items-center mt-2">
                   <TextField
@@ -766,6 +832,7 @@ export default function AddItem({
                       Without Tax
                     </option>
                   </select>
+                  {data.settings.WholeSaleMin && (
                   <TextField
                     id="outlined-search"
                     // value={WholeSalePrice}
@@ -778,16 +845,18 @@ export default function AddItem({
                     }}
                     type="search"
                   />
+                  )}
                   {SecondaryUnit?.name && (
                     <p className="text-sm">
                       wholesale unit - {SecondaryUnit.name}
                     </p>
                   )}
                 </div>
+                )}
               </div>
               <div className=" flex gap-2 w-full">
                 {toggle && (
-                  <div className="rounded-lg flex-1 bg-gray-200 m-3 p-3">
+                  <div className="rounded-lg flex-1 bg-gray-100 m-3 p-3">
                     <h1 className="text-lg mb-[10px] font-semibold">
                       PURCHASE PRICE
                     </h1>
@@ -835,7 +904,7 @@ export default function AddItem({
                     </div>
                   </div>
                 )}
-                <div className="rounded-lg flex-1 bg-gray-200 m-3 p-3">
+                <div className="rounded-lg flex-1 bg-gray-100 m-3 p-3">
                   <h1 className="text-lg mb-[10px] font-semibold">TAXES</h1>
                   <div className="flex gap-3 items-center">
                     {/* <Select

@@ -149,7 +149,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.TntNum,
+                      TntNum: !data.settings.TntNum,
                     },
                   })
                 }
@@ -194,7 +194,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.transactionhistory,
+                      transactionhistory: !data.settings.transactionhistory,
                     },
                   })
                 }
@@ -216,7 +216,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.estmateQ,
+                      estmateQ: !data.settings.estmateQ,
                     },
                   })
                 }
@@ -234,7 +234,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.saleOrder,
+                      saleOrder: !data.settings.saleOrder,
                     },
                   })
                 }
@@ -252,7 +252,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.otherIncome,
+                      otherIncome: !data.settings.otherIncome,
                     },
                   })
                 }
@@ -270,7 +270,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.fixedAssets,
+                      fixedAssets: !data.settings.fixedAssets,
                     },
                   })
                 }
@@ -288,7 +288,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.chalan,
+                      chalan: !data.settings.chalan,
                     },
                   })
                 }
@@ -784,7 +784,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.lowStockDialogue,
+                      lowStockDialogue: !data.settings.lowStockDialogue,
                     },
                   })
                 }
@@ -802,7 +802,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.ItemUnits,
+                      ItemUnits: !data.settings.ItemUnits,
                     },
                   })
                 }
@@ -820,7 +820,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.itemCategory,
+                      itemCategory: !data.settings.itemCategory,
                     },
                   })
                 }
@@ -838,7 +838,7 @@ export default function Setting({ data, setData }) {
                     ...data,
                     settings: {
                       ...data.settings,
-                      enablePasscode: !data.settings.itemwiseDiscount,
+                      itemwiseDiscount: !data.settings.itemwiseDiscount,
                     },
                   })
                 }
@@ -973,6 +973,45 @@ export default function Setting({ data, setData }) {
               />{" "}
               <span>MRP</span>
             </div>
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.WholeSale}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      WholeSale: !data.settings.WholeSale,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Whole Sale</span>
+            </div>
+            {data.settings.WholeSale && (
+
+            <div>
+              <input
+                type="checkbox"
+                checked={data.settings.WholeSaleMin}
+                onChange={() =>
+                  setData({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      WholeSaleMin: !data.settings.WholeSaleMin,
+                    },
+                  })
+                }
+                name=""
+                id=""
+              />{" "}
+              <span>Whole Sale Minimum Qty</span>
+            </div>
+            )}
           </div>
         </div>
       )}
