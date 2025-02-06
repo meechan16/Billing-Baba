@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ImageUploader from "../../components/ImgUpload";
 import dev_url from "../../url";
 import { useParams } from "react-router-dom";
+import { dark } from "@mui/material/styles/createPalette";
 
 export default function AddSales({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -158,7 +159,7 @@ export default function AddSales({ data, setData, change, setChange }) {
     }
 
     const newData = {
-      name: Name ? Name : "",
+      name: Name ? Name.value : "",
       phone_no: phone_no ? phone_no : "",
       BillingAdd,
       ShippingAdd,
@@ -227,14 +228,15 @@ export default function AddSales({ data, setData, change, setChange }) {
     }
     
     if(data.settings?.PartyLoyaltyPoints){
-      newDa.parties.find(
-        (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints? newDa.parties.find(
-        (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints += parseFloat(newData.amount / data.settings?.amountToLoyaltyPt ):
-      newDa.parties.find(
-        (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints = parseFloat(newData.amount / data.settings?.amountToLoyaltyPt )
+      let da = newDa.parties.find((ele, index) => ele.partyName === Name || ele.name === Name)
+      if (da){
+
+        if(da.PartyLoyaltyPoints){
+          da.PartyLoyaltyPoints += parseFloat(newData.amount / data.settings?.amountToLoyaltyPt )
+        }else{
+          da.PartyLoyaltyPoints = parseFloat(newData.amount / data.settings?.amountToLoyaltyPt )
+        }
+      }
     }
 
     newDa.total_sales
