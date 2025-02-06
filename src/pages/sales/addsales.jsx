@@ -731,12 +731,14 @@ export default function AddSales({ data, setData, change, setChange }) {
                     PRICE / UNIT
                   </th>
                   {/* Combined Discount Header */}
-                  <th
-                    colSpan="2"
-                    className="px-1 py-1   border border-gray-300"
-                  >
-                    DISCOUNT
-                  </th>
+                  {data.settings?.itemwiseDiscount && (
+                    <th
+                      colSpan="2"
+                      className="px-1 py-1   border border-gray-300"
+                    >
+                      DISCOUNT
+                    </th>
+                  )}
                   {/* Combined Tax Header */}
                   <th
                     colSpan="2"
@@ -780,8 +782,12 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   )}
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
-                  <th className="px-1 py-1  border border-gray-300">%</th>
-                  <th className="px-1 py-1  border border-gray-300">AMOUNT</th>
+                  {data.settings?.itemwiseDiscount && (
+                    <th className="px-1 py-1  border border-gray-300">%</th>
+                  )}
+                  {data.settings?.itemwiseDiscount && (
+                    <th className="px-1 py-1  border border-gray-300">AMOUNT</th>
+                  )}
                   <th className="px-1 py-1  border border-gray-300">%</th>
                   <th className="px-1 py-1  border border-gray-300">AMOUNT</th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
@@ -806,7 +812,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                           <path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
                         </svg>
                       </button>
-                      ):rowIndex}
+                      ):rowIndex + 1}
                     </td>
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.category} */}
@@ -814,19 +820,31 @@ export default function AddSales({ data, setData, change, setChange }) {
                         name=""
                         id=""
                         className="w-full px-1 py-1 text-center"
-                        onChange={(e) =>
-                          handleInputChange(
-                            rowIndex,
-                            "category",
-                            e.target.value
-                          )
+                        onChange={(e) =>{
+                          const value = e.target.value;
+                          if (value === "addCategory") {
+                            Navigate("/items?data=addCategory");
+                          } else {
+                            handleInputChange(
+                              rowIndex,
+                              "category",
+                              e.target.value
+                            )
+                          }
+                        }
                         }
                       >
-                        {data.options?.map((item) => (
-                          <option key={item} value={item}>
-                            {item}
+                        <option value={""}>
+                          none
+                        </option>
+                        {data.category?.map((item, ind) => (
+                          <option key={ind} value={item.name}>
+                            {item.name}
                           </option>
                         ))}
+                        <option value={"addCategory"} className="text-blue-500 font-semibold">
+                          + add category
+                        </option>
                       </select>
                     </td>
                     <td className=" w-1/6 border border-gray-300">
@@ -1097,34 +1115,38 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }}
                       />
                     </td>
-                    <td className="  border border-gray-300">
-                      <input
-                        className="w-full px-1 py-1 text-center"
-                        type="number"
-                        value={rows[rowIndex].discountPercentage}
-                        onChange={(e) =>
-                          handleInputChange(
-                            rowIndex,
-                            "discountPercentage",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
-                    <td className="  border border-gray-300">
-                      <input
-                        className="w-full  px-1 py-1 text-center "
-                        type="number"
-                        value={rows[rowIndex].discount}
-                        onChange={(e) =>
-                          handleInputChange(
-                            rowIndex,
-                            "discount",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+                    {data.settings?.itemwiseDiscount && (
+                      <td className="  border border-gray-300">
+                        <input
+                          className="w-full px-1 py-1 text-center"
+                          type="number"
+                          value={rows[rowIndex].discountPercentage}
+                          onChange={(e) =>
+                            handleInputChange(
+                              rowIndex,
+                              "discountPercentage",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </td>
+                    )}
+                    {data.settings?.itemwiseDiscount && (
+                      <td className="  border border-gray-300">
+                        <input
+                          className="w-full  px-1 py-1 text-center "
+                          type="number"
+                          value={rows[rowIndex].discount}
+                          onChange={(e) =>
+                            handleInputChange(
+                              rowIndex,
+                              "discount",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </td>
+                    )}
                     <td className="   border border-gray-300">
                       <select
                         name=""
@@ -1216,13 +1238,17 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
-                  <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+                  {data.settings?.itemwiseDiscount && (
+                    <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
+            )}
+                  {data.settings?.itemwiseDiscount && (
                   <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
                     {rows.reduce(
                       (total, row) => total + (parseInt(row.discount) || 0),
                       0
                     )}
                   </td>
+            )}
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                   <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
                     {rows.reduce(
