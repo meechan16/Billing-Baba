@@ -181,7 +181,7 @@ export default function AddParties({ data, setData, change, setChange }) {
           </div>
           <div>
             {
-              data.settings.partyGrouping && (
+              data.settings?.partyGrouping && (
 
             <div className="relative">
               <TextField
@@ -350,7 +350,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                   defaultValue=""
                 />
                 <div className="flex flex-col gap-2">
-                  {(!DisableShippingAdd && data.settings.PartyShippingAdd) && (
+                  {(!DisableShippingAdd && data.settings?.PartyShippingAdd) && (
                     <TextField
                       value={ShippingAdd}
                       onChange={(e) => setShippingAdd(e.target.value)}
@@ -361,7 +361,7 @@ export default function AddParties({ data, setData, change, setChange }) {
                       defaultValue=""
                     />
                   )}
-                  {data.settings.PartyShippingAdd && (
+                  {data.settings?.PartyShippingAdd && (
 
                   <button
                     onClick={() => setDisabeShippingAdd(!DisableShippingAdd)}

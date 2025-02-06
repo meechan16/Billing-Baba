@@ -108,7 +108,7 @@ export default function Profile({ data, setData }) {
         >
           Current Company
         </button>
-        {data.settings.multifirm && (
+        {data.settings?.multifirm && (
         <button
           className={`py-1 px-3 text-lg font-semibold hover:bg-gray-300 border-red-500 ${(page == 1 || page == 5) && "border-b-2"} `}
           onClick={() => setPage(1)}

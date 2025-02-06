@@ -116,7 +116,7 @@ export default function Sidebar({ part, subpart, data = null }) {
                   Sale Invoice
                 </li>
               </Link>
-              {data.settings.estmateQ && (
+              {data.settings?.estmateQ && (
               <Link to="/estimation">
                 <li className={subpart === "estimation" ? "selected" : ""}>
                   Estimation
@@ -128,14 +128,14 @@ export default function Sidebar({ part, subpart, data = null }) {
                   Payment In
                 </li>
               </Link>
-              {data.settings.saleOrder && (
+              {data.settings?.saleOrder && (
               <Link to="/sales-order">
                 <li className={subpart === "sales-order" ? "selected" : ""}>
                   Sales Order
                 </li>
               </Link>
               )}
-              {data.settings.chalan && (
+              {data.settings?.chalan && (
               <Link to="/delivery-chalan">
                 <li className={subpart === "delivery-chalan" ? "selected" : ""}>
                   Delievery Chalan

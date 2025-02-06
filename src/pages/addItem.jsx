@@ -354,7 +354,7 @@ export default function AddItem({
               setInputValue={setSecondaryUnit}
               placeholder={"Secondary Unit"}
             /> */}
-            {data.settings.ItemUnits? (
+            {data.settings?.ItemUnits? (
               <>
               {primaryUnit?.name && primaryUnit?.done ? (
                 <>
@@ -648,7 +648,7 @@ export default function AddItem({
               type="search"
             />
           </div>
-          {data.settings.itembarcodeScanner && (
+          {data.settings?.itembarcodeScanner && (
           <div className="p1 mt-2">
             <p className="text-gray-400 ">
               * scan existing barcode to set custom item code from pre-existing
@@ -681,7 +681,7 @@ export default function AddItem({
                 Online Store
               </button>
             {/* )} */}
-            {(toggle && data.settings.itemStockMaintainance) && (
+            {(toggle && data.settings?.itemStockMaintainance) && (
               <button
                 className={page === "Man" && "active"}
                 onClick={() => setPage("Man")}
@@ -692,7 +692,7 @@ export default function AddItem({
           </div>
           {page === "pricing" ? (
             <div className="">
-              {data.settings.MRP && (
+              {data.settings?.MRP && (
               <div className="rounded-lg bg-gray-100 m-3 p-3">
                 <h1 className="text-lg mb-[10px] font-semibold">MRP</h1>
                 <div className="flex">
@@ -777,7 +777,7 @@ export default function AddItem({
                       </option>
                     </select>
                   </div>
-                  {data.settings.itemwiseDiscount && (
+                  {data.settings?.itemwiseDiscount && (
                   <div className="flex items-center ml-10 gap-0">
                     <TextField
                       id="outlined-search"
@@ -806,7 +806,7 @@ export default function AddItem({
                   </div>
                   )}
                   </div>
-                {data.settings.WholeSale && (
+                {data.settings?.WholeSale && (
 
                 <div className="flex items-center mt-2">
                   <TextField
@@ -832,7 +832,7 @@ export default function AddItem({
                       Without Tax
                     </option>
                   </select>
-                  {data.settings.WholeSaleMin && (
+                  {data.settings?.WholeSaleMin && (
                   <TextField
                     id="outlined-search"
                     // value={WholeSalePrice}

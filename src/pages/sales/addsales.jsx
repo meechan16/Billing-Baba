@@ -133,7 +133,7 @@ export default function AddSales({ data, setData, change, setChange }) {
     const totalAmount = rows.reduce(
       (total, row) => total + (row.amount || 0),
       0
-    ) - (parseInt(data.settings.loyaltyPtToAmount? data.settings.loyaltyPtToAmount:0) * lp) - paid;
+    ) - (parseInt(data.settings?.loyaltyPtToAmount? data.settings?.loyaltyPtToAmount:0) * lp) - paid;
     const profit = rows.reduce(
       (total, row) => total + (parseInt(row.profit) || 0),
       0
@@ -226,15 +226,15 @@ export default function AddSales({ data, setData, change, setChange }) {
       console.log(newDa);
     }
     
-    if(data.settings.PartyLoyaltyPoints){
+    if(data.settings?.PartyLoyaltyPoints){
       newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
       ).PartyLoyaltyPoints? newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints += parseFloat(newData.amount / data.settings.amountToLoyaltyPt ):
+      ).PartyLoyaltyPoints += parseFloat(newData.amount / data.settings?.amountToLoyaltyPt ):
       newDa.parties.find(
         (ele, index) => ele.partyName === Name || ele.name === Name
-      ).PartyLoyaltyPoints = parseFloat(newData.amount / data.settings.amountToLoyaltyPt )
+      ).PartyLoyaltyPoints = parseFloat(newData.amount / data.settings?.amountToLoyaltyPt )
     }
 
     newDa.total_sales
@@ -348,10 +348,10 @@ export default function AddSales({ data, setData, change, setChange }) {
 
     // add loyalty points
     if (data?.settings?.PartyLoyaltyPoints){
-      if (data.settings.loyaltyPointdivitent){
+      if (data.settings?.loyaltyPointdivitent){
         newDa.parties?.find((index, ele) => ele.name === Name)?.loyaltyPoints? 
-            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints += (parseFloat(newData.amount)) * data.settings.loyaltyPointdivitent): 
-            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =  (parseFloat(newData.amount)) * data.settings.loyaltyPointdivitent)
+            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints += (parseFloat(newData.amount)) * data.settings?.loyaltyPointdivitent): 
+            (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =  (parseFloat(newData.amount)) * data.settings?.loyaltyPointdivitent)
       }else{
         newDa.parties.find((index, ele) => ele.name === Name)?.loyaltyPoints? (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints +=
             (parseFloat(newData.amount)) * 0.001): (newDa.parties.find((index, ele) => ele.name === Name).loyaltyPoints =
@@ -574,7 +574,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 rows="3"
                 className="p-1 bg-white border border-gray-300 rounded-md"
                 ></textarea>
-                {data.settings.PartyShippingAdd && (
+                {data.settings?.PartyShippingAdd && (
 
                 <textarea
                   name=""
@@ -591,7 +591,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 />
                 )}
               </div>
-              {data.settings.PartyShippingAdd && (
+              {data.settings?.PartyShippingAdd && (
               <div className="flex gap-2">
                 <input autoComplete="off" type="checkbox" name="" onChange={()=> {
                   if (!isSameAddress){
@@ -672,7 +672,7 @@ export default function AddSales({ data, setData, change, setChange }) {
               <thead>
                 <tr className="bg-blue-100">
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
-                    {data.settings.itembarcodeScanner &&(
+                    {data.settings?.itembarcodeScanner &&(
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 512 512"><path d="M24 32C10.7 32 0 42.7 0 56L0 456c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24L64 56c0-13.3-10.7-24-24-24L24 32zm88 0c-8.8 0-16 7.2-16 16l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16zm72 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zm96 0c-13.3 0-24 10.7-24 24l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0zM448 56l0 400c0 13.3 10.7 24 24 24l16 0c13.3 0 24-10.7 24-24l0-400c0-13.3-10.7-24-24-24l-16 0c-13.3 0-24 10.7-24 24zm-64-8l0 416c0 8.8 7.2 16 16 16s16-7.2 16-16l0-416c0-8.8-7.2-16-16-16s-16 7.2-16 16z"/></svg>
                   )}
                   </th>
@@ -682,32 +682,32 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1 border border-gray-300 border-b-0 w-1/6">
                     ITEM
                   </th>
-                  {data.settings.description && (
+                  {data.settings?.description && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     DESCRIPTION
                   </th>
                   )}
-                  {data.settings.BatchNum && (
+                  {data.settings?.BatchNum && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     BATCH NO.
                   </th>
                   )}
-                  {data.settings.ModelNum && (
+                  {data.settings?.ModelNum && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     MODEL NO.
                   </th>
                     )}
-                  {data.settings.ExpiringDate && (
+                  {data.settings?.ExpiringDate && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     EXP. DATE
                   </th>
                     )}
-                  {data.settings.MfgDate && (
+                  {data.settings?.MfgDate && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     MFG. DATE
                   </th>
                     )}
-                  {data.settings.size&&(
+                  {data.settings?.size&&(
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     SIZE
                   </th>
@@ -716,13 +716,13 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     QTY
                   </th>
-                  {data.settings.ItemUnits && (
+                  {data.settings?.ItemUnits && (
 
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     UNIT
                   </th>
                   )}
-                  {data.settings.MRP && (
+                  {data.settings?.MRP && (
                   <th className="px-1 py-1 border border-gray-300 border-b-0">
                     MRP
                   </th>
@@ -754,29 +754,29 @@ export default function AddSales({ data, setData, change, setChange }) {
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
-                  {data.settings.description && (
+                  {data.settings?.description && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   )}
-                  {data.settings.BatchNum && (
+                  {data.settings?.BatchNum && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   )}
-                  {data.settings.ModelNum && (
+                  {data.settings?.ModelNum && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                     )}
-                  {data.settings.ExpiringDate && (
+                  {data.settings?.ExpiringDate && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                     )}
-                  {data.settings.MfgDate && ( 
+                  {data.settings?.MfgDate && ( 
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                     )}
-                  {data.settings.size && (
+                  {data.settings?.size && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   )}
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
-                  {data.settings.ItemUnits && (
+                  {data.settings?.ItemUnits && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   )}
-                  {data.settings.MRP && (
+                  {data.settings?.MRP && (
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
                   )}
                   <th className="px-1 py-1  border border-gray-300 border-t-0"></th>
@@ -917,7 +917,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         </ul>
                       )}
                     </td>
-                    {data.settings.description && (
+                    {data.settings?.description && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.description} */}
                       <input
@@ -929,7 +929,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       />
                     </td>
                   )}
-                    {data.settings.BatchNum && (
+                    {data.settings?.BatchNum && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.batchNo} */}
                       <input
@@ -941,7 +941,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       />
                     </td>
                   )}
-                    {data.settings.ModelNum && (
+                    {data.settings?.ModelNum && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.modelNo} */}
                       <input
@@ -953,7 +953,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       />
                     </td>
                     )}
-                    {data.settings.ExpiringDate && (
+                    {data.settings?.ExpiringDate && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.expDate} */}
                       <input
@@ -965,7 +965,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       />
                     </td>
                     )}
-                    {data.settings.MfgDate && (
+                    {data.settings?.MfgDate && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.mfgDate} */}
                       <input
@@ -977,7 +977,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       />
                     </td>
                     )}
-                    {data.settings.size && (
+                    {data.settings?.size && (
                     <td className="px-1 py-1   border border-gray-300">
                       {/* {row.size} */}
                       <input
@@ -999,7 +999,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                         }
                       />
                     </td>
-                    {data.settings.ItemUnits && (
+                    {data.settings?.ItemUnits && (
                     <td className="  border border-gray-300 relative">
                       <input
                         className="w-full  px-1 py-1 text-center"
@@ -1061,7 +1061,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       )}
                     </td>
                     )}
-                    {data.settings.MRP && (
+                    {data.settings?.MRP && (
                     <td className="border border-gray-300">
                       <input
                         className="w-full px-1 py-1 text-center"
@@ -1185,22 +1185,22 @@ export default function AddSales({ data, setData, change, setChange }) {
                     </button>
                     <span>Total</span>
                   </td>
-                  {data.settings.description && (
+                  {data.settings?.description && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
-                  {data.settings.BatchNum && (
+                  {data.settings?.BatchNum && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
-                  {data.settings.ModelNum && (
+                  {data.settings?.ModelNum && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
-                  {data.settings.ExpiringDate && (
+                  {data.settings?.ExpiringDate && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
-                  {data.settings.MfgDate && ( 
+                  {data.settings?.MfgDate && ( 
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
-                  {data.settings.size && (
+                  {data.settings?.size && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
                   <td className="px-1 py-1  text-end border border-gray-300 font-semibold border-x-0">
@@ -1209,10 +1209,10 @@ export default function AddSales({ data, setData, change, setChange }) {
                       0
                     )}
                   </td>
-                  {data.settings.ItemUnits && (
+                  {data.settings?.ItemUnits && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
-                  {data.settings.MRP && (
+                  {data.settings?.MRP && (
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
                 )}
                   <td className="px-1 py-1  text-end border border-gray-300 border-x-0"></td>
@@ -1320,7 +1320,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                   {rows.reduce((total, row) => total + (row.amount || 0), 0)}
                 </p>
               </div>
-              {data.settings.PartyLoyaltyPoints && (
+              {data.settings?.PartyLoyaltyPoints && (
               <div className="flex gap-2 items-center justify-end">
                 <div className=" flex flex-col">
                   <h1>Loyalty points Used</h1>
@@ -1331,10 +1331,10 @@ export default function AddSales({ data, setData, change, setChange }) {
                   className="p-2 w-[200px] bg-white text-end border border-gray-300 rounded-md"
                   value={lp}
                   onChange={(e) => setLp(e.target.value)}
-                />{" "}x {data.settings.loyaltyPtToAmount}
+                />{" "}x {data.settings?.loyaltyPtToAmount}
                 ={" "}
                 <p className="p-2 w-[200px] text-end bg-gray-100 border border-gray-300 rounded-md">
-                  {data.settings.loyaltyPtToAmount * lp}
+                  {data.settings?.loyaltyPtToAmount * lp}
                 </p>
               </div>
               )}
@@ -1342,7 +1342,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                 <span>Remaining</span>
                 <p className="p-2 border  w-[200px] bg-gray-100 text-end border-gray-300 rounded-md">
                   {rows.reduce((total, row) => total + (row.amount || 0), 0) -
-                    (parseInt(data.settings.loyaltyPtToAmount? data.settings.loyaltyPtToAmount:0) * lp)}
+                    (parseInt(data.settings?.loyaltyPtToAmount? data.settings?.loyaltyPtToAmount:0) * lp)}
                 </p>
               </div>
               {toggle && (
@@ -1362,7 +1362,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                       {rows.reduce(
                         (total, row) => total + (row.amount || 0),
                         0
-                      ) - (parseInt(data.settings.loyaltyPtToAmount? data.settings.loyaltyPtToAmount:0) * lp) - paid}
+                      ) - (parseInt(data.settings?.loyaltyPtToAmount? data.settings?.loyaltyPtToAmount:0) * lp) - paid}
                     </p>
                   </div>
                 </>

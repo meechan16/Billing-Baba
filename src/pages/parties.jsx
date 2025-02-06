@@ -269,7 +269,7 @@ export default function Parties({ data, setData, change, setChange }) {
         >
           Parties
         </button>
-        {data.settings.partyGrouping && (
+        {data.settings?.partyGrouping && (
         <button
           className={page === "groups" ? "selected" : ""}
           onClick={() => {
@@ -281,7 +281,7 @@ export default function Parties({ data, setData, change, setChange }) {
           Groups
         </button>
         )}
-        {data.settings.PartyLoyaltyPoints && (
+        {data.settings?.PartyLoyaltyPoints && (
         <button
           className={page === "loyalty" ? "selected" : ""}
           onClick={() => {
