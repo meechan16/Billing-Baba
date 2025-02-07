@@ -486,7 +486,6 @@ export default function AddSales({ data, setData, change, setChange }) {
                 <div className="flex gap-1 items-center relative pr-3  border border-gray-300 rounded-md">
                   <input
                     type="text"
-                    name="name"
                     value={Name.value}
                     onChange={(e) => setName({ value: e.target.value, done:false })}
                     placeholder="Search by Name/Phone"
@@ -640,7 +639,7 @@ export default function AddSales({ data, setData, change, setChange }) {
                     setState_of_supply({ state: e.target.value, isDone: false })
                   }
                   className="px-1 cursor-pointer border-b border-gray-600 focus:outline-none"
-                  name="State"
+                  // name="State"
                   placeholder="input..."
                   id=""
                 />

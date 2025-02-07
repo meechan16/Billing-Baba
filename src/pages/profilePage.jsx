@@ -86,9 +86,9 @@ export default function Profile({ data, setData }) {
 
   return (
     <div className="w-full h-full flex flex-col items-center">
-      <div className="flex w-full justify-evenly gap-2 bg-gray-100">
+      <div className="flex w-full justify-evenly gap-2 bg-[#f9f8f2]">
         <button
-          className={`py-1 px-3 text-lg font-semibold hover:bg-gray-300 border-red-500 ${page === 0 && "border-b-2"} `}
+          className={`py-1 px-3 text-md font-semibold hover:bg-gray-300 border-red-500 ${page === 0 && "border-b-2"} `}
           onClick={() => {
             setProfileDat({
               BusinessName: data.BusinessName,
@@ -110,26 +110,26 @@ export default function Profile({ data, setData }) {
         </button>
         {data.settings?.multifirm && (
         <button
-          className={`py-1 px-3 text-lg font-semibold hover:bg-gray-300 border-red-500 ${(page == 1 || page == 5) && "border-b-2"} `}
+          className={`py-1 px-3 text-md font-semibold hover:bg-gray-300 border-red-500 ${(page == 1 || page == 5) && "border-b-2"} `}
           onClick={() => setPage(1)}
         >
           Manage Companies
         </button>
         )}
         <button
-          className={`py-1 px-3 text-lg font-semibold hover:bg-gray-300 border-red-500  ${page === 2 && "border-b-2"} `}
+          className={`py-1 px-3 text-md font-semibold hover:bg-gray-300 border-red-500  ${page === 2 && "border-b-2"} `}
           onClick={() => setPage(2)}
         >
           Billing & Plans
         </button>
         <button
-          className={` py-1 px-3 text-lg font-semibold hover:bg-gray-300 border-red-500 ${page === 3 && "border-b-2"} `}
+          className={` py-1 px-3 text-md font-semibold hover:bg-gray-300 border-red-500 ${page === 3 && "border-b-2"} `}
           disabled
         >
           User & Permissions
         </button>
         <button
-          className={`py-1 px-3 text-lg font-semibold hover:bg-gray-300 border-red-500  ${page === 4 && "border-b-2"} `}
+          className={`py-1 px-3 text-md font-semibold hover:bg-gray-300 border-red-500  ${page === 4 && "border-b-2"} `}
           disabled
         >
           My Staff

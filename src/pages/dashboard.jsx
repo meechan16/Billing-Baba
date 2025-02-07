@@ -95,9 +95,9 @@ export default function Dashboard({ data, setData }) {
         <div className="content relative">
             {hidden && (
 
-          <div className="absolute w-[100%] h-full bg-white/30 backdrop-blur-md z-20 flex flex-col justify-center items-center">
+          <div className="absolute w-[100%] h-full text-semibold font-md bg-white/30 backdrop-blur-md z-20 flex flex-col justify-center items-center">
             <span>Privacy mode Enabled, Disable to view dashboard</span>
-            <button className="border rounded-md px-3 py-1 border-blue-500 hover:bg-blue-500 hover:text-white" onClick={()=> sethidden(!hidden) }>Disable</button>
+            <button className="rounded-full  bg-red-200 text-black-500 px-5 py-1 mt-4 hover:bg-red-500 hover:text-white" onClick={()=> sethidden(!hidden) }>Disable</button>
           </div>
             )}
           <div className="left-p w-[70%] py-2">
@@ -472,7 +472,7 @@ export default function Dashboard({ data, setData }) {
             <div className="list">
               <div className="title">
                 <h1>Privacy Mode</h1>
-                <button className="border rounded-md px-3 py-1 border-blue-500 hover:bg-blue-500 hover:text-white" onClick={()=> sethidden(!hidden)} id="" >Turn On</button>
+                <button className="border-2 rounded-md font-semibold text-red-500 px-3 py-1 border-red-500 hover:bg-red-500 hover:text-white" onClick={()=> sethidden(!hidden)} id="" >Turn On</button>
               </div>
             </div>
             <div className="list">
