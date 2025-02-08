@@ -82,8 +82,8 @@ export default function LogIn({ sw = false }) {
     setLoading(false);
   };
   return (
-    <div className="w-screen h-screen py-3 flex justify-center bg-gray-100 items-center">
-        <div className="w-1/3 bg-white rounded-lg shadow-lg flex flex-col justify-between items-center p-3">
+    <div className="w-screen h-screen flex justify-center bg-gray-100 items-center">
+        <div className="w-1/3 bg-white rounded-lg shadow-lg flex flex-col justify-between items-center p-4">
         <div className="flex items-center gap-2">
           <img src="./assets/BillingBabaLogo.png" className="w-16 h-16" alt="logo" />
           <div className="font-bold">Billing Baba</div>
@@ -93,8 +93,6 @@ export default function LogIn({ sw = false }) {
           Ab Business Karo Tenstion Free.
           </span>
           
-          {Switch === "login" && (
-            <>
             <div className="flex w-full">
 
               <h1 className={`font-semibold mt-4 text-xl p-4 flex-1 hover:border-b-2 text-center ${toggle && "border-b-2"} border-gray-200`} onClick={()=>setToggle(true)}>Mobile No.</h1>
@@ -168,7 +166,7 @@ export default function LogIn({ sw = false }) {
                 )}
               </div>
             </form>
-            ) :(
+            ) : Switch === "login" ?(
               <>
             
               <input
@@ -196,6 +194,38 @@ export default function LogIn({ sw = false }) {
               <button className="flex w-full border-2 my-4 font-semibold  py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg"
                 onClick={() => setSwitch("signup")}>Sign Up</button>
               </>
+            ):(
+              <>
+                <input
+                  type="text"
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  // name="email"
+                  placeholder="Email"
+                className="p-2 rounded-md shadow-sm hover:shadow-md w-full text-lg mt-2"
+                />
+                <input
+                  type="text"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  // name="name"
+                  placeholder="Full name"
+                className="p-2 rounded-md shadow-sm hover:shadow-md w-full text-lg mt-2"
+                />
+                <input
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  // name="password"
+                className="p-2 rounded-md shadow-sm hover:shadow-md w-full text-lg mt-2"
+                  placeholder="Password"
+                />
+                <button onClick={(e) => signup()}
+                className="flex bg-blue-100 w-full my-4 font-semibold  py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg">Sign Up</button>
+                <div className="line"></div>
+                <p>If you aready have an account, please login</p>
+                <button className="flex w-full border-2 my-4 font-semibold  py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg" onClick={() => setSwitch("login")}>Log-In</button>
+              </>
             )}
               <button
                 onClick={async (e) => {
@@ -205,56 +235,13 @@ export default function LogIn({ sw = false }) {
                   window.location.href = "/";
                   history("/");
                 }}
-                className="flex bg-blue-600 w-full my-4 text-white font-semibold py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg"
+                className="flex bg-blue-600 w-full mt-4 text-white font-semibold py-2 px-4 justify-center items-center gap-4 rounded-md shadow-md hover:shadow-lg"
               >
                 <img src="./assets/google_icon.png" alt="google logo" className=" w-4 h-" />
                 Log In with Google
               </button>
-            </>
-          )}
-          {Switch === "signup" && (
-            <>
-              <h1>Sign-Up Form</h1>
-              <input
-                type="text"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                name="email"
-                placeholder="Email"
-              />
-              <input
-                type="text"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                name="name"
-                placeholder="Full name"
-              />
-              <input
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                name="password"
-                placeholder="Password"
-              />
-              <button onClick={(e) => signup()}>Sign Up</button>
-              <button
-                onClick={async (e) => {
-                  let res = await signInWithGoogle();
-                  saveUidToLocalStorage(res.data.uid);
-                  
-                  window.location.href = "/";
-                  // history("/");
-                }}
-                className="google"
-              >
-                <img src="./assets/google_icon.png" alt="" />
-                Log In with Google
-              </button>
-              <div className="line"></div>
-              <p>If you aready have an account, please login</p>
-              <button onClick={() => setSwitch("login")}>Log-In</button>
-            </>
-          )}
+         
+          {/* {Switch === "signup" && } */}
         </div>
     </div>
   );
