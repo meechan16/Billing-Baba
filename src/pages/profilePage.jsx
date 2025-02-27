@@ -138,6 +138,19 @@ export default function Profile({ data, setData }) {
       <div className="w-2/3 p-3 rounded-md">
         {page === 0 && (
           <div className="w-full mt-1 mx-auto p-6 bg-white rounded-md">
+            <div className="flex justify-between items-center mb-5 w-full">
+            <h1 className="text-xl font-bold">User Profile</h1>
+            <button
+                className="px-4 py-1 bg-red-500 text-white rounded-sm font-semibold"
+                onClick={() => {
+                  logout();
+                  saveUidToLocalStorage("");
+                  Navigate("/login");
+                }}
+              >
+                Log Out
+              </button>
+            </div>
             <div className="flex justify-between w-full">
               <div className="mb-2">
                 {!Logo ? (
@@ -192,7 +205,7 @@ export default function Profile({ data, setData }) {
                 {/*<p>{Signature}</p>
           <p>{Logo}</p>*/}
               </div>
-              {/*<div className="">
+              <div className="">
               {!Signature ? (
                 <>
                   <button
@@ -242,7 +255,7 @@ export default function Profile({ data, setData }) {
                   <span>Business Sign</span>
                 </>
               )}
-            </div>*/}
+            </div>
             </div>
             <div className="flex space-x-4 mb-4">
               <button
@@ -762,20 +775,21 @@ export default function Profile({ data, setData }) {
                       }
                     />
                   </div>
+                  <div>
+                    <label className="block text-gray-700 font-semibold">
+                      Registration Type
+                    </label>
+                    <select className="w-full p-2 border border-gray-300 rounded-md">
+                      <option>With GST</option>
+                      <option>Without GST</option>
+
+                    </select>
+                  </div>
                 </div>
               </div>
             )}
             <div className="flex justify-between mt-4">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-md"
-                onClick={() => {
-                  logout();
-                  saveUidToLocalStorage("");
-                  Navigate("/login");
-                }}
-              >
-                Log Out
-              </button>
+              
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 onClick={() => {

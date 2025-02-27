@@ -92,7 +92,8 @@ const signInWithGoogle = async () => {
     }
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    console.log(err.message);
+    alert("Error signing in with Google. Please try again.");
   }
 };
 
@@ -129,7 +130,9 @@ const registerWithEmailAndPassword = async (email, password, name) => {
     return user.uid;
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    // alert(err.message);
+
+    alert("Error signing in with Google. Please try again.");
   }
 };
 const sendPasswordReset = async (email) => {
@@ -138,7 +141,9 @@ const sendPasswordReset = async (email) => {
     alert("Password reset link sent!");
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    // alert(err.message);
+
+    alert("Error signing in with Google. Please try again.");
   }
 };
 
@@ -165,12 +170,14 @@ function getUidFromLocalStorage() {
     return null;
   }
 }
+
 const setUpRecaptcha = (containerId) => {
   window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
     size: "invisible",
     callback: (response) => {
       // reCAPTCHA solved, allow signInWithPhoneNumber.
       // onSignInSubmit();
+      console.log("Recaptcha resolved");
     },
   });
 };
@@ -229,7 +236,6 @@ const verifyOTP = async (otp) => {
     alert("Error in verifying OTP");
   }
 };
-
 export {
   auth,
   EmailAuthProvider,

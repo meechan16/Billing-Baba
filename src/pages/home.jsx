@@ -70,6 +70,28 @@ export default function Home({ children, part, subpart, data, setData }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [help]);
+  
+  const dropdownRef2 = useRef(null);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef2.current && !dropdownRef2.current.contains(event.target)) {
+        setToggle(false)
+      }
+    };
+
+    if (toggle) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // Cleanup the event listener on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [toggle]);
 
   return (
     <div id="Home">
@@ -116,6 +138,10 @@ export default function Home({ children, part, subpart, data, setData }) {
               <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Whatsapp</span>
               <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Live chat</span>
               <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200">Report Missing feature</span>
+              <span className="p-2 border border-gray-200 text-nowrap text-center bg-gray-200">Ph: 7987016325</span>
+              <span className="p-2 border border-gray-200 text-nowrap text-center bg-gray-200">email: billingbabaofficial@gmail.com</span>
+              {/* <span className="p-2 border border-gray-200 text-nowrap text-center hover:bg-gray-200"><span className="font-xs">or contact</span></span> */}
+
             </div>
           )}
           </div>
@@ -134,14 +160,29 @@ export default function Home({ children, part, subpart, data, setData }) {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288l111.5 0L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7l-111.5 0L349.4 44.6z"/></svg>
       </button>
       {toggle && (
-      <div className="absolute p-3 rounded-lg grid grid-cols-2 top-7 shadow-lg -translate-x-1/2 bg-white lg:w-[300px]">
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/addsales")}>Add Sales</button>
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/addpurchase")}>Add Purchase</button>
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/AddParties")}>Add Parties</button>
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/add-items")}>Add Items</button>
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/add-sales-order")}>Add Sales Orders</button>
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/add-purchase-order")}>Add Purchase Orders</button>
-        <button className="block p-3 hover:border-b border-blue-500" onClick={() => Navigate("/quick-billing")}>Quick Billing</button>
+      <div className="absolute p-3 rounded-lg flex justify-between items-start gap-2 top-7 shadow-xl -translate-x-[80%] bg-white lg:w-[600px]" ref={dropdownRef2}>
+        <div>
+          <h1 className="font-semibold mb-2 ">SALE</h1>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/sale-invoice")}>Sale invoice</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/payment-in")}>Payments In</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/sales-return")}>Sale Return</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/sales-order")}>Sale Order</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/estimation")}>Estimate/Quotation</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/delivery-chalan")}>Delivery chalan</button>
+        </div>
+        <div>
+        <h1 className="font-semibold mb-2">PURCHASE</h1>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/purchase-bill")}>Purchase Bill</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/payment-outs")}>Payment-out</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/purchase-return")}>Purchase Return</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/purchase-order")}>Purchase Order</button>
+        </div>
+        <div>
+          <h1 className="font-semibold mb-2">OTHERS</h1>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("expenses")}>Expenses</button>
+        <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/")}>Other Income</button>
+        {/* <button className="block p-3 hover:border-b hover:text-blue-500 border-blue-500" onClick={() => Navigate("/quick-billing")}>Party To Party Transfer</button> */}
+        </div>
       </div>
       )}
       </div>
