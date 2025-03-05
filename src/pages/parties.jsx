@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/dropdown";
 import EditParties from "./editParties";
 import SortableTable from "../components/Tables";
+import { Autocomplete, TextField } from "@mui/material";
 
 export default function Parties({ data, setData, change, setChange }) {
   const Navigate = useNavigate();
@@ -343,7 +344,7 @@ export default function Parties({ data, setData, change, setChange }) {
                     </svg>
                     {impPtDrp && (
                       <button
-                        className="absolute top-[20px] font-semibold left-0 p-2 bg-slate-200 text-black w-[180px] rounded-md shadow-md text-white no-wrap"
+                        className="absolute top-[20px] font-semibold left-0 p-2 bg-slate-200 text-black w-[180px] rounded-md shadow-md hover:bg-gray-300 no-wrap"
                         onClick={() => Navigate("/import-parties")}
                       >
                         Import Parties
@@ -902,6 +903,30 @@ export default function Parties({ data, setData, change, setChange }) {
                       onClick={() => handlePartySelect(party)}
                     >
                       <h1>{party}</h1>
+                      <Dropdown
+                            menuItems={[
+                              {
+                                label: "Delete",
+                                action: () => {
+                                  let newDa = data;
+                                  newDa.groups = newDa.groups.filter(
+                                    (ele) => ele !== party
+                                  );
+                                  console.log(newDa);
+                                  setData(newDa);
+                                  setChange(!change);
+                                  setSelectedParty();
+                                },
+                              },
+                            ]}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                            >
+                              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
+                          </Dropdown>
                     </div>
                   ))}
             </div>
@@ -913,7 +938,7 @@ export default function Parties({ data, setData, change, setChange }) {
                   <p className="font-semibold">Party group</p>
                   <p
                     onClick={() => setGrpPg(0)}
-                    className="cursor-pointer font-bold"
+                    className="cursor-pointer font-bold rounded-full hover:bg-gray-100"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                   </p>
@@ -929,7 +954,7 @@ export default function Parties({ data, setData, change, setChange }) {
                 </div>
                 <div className="w-full p-3">
                   <button
-                    className="bg-blue-400 font-semibold w-full text-lg px-3 py-1 rounded-md shadow-md text-white"
+                    className="bg-blue-400 hover:bg-blue-500 font-semibold w-full text-lg px-3 py-1 rounded-md shadow-md text-white"
                     onClick={() => GrpPgInps?.val?.length > 0 && AddGrp(GrpPgInps.val)}
                   >
                     Add
@@ -948,7 +973,18 @@ export default function Parties({ data, setData, change, setChange }) {
                 </div>
                 <div className="p-3">
                   <p className="p-1 font-semibold">Add Party to Group</p>
-                  <input
+                  <Autocomplete
+                                        disablePortal
+                                        options={data?.parties.map((unit)=> ({label:unit.partyName}))}
+                                        sx={{ width: 250 }}
+                                        renderInput={(params) => <TextField {...params} label="Parties" />}
+                                        
+                                        value={GrpPgInps.val}
+                    onChange={(event, newValue) =>
+                      setGrpPgInps({ st: false, val: newValue })
+                    }
+                                      />
+                  {/* <input
                     type="text"
                     className="p-1 border border-gray-400 bg-gray-200"
                     value={GrpPgInps.val}
@@ -981,7 +1017,7 @@ export default function Parties({ data, setData, change, setChange }) {
                         <h1>{party.partyName}</h1>
                       </div>
                     ))}
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="w-full p-3">

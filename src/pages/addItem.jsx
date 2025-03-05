@@ -8,6 +8,7 @@ import Loader from "./Loader";
 import { useLocation } from "react-router-dom";
 import ImageUploader from "../components/ImgUpload";
 import { ToastContainer, toast } from 'react-toastify';
+import { Autocomplete } from "@mui/material";
 
 export default function AddItem({
   data,
@@ -41,6 +42,7 @@ export default function AddItem({
   var [primaryUnit, setprimaryUnit] = useState();
   var [SecondaryUnit, setSecondaryUnit] = useState();
   var [Conversion, setConversion] = useState();
+  var [editUnits, setEditUnits] = useState({primary:"",secondary:"",conversion:""});
   var [ImageURL, setImageUrl] = useState();
   var [ImageList, setImageList] = useState();
 
@@ -138,44 +140,35 @@ export default function AddItem({
   const addItemReq = async () => {
 
     if (sellPrice < discount) {
-      // alert("discount can't be more than sales price");
-      toast("discount can't be more than sales price", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        // transition: "Bounce",
-        })
+      alert("discount can't be more than sales price");
+      // toast("discount can't be more than sales price", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: false,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      //   // transition: "Bounce",
+      //   })
+      return
     } else if (purchaseprice >= sellPrice - discount) {
-      // alert("purchase price more than sale price, please fix");
-      toast("purchase price more than sale price, please fix", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        // transition: "Bounce",
-        })
+      alert("purchase price more than sale price, please fix");
+      // toast("purchase price more than sale price, please fix", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: false,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      //   // transition: "Bounce",
+      //   })
+      return
     } else if (MRP < purchaseprice) {
       alert("MRP more than purchase price, please fix");
-      toast("purchase price more than sale price, please fix", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        // transition: "Bounce",
-        })
     }
     if (
       !itemName ||
@@ -186,18 +179,18 @@ export default function AddItem({
       !tax ||
       !primaryUnit
       ) {
-        // alert();
-        toast("Please fill all the fields", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          // transition: "Bounce",
-          })
+        alert("Please fill all the fields");
+        // toast("Please fill all the fields", {
+        //   position: "top-right",
+        //   autoClose: 5000,
+        //   hideProgressBar: false,
+        //   closeOnClick: false,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "light",
+        //   // transition: "Bounce",
+        //   })
     }
 
     setLoading(true);
@@ -414,7 +407,18 @@ export default function AddItem({
                       setInputValue={setprimaryUnit}
                       placeholder={"Primary Unit"}
                     /> */}
-                    <input
+                    <Autocomplete
+                      disablePortal
+                      options={data?.units.map((unit)=> ({label:unit.name}))}
+                      sx={{ width: 250 }}
+                      renderInput={(params) => <TextField {...params} label="Units" />}
+                      value={editUnits?.primary}
+                      onChange={(event, newValue) =>
+                        setEditUnits({...editUnits, primary: newValue?.label})
+                      }
+                    />
+
+                    {/* <input
                       type="text"
                       className="p-2 border border-gray-400"
                       value={primaryUnit?.name}
@@ -447,22 +451,27 @@ export default function AddItem({
                             </div>
                           ))}
                       </div>
-                    )}
+                    )} */}
                   </div>
                   <div className="relative">
                     <h1>Secondary Unit</h1>
-                    {/* <CustomInput
-                      inputValue={primaryUnit}
-                      setInputValue={setprimaryUnit}
-                      placeholder={"Primary Unit"}
-                    /> */}
-                    <input
+                    <Autocomplete
+                      disablePortal
+                      options={data?.units.map((unit)=> ({label:unit.name}))}
+                      sx={{ width: 250 }}
+                      renderInput={(params) => <TextField {...params} label="Units" />}
+                      value={editUnits?.secondary}
+                      onChange={(event, newValue) =>
+                        setEditUnits({...editUnits, secondary: newValue?.label})
+                      }
+                    />
+                    {/* <input
                       type="text"
                       className="p-2 border border-gray-400"
                       value={SecondaryUnit?.name}
                       onChange={(e) =>
                         setSecondaryUnit({ name: e.target.value, done: false })
-                      
+
                       }
                     />
                     {SecondaryUnit?.name && !SecondaryUnit?.done && (
@@ -493,7 +502,7 @@ export default function AddItem({
                             </div>
                           ))}
                       </div>
-                    )}
+                    )} */}
                   </div>
                   {/* <CustomInput
                     inputValue={SecondaryUnit}
@@ -501,7 +510,7 @@ export default function AddItem({
                     placeholder={"Secondary Unit"}
                   /> */}
                 </div>
-                {SecondaryUnit?.name && (
+                {editUnits?.secondary && (
                 <p>
                   One Secondary unit ={" "}
                   <input
@@ -509,8 +518,10 @@ export default function AddItem({
                     className="p-1 border border-gray-400"
                     name=""
                     id=""
-                    value={Conversion}
-                    onChange={(e) => setConversion(e.target.value)}
+                    vvalue={editUnits?.conversion}
+                    onChange={(event, newValue) =>
+                      setEditUnits({...editUnits, conversion: newValue?.label})
+                    }
                   />{" "}
                   X Primary Unit
                 </p>
@@ -518,7 +529,9 @@ export default function AddItem({
                 <div className="flex w-full gap-2 mt-2">
                   <button
                     onClick={() => {
-                      setprimaryUnit({ ...primaryUnit, done: true })
+                      setprimaryUnit({ name:editUnits.primary, done: true })
+                      setSecondaryUnit({done: true , name:editUnits.secondary})
+                      setConversion(editUnits.conversion)
                       setUnitToggle(false)}}
                     className="px-4 py-2 bg-blue-500 flex-1 text-white rounded hover:bg-blue-600"
                   >
@@ -582,7 +595,7 @@ export default function AddItem({
                 </button>
               )}
             </div>
-            
+
             <button
               className="text-blue-400 font-semibold mx-2 items-center fill-blue-400 flex gap-1"
               onClick={() => setShowPopup(true)}
