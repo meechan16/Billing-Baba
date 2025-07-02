@@ -59,6 +59,7 @@ import AddPaymentsOut from "./pages/purchase/addpaymentOut";
 import AddPurchaseReturn from "./pages/purchase/addPurchaseReturn";
 import PurchaseReturnBill from "./pages/purchase/PurchaseReturnBill";
 import SalesBill from "./pages/sales/SalesBill";
+import Superadmin from "./pages/superadmin"
 
 function App() {
   // const Navigate = useNavigate();
@@ -526,9 +527,6 @@ function App() {
             path="/sales-bill"
             exact
             element={
-              // <Home part="items">
-              //   <AddItems />
-              // </Home>
               <SalesBill
                 data={data}
                 setData={setData}
@@ -541,9 +539,6 @@ function App() {
             path="/addPurchase"
             exact
             element={
-              // <Home part="items">
-              //   <AddItems />
-              // </Home>
               <AddPurchase
                 data={data}
                 setData={setData}
@@ -1059,6 +1054,13 @@ function App() {
                   setChange={setChange}
                 />
               </Home>
+            }
+          />
+          <Route
+            path="/Superadmin"
+            exact
+            element={
+              <Superadmin/>
             }
           />
         </Routes>
